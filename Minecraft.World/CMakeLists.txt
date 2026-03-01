@@ -35,7 +35,7 @@ set(ConsoleHelpers__ConsoleSaveFileIO
     "FileHeader.cpp"
     "FileHeader.h"
 )
-source_group("ConsoleHelpers\\ConsoleSaveFileIO" FILES ${ConsoleHelpers__ConsoleSaveFileIO})
+source_group("ConsoleHelpers/ConsoleSaveFileIO" FILES ${ConsoleHelpers__ConsoleSaveFileIO})
 
 set(ConsoleJavaLibs
     "Arrays.h"
@@ -103,7 +103,7 @@ set(ConsoleJavaLibs__InputOutputStream
     "OutputStream.h"
     "Reader.h"
 )
-source_group("ConsoleJavaLibs\\InputOutputStream" FILES ${ConsoleJavaLibs__InputOutputStream})
+source_group("ConsoleJavaLibs/InputOutputStream" FILES ${ConsoleJavaLibs__InputOutputStream})
 
 set(Header_Files
     "compression.h"
@@ -123,8 +123,9 @@ set(Source_Files
 source_group("Source Files" FILES ${Source_Files})
 
 set(argo
-    "../Minecraft.Client/Xbox/res/audio/Minecraft.xgs"
+    "../Minecraft.Client/Common/res/TitleUpdate/audio/Minecraft.xgs"
 )
+
 source_group("argo" FILES ${argo})
 
 set(com__mojang__nbt
@@ -146,7 +147,7 @@ set(com__mojang__nbt
     "Tag.cpp"
     "Tag.h"
 )
-source_group("com\\mojang\\nbt" FILES ${com__mojang__nbt})
+source_group("com/mojang/nbt" FILES ${com__mojang__nbt})
 
 set(net__minecraft
     "Direction.cpp"
@@ -159,7 +160,7 @@ set(net__minecraft
     "SharedConstants.cpp"
     "SharedConstants.h"
 )
-source_group("net\\minecraft" FILES ${net__minecraft})
+source_group("net/minecraft" FILES ${net__minecraft})
 
 set(net__minecraft__commands
     "AdminLogCommand.h"
@@ -171,7 +172,7 @@ set(net__minecraft__commands
     "CommandsEnum.h"
     "net.minecraft.commands.h"
 )
-source_group("net\\minecraft\\commands" FILES ${net__minecraft__commands})
+source_group("net/minecraft/commands" FILES ${net__minecraft__commands})
 
 set(net__minecraft__commands__common
     "DefaultGameModeCommand.cpp"
@@ -192,7 +193,7 @@ set(net__minecraft__commands__common
     "ToggleDownfallCommand.cpp"
     "ToggleDownfallCommand.h"
 )
-source_group("net\\minecraft\\commands\\common" FILES ${net__minecraft__commands__common})
+source_group("net/minecraft/commands/common" FILES ${net__minecraft__commands__common})
 
 set(net__minecraft__locale
     "I18n.cpp"
@@ -201,14 +202,14 @@ set(net__minecraft__locale
     "Language.h"
     "net.minecraft.locale.h"
 )
-source_group("net\\minecraft\\locale" FILES ${net__minecraft__locale})
+source_group("net/minecraft/locale" FILES ${net__minecraft__locale})
 
 set(net__minecraft__network
     "Connection.cpp"
     "Connection.h"
     "net.minecraft.network.h"
 )
-source_group("net\\minecraft\\network" FILES ${net__minecraft__network})
+source_group("net/minecraft/network" FILES ${net__minecraft__network})
 
 set(net__minecraft__network__packet
     "AddEntityPacket.cpp"
@@ -382,7 +383,7 @@ set(net__minecraft__network__packet
     "XZPacket.cpp"
     "XZPacket.h"
 )
-source_group("net\\minecraft\\network\\packet" FILES ${net__minecraft__network__packet})
+source_group("net/minecraft/network/packet" FILES ${net__minecraft__network__packet})
 
 set(net__minecraft__stats
     "Achievement.cpp"
@@ -407,7 +408,7 @@ set(net__minecraft__stats
     "Stats.cpp"
     "Stats.h"
 )
-source_group("net\\minecraft\\stats" FILES ${net__minecraft__stats})
+source_group("net/minecraft/stats" FILES ${net__minecraft__stats})
 
 set(net__minecraft__util
     "Hasher.cpp"
@@ -422,7 +423,7 @@ set(net__minecraft__util
     "WeighedTreasure.cpp"
     "WeighedTreasure.h"
 )
-source_group("net\\minecraft\\util" FILES ${net__minecraft__util})
+source_group("net/minecraft/util" FILES ${net__minecraft__util})
 
 set(net__minecraft__world
     "CompoundContainer.cpp"
@@ -440,7 +441,7 @@ set(net__minecraft__world
     "SimpleContainer.cpp"
     "SimpleContainer.h"
 )
-source_group("net\\minecraft\\world" FILES ${net__minecraft__world})
+source_group("net/minecraft/world" FILES ${net__minecraft__world})
 
 set(net__minecraft__world__damageSource
     "DamageSource.cpp"
@@ -451,7 +452,7 @@ set(net__minecraft__world__damageSource
     "IndirectEntityDamageSource.h"
     "net.minecraft.world.damagesource.h"
 )
-source_group("net\\minecraft\\world\\damageSource" FILES ${net__minecraft__world__damageSource})
+source_group("net/minecraft/world/damageSource" FILES ${net__minecraft__world__damageSource})
 
 set(net__minecraft__world__effect
     "InstantenousMobEffect.cpp"
@@ -462,7 +463,7 @@ set(net__minecraft__world__effect
     "MobEffectInstance.h"
     "net.minecraft.world.effect.h"
 )
-source_group("net\\minecraft\\world\\effect" FILES ${net__minecraft__world__effect})
+source_group("net/minecraft/world/effect" FILES ${net__minecraft__world__effect})
 
 set(net__minecraft__world__entity
     "AgableMob.cpp"
@@ -499,7 +500,7 @@ set(net__minecraft__world__entity
     "SynchedEntityData.cpp"
     "SynchedEntityData.h"
 )
-source_group("net\\minecraft\\world\\entity" FILES ${net__minecraft__world__entity})
+source_group("net/minecraft/world/entity" FILES ${net__minecraft__world__entity})
 
 set(net__minecraft__world__entity__ai__control
     "BodyControl.cpp"
@@ -513,7 +514,7 @@ set(net__minecraft__world__entity__ai__control
     "MoveControl.h"
     "net.minecraft.world.entity.ai.control.h"
 )
-source_group("net\\minecraft\\world\\entity\\ai\\control" FILES ${net__minecraft__world__entity__ai__control})
+source_group("net/minecraft/world/entity/ai/control" FILES ${net__minecraft__world__entity__ai__control})
 
 set(net__minecraft__world__entity__ai__goal
     "ArrowAttackGoal.cpp"
@@ -596,7 +597,7 @@ set(net__minecraft__world__entity__ai__goal
     "TradeWithPlayerGoal.cpp"
     "TradeWithPlayerGoal.h"
 )
-source_group("net\\minecraft\\world\\entity\\ai\\goal" FILES ${net__minecraft__world__entity__ai__goal})
+source_group("net/minecraft/world/entity/ai/goal" FILES ${net__minecraft__world__entity__ai__goal})
 
 set(net__minecraft__world__entity__ai__goal__target
     "DefendVillageTargetGoal.cpp"
@@ -615,28 +616,28 @@ set(net__minecraft__world__entity__ai__goal__target
     "TargetGoal.cpp"
     "TargetGoal.h"
 )
-source_group("net\\minecraft\\world\\entity\\ai\\goal\\target" FILES ${net__minecraft__world__entity__ai__goal__target})
+source_group("net/minecraft/world/entity/ai/goal/target" FILES ${net__minecraft__world__entity__ai__goal__target})
 
 set(net__minecraft__world__entity__ai__navigation
     "net.minecraft.world.entity.ai.navigation.h"
     "PathNavigation.cpp"
     "PathNavigation.h"
 )
-source_group("net\\minecraft\\world\\entity\\ai\\navigation" FILES ${net__minecraft__world__entity__ai__navigation})
+source_group("net/minecraft/world/entity/ai/navigation" FILES ${net__minecraft__world__entity__ai__navigation})
 
 set(net__minecraft__world__entity__ai__sensing
     "net.minecraft.world.entity.ai.sensing.h"
     "Sensing.cpp"
     "Sensing.h"
 )
-source_group("net\\minecraft\\world\\entity\\ai\\sensing" FILES ${net__minecraft__world__entity__ai__sensing})
+source_group("net/minecraft/world/entity/ai/sensing" FILES ${net__minecraft__world__entity__ai__sensing})
 
 set(net__minecraft__world__entity__ai__util
     "net.minecraft.world.entity.ai.util.h"
     "RandomPos.cpp"
     "RandomPos.h"
 )
-source_group("net\\minecraft\\world\\entity\\ai\\util" FILES ${net__minecraft__world__entity__ai__util})
+source_group("net/minecraft/world/entity/ai/util" FILES ${net__minecraft__world__entity__ai__util})
 
 set(net__minecraft__world__entity__ai__village
     "DoorInfo.cpp"
@@ -649,7 +650,7 @@ set(net__minecraft__world__entity__ai__village
     "VillageSiege.cpp"
     "VillageSiege.h"
 )
-source_group("net\\minecraft\\world\\entity\\ai\\village" FILES ${net__minecraft__world__entity__ai__village})
+source_group("net/minecraft/world/entity/ai/village" FILES ${net__minecraft__world__entity__ai__village})
 
 set(net__minecraft__world__entity__animal
     "Animal.cpp"
@@ -682,7 +683,7 @@ set(net__minecraft__world__entity__animal
     "Wolf.cpp"
     "Wolf.h"
 )
-source_group("net\\minecraft\\world\\entity\\animal" FILES ${net__minecraft__world__entity__animal})
+source_group("net/minecraft/world/entity/animal" FILES ${net__minecraft__world__entity__animal})
 
 set(net__minecraft__world__entity__boss
     "BossMob.cpp"
@@ -691,7 +692,7 @@ set(net__minecraft__world__entity__boss
     "BossMobPart.h"
     "net.minecraft.world.entity.boss.h"
 )
-source_group("net\\minecraft\\world\\entity\\boss" FILES ${net__minecraft__world__entity__boss})
+source_group("net/minecraft/world/entity/boss" FILES ${net__minecraft__world__entity__boss})
 
 set(net__minecraft__world__entity__boss__enderdragon
     "EnderCrystal.cpp"
@@ -702,7 +703,7 @@ set(net__minecraft__world__entity__boss__enderdragon
     "NetherSphere.cpp"
     "NetherSphere.h"
 )
-source_group("net\\minecraft\\world\\entity\\boss\\enderdragon" FILES ${net__minecraft__world__entity__boss__enderdragon})
+source_group("net/minecraft/world/entity/boss/enderdragon" FILES ${net__minecraft__world__entity__boss__enderdragon})
 
 set(net__minecraft__world__entity__global
     "GlobalEntity.cpp"
@@ -711,7 +712,7 @@ set(net__minecraft__world__entity__global
     "LightningBolt.h"
     "net.minecraft.world.entity.global.h"
 )
-source_group("net\\minecraft\\world\\entity\\global" FILES ${net__minecraft__world__entity__global})
+source_group("net/minecraft/world/entity/global" FILES ${net__minecraft__world__entity__global})
 
 set(net__minecraft__world__entity__item
     "Boat.cpp"
@@ -726,7 +727,7 @@ set(net__minecraft__world__entity__item
     "PrimedTnt.cpp"
     "PrimedTnt.h"
 )
-source_group("net\\minecraft\\world\\entity\\item" FILES ${net__minecraft__world__entity__item})
+source_group("net/minecraft/world/entity/item" FILES ${net__minecraft__world__entity__item})
 
 set(net__minecraft__world__entity__monster
     "Blaze.cpp"
@@ -761,7 +762,7 @@ set(net__minecraft__world__entity__monster
     "Zombie.cpp"
     "Zombie.h"
 )
-source_group("net\\minecraft\\world\\entity\\monster" FILES ${net__minecraft__world__entity__monster})
+source_group("net/minecraft/world/entity/monster" FILES ${net__minecraft__world__entity__monster})
 
 set(net__minecraft__world__entity__npc
     "ClientSideMerchant.cpp"
@@ -772,7 +773,7 @@ set(net__minecraft__world__entity__npc
     "Villager.cpp"
     "Villager.h"
 )
-source_group("net\\minecraft\\world\\entity\\npc" FILES ${net__minecraft__world__entity__npc})
+source_group("net/minecraft/world/entity/npc" FILES ${net__minecraft__world__entity__npc})
 
 set(net__minecraft__world__entity__player
     "Abilities.cpp"
@@ -783,7 +784,7 @@ set(net__minecraft__world__entity__player
     "Player.cpp"
     "Player.h"
 )
-source_group("net\\minecraft\\world\\entity\\player" FILES ${net__minecraft__world__entity__player})
+source_group("net/minecraft/world/entity/player" FILES ${net__minecraft__world__entity__player})
 
 set(net__minecraft__world__entity__projectile
     "Arrow.cpp"
@@ -812,7 +813,7 @@ set(net__minecraft__world__entity__projectile
     "ThrownPotion.cpp"
     "ThrownPotion.h"
 )
-source_group("net\\minecraft\\world\\entity\\projectile" FILES ${net__minecraft__world__entity__projectile})
+source_group("net/minecraft/world/entity/projectile" FILES ${net__minecraft__world__entity__projectile})
 
 set(net__minecraft__world__food
     "FoodConstants.cpp"
@@ -821,7 +822,7 @@ set(net__minecraft__world__food
     "FoodData.h"
     "net.minecraft.world.food.h"
 )
-source_group("net\\minecraft\\world\\food" FILES ${net__minecraft__world__food})
+source_group("net/minecraft/world/food" FILES ${net__minecraft__world__food})
 
 set(net__minecraft__world__inventory
     "AbstractContainerMenu.cpp"
@@ -874,7 +875,7 @@ set(net__minecraft__world__inventory
     "TrapMenu.cpp"
     "TrapMenu.h"
 )
-source_group("net\\minecraft\\world\\inventory" FILES ${net__minecraft__world__inventory})
+source_group("net/minecraft/world/inventory" FILES ${net__minecraft__world__inventory})
 
 set(net__minecraft__world__item
     "AnvilTileItem.cpp"
@@ -1008,14 +1009,14 @@ set(net__minecraft__world__item
     "WeaponItem.cpp"
     "WeaponItem.h"
 )
-source_group("net\\minecraft\\world\\item" FILES ${net__minecraft__world__item})
+source_group("net/minecraft/world/item" FILES ${net__minecraft__world__item})
 
 set(net__minecraft__world__item__alchemy
     "net.minecraft.world.item.alchemy.h"
     "PotionBrewing.cpp"
     "PotionBrewing.h"
 )
-source_group("net\\minecraft\\world\\item\\alchemy" FILES ${net__minecraft__world__item__alchemy})
+source_group("net/minecraft/world/item/alchemy" FILES ${net__minecraft__world__item__alchemy})
 
 set(net__minecraft__world__item__crafting
     "ArmorDyeRecipe.cpp"
@@ -1045,7 +1046,7 @@ set(net__minecraft__world__item__crafting
     "WeaponRecipies.cpp"
     "WeaponRecipies.h"
 )
-source_group("net\\minecraft\\world\\item\\crafting" FILES ${net__minecraft__world__item__crafting})
+source_group("net/minecraft/world/item/crafting" FILES ${net__minecraft__world__item__crafting})
 
 set(net__minecraft__world__item__enchantment
     "ArrowDamageEnchantment.cpp"
@@ -1088,7 +1089,7 @@ set(net__minecraft__world__item__enchantment
     "WaterWorkerEnchantment.cpp"
     "WaterWorkerEnchantment.h"
 )
-source_group("net\\minecraft\\world\\item\\enchantment" FILES ${net__minecraft__world__item__enchantment})
+source_group("net/minecraft/world/item/enchantment" FILES ${net__minecraft__world__item__enchantment})
 
 set(net__minecraft__world__item__trading
     "Merchant.h"
@@ -1098,7 +1099,7 @@ set(net__minecraft__world__item__trading
     "MerchantRecipeList.h"
     "net.minecraft.world.item.trading.h"
 )
-source_group("net\\minecraft\\world\\item\\trading" FILES ${net__minecraft__world__item__trading})
+source_group("net/minecraft/world/item/trading" FILES ${net__minecraft__world__item__trading})
 
 set(net__minecraft__world__level
     "BlockDestructionProgress.cpp"
@@ -1139,7 +1140,7 @@ set(net__minecraft__world__level
     "WaterColor.cpp"
     "WaterColor.h"
 )
-source_group("net\\minecraft\\world\\level" FILES ${net__minecraft__world__level})
+source_group("net/minecraft/world/level" FILES ${net__minecraft__world__level})
 
 set(net__minecraft__world__level__biome
     "BeachBiome.cpp"
@@ -1186,7 +1187,7 @@ set(net__minecraft__world__level__biome
     "WaterlilyFeature.cpp"
     "WaterlilyFeature.h"
 )
-source_group("net\\minecraft\\world\\level\\biome" FILES ${net__minecraft__world__level__biome})
+source_group("net/minecraft/world/level/biome" FILES ${net__minecraft__world__level__biome})
 
 set(net__minecraft__world__level__chunk
     "BlockReplacements.cpp"
@@ -1210,7 +1211,7 @@ set(net__minecraft__world__level__chunk
     "WaterLevelChunk.cpp"
     "WaterLevelChunk.h"
 )
-source_group("net\\minecraft\\world\\level\\chunk" FILES ${net__minecraft__world__level__chunk})
+source_group("net/minecraft/world/level/chunk" FILES ${net__minecraft__world__level__chunk})
 
 set(net__minecraft__world__level__chunk__storage
     "ChunkStorage.h"
@@ -1236,7 +1237,7 @@ set(net__minecraft__world__level__chunk__storage
 #    "ZoneIo.cpp"
     "ZoneIo.h"
 )
-source_group("net\\minecraft\\world\\level\\chunk\\storage" FILES ${net__minecraft__world__level__chunk__storage})
+source_group("net/minecraft/world/level/chunk/storage" FILES ${net__minecraft__world__level__chunk__storage})
 
 set(net__minecraft__world__level__dimension
     "Dimension.cpp"
@@ -1248,7 +1249,7 @@ set(net__minecraft__world__level__dimension
     "TheEndDimension.cpp"
     "TheEndDimension.h"
 )
-source_group("net\\minecraft\\world\\level\\dimension" FILES ${net__minecraft__world__level__dimension})
+source_group("net/minecraft/world/level/dimension" FILES ${net__minecraft__world__level__dimension})
 
 set(net__minecraft__world__level__levelgen
     "CanyonFeature.cpp"
@@ -1276,7 +1277,7 @@ set(net__minecraft__world__level__levelgen
     "TheEndLevelRandomLevelSource.h"
     "TownFeature.h"
 )
-source_group("net\\minecraft\\world\\level\\levelgen" FILES ${net__minecraft__world__level__levelgen})
+source_group("net/minecraft/world/level/levelgen" FILES ${net__minecraft__world__level__levelgen})
 
 set(net__minecraft__world__level__levelgen__feature
     "BasicTree.cpp"
@@ -1347,7 +1348,7 @@ set(net__minecraft__world__level__levelgen__feature
     "VinesFeature.cpp"
     "VinesFeature.h"
 )
-source_group("net\\minecraft\\world\\level\\levelgen\\feature" FILES ${net__minecraft__world__level__levelgen__feature})
+source_group("net/minecraft/world/level/levelgen/feature" FILES ${net__minecraft__world__level__levelgen__feature})
 
 set(net__minecraft__world__level__levelgen__structure
     "BlockGenMethods.cpp"
@@ -1385,7 +1386,7 @@ set(net__minecraft__world__level__levelgen__structure
     "VillagePieces.cpp"
     "VillagePieces.h"
 )
-source_group("net\\minecraft\\world\\level\\levelgen\\structure" FILES ${net__minecraft__world__level__levelgen__structure})
+source_group("net/minecraft/world/level/levelgen/structure" FILES ${net__minecraft__world__level__levelgen__structure})
 
 set(net__minecraft__world__level__levelgen__synth
     "Distort.cpp"
@@ -1410,7 +1411,7 @@ set(net__minecraft__world__level__levelgen__synth
     "Synth.cpp"
     "Synth.h"
 )
-source_group("net\\minecraft\\world\\level\\levelgen\\synth" FILES ${net__minecraft__world__level__levelgen__synth})
+source_group("net/minecraft/world/level/levelgen/synth" FILES ${net__minecraft__world__level__levelgen__synth})
 
 set(net__minecraft__world__level__material
     "DecorationMaterial.h"
@@ -1424,7 +1425,7 @@ set(net__minecraft__world__level__material
     "PortalMaterial.h"
     "WebMaterial.h"
 )
-source_group("net\\minecraft\\world\\level\\material" FILES ${net__minecraft__world__level__material})
+source_group("net/minecraft/world/level/material" FILES ${net__minecraft__world__level__material})
 
 set(net__minecraft__world__level__newbiome__layer
     "AddIslandLayer.cpp"
@@ -1479,7 +1480,7 @@ set(net__minecraft__world__level__newbiome__layer
     "ZoomLayer.cpp"
     "ZoomLayer.h"
 )
-source_group("net\\minecraft\\world\\level\\newbiome\\layer" FILES ${net__minecraft__world__level__newbiome__layer})
+source_group("net/minecraft/world/level/newbiome/layer" FILES ${net__minecraft__world__level__newbiome__layer})
 
 set(net__minecraft__world__level__pathfinder
     "BinaryHeap.cpp"
@@ -1492,7 +1493,7 @@ set(net__minecraft__world__level__pathfinder
     "PathFinder.cpp"
     "PathFinder.h"
 )
-source_group("net\\minecraft\\world\\level\\pathfinder" FILES ${net__minecraft__world__level__pathfinder})
+source_group("net/minecraft/world/level/pathfinder" FILES ${net__minecraft__world__level__pathfinder})
 
 set(net__minecraft__world__level__saveddata
     "MapItemSavedData.cpp"
@@ -1501,7 +1502,7 @@ set(net__minecraft__world__level__saveddata
     "SavedData.cpp"
     "SavedData.h"
 )
-source_group("net\\minecraft\\world\\level\\saveddata" FILES ${net__minecraft__world__level__saveddata})
+source_group("net/minecraft/world/level/saveddata" FILES ${net__minecraft__world__level__saveddata})
 
 set(net__minecraft__world__level__storage
     "DerivedLevelData.cpp"
@@ -1534,7 +1535,7 @@ set(net__minecraft__world__level__storage
     "SavedDataStorage.cpp"
     "SavedDataStorage.h"
 )
-source_group("net\\minecraft\\world\\level\\storage" FILES ${net__minecraft__world__level__storage})
+source_group("net/minecraft/world/level/storage" FILES ${net__minecraft__world__level__storage})
 
 set(net__minecraft__world__level__tile
     "AirTile.cpp"
@@ -1754,7 +1755,7 @@ set(net__minecraft__world__level__tile
     "WorkbenchTile.cpp"
     "WorkbenchTile.h"
 )
-source_group("net\\minecraft\\world\\level\\tile" FILES ${net__minecraft__world__level__tile})
+source_group("net/minecraft/world/level/tile" FILES ${net__minecraft__world__level__tile})
 
 set(net__minecraft__world__level__tile__entity
     "BrewingStandTileEntity.cpp"
@@ -1783,7 +1784,7 @@ set(net__minecraft__world__level__tile__entity
     "TileEntity.cpp"
     "TileEntity.h"
 )
-source_group("net\\minecraft\\world\\level\\tile\\entity" FILES ${net__minecraft__world__level__tile__entity})
+source_group("net/minecraft/world/level/tile/entity" FILES ${net__minecraft__world__level__tile__entity})
 
 set(net__minecraft__world__level__tile__piston
     "net.minecraft.world.level.tile.piston.h"
@@ -1796,7 +1797,7 @@ set(net__minecraft__world__level__tile__piston
     "PistonPieceEntity.cpp"
     "PistonPieceEntity.h"
 )
-source_group("net\\minecraft\\world\\level\\tile\\piston" FILES ${net__minecraft__world__level__tile__piston})
+source_group("net/minecraft/world/level/tile/piston" FILES ${net__minecraft__world__level__tile__piston})
 
 set(net__minecraft__world__phys
     "AABB.cpp"
@@ -1807,7 +1808,7 @@ set(net__minecraft__world__phys
     "Vec3.cpp"
     "Vec3.h"
 )
-source_group("net\\minecraft\\world\\phys" FILES ${net__minecraft__world__phys})
+source_group("net/minecraft/world/phys" FILES ${net__minecraft__world__phys})
 
 set(x64headers
     "x64headers/extraX64.h"
@@ -1890,873 +1891,100 @@ set(ALL_FILES
 ################################################################################
 add_library(${PROJECT_NAME} STATIC ${ALL_FILES})
 
+if (WIN32)
 target_precompile_headers(${PROJECT_NAME} PRIVATE
     "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_SOURCE_DIR}/stdafx.h>"
 )
+endif()
 
 use_props(${PROJECT_NAME} "${CMAKE_CONFIGURATION_TYPES}" "${DEFAULT_CXX_PROPS}")
+if (MSVC)
 set_target_properties(${PROJECT_NAME} PROPERTIES
     VS_GLOBAL_KEYWORD "Xbox360Proj"
 )
+endif()
 ################################################################################
 # Target name
 ################################################################################
-if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "Durango")
-    set_target_properties(${PROJECT_NAME} PROPERTIES
-        TARGET_NAME_CONTENTPACKAGE_NO_TU   "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-        TARGET_NAME_CONTENTPACKAGE_SYMBOLS "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-        TARGET_NAME_CONTENTPACKAGE         "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-        TARGET_NAME_DEBUG                  "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-        TARGET_NAME_RELEASE                "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-        TARGET_NAME_RELEASEFORART          "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-    )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "PS3")
-    set_target_properties(${PROJECT_NAME} PROPERTIES
-        TARGET_NAME_CONTENTPACKAGE_NO_TU   "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-        TARGET_NAME_CONTENTPACKAGE_SYMBOLS "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-        TARGET_NAME_CONTENTPACKAGE         "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-        TARGET_NAME_DEBUG                  "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-        TARGET_NAME_RELEASE                "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-        TARGET_NAME_RELEASEFORART          "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-    )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "PSVita")
-    set_target_properties(${PROJECT_NAME} PROPERTIES
-        TARGET_NAME_CONTENTPACKAGE_NO_TU   "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-        TARGET_NAME_CONTENTPACKAGE_SYMBOLS "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-        TARGET_NAME_CONTENTPACKAGE         "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-        TARGET_NAME_DEBUG                  "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-        TARGET_NAME_RELEASE                "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-        TARGET_NAME_RELEASEFORART          "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-    )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "Windows64")
-    set_target_properties(${PROJECT_NAME} PROPERTIES
-        TARGET_NAME_CONTENTPACKAGE_NO_TU   "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-        TARGET_NAME_CONTENTPACKAGE_SYMBOLS "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-        TARGET_NAME_CONTENTPACKAGE         "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-        TARGET_NAME_DEBUG                  "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-        TARGET_NAME_RELEASE                "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-        TARGET_NAME_RELEASEFORART          "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-    )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "Xbox 360")
-    set_target_properties(${PROJECT_NAME} PROPERTIES
-        TARGET_NAME_CONTENTPACKAGE_NO_TU   "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-        TARGET_NAME_CONTENTPACKAGE_SYMBOLS "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-        TARGET_NAME_CONTENTPACKAGE         "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-        TARGET_NAME_DEBUG                  "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-        TARGET_NAME_RELEASE                "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-        TARGET_NAME_RELEASEFORART          "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
-    )
-endif()
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    TARGET_NAME_CONTENTPACKAGE_NO_TU   "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
+    TARGET_NAME_CONTENTPACKAGE_SYMBOLS "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
+    TARGET_NAME_CONTENTPACKAGE         "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
+    TARGET_NAME_DEBUG                  "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
+    TARGET_NAME_RELEASE                "${OUTPUT_DIRECTORY}${PROJECT_NAME}"
+    TARGET_NAME_RELEASEFORART          "${OUTPUT_DIRECTORY}${PROJECT_NAME}")
+
 ################################################################################
 # Output directory
 ################################################################################
-if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "Durango")
-    set_target_properties(${PROJECT_NAME} PROPERTIES
-        OUTPUT_DIRECTORY_CONTENTPACKAGE_NO_TU   "${CMAKE_CURRENT_SOURCE_DIR}//$<CONFIG>/"
-        OUTPUT_DIRECTORY_CONTENTPACKAGE_SYMBOLS "${CMAKE_CURRENT_SOURCE_DIR}//${CMAKE_VS_PLATFORM_NAME}_$<CONFIG>/"
-        OUTPUT_DIRECTORY_CONTENTPACKAGE         "${CMAKE_CURRENT_SOURCE_DIR}//${CMAKE_VS_PLATFORM_NAME}_$<CONFIG>/"
-        OUTPUT_DIRECTORY_DEBUG                  "${CMAKE_CURRENT_SOURCE_DIR}//${CMAKE_VS_PLATFORM_NAME}_$<CONFIG>/"
-        OUTPUT_DIRECTORY_RELEASE                "${CMAKE_CURRENT_SOURCE_DIR}//${CMAKE_VS_PLATFORM_NAME}_$<CONFIG>/"
-        OUTPUT_DIRECTORY_RELEASEFORART          "${CMAKE_CURRENT_SOURCE_DIR}//${CMAKE_VS_PLATFORM_NAME}_$<CONFIG>/"
-    )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "ORBIS")
-    set_target_properties(${PROJECT_NAME} PROPERTIES
-        OUTPUT_DIRECTORY_DEBUG                  "${CMAKE_VS_PLATFORM_NAME}_$<CONFIG>/"
-        OUTPUT_DIRECTORY_RELEASE                "${CMAKE_VS_PLATFORM_NAME}_$<CONFIG>/"
-        OUTPUT_DIRECTORY_RELEASEFORART          "${CMAKE_VS_PLATFORM_NAME}_$<CONFIG>/"
-    )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "PS3")
-    set_target_properties(${PROJECT_NAME} PROPERTIES
-        OUTPUT_DIRECTORY_CONTENTPACKAGE_NO_TU   "${CMAKE_CURRENT_SOURCE_DIR}/"
-        OUTPUT_DIRECTORY_CONTENTPACKAGE_SYMBOLS "${CMAKE_CURRENT_SOURCE_DIR}/"
-        OUTPUT_DIRECTORY_CONTENTPACKAGE         "${CMAKE_CURRENT_SOURCE_DIR}/"
-        OUTPUT_DIRECTORY_DEBUG                  "${CMAKE_CURRENT_SOURCE_DIR}/"
-        OUTPUT_DIRECTORY_RELEASE                "${CMAKE_CURRENT_SOURCE_DIR}/"
-        OUTPUT_DIRECTORY_RELEASEFORART          "${CMAKE_CURRENT_SOURCE_DIR}/"
-    )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "PSVita")
-    set_target_properties(${PROJECT_NAME} PROPERTIES
-        OUTPUT_DIRECTORY_CONTENTPACKAGE_NO_TU   "${CMAKE_CURRENT_SOURCE_DIR}/"
-        OUTPUT_DIRECTORY_CONTENTPACKAGE_SYMBOLS "${CMAKE_CURRENT_SOURCE_DIR}/"
-        OUTPUT_DIRECTORY_CONTENTPACKAGE         "${CMAKE_CURRENT_SOURCE_DIR}/"
-        OUTPUT_DIRECTORY_DEBUG                  "${CMAKE_CURRENT_SOURCE_DIR}/"
-        OUTPUT_DIRECTORY_RELEASE                "${CMAKE_CURRENT_SOURCE_DIR}/"
-        OUTPUT_DIRECTORY_RELEASEFORART          "${CMAKE_CURRENT_SOURCE_DIR}/"
-    )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "Windows64")
-    set_target_properties(${PROJECT_NAME} PROPERTIES
-        OUTPUT_DIRECTORY_CONTENTPACKAGE_NO_TU   "${CMAKE_CURRENT_SOURCE_DIR}//$<CONFIG>/"
-        OUTPUT_DIRECTORY_CONTENTPACKAGE_SYMBOLS "${CMAKE_CURRENT_SOURCE_DIR}//${CMAKE_VS_PLATFORM_NAME}_$<CONFIG>/"
-        OUTPUT_DIRECTORY_CONTENTPACKAGE         "${CMAKE_CURRENT_SOURCE_DIR}//${CMAKE_VS_PLATFORM_NAME}_$<CONFIG>/"
-        OUTPUT_DIRECTORY_DEBUG                  "${CMAKE_CURRENT_SOURCE_DIR}//${CMAKE_VS_PLATFORM_NAME}_$<CONFIG>/"
-        OUTPUT_DIRECTORY_RELEASE                "${CMAKE_CURRENT_SOURCE_DIR}//${CMAKE_VS_PLATFORM_NAME}_$<CONFIG>/"
-        OUTPUT_DIRECTORY_RELEASEFORART          "${CMAKE_CURRENT_SOURCE_DIR}//${CMAKE_VS_PLATFORM_NAME}_$<CONFIG>/"
-    )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "Xbox 360")
-    set_target_properties(${PROJECT_NAME} PROPERTIES
-        OUTPUT_DIRECTORY_CONTENTPACKAGE_NO_TU   "${CMAKE_CURRENT_SOURCE_DIR}/"
-        OUTPUT_DIRECTORY_CONTENTPACKAGE_SYMBOLS "${CMAKE_CURRENT_SOURCE_DIR}/"
-        OUTPUT_DIRECTORY_CONTENTPACKAGE         "${CMAKE_CURRENT_SOURCE_DIR}/"
-        OUTPUT_DIRECTORY_DEBUG                  "${CMAKE_CURRENT_SOURCE_DIR}/"
-        OUTPUT_DIRECTORY_RELEASE                "${CMAKE_CURRENT_SOURCE_DIR}/"
-        OUTPUT_DIRECTORY_RELEASEFORART          "${CMAKE_CURRENT_SOURCE_DIR}/"
-    )
-endif()
+
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    OUTPUT_DIRECTORY_CONTENTPACKAGE_NO_TU   "${CMAKE_CURRENT_SOURCE_DIR}/"
+    OUTPUT_DIRECTORY_CONTENTPACKAGE_SYMBOLS "${CMAKE_CURRENT_SOURCE_DIR}/"
+    OUTPUT_DIRECTORY_CONTENTPACKAGE         "${CMAKE_CURRENT_SOURCE_DIR}/"
+    OUTPUT_DIRECTORY_DEBUG                  "${CMAKE_CURRENT_SOURCE_DIR}/"
+    OUTPUT_DIRECTORY_RELEASE                "${CMAKE_CURRENT_SOURCE_DIR}/"
+    OUTPUT_DIRECTORY_RELEASEFORART          "${CMAKE_CURRENT_SOURCE_DIR}/"
+)
+
 ################################################################################
-# MSVC runtime library
+# GCC runtime library
 ################################################################################
-get_property(MSVC_RUNTIME_LIBRARY_DEFAULT TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY)
-if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "Durango")
-    string(CONCAT "MSVC_RUNTIME_LIBRARY_STR"
-        $<$<CONFIG:ContentPackage_NO_TU>:
-            MultiThreaded
-        >
-        $<$<CONFIG:CONTENTPACKAGE_SYMBOLS>:
-            MultiThreaded
-        >
-        $<$<CONFIG:ContentPackage>:
-            MultiThreadedDLL
-        >
-        $<$<CONFIG:Debug>:
-            MultiThreadedDebugDLL
-        >
-        $<$<CONFIG:Release>:
-            MultiThreadedDLL
-        >
-        $<$<CONFIG:ReleaseForArt>:
-            MultiThreaded
-        >
-        $<$<NOT:$<OR:$<CONFIG:ContentPackage_NO_TU>,$<CONFIG:CONTENTPACKAGE_SYMBOLS>,$<CONFIG:ContentPackage>,$<CONFIG:Debug>,$<CONFIG:Release>,$<CONFIG:ReleaseForArt>>>:${MSVC_RUNTIME_LIBRARY_DEFAULT}>
-    )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "PS3")
-    string(CONCAT "MSVC_RUNTIME_LIBRARY_STR"
-        $<$<CONFIG:ContentPackage_NO_TU>:
-            MultiThreaded
-        >
-        $<$<CONFIG:CONTENTPACKAGE_SYMBOLS>:
-            MultiThreaded
-        >
-        $<$<CONFIG:ContentPackage>:
-            MultiThreaded
-        >
-        $<$<CONFIG:Debug>:
-            MultiThreadedDebug
-        >
-        $<$<CONFIG:Release>:
-            MultiThreadedDebug
-        >
-        $<$<CONFIG:ReleaseForArt>:
-            MultiThreaded
-        >
-        $<$<NOT:$<OR:$<CONFIG:ContentPackage_NO_TU>,$<CONFIG:CONTENTPACKAGE_SYMBOLS>,$<CONFIG:ContentPackage>,$<CONFIG:Debug>,$<CONFIG:Release>,$<CONFIG:ReleaseForArt>>>:${MSVC_RUNTIME_LIBRARY_DEFAULT}>
-    )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "PSVita")
-    string(CONCAT "MSVC_RUNTIME_LIBRARY_STR"
-        $<$<CONFIG:ContentPackage_NO_TU>:
-            MultiThreaded
-        >
-        $<$<CONFIG:CONTENTPACKAGE_SYMBOLS>:
-            MultiThreaded
-        >
-        $<$<CONFIG:ContentPackage>:
-            MultiThreaded
-        >
-        $<$<CONFIG:Debug>:
-            MultiThreadedDebug
-        >
-        $<$<CONFIG:Release>:
-            MultiThreadedDebug
-        >
-        $<$<CONFIG:ReleaseForArt>:
-            MultiThreaded
-        >
-        $<$<NOT:$<OR:$<CONFIG:ContentPackage_NO_TU>,$<CONFIG:CONTENTPACKAGE_SYMBOLS>,$<CONFIG:ContentPackage>,$<CONFIG:Debug>,$<CONFIG:Release>,$<CONFIG:ReleaseForArt>>>:${MSVC_RUNTIME_LIBRARY_DEFAULT}>
-    )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "Windows64")
-    string(CONCAT "MSVC_RUNTIME_LIBRARY_STR"
-        $<$<CONFIG:ContentPackage_NO_TU>:
-            MultiThreaded
-        >
-        $<$<CONFIG:CONTENTPACKAGE_SYMBOLS>:
-            MultiThreaded
-        >
-        $<$<CONFIG:ContentPackage>:
-            MultiThreaded
-        >
-        $<$<CONFIG:Debug>:
-            MultiThreadedDebug
-        >
-        $<$<CONFIG:Release>:
-            MultiThreaded
-        >
-        $<$<CONFIG:ReleaseForArt>:
-            MultiThreaded
-        >
-        $<$<NOT:$<OR:$<CONFIG:ContentPackage_NO_TU>,$<CONFIG:CONTENTPACKAGE_SYMBOLS>,$<CONFIG:ContentPackage>,$<CONFIG:Debug>,$<CONFIG:Release>,$<CONFIG:ReleaseForArt>>>:${MSVC_RUNTIME_LIBRARY_DEFAULT}>
-    )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "Xbox 360")
-    string(CONCAT "MSVC_RUNTIME_LIBRARY_STR"
-        $<$<CONFIG:ContentPackage_NO_TU>:
-            MultiThreaded
-        >
-        $<$<CONFIG:CONTENTPACKAGE_SYMBOLS>:
-            MultiThreaded
-        >
-        $<$<CONFIG:ContentPackage>:
-            MultiThreaded
-        >
-        $<$<CONFIG:Debug>:
-            MultiThreadedDebug
-        >
-        $<$<CONFIG:Release>:
-            MultiThreaded
-        >
-        $<$<CONFIG:ReleaseForArt>:
-            MultiThreaded
-        >
-        $<$<NOT:$<OR:$<CONFIG:ContentPackage_NO_TU>,$<CONFIG:CONTENTPACKAGE_SYMBOLS>,$<CONFIG:ContentPackage>,$<CONFIG:Debug>,$<CONFIG:Release>,$<CONFIG:ReleaseForArt>>>:${MSVC_RUNTIME_LIBRARY_DEFAULT}>
-    )
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -DDEBUG")
+elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+else()
+# just assume it's Debug
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -DDEBUG")
 endif()
-set_target_properties(${PROJECT_NAME} PROPERTIES MSVC_RUNTIME_LIBRARY ${MSVC_RUNTIME_LIBRARY_STR})
 
 ################################################################################
 # Compile definitions
 ################################################################################
-if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "Durango")
-    target_compile_definitions(${PROJECT_NAME} PRIVATE
-        "$<$<CONFIG:ContentPackage_NO_TU>:"
-            "_TU_BUILD;"
-            "_FINAL_BUILD;"
-            "NDEBUG;"
-            "_XBOX;"
-            "_LIB;"
-            "_CONTENT_PACKAGE;"
-            "_MBCS"
-        ">"
-        "$<$<CONFIG:CONTENTPACKAGE_SYMBOLS>:"
-            "_TU_BUILD;"
-            "_FINAL_BUILD;"
-            "NDEBUG;"
-            "_XBOX;"
-            "_LIB;"
-            "_CONTENT_PACKAGE;"
-            "_MBCS"
-        ">"
-        "$<$<CONFIG:ContentPackage>:"
-            "SPLIT_SAVES;"
-            "_LARGE_WORLDS;"
-            "_EXTENDED_ACHIEVEMENTS;"
-            "_FINAL_BUILD;"
-            "_CONTENT_PACKAGE;"
-            "NDEBUG;"
-            "__WRL_NO_DEFAULT_LIB__;"
-            "_XM_AVX_INTRINSICS_;"
-            "UNICODE;"
-            "_UNICODE"
-        ">"
-        "$<$<CONFIG:Debug>:"
-            "SPLIT_SAVES;"
-            "_LARGE_WORLDS;"
-            "_EXTENDED_ACHIEVEMENTS;"
-            "UNICODE;"
-            "_UNICODE;"
-            "__WRL_NO_DEFAULT_LIB__;"
-            "WINAPI_FAMILY=WINAPI_FAMILY_TV_TITLE;"
-            "WIN32_LEAN_AND_MEAN;"
-            "_XM_AVX_INTRINSICS_;"
-            "_DEBUG_MENUS_ENABLED;"
-            "_DEBUG;"
-            "_LIB;"
-            "_DURANGO;"
-            "UNICODE;"
-            "_UNICODE"
-        ">"
-        "$<$<CONFIG:Release>:"
-            "SPLIT_SAVES;"
-            "_LARGE_WORLDS;"
-            "_EXTENDED_ACHIEVEMENTS;"
-            "UNICODE;"
-            "_UNICODE;"
-            "__WRL_NO_DEFAULT_LIB__;"
-            "WINAPI_FAMILY=WINAPI_FAMILY_TV_TITLE;"
-            "WIN32_LEAN_AND_MEAN;"
-            "_XM_AVX_INTRINSICS_;"
-            "_DEBUG_MENUS_ENABLED;"
-            "_LIB;"
-            "_DURANGO;"
-            "USE_PIX;"
-            "UNICODE;"
-            "_UNICODE"
-        ">"
-        "$<$<CONFIG:ReleaseForArt>:"
-            "_TU_BUILD;"
-            "_FINAL_BUILD;"
-            "NDEBUG;"
-            "_XBOX;"
-            "_LIB;"
-            "_CONTENT_PACKAGE;"
-            "_MBCS"
-        ">"
-        "_CRT_NON_CONFORMING_SWPRINTFS;"
-        "_CRT_SECURE_NO_WARNINGS"
-    )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "ORBIS")
-    target_compile_definitions(${PROJECT_NAME} PRIVATE
-        "$<$<CONFIG:CONTENTPACKAGE_SYMBOLS>:"
-            "SPLIT_SAVES;"
-            "_LARGE_WORLDS;"
-            "_EXTENDED_ACHIEVEMENTS;"
-            "_CONTENT_PACKAGE;"
-            "_FINAL_BUILD"
-        ">"
-        "$<$<CONFIG:ContentPackage>:"
-            "SPLIT_SAVES;"
-            "_LARGE_WORLDS;"
-            "_EXTENDED_ACHIEVEMENTS;"
-            "_CONTENT_PACKAGE;"
-            "_FINAL_BUILD"
-        ">"
-        "$<$<CONFIG:Debug>:"
-            "SPLIT_SAVES;"
-            "_LARGE_WORLDS;"
-            "_EXTENDED_ACHIEVEMENTS;"
-            "_DEBUG_MENUS_ENABLED;"
-            "_DEBUG"
-        ">"
-        "$<$<CONFIG:Release>:"
-            "SPLIT_SAVES;"
-            "_LARGE_WORLDS;"
-            "_EXTENDED_ACHIEVEMENTS;"
-            "_DEBUG_MENUS_ENABLED"
-        ">"
-        "$<$<CONFIG:ReleaseForArt>:"
-            "SPLIT_SAVES;"
-            "_LARGE_WORLDS;"
-            "_EXTENDED_ACHIEVEMENTS;"
-            "_DEBUG_MENUS_ENABLED"
-        ">"
-    )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "PS3")
-    target_compile_definitions(${PROJECT_NAME} PRIVATE
-        "$<$<CONFIG:ContentPackage_NO_TU>:"
-            "_TU_BUILD;"
-            "_FINAL_BUILD;"
-            "NDEBUG;"
-            "_XBOX;"
-            "_CONTENT_PACKAGE"
-        ">"
-        "$<$<CONFIG:CONTENTPACKAGE_SYMBOLS>:"
-            "_CONTENT_PACKAGE;"
-            "_FINAL_BUILD;"
-            "_ITERATOR_DEBUG_LEVEL=0;"
-            "_SECURE_SCL=0"
-        ">"
-        "$<$<CONFIG:ContentPackage>:"
-            "_CONTENT_PACKAGE;"
-            "_FINAL_BUILD;"
-            "_ITERATOR_DEBUG_LEVEL=0;"
-            "_SECURE_SCL=0"
-        ">"
-        "$<$<CONFIG:Debug>:"
-            "_DEBUG_MENUS_ENABLED;"
-            "_ITERATOR_DEBUG_LEVEL=0;"
-            "_SECURE_SCL=0;"
-            "_DEBUG"
-        ">"
-        "$<$<CONFIG:Release>:"
-            "_DEBUG_MENUS_ENABLED;"
-            "_ITERATOR_DEBUG_LEVEL=0;"
-            "_SECURE_SCL=0"
-        ">"
-        "$<$<CONFIG:ReleaseForArt>:"
-            "_DEBUG_MENUS_ENABLED;"
-            "_ITERATOR_DEBUG_LEVEL=0;"
-            "_SECURE_SCL=0"
-        ">"
-        "_LIB;"
-        "_MBCS"
-    )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "PSVita")
-    target_compile_definitions(${PROJECT_NAME} PRIVATE
-        "$<$<CONFIG:ContentPackage_NO_TU>:"
-            "_TU_BUILD;"
-            "_FINAL_BUILD;"
-            "NDEBUG;"
-            "_CONTENT_PACKAGE"
-        ">"
-        "$<$<CONFIG:CONTENTPACKAGE_SYMBOLS>:"
-            "_CONTENT_PACKAGE;"
-            "_FINAL_BUILD;"
-            "_ITERATOR_DEBUG_LEVEL=0;"
-            "_SECURE_SCL=0"
-        ">"
-        "$<$<CONFIG:ContentPackage>:"
-            "_CONTENT_PACKAGE;"
-            "_FINAL_BUILD;"
-            "_ITERATOR_DEBUG_LEVEL=0;"
-            "_SECURE_SCL=0"
-        ">"
-        "$<$<CONFIG:Debug>:"
-            "_DEBUG_MENUS_ENABLED;"
-            "_ITERATOR_DEBUG_LEVEL=0;"
-            "_SECURE_SCL=0;"
-            "_DEBUG"
-        ">"
-        "$<$<CONFIG:Release>:"
-            "_DEBUG_MENUS_ENABLED;"
-            "_ITERATOR_DEBUG_LEVEL=0;"
-            "_SECURE_SCL=0"
-        ">"
-        "$<$<CONFIG:ReleaseForArt>:"
-            "_DEBUG_MENUS_ENABLED;"
-            "_ITERATOR_DEBUG_LEVEL=0;"
-            "_SECURE_SCL=0"
-        ">"
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+    "$<$<CONFIG:CONTENTPACKAGE_SYMBOLS>:"
+        "SPLIT_SAVES;"
+        "_LARGE_WORLDS;"
         "_EXTENDED_ACHIEVEMENTS;"
-        "_LIB;"
-        "__PSVITA__;"
-        "_MBCS"
-    )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "Windows64")
-    target_compile_definitions(${PROJECT_NAME} PRIVATE
-        "$<$<CONFIG:ContentPackage_NO_TU>:"
-            "_TU_BUILD;"
-            "_FINAL_BUILD;"
-            "NDEBUG;"
-            "_XBOX;"
-            "_CONTENT_PACKAGE"
-        ">"
-        "$<$<CONFIG:CONTENTPACKAGE_SYMBOLS>:"
-            "_TU_BUILD;"
-            "_FINAL_BUILD;"
-            "NDEBUG;"
-            "_XBOX;"
-            "_CONTENT_PACKAGE"
-        ">"
-        "$<$<CONFIG:ContentPackage>:"
-            "_TU_BUILD;"
-            "_FINAL_BUILD;"
-            "NDEBUG;"
-            "_XBOX;"
-            "_CONTENT_PACKAGE"
-        ">"
-        "$<$<CONFIG:Debug>:"
-            "_LARGE_WORLDS;"
-            "_DEBUG_MENUS_ENABLED;"
-            "_DEBUG;"
-            "_WINDOWS64"
+        "_CONTENT_PACKAGE;"
+        "_FINAL_BUILD"
+        "LINUX;"
+        "_LINUX;"
+    ">"
+    "$<$<CONFIG:ContentPackage>:"
+        "SPLIT_SAVES;"
+        "_LARGE_WORLDS;"
+        "_EXTENDED_ACHIEVEMENTS;"
+        "_CONTENT_PACKAGE;"
+        "LINUX;"
+        "_LINUX;"
+        "_FINAL_BUILD"
+    ">"
+    "$<$<CONFIG:Debug>:"
+        "SPLIT_SAVES;"
+        "_LARGE_WORLDS;"
+        "_EXTENDED_ACHIEVEMENTS;"
+        "_DEBUG_MENUS_ENABLED;"
+        "_DEBUG"
+        "LINUX;"
+        "_LINUX;"
         ">"
         "$<$<CONFIG:Release>:"
-            "_LARGE_WORLDS;"
-            "_DEBUG_MENUS_ENABLED;"
-            "_WINDOWS64"
-        ">"
-        "$<$<CONFIG:ReleaseForArt>:"
-            "_TU_BUILD;"
-            "_FINAL_BUILD;"
-            "NDEBUG;"
-            "_XBOX;"
-            "_CONTENT_PACKAGE"
-        ">"
-        "_LIB;"
-        "_CRT_NON_CONFORMING_SWPRINTFS;"
-        "_CRT_SECURE_NO_WARNINGS;"
-        "_MBCS"
-    )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "Xbox 360")
-    target_compile_definitions(${PROJECT_NAME} PRIVATE
-        "$<$<CONFIG:ContentPackage_NO_TU>:"
-            "_FINAL_BUILD;"
-            "_CONTENT_PACKAGE;"
-            "NDEBUG"
-        ">"
-        "$<$<CONFIG:CONTENTPACKAGE_SYMBOLS>:"
-            "_TU_BUILD;"
-            "_FINAL_BUILD;"
-            "NDEBUG;"
-            "_CONTENT_PACKAGE"
-        ">"
-        "$<$<CONFIG:ContentPackage>:"
-            "_TU_BUILD;"
-            "_FINAL_BUILD;"
-            "NDEBUG;"
-            "_CONTENT_PACKAGE"
-        ">"
-        "$<$<CONFIG:Debug>:"
-            "_DEBUG_MENUS_ENABLED;"
-            "_ITERATOR_DEBUG_LEVEL=0;"
-            "_SECURE_SCL=0;"
-            "_DEBUG"
-        ">"
-        "$<$<CONFIG:Release>:"
-            "_DEBUG_MENUS_ENABLED;"
-            "NDEBUG;"
-            "PROFILE"
-        ">"
-        "$<$<CONFIG:ReleaseForArt>:"
-            "_TU_BUILD;"
-            "_FINAL_BUILD;"
-            "NDEBUG;"
-            "_CONTENT_PACKAGE"
-        ">"
-        "_XBOX;"
-        "_LIB;"
-        "_MBCS"
-    )
-endif()
-
-################################################################################
-# Compile and link options
-################################################################################
-if(MSVC)
-    if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "Durango")
-        target_compile_options(${PROJECT_NAME} PRIVATE
-            $<$<CONFIG:ContentPackage_NO_TU>:
-                /Ox;
-                /GF;
-                /Gy;
-                /Ot;
-                /GS-
-            >
-            $<$<CONFIG:CONTENTPACKAGE_SYMBOLS>:
-                /Ox;
-                /GF;
-                /Gy;
-                /Ot;
-                /GS-
-            >
-            $<$<CONFIG:ContentPackage>:
-                /MP;
-                /O2;
-                /GF;
-                /Gy;
-                /Ot;
-                /GS-
-            >
-            $<$<CONFIG:Debug>:
-                /MP;
-                /Od;
-                /RTC1;
-                /Gy;
-                /GS
-            >
-            $<$<CONFIG:Release>:
-                /MP;
-                /Ox;
-                /Ot;
-                /GS
-            >
-            $<$<CONFIG:ReleaseForArt>:
-                /Ox;
-                /GF;
-                /Gy;
-                /Ot;
-                /GS-
-            >
-            /W3;
-            /Zi;
-            /GR;
-            ${DEFAULT_CXX_EXCEPTION_HANDLING}
-        )
-    elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "ORBIS")
-        target_compile_options(${PROJECT_NAME} PRIVATE
-            $<$<CONFIG:Debug>:
-                /MP
-            >
-            $<$<CONFIG:Release>:
-                /MP
-            >
-            $<$<CONFIG:ReleaseForArt>:
-                /MP
-            >
-            ${DEFAULT_CXX_DEBUG_INFORMATION_FORMAT};
-            /GR;
-            ${DEFAULT_CXX_EXCEPTION_HANDLING}
-        )
-    elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "PS3")
-        target_compile_options(${PROJECT_NAME} PRIVATE
-            $<$<CONFIG:ContentPackage_NO_TU>:
-                /Ox;
-                /GF;
-                /Gy;
-                /Ot;
-                ${DEFAULT_CXX_EXCEPTION_HANDLING}
-            >
-            $<$<CONFIG:CONTENTPACKAGE_SYMBOLS>:
-                /MP;
-                /Ox;
-                /GF;
-                /Gy;
-                /Ot;
-                ${DEFAULT_CXX_EXCEPTION_HANDLING}
-            >
-            $<$<CONFIG:ContentPackage>:
-                /MP;
-                /Ox;
-                /GF;
-                /Gy;
-                /Ot;
-                ${DEFAULT_CXX_EXCEPTION_HANDLING}
-            >
-            $<$<CONFIG:Debug>:
-                /MP;
-                /Gm;
-                /Od
-            >
-            $<$<CONFIG:Release>:
-                /MP;
-                /Gm;
-                /Od
-            >
-            $<$<CONFIG:ReleaseForArt>:
-                /MP;
-                /Ox;
-                /GF;
-                /Gy;
-                /Ot;
-                ${DEFAULT_CXX_EXCEPTION_HANDLING}
-            >
-            /W3;
-            /Zi;
-            /GR;
-            /wd1700;
-            /wd613;
-            /wd1011;
-            -Xpch_override=1;
-            /GS-
-        )
-    elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "PSVita")
-        target_compile_options(${PROJECT_NAME} PRIVATE
-            $<$<CONFIG:ContentPackage_NO_TU>:
-                /Ox;
-                /GF;
-                /Gy;
-                /Ot;
-                ${DEFAULT_CXX_EXCEPTION_HANDLING}
-            >
-            $<$<CONFIG:CONTENTPACKAGE_SYMBOLS>:
-                /MP;
-                /Ox;
-                /GF;
-                /Gy;
-                /Ot;
-                ${DEFAULT_CXX_EXCEPTION_HANDLING}
-            >
-            $<$<CONFIG:ContentPackage>:
-                /MP;
-                /Ox;
-                /GF;
-                /Gy;
-                /Ot;
-                ${DEFAULT_CXX_EXCEPTION_HANDLING}
-            >
-            $<$<CONFIG:Debug>:
-                /MP;
-                /Gm;
-                /Od
-            >
-            $<$<CONFIG:Release>:
-                /MP;
-                /Gm;
-                /Od
-            >
-            $<$<CONFIG:ReleaseForArt>:
-                /MP;
-                /Ox;
-                /GF;
-                /Gy;
-                /Ot;
-                ${DEFAULT_CXX_EXCEPTION_HANDLING}
-            >
-            /W3;
-            /Zi;
-            /GR;
-            /wd1700;
-            /wd613;
-            /wd1011;
-            -Xpch_override=1;
-            /GS-
-        )
-    elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "Windows64")
-        target_compile_options(${PROJECT_NAME} PRIVATE
-            $<$<CONFIG:ContentPackage_NO_TU>:
-                /Ox;
-                /GF;
-                /Gy;
-                /Ot
-            >
-            $<$<CONFIG:CONTENTPACKAGE_SYMBOLS>:
-                /Ox;
-                /GF;
-                /Gy;
-                /Ot
-            >
-            $<$<CONFIG:ContentPackage>:
-                /Ox;
-                /GF;
-                /Gy;
-                /Ot
-            >
-            $<$<CONFIG:Debug>:
-                /MP;
-                /Od
-            >
-            $<$<CONFIG:Release>:
-                /MP;
-                /Ox;
-                /Ot
-            >
-            $<$<CONFIG:ReleaseForArt>:
-                /Ox;
-                /GF;
-                /Gy;
-                /Ot
-            >
-            /W3;
-            /Zi;
-            /GR;
-            ${DEFAULT_CXX_EXCEPTION_HANDLING};
-            /GS-
-        )
-    elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "Xbox 360")
-        target_compile_options(${PROJECT_NAME} PRIVATE
-            $<$<CONFIG:ContentPackage_NO_TU>:
-                /Ox;
-                /GF;
-                /Gy;
-                /Ot
-            >
-            $<$<CONFIG:CONTENTPACKAGE_SYMBOLS>:
-                /Ox;
-                /GF;
-                /Gy;
-                /Ot
-            >
-            $<$<CONFIG:ContentPackage>:
-                /Ox;
-                /GF;
-                /Gy;
-                /Ot
-            >
-            $<$<CONFIG:Debug>:
-                /Gm-;
-                /Od
-            >
-            $<$<CONFIG:Release>:
-                /Gm-;
-                /Ox;
-                /GF;
-                /Gy;
-                /Ot
-            >
-            $<$<CONFIG:ReleaseForArt>:
-                /Ox;
-                /GF;
-                /Gy;
-                /Ot
-            >
-            /MP;
-            /W3;
-            /Zi;
-            /GR;
-            /GS-
-        )
-    endif()
-    if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "Durango")
-        target_link_options(${PROJECT_NAME} PRIVATE
-            $<$<CONFIG:ContentPackage_NO_TU>:
-                /OPT:REF;
-                /OPT:ICF
-            >
-            $<$<CONFIG:CONTENTPACKAGE_SYMBOLS>:
-                /OPT:REF;
-                /OPT:ICF
-            >
-            $<$<CONFIG:ContentPackage>:
-                /OPT:REF;
-                /OPT:ICF
-            >
-            $<$<CONFIG:ReleaseForArt>:
-                /OPT:REF;
-                /OPT:ICF
-            >
-        )
-    elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "PS3")
-        target_link_options(${PROJECT_NAME} PRIVATE
-            $<$<CONFIG:ContentPackage_NO_TU>:
-                /OPT:REF;
-                /OPT:ICF
-            >
-            $<$<CONFIG:CONTENTPACKAGE_SYMBOLS>:
-                /OPT:REF;
-                /OPT:ICF
-            >
-            $<$<CONFIG:ContentPackage>:
-                /OPT:REF;
-                /OPT:ICF
-            >
-            $<$<CONFIG:ReleaseForArt>:
-                /OPT:REF;
-                /OPT:ICF
-            >
-        )
-    elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "PSVita")
-        target_link_options(${PROJECT_NAME} PRIVATE
-            $<$<CONFIG:ContentPackage_NO_TU>:
-                /OPT:REF;
-                /OPT:ICF
-            >
-            $<$<CONFIG:CONTENTPACKAGE_SYMBOLS>:
-                /OPT:REF;
-                /OPT:ICF
-            >
-            $<$<CONFIG:ContentPackage>:
-                /OPT:REF;
-                /OPT:ICF
-            >
-            $<$<CONFIG:ReleaseForArt>:
-                /OPT:REF;
-                /OPT:ICF
-            >
-        )
-    elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "Windows64")
-        target_link_options(${PROJECT_NAME} PRIVATE
-            $<$<CONFIG:ContentPackage_NO_TU>:
-                /OPT:REF;
-                /OPT:ICF
-            >
-            $<$<CONFIG:CONTENTPACKAGE_SYMBOLS>:
-                /OPT:REF;
-                /OPT:ICF
-            >
-            $<$<CONFIG:ContentPackage>:
-                /OPT:REF;
-                /OPT:ICF
-            >
-            $<$<CONFIG:ReleaseForArt>:
-                /OPT:REF;
-                /OPT:ICF
-            >
-        )
-    elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "Xbox 360")
-        target_link_options(${PROJECT_NAME} PRIVATE
-            $<$<CONFIG:ContentPackage_NO_TU>:
-                /OPT:REF;
-                /OPT:ICF
-            >
-            $<$<CONFIG:CONTENTPACKAGE_SYMBOLS>:
-                /OPT:REF;
-                /OPT:ICF
-            >
-            $<$<CONFIG:ContentPackage>:
-                /OPT:REF;
-                /OPT:ICF
-            >
-            $<$<CONFIG:ReleaseForArt>:
-                /OPT:REF;
-                /OPT:ICF
-            >
-        )
-    endif()
-endif()
+        "SPLIT_SAVES;"
+        "_LARGE_WORLDS;"
+        "_EXTENDED_ACHIEVEMENTS;"
+        "LINUX;"
+        "_LINUX;"
+        "_DEBUG_MENUS_ENABLED"
+    ">"
+    "$<$<CONFIG:ReleaseForArt>:"
+        "SPLIT_SAVES;"
+        "_LARGE_WORLDS;"
+        "LINUX;"
+        "_LINUX;"
+        "_EXTENDED_ACHIEVEMENTS;"
+        "_DEBUG_MENUS_ENABLED"
+    ">"
+)
 
