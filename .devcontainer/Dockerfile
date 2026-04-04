@@ -13,6 +13,7 @@ RUN apt-get update \
         ninja-build \
         libsdl2-dev \
         libgl-dev \
+        libglm-dev \
         libglu1-mesa-dev \
         libpthread-stubs0-dev \
     && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-15 100 \
