@@ -64,8 +64,16 @@ lib_minecraft = static_library('minecraft',
   cpp_args : global_cpp_args + global_cpp_defs,
 )
 
+_inc_dir = '../../' / inc_dir
+
 zlib_dep = dependency('zlib')
-crypto_dep = dependency('libcrypto')  # for MD5 in Hasher.cpp on Linux
+if host_machine.system() == 'android'
+  crypto_dep = declare_dependency(
+    dependencies: cc.find_library('crypto', dirs: lib_dir, required: true ),
+    include_directories: _inc_dir)
+else
+ crypto_dep = dependency('libcrypto')  # for MD5 in Hasher.cpp on Linux
+endif
 
 minecraft_dep = declare_dependency(
   link_with : lib_minecraft,

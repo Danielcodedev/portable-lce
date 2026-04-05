@@ -1,0 +1,23 @@
+[constants]
+ndk_home = 'set_path_to_you_ndk'
+ndk_api = 'set_api_ndk'
+
+[properties]
+skip_sanity_check = true
+
+[binaries]
+c = ndk_home / 'toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android' + ndk_api + '-clang'
+cpp = ndk_home / 'toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android' + ndk_api + '-clang++'
+ar = ndk_home / 'toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar'
+strip = ndk_home / 'toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip'
+sys_root = ndk_home / 'toolchains/llvm/prebuilt/linux-x86_64/sysroot'
+as      = ndk_home / 'toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-as'
+ranlib  = ndk_home / 'toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ranlib'
+ld      = ndk_home / 'toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ld'
+pkg_config = 'false'
+
+[host_machine]
+system = 'android'
+cpu_family = 'arm'
+cpu = 'aarch64'
+endian = 'little'

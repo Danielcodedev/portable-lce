@@ -29,7 +29,7 @@ platform_sources = run_command(
 ).stdout().strip().split('\n')
 
 # linux-specific files
-if host_machine.system() == 'linux'
+if host_machine.system() == 'linux' or host_machine.system() == 'android'
   platform_sources += run_command(
     'sh',
     '-c', 'find "'
