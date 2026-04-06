@@ -30,7 +30,7 @@
 #include "platform/sdl2/Input.h"
 #include "platform/sdl2/Render.h"
 #include "platform/sdl2/Storage.h"
-#include "protocol/DisconnectPacket.h"
+#include "minecraft/network/packet/DisconnectPacket.h"
 #include "app/common/Audio/SoundEngine.h"
 #include "app/common/DLC/DLCPack.h"
 #include "app/common/DLC/DLCManager.h"

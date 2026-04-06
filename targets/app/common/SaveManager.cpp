@@ -1,3 +1,4 @@
+#include "app/linux/LinuxGame.h"
 #include "app/common/SaveManager.h"
 
 #include <chrono>

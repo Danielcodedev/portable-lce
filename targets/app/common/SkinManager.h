@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "app/common/App_structs.h"
-#include "minecraft/world/entity/player/SkinBox.h"
+#include "minecraft/client/SkinBox.h"
 #include "platform/XboxStubs.h"
 
 class ModelPart;

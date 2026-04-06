@@ -16,14 +16,14 @@ class GameRuleManager;
 
 // SKIN_BOX, FEATURE_DATA, MOJANG_DATA are C-style typedef'd structs
 // that cannot be forward-declared.  Include the lightweight headers.
-#include "minecraft/world/entity/player/SkinBox.h"
+#include "minecraft/client/SkinBox.h"
 #include "app/common/App_structs.h"
 
 // Enums needed by callers - pulled from app layer.
 // These are small POD enums safe to include transitively.
 #include "app/common/App_enums.h"
 #include "platform/PlatformTypes.h"  // PlayerUID
-#include "protocol/DisconnectPacket.h"  // eDisconnectReason
+#include "minecraft/network/packet/DisconnectPacket.h"  // eDisconnectReason
 #include "minecraft/client/IMenuService.h"
 
 // eINSTANCEOF lives in java/Class.h which is heavyweight.

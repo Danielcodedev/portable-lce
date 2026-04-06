@@ -6,7 +6,7 @@
 #include "platform/NetTypes.h"
 #include "platform/sdl2/Storage.h"
 #include "platform/XboxStubs.h"
-#include "protocol/DisconnectPacket.h"
+#include "minecraft/network/packet/DisconnectPacket.h"
 
 struct INVITE_INFO;
 
