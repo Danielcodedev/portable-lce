@@ -5,40 +5,27 @@
 #include "minecraft/GameEnums.h"
 #include "app/common/Console_Debug_enum.h"
 #include "app/common/Network/GameNetworkManager.h"
-#include "app/common/UI/All Platforms/UIEnums.h"
-#include "app/common/UI/All Platforms/UIStructs.h"
-#include "app/common/UI/Scenes/UIScene_FullscreenProgress.h"
-#include "app/common/UI/Scenes/In-Game Menu Screens/UIScene_PauseMenu.h"
 #include "app/linux/LinuxGame.h"
 #include "app/linux/Linux_UIController.h"
-#include "minecraft/GameHostOptions.h"
 #include "minecraft/client/Minecraft.h"
 #include "minecraft/client/Options.h"
 #include "minecraft/client/gui/Gui.h"
 #include "minecraft/client/multiplayer/MultiPlayerGameMode.h"
 #include "minecraft/client/multiplayer/MultiPlayerLocalPlayer.h"
 #include "minecraft/client/renderer/GameRenderer.h"
-#include "minecraft/client/skins/DLCTexturePack.h"
 #include "minecraft/client/skins/TexturePack.h"
 #include "minecraft/client/skins/TexturePackRepository.h"
 #include "minecraft/server/MinecraftServer.h"
 #include "minecraft/server/PlayerList.h"
 #include "minecraft/server/level/ServerPlayer.h"
-#include "minecraft/stats/StatsCounter.h"
 #include "minecraft/world/entity/player/Player.h"
 #include "minecraft/world/level/tile/Tile.h"
 #include "platform/sdl2/Input.h"
 #include "platform/sdl2/Render.h"
 #include "platform/sdl2/Storage.h"
-#include "minecraft/network/packet/DisconnectPacket.h"
 #include "app/common/Audio/SoundEngine.h"
-#include "app/common/DLC/DLCPack.h"
-#include "app/common/DLC/DLCManager.h"
-#include "minecraft/world/level/storage/ConsoleSaveFileIO/compression.h"
 
 #include <cstring>
-#include <chrono>
-#include <thread>
 
 GameSettingsManager::GameSettingsManager() {
     memset(GameSettingsA, 0, sizeof(GameSettingsA));
