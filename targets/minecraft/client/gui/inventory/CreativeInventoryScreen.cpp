@@ -6,7 +6,6 @@
 #include <algorithm>
 #include <string>
 
-#include "platform/input/InputActions.h"
 #include "platform/input/input.h"
 #include "platform/sdl2/Render.h"
 #include "AbstractContainerScreen.h"

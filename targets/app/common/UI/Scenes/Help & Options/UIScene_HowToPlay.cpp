@@ -6,7 +6,6 @@
 
 #include <vector>
 
-#include "platform/input/InputActions.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/UI/Controls/UIControl_Label.h"
 #include "app/common/UI/UIScene.h"

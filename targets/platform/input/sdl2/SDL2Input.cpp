@@ -17,7 +17,7 @@
 #include <functional>
 #include <string>
 
-#include "../InputActions.h"
+#include "../InputConstants.h"
 #include "../PlatformTypes.h"
 
 SDL2Input sdl2_input_instance;

@@ -7,7 +7,6 @@
 #include <memory>
 
 #include "platform/PlatformTypes.h"
-#include "platform/input/InputActions.h"
 #include "platform/profile/profile.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/Tutorial/Tutorial.h"

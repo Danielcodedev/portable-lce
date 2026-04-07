@@ -16,7 +16,6 @@
 #include "minecraft/client/Minecraft.h"
 #include "minecraft/client/skins/TexturePack.h"
 #include "minecraft/client/skins/TexturePackRepository.h"
-#include "platform/input/InputActions.h"
 #include "platform/input/input.h"
 #include "platform/sdl2/Render.h"
 #include "platform/XboxStubs.h"

@@ -1,7 +1,6 @@
 #include "minecraft/IGameServices.h"
 #include "Screen.h"
 
-#include "platform/input/InputActions.h"
 #include "platform/input/input.h"
 #include "platform/profile/profile.h"
 #include "Button.h"

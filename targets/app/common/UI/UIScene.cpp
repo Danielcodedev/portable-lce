@@ -5,7 +5,6 @@
 #include <utility>
 
 #include "platform/PlatformTypes.h"
-#include "platform/input/InputActions.h"
 #include "platform/sdl2/Render.h"
 #include "app/common/UI/All Platforms/UIEnums.h"
 #include "app/common/UI/All Platforms/UIStructs.h"

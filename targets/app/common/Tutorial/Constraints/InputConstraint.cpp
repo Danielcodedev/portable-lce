@@ -1,6 +1,5 @@
 #include "InputConstraint.h"
 
-#include "platform/input/InputActions.h"
 #include "platform/input/input.h"
 
 bool InputConstraint::isMappingConstrained(int iPad, int mapping) {

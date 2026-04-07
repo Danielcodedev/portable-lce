@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 
-#include "platform/input/InputActions.h"
 #include "app/common/GameRules/LevelRules/RuleDefinitions/LevelRuleset.h"
 #include "app/common/Tutorial/Constraints/AreaConstraint.h"
 #include "app/common/Tutorial/Constraints/ChangeStateConstraint.h"

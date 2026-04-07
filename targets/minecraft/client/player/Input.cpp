@@ -3,7 +3,6 @@
 
 #include <cmath>
 
-#include "platform/input/InputActions.h"
 #include "platform/input/input.h"
 #include "LocalPlayer.h"
 #include "minecraft/GameEnums.h"

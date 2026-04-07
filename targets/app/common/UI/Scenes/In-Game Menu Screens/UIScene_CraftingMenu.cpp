@@ -1,7 +1,6 @@
 
 #include "UIScene_CraftingMenu.h"
 
-#include "platform/input/InputActions.h"
 #include "platform/profile/profile.h"
 #include "app/common/Tutorial/Tutorial.h"
 #include "app/common/Tutorial/TutorialEnum.h"

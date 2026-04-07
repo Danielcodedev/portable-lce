@@ -28,7 +28,6 @@
 #include "minecraft/world/item/Item.h"
 #include "minecraft/world/level/tile/Tile.h"
 // 4J Stu - Added for tutorial callbacks
-#include "platform/input/InputActions.h"
 #include "platform/input/input.h"
 #include "platform/profile/profile.h"
 #include "platform/sdl2/Render.h"

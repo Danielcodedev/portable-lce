@@ -3,7 +3,6 @@
 #include <string>
 
 #include "platform/PlatformTypes.h"
-#include "platform/input/InputActions.h"
 #include "platform/sdl2/Render.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/UI/All Platforms/UIEnums.h"

@@ -6,7 +6,6 @@
 #include <algorithm>
 #include <compare>
 
-#include "platform/input/InputActions.h"
 #include "platform/profile/profile.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/App_structs.h"

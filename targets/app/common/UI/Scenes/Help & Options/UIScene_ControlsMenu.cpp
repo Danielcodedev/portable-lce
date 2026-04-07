@@ -4,7 +4,6 @@
 
 #include <memory>
 
-#include "platform/input/InputActions.h"
 #include "platform/input/input.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/BuildVer/BuildVer.h"

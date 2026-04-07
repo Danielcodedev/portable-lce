@@ -5,7 +5,6 @@
 
 #include <memory>
 
-#include "platform/input/InputActions.h"
 #include "platform/input/input.h"
 #include "platform/profile/profile.h"
 #include "minecraft/GameEnums.h"

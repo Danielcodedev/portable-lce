@@ -1,7 +1,6 @@
 
 #include "UIScene_SignEntryMenu.h"
 
-#include "platform/input/InputActions.h"
 #include "platform/input/input.h"
 #include "app/common/UI/All Platforms/UIStructs.h"
 #include "app/common/UI/Controls/UIControl_Button.h"

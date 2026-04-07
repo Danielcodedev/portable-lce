@@ -21,7 +21,7 @@
 #endif
 
 #include "platform/PlatformTypes.h"
-#include "platform/input/InputActions.h"
+#include "platform/input/input.h"
 #include "platform/sdl2/Render.h"
 #include "platform/sdl2/Storage.h"
 #include "app/common/UI/All Platforms/IUIController.h"

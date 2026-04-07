@@ -1,7 +1,6 @@
 
 #include "UIScene_HelpAndOptionsMenu.h"
 
-#include "platform/input/InputActions.h"
 #include "platform/profile/profile.h"
 #include "app/common/UI/Controls/UIControl_Button.h"
 #include "app/common/UI/UILayer.h"
