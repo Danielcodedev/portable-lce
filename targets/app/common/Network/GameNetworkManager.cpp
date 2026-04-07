@@ -28,7 +28,7 @@
 #include "Socket.h"
 #include "platform/XboxStubs.h"
 #include "util/StringHelpers.h"
-#include "platform/PlatformServices.h"
+#include "platform/fs/fs.h"
 #include "minecraft/world/level/storage/ConsoleSaveFileIO/compression.h"
 #include "java/File.h"
 #include "minecraft/client/Minecraft.h"
@@ -160,14 +160,14 @@ bool CGameNetworkManager::StartNetworkGame(Minecraft* minecraft,
                         File grf(fileRoot);
                         if (grf.exists()) {
                             std::size_t dwFileSize =
-                                PlatformFileIO.fileSize(grf.getPath());
+                                PlatformFilesystem.fileSize(grf.getPath());
                             if (dwFileSize > 0) {
                                 uint8_t* pbData =
                                     (uint8_t*)new uint8_t[dwFileSize];
-                                auto readResult = PlatformFileIO.readFile(
+                                auto readResult = PlatformFilesystem.readFile(
                                     grf.getPath(), pbData, dwFileSize);
                                 if (readResult.status !=
-                                    IPlatformFileIO::ReadStatus::Ok) {
+                                    IPlatformFilesystem::ReadStatus::Ok) {
                                     app.FatalLoadError();
                                 }
 

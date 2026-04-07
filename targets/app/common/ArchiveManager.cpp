@@ -9,7 +9,7 @@
 #include "minecraft/client/Minecraft.h"
 #include "minecraft/client/skins/TexturePack.h"
 #include "minecraft/client/skins/TexturePackRepository.h"
-#include "platform/PlatformServices.h"
+#include "platform/fs/fs.h"
 #include "platform/PlatformTypes.h"
 
 ArchiveManager::ArchiveManager()
@@ -26,7 +26,7 @@ void ArchiveManager::loadMediaArchive() {
 
     if (!mediapath.empty()) {
 #if defined(__linux__)
-        std::wstring exeDirW = PlatformFileIO.getBasePath().wstring();
+        std::wstring exeDirW = PlatformFilesystem.getBasePath().wstring();
         std::wstring candidate = exeDirW + File::pathSeparator + mediapath;
         if (File(candidate).exists()) {
             m_mediaArchive = new ArchiveFile(File(candidate));

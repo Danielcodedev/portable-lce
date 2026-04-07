@@ -16,7 +16,7 @@
 #include "app/linux/Iggy/include/rrCore.h"
 #include "app/linux/LinuxGame.h"
 #include "platform/C4JThread.h"
-#include "platform/PlatformServices.h"
+#include "platform/fs/fs.h"
 #include "java/Random.h"
 #include "minecraft/client/Minecraft.h"
 #include "minecraft/client/multiplayer/MultiPlayerLocalPlayer.h"
@@ -183,7 +183,7 @@ void SoundEngine::play(int iSound, float x, float y, float z, float volume,
     for (int i = 0; szId[i]; i++)
         if (szId[i] == '.') szId[i] = '/';
 
-    std::string base = PlatformFileIO.getBasePath().string() + "/";
+    std::string base = PlatformFilesystem.getBasePath().string() + "/";
     const char* roots[] = {
         "Sound/Minecraft/", "app/common/Sound/Minecraft/",
         "app/common/res/TitleUpdate/res/Sound/Minecraft/"};
@@ -197,7 +197,7 @@ void SoundEngine::play(int iSound, float x, float y, float z, float volume,
             for (int i = 1; i <= 16; i++) {
                 char tryP[512];
                 snprintf(tryP, 512, "%s%s%d%s", fullRoot.c_str(), szId, i, ext);
-                if (PlatformFileIO.exists(tryP))
+                if (PlatformFilesystem.exists(tryP))
                     count = i;
                 else
                     break;
@@ -210,7 +210,7 @@ void SoundEngine::play(int iSound, float x, float y, float z, float volume,
             }
             char tryP[512];
             snprintf(tryP, 512, "%s%s%s", fullRoot.c_str(), szId, ext);
-            if (PlatformFileIO.exists(tryP)) {
+            if (PlatformFilesystem.exists(tryP)) {
                 strncpy(finalPath, tryP, 511);
                 found = true;
                 break;
@@ -250,7 +250,7 @@ void SoundEngine::playUI(int iSound, float volume, float pitch) {
         wcstombs(szIdentifier, wchUISoundNames[iSound], 255);
     for (int i = 0; szIdentifier[i]; i++)
         if (szIdentifier[i] == '.') szIdentifier[i] = '/';
-    std::string base = PlatformFileIO.getBasePath().string() + "/";
+    std::string base = PlatformFilesystem.getBasePath().string() + "/";
     const char* roots[] = {
         "Sound/Minecraft/UI/",
         "Sound/Minecraft/",
@@ -265,7 +265,7 @@ void SoundEngine::playUI(int iSound, float volume, float pitch) {
             char tryP[512];
             snprintf(tryP, 512, "%s%s%s%s", base.c_str(), root, szIdentifier,
                      ext);
-            if (PlatformFileIO.exists(tryP)) {
+            if (PlatformFilesystem.exists(tryP)) {
                 strncpy(finalPath, tryP, 511);
                 found = true;
                 break;
@@ -452,7 +452,7 @@ void SoundEngine::playMusicTick() {
                 return;
             }
             if (m_musicID != -1) {
-                std::string base = PlatformFileIO.getBasePath().string() + "/";
+                std::string base = PlatformFilesystem.getBasePath().string() + "/";
                 bool isCD = (m_musicID >= m_iStream_CD_1);
                 const char* folder = isCD ? "cds/" : "music/";
                 const char* track = m_szStreamFileA[m_musicID];
@@ -467,13 +467,13 @@ void SoundEngine::playMusicTick() {
                         // try with folder prefix (music/ or cds/)
                         snprintf(m_szStreamName, sizeof(m_szStreamName), "%s%s%s%s%s", base.c_str(), r, folder,
                                  track, e);
-                        if (PlatformFileIO.exists(m_szStreamName)) {
+                        if (PlatformFilesystem.exists(m_szStreamName)) {
                             found = true;
                             break;
                         }
                         // try without folder prefix
                         snprintf(m_szStreamName, sizeof(m_szStreamName), "%s%s%s%s", base.c_str(), r, track, e);
-                        if (PlatformFileIO.exists(m_szStreamName)) {
+                        if (PlatformFilesystem.exists(m_szStreamName)) {
                             found = true;
                             break;
                         }

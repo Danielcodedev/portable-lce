@@ -6,7 +6,7 @@
 #include <vector>
 
 // Platform-agnostic file I/O interface.
-class IPlatformFileIO {
+class IPlatformFilesystem {
 public:
     enum class ReadStatus {
         Ok,
@@ -21,7 +21,7 @@ public:
         std::size_t fileSize;
     };
 
-    virtual ~IPlatformFileIO() = default;
+    virtual ~IPlatformFilesystem() = default;
 
     // Read an entire file into a caller-provided buffer.
     [[nodiscard]] virtual ReadResult readFile(

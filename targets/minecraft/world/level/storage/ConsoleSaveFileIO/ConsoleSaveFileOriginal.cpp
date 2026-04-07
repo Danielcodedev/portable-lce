@@ -34,7 +34,7 @@
 #include "minecraft/world/level/storage/ConsoleSaveFileIO/FileHeader.h"
 #include "minecraft/world/level/storage/LevelData.h"
 #include "platform/storage/storage.h"
-#include "platform/PlatformServices.h"
+#include "platform/fs/fs.h"
 
 #define RESERVE_ALLOCATION MEM_RESERVE
 #define COMMIT_ALLOCATION MEM_COMMIT
@@ -745,13 +745,13 @@ void ConsoleSaveFileOriginal::DebugFlushToFile(
     bool writeSucceeded = false;
 
     if (compressedData != nullptr && compressedDataSize > 0) {
-        writeSucceeded = PlatformFileIO.writeFile(
+        writeSucceeded = PlatformFilesystem.writeFile(
             outputPath, compressedData, compressedDataSize);
         numberOfBytesWritten = writeSucceeded ? compressedDataSize : 0;
         assert(numberOfBytesWritten == compressedDataSize);
     } else {
         writeSucceeded =
-            PlatformFileIO.writeFile(outputPath, pvSaveMem, fileSize);
+            PlatformFilesystem.writeFile(outputPath, pvSaveMem, fileSize);
         numberOfBytesWritten = writeSucceeded ? fileSize : 0;
         assert(numberOfBytesWritten == fileSize);
     }

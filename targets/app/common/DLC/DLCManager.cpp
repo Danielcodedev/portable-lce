@@ -20,7 +20,7 @@
 #include "app/common/GameRules/GameRuleManager.h"
 #include "app/linux/LinuxGame.h"
 #include "app/linux/Linux_UIController.h"
-#include "platform/PlatformServices.h"
+#include "platform/fs/fs.h"
 #include "util/StringHelpers.h"
 #include "minecraft/client/Minecraft.h"
 #include "minecraft/client/skins/TexturePackRepository.h"
@@ -105,14 +105,14 @@ bool readOwnedDlcFile(const std::string& path, std::uint8_t** ppData,
     *pBytesRead = 0;
 
     const std::wstring readPath = getMountedDlcReadPath(path);
-    const std::size_t fSize = PlatformFileIO.fileSize(readPath);
+    const std::size_t fSize = PlatformFilesystem.fileSize(readPath);
     if (fSize == 0 || fSize > std::numeric_limits<unsigned int>::max()) {
         return false;
     }
 
     std::uint8_t* data = new std::uint8_t[fSize];
-    auto result = PlatformFileIO.readFile(readPath, data, fSize);
-    if (result.status != IPlatformFileIO::ReadStatus::Ok) {
+    auto result = PlatformFilesystem.readFile(readPath, data, fSize);
+    if (result.status != IPlatformFilesystem::ReadStatus::Ok) {
         delete[] data;
         return false;
     }

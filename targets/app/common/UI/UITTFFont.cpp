@@ -9,7 +9,7 @@
 #include "app/linux/Iggy/include/rrCore.h"
 #include "app/linux/LinuxGame.h"
 #include "util/StringHelpers.h"
-#include "platform/PlatformServices.h"
+#include "platform/fs/fs.h"
 
 UITTFFont::UITTFFont(const std::string& name, const std::string& path,
                      S32 fallbackCharacter)
@@ -17,11 +17,11 @@ UITTFFont::UITTFFont(const std::string& name, const std::string& path,
     app.DebugPrintf("UITTFFont opening %s\n", path.c_str());
     pbData = nullptr;
 
-    const std::size_t fileSize = PlatformFileIO.fileSize(path);
+    const std::size_t fileSize = PlatformFilesystem.fileSize(path);
     if (fileSize != 0) {
         pbData = new std::uint8_t[fileSize];
-        auto result = PlatformFileIO.readFile(path, pbData, fileSize);
-        if (result.status != IPlatformFileIO::ReadStatus::Ok) {
+        auto result = PlatformFilesystem.readFile(path, pbData, fileSize);
+        if (result.status != IPlatformFilesystem::ReadStatus::Ok) {
             app.DebugPrintf("Failed to open TTF file\n");
             delete[] pbData;
             pbData = nullptr;

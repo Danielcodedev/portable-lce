@@ -30,6 +30,7 @@ sdl2_sources = files(
   'storage/stub/StubStorage.cpp',
   'renderer/gl/GLRenderer.cpp',
   'renderer/gl/render_stubs.cpp',
+  'fs/std/StdFilesystem.cpp',
 )
 
 lib_platform_sdl2 = static_library('platform_sdl2',

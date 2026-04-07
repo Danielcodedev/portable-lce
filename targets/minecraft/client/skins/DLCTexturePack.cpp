@@ -29,7 +29,7 @@
 #include "app/linux/Linux_UIController.h"
 #include "app/linux/Stubs/winapi_stubs.h"
 #include "minecraft/client/BufferedImage.h"
-#include "platform/PlatformServices.h"
+#include "platform/fs/fs.h"
 #include "java/File.h"
 #include "minecraft/client/Minecraft.h"
 #include "minecraft/client/skins/AbstractTexturePack.h"
@@ -55,8 +55,8 @@ bool ReadPortableBinaryFile(File& file, std::uint8_t*& data,
     const std::size_t capacity = static_cast<std::size_t>(fileLength);
     std::uint8_t* buffer = new std::uint8_t[capacity == 0 ? 1 : capacity];
     auto readResult =
-        PlatformFileIO.readFile(file.getPath(), buffer, capacity);
-    if (readResult.status != IPlatformFileIO::ReadStatus::Ok ||
+        PlatformFilesystem.readFile(file.getPath(), buffer, capacity);
+    if (readResult.status != IPlatformFilesystem::ReadStatus::Ok ||
         readResult.fileSize > std::numeric_limits<unsigned int>::max()) {
         delete[] buffer;
         data = nullptr;

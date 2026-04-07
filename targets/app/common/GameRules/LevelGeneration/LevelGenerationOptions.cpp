@@ -30,7 +30,7 @@
 #include "minecraft/world/level/dimension/Dimension.h"
 #include "minecraft/world/level/levelgen/structure/BoundingBox.h"
 #include "minecraft/world/phys/AABB.h"
-#include "platform/PlatformServices.h"
+#include "platform/fs/fs.h"
 #include "platform/profile/profile.h"
 #include "platform/storage/storage.h"
 #include "strings.h"
@@ -599,10 +599,10 @@ int LevelGenerationOptions::onPackMounted(int iPad, uint32_t dwErr,
                     uint32_t dwFileSize = grf.length();
                     if (dwFileSize > 0) {
                         uint8_t* pbData = (uint8_t*)new uint8_t[dwFileSize];
-                        auto readResult = PlatformFileIO.readFile(
+                        auto readResult = PlatformFilesystem.readFile(
                             grf.getPath(), pbData, dwFileSize);
                         if (readResult.status !=
-                            IPlatformFileIO::ReadStatus::Ok) {
+                            IPlatformFilesystem::ReadStatus::Ok) {
                             app.FatalLoadError();
                         }
 
@@ -623,12 +623,12 @@ int LevelGenerationOptions::onPackMounted(int iPad, uint32_t dwErr,
                                       lgo->getBaseSavePath(), true, L"WPACK:"));
             if (save.exists()) {
                 std::size_t dwFileSize =
-                    PlatformFileIO.fileSize(save.getPath());
+                    PlatformFilesystem.fileSize(save.getPath());
                 if (dwFileSize > 0) {
                     uint8_t* pbData = (uint8_t*)new uint8_t[dwFileSize];
-                    auto readResult = PlatformFileIO.readFile(
+                    auto readResult = PlatformFilesystem.readFile(
                         save.getPath(), pbData, dwFileSize);
-                    if (readResult.status != IPlatformFileIO::ReadStatus::Ok) {
+                    if (readResult.status != IPlatformFilesystem::ReadStatus::Ok) {
                         app.FatalLoadError();
                     }
 

@@ -14,7 +14,7 @@
 #include "app/linux/Stubs/winapi_stubs.h"
 #include "PlatformTypes.h"
 #include "util/StringHelpers.h"
-#include "platform/PlatformServices.h"
+#include "platform/fs/fs.h"
 
 BufferedImage::BufferedImage(int width, int height, int type) {
     data[0] = new int[width * height];
@@ -61,7 +61,7 @@ BufferedImage::BufferedImage(const std::wstring& File,
         baseName = baseName.substr(1);
     if (baseName.find(L"res/") == 0) baseName = baseName.substr(4);
 
-    std::wstring exeDir = PlatformFileIO.getBasePath().wstring();
+    std::wstring exeDir = PlatformFilesystem.getBasePath().wstring();
 
     for (int l = 0; l < 10; l++) {
         std::wstring mipSuffix =
@@ -82,7 +82,7 @@ BufferedImage::BufferedImage(const std::wstring& File,
             size_t p;
             while ((p = attempt.find(L"//")) != std::wstring::npos)
                 attempt.replace(p, 2, L"/");
-            if (PlatformFileIO.exists(attempt)) {
+            if (PlatformFilesystem.exists(attempt)) {
                 finalPath = attempt;
                 foundOnDisk = true;
                 break;

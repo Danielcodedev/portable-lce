@@ -9,7 +9,7 @@
 #include <vector>
 
 #include "util/StringHelpers.h"  // 4jcraft TODO
-#include "platform/PlatformServices.h"
+#include "platform/fs/fs.h"
 #include "java/FileFilter.h"
 
 const wchar_t File::pathSeparator = L'/';
@@ -68,7 +68,7 @@ File::File(const std::wstring& pathname) {
     while (!request.empty() && request[0] == '/') request.erase(0, 1);
     if (request.find("res/") == 0) request.erase(0, 4);
 
-    std::string exeDir = PlatformFileIO.getBasePath().string();
+    std::string exeDir = PlatformFilesystem.getBasePath().string();
     std::string fileName = request;
     size_t lastSlash = fileName.find_last_of('/');
     if (lastSlash != std::string::npos)
@@ -84,11 +84,11 @@ File::File(const std::wstring& pathname) {
     for (const char* base : bases) {
         std::string tryFull = exeDir + base + request;
         std::string tryFile = exeDir + base + fileName;
-        if (PlatformFileIO.exists(tryFull)) {
+        if (PlatformFilesystem.exists(tryFull)) {
             m_abstractPathName = convStringToWstring(tryFull);
             return;
         }
-        if (PlatformFileIO.exists(tryFile)) {
+        if (PlatformFilesystem.exists(tryFile)) {
             m_abstractPathName = convStringToWstring(tryFile);
             return;
         }

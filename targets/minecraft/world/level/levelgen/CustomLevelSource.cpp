@@ -8,7 +8,7 @@
 
 #include "app/common/GameRules/LevelGeneration/LevelGenerationOptions.h"
 #include "app/linux/LinuxGame.h"
-#include "platform/PlatformServices.h"
+#include "platform/fs/fs.h"
 #include "minecraft/world/level/biome/Biome.h"
 #include "minecraft/world/level/chunk/ChunkSource.h"
 #if defined(__linux__)
@@ -47,12 +47,12 @@ CustomLevelSource::CustomLevelSource(Level* level, int64_t seed,
 
     {
         const char* path = "GameRules/heightmap.bin";
-        auto result = PlatformFileIO.readFile(
+        auto result = PlatformFilesystem.readFile(
             path, m_heightmapOverride.data(), m_heightmapOverride.size());
-        if (result.status == IPlatformFileIO::ReadStatus::TooLarge) {
+        if (result.status == IPlatformFilesystem::ReadStatus::TooLarge) {
             Log::info("Heightmap binary is too large!!\n");
             __debugbreak();
-        } else if (result.status != IPlatformFileIO::ReadStatus::Ok) {
+        } else if (result.status != IPlatformFilesystem::ReadStatus::Ok) {
             gameServices().fatalLoadError();
             assert(false);
         }
@@ -63,16 +63,16 @@ CustomLevelSource::CustomLevelSource(Level* level, int64_t seed,
 
     {
         const char* waterHeightPath = "GameRules/waterheight.bin";
-        auto result = PlatformFileIO.readFile(
+        auto result = PlatformFilesystem.readFile(
             waterHeightPath, m_waterheightOverride.data(),
             m_waterheightOverride.size());
-        if (result.status == IPlatformFileIO::ReadStatus::NotFound) {
+        if (result.status == IPlatformFilesystem::ReadStatus::NotFound) {
             memset(m_waterheightOverride.data(), level->seaLevel,
                    m_waterheightOverride.size());
-        } else if (result.status == IPlatformFileIO::ReadStatus::TooLarge) {
+        } else if (result.status == IPlatformFilesystem::ReadStatus::TooLarge) {
             Log::info("waterheight binary is too large!!\n");
             __debugbreak();
-        } else if (result.status != IPlatformFileIO::ReadStatus::Ok) {
+        } else if (result.status != IPlatformFilesystem::ReadStatus::Ok) {
             gameServices().fatalLoadError();
         }
     }
