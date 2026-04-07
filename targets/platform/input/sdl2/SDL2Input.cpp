@@ -1,4 +1,4 @@
-#include "Input.h"
+#include "SDL2Input.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
@@ -20,7 +20,8 @@
 #include "../InputActions.h"
 #include "../PlatformTypes.h"
 
-C_4JInput InputManager;
+SDL2Input sdl2_input_instance;
+IPlatformInput& PlatformInput = sdl2_input_instance;
 
 static const int KEY_COUNT = SDL_NUM_SCANCODES;
 static const int BTN_COUNT = SDL_CONTROLLER_BUTTON_MAX;
@@ -229,7 +230,7 @@ static void TakeSnapIfNeeded() {
     }
 }
 // We initialize the SDL input
-void C_4JInput::Initialise(int, unsigned char, unsigned char, unsigned char) {
+void SDL2Input::Initialise(int, unsigned char, unsigned char, unsigned char) {
     if (!s_sdlInitialized) {
         if (SDL_WasInit(SDL_INIT_VIDEO) == 0) {
             SDL_Init(SDL_INIT_VIDEO);
@@ -279,7 +280,7 @@ static void utf8_pop_back(std::string& str) {
 
 // Each tick we update the input state by polling SDL, this is where we get the
 // kbd and mouse state.
-void C_4JInput::Tick() {
+void SDL2Input::Tick() {
     if (!s_sdlInitialized) return;
 
     memcpy(s_keysPrev, s_keysCurrent, sizeof(s_keysCurrent));
@@ -374,7 +375,7 @@ void C_4JInput::Tick() {
     }
 }
 
-int C_4JInput::GetHotbarSlotPressed(int iPad) {
+int SDL2Input::GetHotbarSlotPressed(int iPad) {
     if (iPad != 0) return -1;
 
     constexpr size_t NUM_HOTBAR_SLOTS = 9;
@@ -460,7 +461,7 @@ int C_4JInput::GetHotbarSlotPressed(int iPad) {
     default:                                                                   \
         return false;
 
-bool C_4JInput::ButtonDown(int iPad, unsigned char ucAction) {
+bool SDL2Input::ButtonDown(int iPad, unsigned char ucAction) {
     if (iPad != 0) return false;
     if (s_keyboardActive) return false;
     if (ucAction == 255) {
@@ -490,7 +491,7 @@ bool C_4JInput::ButtonDown(int iPad, unsigned char ucAction) {
     }
 }
 // The part that handles completing the action of pressing a button.
-bool C_4JInput::ButtonPressed(int iPad, unsigned char ucAction) {
+bool SDL2Input::ButtonPressed(int iPad, unsigned char ucAction) {
     if (iPad != 0 || ucAction == 255) return false;
     if (s_keyboardActive) return false;
     switch (ucAction) {
@@ -516,7 +517,7 @@ bool C_4JInput::ButtonPressed(int iPad, unsigned char ucAction) {
     }
 }
 // The part that handles Releasing a button.
-bool C_4JInput::ButtonReleased(int iPad, unsigned char ucAction) {
+bool SDL2Input::ButtonReleased(int iPad, unsigned char ucAction) {
     if (iPad != 0 || ucAction == 255) return false;
     if (s_keyboardActive) return false;
     switch (ucAction) {
@@ -541,7 +542,7 @@ bool C_4JInput::ButtonReleased(int iPad, unsigned char ucAction) {
     }
 }
 
-unsigned int C_4JInput::GetValue(int iPad, unsigned char ucAction, bool) {
+unsigned int SDL2Input::GetValue(int iPad, unsigned char ucAction, bool) {
     if (iPad != 0) return 0;
     if (ucAction == MINECRAFT_ACTION_LEFT_SCROLL) {
         if (s_scrollTicksForGetValue > 0) {
@@ -563,13 +564,13 @@ unsigned int C_4JInput::GetValue(int iPad, unsigned char ucAction, bool) {
 }
 // Left stick movement, the one that moves the player around or selects menu
 // options. (Soon be tested.)
-float C_4JInput::GetJoypadStick_LX(int, bool) {
+float SDL2Input::GetJoypadStick_LX(int, bool) {
     if (ADown(SDL_CONTROLLER_AXIS_LEFTX))
         return axisVal[SDL_CONTROLLER_AXIS_LEFTX];
     return (KDown(SDL_SCANCODE_D) ? 1.f : 0.f) -
            (KDown(SDL_SCANCODE_A) ? 1.f : 0.f);
 }
-float C_4JInput::GetJoypadStick_LY(int, bool) {
+float SDL2Input::GetJoypadStick_LY(int, bool) {
     if (ADown(SDL_CONTROLLER_AXIS_LEFTY))
         return -axisVal[SDL_CONTROLLER_AXIS_LEFTY];
     return (KDown(SDL_SCANCODE_W) ? 1.f : 0.f) -
@@ -582,7 +583,7 @@ static float MouseAxis(float raw) {
     return (raw >= 0.f ? 1.f : -1.f) * sqrtf(fabsf(raw));
 }
 // We apply the Stick movement on the R(Right) X(2D Position)
-float C_4JInput::GetJoypadStick_RX(int, bool) {
+float SDL2Input::GetJoypadStick_RX(int, bool) {
     if (ADown(SDL_CONTROLLER_AXIS_RIGHTX))
         return axisVal[SDL_CONTROLLER_AXIS_RIGHTX];
     if (!SDL_GetRelativeMouseMode()) return 0.f;
@@ -590,7 +591,7 @@ float C_4JInput::GetJoypadStick_RX(int, bool) {
     return MouseAxis(s_snapRelX * MOUSE_SCALE);
 }
 // Bis. but with Y(2D Position)
-float C_4JInput::GetJoypadStick_RY(int, bool) {
+float SDL2Input::GetJoypadStick_RY(int, bool) {
     if (ADown(SDL_CONTROLLER_AXIS_RIGHTY))
         return -axisVal[SDL_CONTROLLER_AXIS_RIGHTY];
     if (!SDL_GetRelativeMouseMode()) return 0.f;
@@ -598,78 +599,78 @@ float C_4JInput::GetJoypadStick_RY(int, bool) {
     return MouseAxis(-s_snapRelY * MOUSE_SCALE);
 }
 
-unsigned char C_4JInput::GetJoypadLTrigger(int, bool) {
+unsigned char SDL2Input::GetJoypadLTrigger(int, bool) {
     return (s_mouseRightCurrent ||
             s_axisCurrent[SDL_CONTROLLER_AXIS_TRIGGERLEFT])
                ? 255
                : 0;
 }
-unsigned char C_4JInput::GetJoypadRTrigger(int, bool) {
+unsigned char SDL2Input::GetJoypadRTrigger(int, bool) {
     return (s_mouseLeftCurrent ||
             s_axisCurrent[SDL_CONTROLLER_AXIS_TRIGGERRIGHT])
                ? 255
                : 0;
 }
 
-int C_4JInput::GetMouseX() { return s_mouseX; }
-int C_4JInput::GetMouseY() { return s_mouseY; }
+int SDL2Input::GetMouseX() { return s_mouseX; }
+int SDL2Input::GetMouseY() { return s_mouseY; }
 
 // We detect if a Menu is visible on the player's screen to the mouse being
 // stuck.
-void C_4JInput::SetMenuDisplayed(int iPad, bool bVal) {
+void SDL2Input::SetMenuDisplayed(int iPad, bool bVal) {
     if (iPad >= 0 && iPad < 4) s_menuDisplayed[iPad] = bVal;
     if (!s_sdlInitialized || bVal == s_prevMenuDisplayed) return;
     SDL_SetRelativeMouseMode(bVal ? SDL_FALSE : SDL_TRUE);
     s_prevMenuDisplayed = bVal;
 }
 
-int C_4JInput::GetScrollDelta() {
+int SDL2Input::GetScrollDelta() {
     int v = s_scrollTicksForButtonPressed;
     s_scrollTicksForButtonPressed = 0;
     return v;
 }
 
-void C_4JInput::SetDeadzoneAndMovementRange(unsigned int, unsigned int) {}
-void C_4JInput::SetGameJoypadMaps(unsigned char, unsigned char, unsigned int) {}
-unsigned int C_4JInput::GetGameJoypadMaps(unsigned char, unsigned char) {
+void SDL2Input::SetDeadzoneAndMovementRange(unsigned int, unsigned int) {}
+void SDL2Input::SetGameJoypadMaps(unsigned char, unsigned char, unsigned int) {}
+unsigned int SDL2Input::GetGameJoypadMaps(unsigned char, unsigned char) {
     return 0;
 }
-void C_4JInput::SetJoypadMapVal(int, unsigned char) {}
-unsigned char C_4JInput::GetJoypadMapVal(int) { return 0; }
-void C_4JInput::SetJoypadSensitivity(int, float) {}
-void C_4JInput::SetJoypadStickAxisMap(int, unsigned int, unsigned int) {}
-void C_4JInput::SetJoypadStickTriggerMap(int, unsigned int, unsigned int) {}
-void C_4JInput::SetKeyRepeatRate(float, float) {}
-void C_4JInput::SetDebugSequence(const char*, std::function<int()>) {}
-float C_4JInput::GetIdleSeconds(int) { return 0.f; }
-bool C_4JInput::IsPadConnected(int iPad) { return iPad == 0; }
+void SDL2Input::SetJoypadMapVal(int, unsigned char) {}
+unsigned char SDL2Input::GetJoypadMapVal(int) { return 0; }
+void SDL2Input::SetJoypadSensitivity(int, float) {}
+void SDL2Input::SetJoypadStickAxisMap(int, unsigned int, unsigned int) {}
+void SDL2Input::SetJoypadStickTriggerMap(int, unsigned int, unsigned int) {}
+void SDL2Input::SetKeyRepeatRate(float, float) {}
+void SDL2Input::SetDebugSequence(const char*, std::function<int()>) {}
+float SDL2Input::GetIdleSeconds(int) { return 0.f; }
+bool SDL2Input::IsPadConnected(int iPad) { return iPad == 0; }
 
-EKeyboardResult C_4JInput::RequestKeyboard(const wchar_t*, const wchar_t*, int,
+EKeyboardResult SDL2Input::RequestKeyboard(const wchar_t*, const wchar_t*, int,
                                            unsigned int,
                                            std::function<int(bool)> callback,
-                                           C_4JInput::EKeyboardMode) {
+                                           SDL2Input::EKeyboardMode) {
     s_keyboardActive = true;
     s_textInputBuf.clear();
     s_keyboardCallback = std::move(callback);
     SDL_StartTextInput();
     return EKeyboardResult::Pending;
 }
-bool C_4JInput::GetMenuDisplayed(int iPad) {
+bool SDL2Input::GetMenuDisplayed(int iPad) {
     if (iPad >= 0 && iPad < 4) return s_menuDisplayed[iPad];
     return false;
 }
-const char* C_4JInput::GetText() { return s_textInputBuf.c_str(); }
-bool C_4JInput::VerifyStrings(wchar_t**, int,
+const char* SDL2Input::GetText() { return s_textInputBuf.c_str(); }
+bool SDL2Input::VerifyStrings(wchar_t**, int,
                               std::function<int(STRING_VERIFY_RESPONSE*)>) {
     return true;
 }
-void C_4JInput::CancelQueuedVerifyStrings(
+void SDL2Input::CancelQueuedVerifyStrings(
     std::function<int(STRING_VERIFY_RESPONSE*)>) {}
-void C_4JInput::CancelAllVerifyInProgress() {}
+void SDL2Input::CancelAllVerifyInProgress() {}
 
 // Primary pad (moved from Profile)
 namespace {
 int s_inputPrimaryPad = 0;
 }
-int C_4JInput::GetPrimaryPad() { return s_inputPrimaryPad; }
-void C_4JInput::SetPrimaryPad(int iPad) { s_inputPrimaryPad = iPad; }
+int SDL2Input::GetPrimaryPad() { return s_inputPrimaryPad; }
+void SDL2Input::SetPrimaryPad(int iPad) { s_inputPrimaryPad = iPad; }

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "IPlatformFileIO.h"
-#include "IPlatformInput.h"
 #include "IPlatformLeaderboard.h"
 #include "IPlatformNetwork.h"
 #include "IPlatformProfile.h"
@@ -13,7 +12,6 @@
 // by the app layer at startup.
 
 extern IPlatformFileIO& PlatformFileIO;
-extern IPlatformInput& PlatformInput;
 extern IPlatformProfile& PlatformProfile;
 extern IPlatformRenderer& PlatformRender;
 extern IPlatformStorage& PlatformStorage;

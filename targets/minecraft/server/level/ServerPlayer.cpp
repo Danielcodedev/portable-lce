@@ -10,7 +10,7 @@
 #include <cmath>
 #include <format>
 
-#include "platform/sdl2/Input.h"
+#include "platform/input/input.h"
 #include "EntityTracker.h"
 #include "app/common/Console_Debug_enum.h"
 #include "app/common/GameRules/LevelRules/Rules/GameRulesInstance.h"
@@ -585,7 +585,7 @@ void ServerPlayer::doChunkSendingTick(bool dontDelayChunks) {
 void ServerPlayer::doTickB() {
 #if !defined(_CONTENT_PACKAGE)
     // check if there's a debug dimension change requested
-    // if(gameServices().debugGetMask(InputManager.GetPrimaryPad())&(1L<<eDebugSetting_GoToNether))
+    // if(gameServices().debugGetMask(PlatformInput.GetPrimaryPad())&(1L<<eDebugSetting_GoToNether))
     //{
     //	if(level->dimension->id == 0 )
     //	{
@@ -593,11 +593,11 @@ void ServerPlayer::doTickB() {
     //		portalTime=1;
     //	}
     //	unsigned int
-    // uiVal=gameServices().debugGetMask(InputManager.GetPrimaryPad());
-    //	gameServices().setGameSettingsDebugMask(InputManager.GetPrimaryPad(),uiVal&~(1L<<eDebugSetting_GoToNether));
+    // uiVal=gameServices().debugGetMask(PlatformInput.GetPrimaryPad());
+    //	gameServices().setGameSettingsDebugMask(PlatformInput.GetPrimaryPad(),uiVal&~(1L<<eDebugSetting_GoToNether));
     //}
     // 	else if
-    // (gameServices().debugGetMask(InputManager.GetPrimaryPad())&(1L<<eDebugSetting_GoToEnd))
+    // (gameServices().debugGetMask(PlatformInput.GetPrimaryPad())&(1L<<eDebugSetting_GoToEnd))
     // 	{
     // 		if(level->dimension->id == 0 )
     // 		{
@@ -605,20 +605,20 @@ void ServerPlayer::doTickB() {
     // std::dynamic_pointer_cast<ServerPlayer>( shared_from_this() ), 1 );
     // 		}
     // 		unsigned int
-    // uiVal=gameServices().debugGetMask(InputManager.GetPrimaryPad());
-    // 		gameServices().setGameSettingsDebugMask(InputManager.GetPrimaryPad(),uiVal&~(1L<<eDebugSetting_GoToEnd));
+    // uiVal=gameServices().debugGetMask(PlatformInput.GetPrimaryPad());
+    // 		gameServices().setGameSettingsDebugMask(PlatformInput.GetPrimaryPad(),uiVal&~(1L<<eDebugSetting_GoToEnd));
     // 	}
     // else
-    if (gameServices().debugGetMask(InputManager.GetPrimaryPad()) &
+    if (gameServices().debugGetMask(PlatformInput.GetPrimaryPad()) &
         (1L << eDebugSetting_GoToOverworld)) {
         if (level->dimension->id != 0) {
             isInsidePortal = true;
             portalTime = 1;
         }
         unsigned int uiVal =
-            gameServices().debugGetMask(InputManager.GetPrimaryPad());
+            gameServices().debugGetMask(PlatformInput.GetPrimaryPad());
         gameServices().setGameSettingsDebugMask(
-            InputManager.GetPrimaryPad(),
+            PlatformInput.GetPrimaryPad(),
             uiVal & ~(1L << eDebugSetting_GoToOverworld));
     }
 #endif

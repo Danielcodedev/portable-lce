@@ -5,7 +5,7 @@
 #include <stdint.h>
 
 #include "platform/PlatformTypes.h"
-#include "platform/InputActions.h"
+#include "platform/input/InputActions.h"
 #include "platform/sdl2/Profile.h"
 #include "app/common/App_Defines.h"
 #include "minecraft/GameEnums.h"

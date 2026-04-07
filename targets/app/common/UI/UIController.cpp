@@ -10,7 +10,7 @@
 #include <memory>
 #include <utility>
 
-#include "platform/sdl2/Input.h"
+#include "platform/input/input.h"
 #include "platform/sdl2/Profile.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/Audio/SoundEngine.h"
@@ -737,7 +737,7 @@ void UIController::tickInput() {
     if (!m_bSystemUIShowing) {
 #if defined(ENABLE_IGGY_PERFMON)
         if (m_iggyPerfmonEnabled) {
-            if (InputManager.ButtonPressed(ProfileManager.GetPrimaryPad(),
+            if (PlatformInput.ButtonPressed(ProfileManager.GetPrimaryPad(),
                                            ACTION_MENU_STICK_PRESS))
                 m_iggyPerfmonEnabled = !m_iggyPerfmonEnabled;
         } else
@@ -765,9 +765,9 @@ void UIController::handleKeyPress(unsigned int iPad, unsigned int key) {
     bool released = false;  // Toggle
     bool repeat = false;
 
-    down = InputManager.ButtonDown(iPad, key);
-    pressed = InputManager.ButtonPressed(iPad, key);    // Toggle
-    released = InputManager.ButtonReleased(iPad, key);  // Toggle
+    down = PlatformInput.ButtonDown(iPad, key);
+    pressed = PlatformInput.ButtonPressed(iPad, key);    // Toggle
+    released = PlatformInput.ButtonReleased(iPad, key);  // Toggle
 
     if (pressed) app.DebugPrintf("Pressed %d\n", key);
     if (released) app.DebugPrintf("Released %d\n", key);
@@ -847,29 +847,29 @@ void UIController::renderScenes() {
         IggyPerfmonPad pm_pad;
 
         pm_pad.bits = 0;
-        pm_pad.field.dpad_up = InputManager.ButtonPressed(
+        pm_pad.field.dpad_up = PlatformInput.ButtonPressed(
             ProfileManager.GetPrimaryPad(), ACTION_MENU_UP);
-        pm_pad.field.dpad_down = InputManager.ButtonPressed(
+        pm_pad.field.dpad_down = PlatformInput.ButtonPressed(
             ProfileManager.GetPrimaryPad(), ACTION_MENU_DOWN);
-        pm_pad.field.dpad_left = InputManager.ButtonPressed(
+        pm_pad.field.dpad_left = PlatformInput.ButtonPressed(
             ProfileManager.GetPrimaryPad(), ACTION_MENU_LEFT);
-        pm_pad.field.dpad_right = InputManager.ButtonPressed(
+        pm_pad.field.dpad_right = PlatformInput.ButtonPressed(
             ProfileManager.GetPrimaryPad(), ACTION_MENU_RIGHT);
-        pm_pad.field.button_up = InputManager.ButtonPressed(
+        pm_pad.field.button_up = PlatformInput.ButtonPressed(
             ProfileManager.GetPrimaryPad(), ACTION_MENU_Y);
-        pm_pad.field.button_down = InputManager.ButtonPressed(
+        pm_pad.field.button_down = PlatformInput.ButtonPressed(
             ProfileManager.GetPrimaryPad(), ACTION_MENU_A);
-        pm_pad.field.button_left = InputManager.ButtonPressed(
+        pm_pad.field.button_left = PlatformInput.ButtonPressed(
             ProfileManager.GetPrimaryPad(), ACTION_MENU_X);
-        pm_pad.field.button_right = InputManager.ButtonPressed(
+        pm_pad.field.button_right = PlatformInput.ButtonPressed(
             ProfileManager.GetPrimaryPad(), ACTION_MENU_B);
-        pm_pad.field.shoulder_left_hi = InputManager.ButtonPressed(
+        pm_pad.field.shoulder_left_hi = PlatformInput.ButtonPressed(
             ProfileManager.GetPrimaryPad(), ACTION_MENU_LEFT_SCROLL);
-        pm_pad.field.shoulder_right_hi = InputManager.ButtonPressed(
+        pm_pad.field.shoulder_right_hi = PlatformInput.ButtonPressed(
             ProfileManager.GetPrimaryPad(), ACTION_MENU_RIGHT_SCROLL);
-        pm_pad.field.trigger_left_low = InputManager.ButtonPressed(
+        pm_pad.field.trigger_left_low = PlatformInput.ButtonPressed(
             ProfileManager.GetPrimaryPad(), ACTION_MENU_PAGEUP);
-        pm_pad.field.trigger_right_low = InputManager.ButtonPressed(
+        pm_pad.field.trigger_right_low = PlatformInput.ButtonPressed(
             ProfileManager.GetPrimaryPad(), ACTION_MENU_PAGEDOWN);
         // IggyPerfmonPadFromXInputStatePointer(pm_pad, &xi_pad);
 
@@ -1582,7 +1582,7 @@ void UIController::SetMenuDisplayed(int iPad, bool bVal) {
     if (bVal) {
         if (iPad == XUSER_INDEX_ANY) {
             for (int i = 0; i < XUSER_MAX_COUNT; i++) {
-                InputManager.SetMenuDisplayed(i, true);
+                PlatformInput.SetMenuDisplayed(i, true);
                 m_bMenuDisplayed[i] = true;
                 // 4J Stu - Fix for #11018 - Functional: When the controller is
                 // unplugged during active gameplay and plugged back in at the
@@ -1590,7 +1590,7 @@ void UIController::SetMenuDisplayed(int iPad, bool bVal) {
                 m_bMenuToBeClosed[i] = false;
             }
         } else {
-            InputManager.SetMenuDisplayed(iPad, true);
+            PlatformInput.SetMenuDisplayed(iPad, true);
             m_bMenuDisplayed[iPad] = true;
             // 4J Stu - Fix for #11018 - Functional: When the controller is
             // unplugged during active gameplay and plugged back in at the
@@ -1618,7 +1618,7 @@ void UIController::CheckMenuDisplayed() {
             } else {
                 m_bMenuToBeClosed[iPad] = false;
                 m_bMenuDisplayed[iPad] = false;
-                InputManager.SetMenuDisplayed(iPad, false);
+                PlatformInput.SetMenuDisplayed(iPad, false);
             }
         }
     }

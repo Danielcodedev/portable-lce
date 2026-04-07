@@ -3,7 +3,7 @@
 
 #include <wchar.h>
 
-#include "platform/InputActions.h"
+#include "platform/input/InputActions.h"
 #include "platform/sdl2/Profile.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/UI/Controls/UIControl_CheckBox.h"

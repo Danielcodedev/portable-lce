@@ -9,7 +9,7 @@
 #include <thread>
 #include <vector>
 
-#include "platform/sdl2/Input.h"
+#include "platform/input/input.h"
 #include "platform/sdl2/Profile.h"
 #include "platform/sdl2/Render.h"
 #include "platform/sdl2/Storage.h"
@@ -1506,7 +1506,7 @@ void CGameNetworkManager::ServerStoppedWait() {
             // Tick some simple things
             ProfileManager.Tick();
             StorageManager.Tick();
-            InputManager.Tick();
+            PlatformInput.Tick();
             RenderManager.Tick();
             ui.tick();
             ui.render();

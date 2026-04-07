@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-#include "platform/sdl2/Input.h"
+#include "platform/input/input.h"
 #include "app/common/Tutorial/Constraints/InputConstraint.h"
 #include "app/common/Tutorial/Tasks/TutorialTask.h"
 #include "app/common/Tutorial/Tutorial.h"
@@ -54,12 +54,12 @@ bool ChoiceTask::isCompleted() {
             return false;
 
         if (!m_bConfirmMappingComplete &&
-            InputManager.GetValue(pMinecraft->player->GetXboxPad(),
+            PlatformInput.GetValue(pMinecraft->player->GetXboxPad(),
                                   m_iConfirmMapping) > 0) {
             m_bConfirmMappingComplete = true;
         }
         if (!m_bCancelMappingComplete &&
-            InputManager.GetValue(pMinecraft->player->GetXboxPad(),
+            PlatformInput.GetValue(pMinecraft->player->GetXboxPad(),
                                   m_iCancelMapping) > 0) {
             m_bCancelMappingComplete = true;
         }

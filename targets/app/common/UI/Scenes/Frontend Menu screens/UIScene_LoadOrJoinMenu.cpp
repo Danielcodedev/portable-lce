@@ -6,8 +6,8 @@
 
 #include <compare>
 
-#include "platform/InputActions.h"
-#include "platform/sdl2/Input.h"
+#include "platform/input/InputActions.h"
+#include "platform/input/input.h"
 #include "platform/sdl2/Profile.h"
 #include "app/common/App_Defines.h"
 #include "minecraft/GameEnums.h"
@@ -823,7 +823,7 @@ int UIScene_LoadOrJoinMenu::handleKeyboardCompleteWorldName(bool bRes) {
     // 4J HEG - No reason to set value if keyboard was cancelled
     m_bIgnoreInput = false;
     if (bRes) {
-        const char* text = InputManager.GetText();
+        const char* text = PlatformInput.GetText();
         // check the name is valid
         if (text[0] != '\0') {
         } else {
@@ -1492,12 +1492,12 @@ int UIScene_LoadOrJoinMenu::SaveOptionsDialogReturned(
                     .UTF8SaveName,
                 strlen(pClass->m_saveDetails->UTF8SaveName) + 1);  // plus null
             wchar_t* ptr = wSaveName;
-            InputManager.RequestKeyboard(
+            PlatformInput.RequestKeyboard(
                 app.GetString(IDS_RENAME_WORLD_TITLE), wSaveName, 0, 25,
                 [pClass](bool bRes) -> int {
                     return pClass->handleKeyboardCompleteWorldName(bRes);
                 },
-                C_4JInput::EKeyboardMode_Default);
+                IPlatformInput::EKeyboardMode_Default);
         } break;
 
         case C4JStorage::EMessage_ResultThirdOption:  // delete -

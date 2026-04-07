@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-#include "platform/InputActions.h"
+#include "platform/input/InputActions.h"
 #include "platform/sdl2/Profile.h"
 #include "platform/sdl2/Render.h"
 #include "minecraft/GameEnums.h"

@@ -8,7 +8,7 @@
 
 #include <memory>
 
-#include "platform/InputActions.h"
+#include "platform/input/InputActions.h"
 #include "platform/sdl2/Profile.h"
 #include "app/common/Console_Debug_enum.h"
 #include "app/common/Leaderboards/LeaderboardInterface.h"

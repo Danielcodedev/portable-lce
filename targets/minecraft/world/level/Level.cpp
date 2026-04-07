@@ -15,7 +15,7 @@
 #include <optional>
 
 #include "Explosion.h"
-#include "IPlatformInput.h"
+#include "platform/input/input.h"
 #include "LevelListener.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/Colours/ColourTable.h"

@@ -4,8 +4,8 @@
 
 #include <memory>
 
-#include "platform/InputActions.h"
-#include "platform/sdl2/Input.h"
+#include "platform/input/InputActions.h"
+#include "platform/input/input.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/BuildVer/BuildVer.h"
 #include "app/common/UI/Controls/UIControl_Button.h"
@@ -251,7 +251,7 @@ void UIScene_ControlsMenu::PositionAllText(int iPad) {
 
 void UIScene_ControlsMenu::PositionText(int iPad, int iTextID,
                                         unsigned char ucAction) {
-    unsigned int uiVal = InputManager.GetGameJoypadMaps(
+    unsigned int uiVal = PlatformInput.GetGameJoypadMaps(
         m_iCurrentNavigatedControlsLayout, ucAction);
 
     if (uiVal & _360_JOY_BUTTON_A)

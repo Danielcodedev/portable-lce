@@ -28,8 +28,8 @@
 #include "minecraft/world/item/Item.h"
 #include "minecraft/world/level/tile/Tile.h"
 // 4J Stu - Added for tutorial callbacks
-#include "platform/InputActions.h"
-#include "platform/sdl2/Input.h"
+#include "platform/input/InputActions.h"
+#include "platform/input/input.h"
 #include "platform/sdl2/Profile.h"
 #include "platform/sdl2/Render.h"
 #include "app/common/App_structs.h"
@@ -381,7 +381,7 @@ void LocalPlayer::aiStep() {
         // snap y rotation to nearest 90 degree axis aligned value
         float yRotSnapped = floorf((yRot / 90.0f) + 0.5f) * 90.0f;
 
-        if (InputManager.GetJoypadMapVal(m_iPad) == 0) {
+        if (PlatformInput.GetJoypadMapVal(m_iPad) == 0) {
             if (ullDpad_filtered & (1LL << MINECRAFT_ACTION_DPAD_RIGHT)) {
                 xd = -0.15 * cos(yRotSnapped * std::numbers::pi / 180);
                 zd = -0.15 * sin(yRotSnapped * std::numbers::pi / 180);
@@ -485,12 +485,12 @@ void LocalPlayer::aiStep() {
     }
 
     // Check if the player is idle and the rich presence needs updated
-    if (!m_bIsIdle && InputManager.GetIdleSeconds(m_iPad) > PLAYER_IDLE_TIME) {
+    if (!m_bIsIdle && PlatformInput.GetIdleSeconds(m_iPad) > PLAYER_IDLE_TIME) {
         ProfileManager.SetCurrentGameActivity(m_iPad, CONTEXT_PRESENCE_IDLE,
                                               false);
         m_bIsIdle = true;
     } else if (m_bIsIdle &&
-               InputManager.GetIdleSeconds(m_iPad) < PLAYER_IDLE_TIME) {
+               PlatformInput.GetIdleSeconds(m_iPad) < PLAYER_IDLE_TIME) {
         // Are we offline or online, and how many players are there
         if (g_NetworkManager.GetPlayerCount() > 1) {
             // only do it for this player here - each player will run this code

@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "BiomeOverrideLayer.h"
-#include "IPlatformInput.h"
+#include "platform/input/input.h"
 #include "app/common/Console_Debug_enum.h"
 #include "app/linux/LinuxGame.h"
 #include "minecraft/world/level/LevelType.h"

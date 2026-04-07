@@ -2,7 +2,7 @@
 #include "UIScene_MessageBox.h"
 
 #include "platform/PlatformTypes.h"
-#include "platform/InputActions.h"
+#include "platform/input/InputActions.h"
 #include "platform/sdl2/Profile.h"
 #include "app/common/UI/All Platforms/UIStructs.h"
 #include "app/common/UI/Controls/UIControl_Button.h"

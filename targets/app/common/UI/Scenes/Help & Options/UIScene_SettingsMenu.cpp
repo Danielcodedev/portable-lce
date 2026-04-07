@@ -1,7 +1,7 @@
 
 #include "UIScene_SettingsMenu.h"
 
-#include "platform/InputActions.h"
+#include "platform/input/InputActions.h"
 #include "platform/sdl2/Profile.h"
 #include "app/common/UI/Controls/UIControl_Button.h"
 #include "app/common/UI/UILayer.h"

@@ -1,8 +1,8 @@
 
 #include "UIScene_SignEntryMenu.h"
 
-#include "platform/InputActions.h"
-#include "platform/sdl2/Input.h"
+#include "platform/input/InputActions.h"
+#include "platform/input/input.h"
 #include "app/common/UI/All Platforms/UIStructs.h"
 #include "app/common/UI/Controls/UIControl_Button.h"
 #include "app/common/UI/Controls/UIControl_Label.h"
@@ -50,10 +50,10 @@ UIScene_SignEntryMenu::UIScene_SignEntryMenu(int iPad, void* _initData,
             case XC_LANGUAGE_KOREAN:
             case XC_LANGUAGE_RUSSIAN:
                 m_signRows[i].SetKeyboardType(
-                    C_4JInput::EKeyboardMode_Alphabet);
+                    IPlatformInput::EKeyboardMode_Alphabet);
                 break;
             default:
-                m_signRows[i].SetKeyboardType(C_4JInput::EKeyboardMode_Full);
+                m_signRows[i].SetKeyboardType(IPlatformInput::EKeyboardMode_Full);
                 break;
         }
 
@@ -158,7 +158,7 @@ void UIScene_SignEntryMenu::handlePress(F64 controlId, F64 childId) {
         case eControl_Line4: {
             m_iEditingLine = (int)controlId;
             m_bIgnoreInput = true;
-            InputManager.RequestKeyboard(
+            PlatformInput.RequestKeyboard(
                 app.GetString(IDS_SIGN_TITLE),
                 m_textInputLines[m_iEditingLine].getLabel(), m_iPad, 15,
                 [this](bool bRes) -> int {
@@ -166,13 +166,13 @@ void UIScene_SignEntryMenu::handlePress(F64 controlId, F64 childId) {
                     m_bIgnoreInput = false;
                     if (bRes && m_iEditingLine >= 0 && m_iEditingLine < 4) {
                         std::wstring str =
-                            convStringToWstring(InputManager.GetText());
+                            convStringToWstring(PlatformInput.GetText());
                         if (str.size() > 15) str.resize(15);
                         m_textInputLines[m_iEditingLine].setLabel(str);
                     }
                     return 0;
                 },
-                C_4JInput::EKeyboardMode_Alphabet);
+                IPlatformInput::EKeyboardMode_Alphabet);
         } break;
     }
 }

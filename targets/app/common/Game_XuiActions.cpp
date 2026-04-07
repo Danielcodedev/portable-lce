@@ -430,7 +430,7 @@ void Game::HandleXuiActions(void) {
 
                     // 4J-PB - cancel any possible std::string verifications
                     // queued with LIVE
-                    // InputManager.CancelAllVerifyInProgress();
+                    // PlatformInput.CancelAllVerifyInProgress();
 
                     // In a split screen, only the primary player actually
                     // quits the game, others just remove their players

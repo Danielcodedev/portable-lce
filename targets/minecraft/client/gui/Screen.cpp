@@ -1,8 +1,8 @@
 #include "minecraft/IGameServices.h"
 #include "Screen.h"
 
-#include "platform/InputActions.h"
-#include "platform/sdl2/Input.h"
+#include "platform/input/InputActions.h"
+#include "platform/input/input.h"
 #include "platform/sdl2/Profile.h"
 #include "Button.h"
 #include "minecraft/GameEnums.h"
@@ -44,7 +44,7 @@ void Screen::keyPressed(wchar_t eventCharacter, int eventKey) {
         // unpausing is done in all scenarios
         if (g_NetworkManager.IsLocalGame() &&
             g_NetworkManager.GetPlayerCount() == 1)
-            gameServices().setXuiServerAction(InputManager.GetPrimaryPad(),
+            gameServices().setXuiServerAction(PlatformInput.GetPrimaryPad(),
                                    eXuiServerAction_PauseServer, (void*)false);
     }
 }
@@ -108,14 +108,14 @@ void Screen::updateEvents() {
                              minecraft->height);
     int screenWidth = ssc.getWidth();
     int screenHeight = ssc.getHeight();
-    int xMouse = InputManager.GetMouseX() * screenWidth / fbw;
-    int yMouse = InputManager.GetMouseY() * screenHeight / fbh - 1;
+    int xMouse = PlatformInput.GetMouseX() * screenWidth / fbw;
+    int yMouse = PlatformInput.GetMouseY() * screenHeight / fbh - 1;
 
     static bool prevLeftState = false;
     static bool prevRightState = false;
 
-    bool leftState = InputManager.ButtonDown(0, MINECRAFT_ACTION_ACTION);
-    bool rightState = InputManager.ButtonDown(0, MINECRAFT_ACTION_USE);
+    bool leftState = PlatformInput.ButtonDown(0, MINECRAFT_ACTION_ACTION);
+    bool rightState = PlatformInput.ButtonDown(0, MINECRAFT_ACTION_USE);
 
     if (leftState && !prevLeftState) {
         mouseClicked(xMouse, yMouse, 0);

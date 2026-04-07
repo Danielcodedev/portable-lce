@@ -12,7 +12,7 @@
 #include <memory>
 #include <utility>
 
-#include "IPlatformInput.h"
+#include "platform/input/input.h"
 #include "LevelData.h"
 #include "app/common/Console_Debug_enum.h"
 #include "app/common/GameRules/GameRuleManager.h"

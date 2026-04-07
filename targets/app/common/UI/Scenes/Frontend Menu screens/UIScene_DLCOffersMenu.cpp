@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 #include "platform/PlatformTypes.h"
-#include "platform/InputActions.h"
+#include "platform/input/InputActions.h"
 #include "platform/sdl2/Render.h"
 #include "app/common/UI/All Platforms/UIStructs.h"
 #include "app/common/UI/Controls/UIControl_DLCList.h"

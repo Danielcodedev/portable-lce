@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-#include "IPlatformInput.h"
+#include "platform/input/input.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/Colours/ColourTable.h"
 #include "app/common/Console_Debug_enum.h"

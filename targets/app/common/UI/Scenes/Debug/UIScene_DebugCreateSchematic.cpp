@@ -3,8 +3,8 @@
 
 #include <wchar.h>
 
-#include "platform/InputActions.h"
-#include "platform/sdl2/Input.h"
+#include "platform/input/InputActions.h"
+#include "platform/input/input.h"
 #include "platform/sdl2/Profile.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/GameRules/LevelGeneration/ConsoleSchematicFile.h"
@@ -130,12 +130,12 @@ void UIScene_DebugCreateSchematic::handlePress(F64 controlId, F64 childId) {
         case eControl_EndY:
         case eControl_EndZ:
             m_keyboardCallbackControl = (eControls)((int)controlId);
-            InputManager.RequestKeyboard(
+            PlatformInput.RequestKeyboard(
                 L"Enter something", L"", 0, 25,
                 [this](bool bRes) -> int {
                     return handleKeyboardComplete(bRes);
                 },
-                C_4JInput::EKeyboardMode_Default);
+                IPlatformInput::EKeyboardMode_Default);
             break;
     };
 }
@@ -156,7 +156,7 @@ void UIScene_DebugCreateSchematic::handleCheckboxToggled(F64 controlId,
 }
 
 int UIScene_DebugCreateSchematic::handleKeyboardComplete(bool bRes) {
-    const char* text = InputManager.GetText();
+    const char* text = PlatformInput.GetText();
     if (text[0] != '\0') {
         std::wstring value = convStringToWstring(text);
         int iVal = 0;

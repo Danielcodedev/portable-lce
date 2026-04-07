@@ -72,7 +72,7 @@ void MultiplayerLocalPlayer::tick() {
     // 4J Added
     // 4J-PB - changing this to a game host option ot hide gamertags
     // bool bIsisPrimaryHost=g_NetworkManager.IsHost() &&
-    // (InputManager.GetPrimaryPad()==m_iPad);
+    // (PlatformInput.GetPrimaryPad()==m_iPad);
 
     /*if((gameServices().getGameSettings(m_iPad,eGameSetting_PlayerVisibleInMap)!=0) !=
     m_bShownOnMaps)

@@ -11,7 +11,7 @@
 #include <utility>
 
 #include "platform/PlatformTypes.h"
-#include "platform/sdl2/Input.h"
+#include "platform/input/input.h"
 #include "ClientConnection.h"
 #include "app/common/Audio/SoundEngine.h"
 #include "app/common/Console_Debug_enum.h"
@@ -123,7 +123,7 @@ void MultiPlayerLevel::tick() {
 #if !defined(_FINAL_BUILD)
         bool freezeTime =
             gameServices().debugSettingsOn() &&
-            gameServices().debugGetMask(InputManager.GetPrimaryPad()) &
+            gameServices().debugGetMask(PlatformInput.GetPrimaryPad()) &
                 (1L << eDebugSetting_FreezeTime);
         if (!freezeTime)
 #endif

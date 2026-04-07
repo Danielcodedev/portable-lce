@@ -5,7 +5,7 @@
 #include <utility>
 #include <vector>
 
-#include "platform/sdl2/Input.h"
+#include "platform/input/input.h"
 #include "app/common/Tutorial/Constraints/InputConstraint.h"
 #include "app/common/Tutorial/Tasks/TutorialTask.h"
 #include "app/common/Tutorial/Tutorial.h"
@@ -63,7 +63,7 @@ bool InfoTask::isCompleted() {
              ++it) {
             bool current = (*it).second;
             if (!current) {
-                if (InputManager.GetValue(pMinecraft->player->GetXboxPad(),
+                if (PlatformInput.GetValue(pMinecraft->player->GetXboxPad(),
                                           (*it).first) > 0) {
                     (*it).second = true;
                     bAllComplete = true;

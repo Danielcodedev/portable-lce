@@ -6,7 +6,7 @@
 #include <utility>
 #include <vector>
 
-#include "platform/sdl2/Input.h"
+#include "platform/input/input.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/Tutorial/Constraints/InputConstraint.h"
 #include "app/common/Tutorial/Tasks/TutorialTask.h"
@@ -81,7 +81,7 @@ bool ControllerTask::isCompleted() {
         for (auto it = southpawCompletedMappings.begin();
              it != southpawCompletedMappings.end(); ++it) {
             if (!it->second) {
-                if (InputManager.GetValue(pMinecraft->player->GetXboxPad(),
+                if (PlatformInput.GetValue(pMinecraft->player->GetXboxPad(),
                                           it->first) > 0) {
                     it->second = true;
                     m_uiCompletionMask |= 1 << iCurrent;
@@ -95,7 +95,7 @@ bool ControllerTask::isCompleted() {
         for (auto it = completedMappings.begin(); it != completedMappings.end();
              ++it) {
             if (!it->second) {
-                if (InputManager.GetValue(pMinecraft->player->GetXboxPad(),
+                if (PlatformInput.GetValue(pMinecraft->player->GetXboxPad(),
                                           it->first) > 0) {
                     it->second = true;
                     m_uiCompletionMask |= 1 << iCurrent;

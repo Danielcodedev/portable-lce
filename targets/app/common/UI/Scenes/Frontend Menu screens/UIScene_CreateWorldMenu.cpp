@@ -7,8 +7,8 @@
 #include <utility>
 
 #include "platform/PlatformTypes.h"
-#include "platform/InputActions.h"
-#include "platform/sdl2/Input.h"
+#include "platform/input/InputActions.h"
+#include "platform/input/input.h"
 #include "platform/sdl2/Profile.h"
 #include "app/common/App_Defines.h"
 #include "minecraft/GameEnums.h"
@@ -353,7 +353,7 @@ void UIScene_CreateWorldMenu::handlePress(F64 controlId, F64 childId) {
     switch ((int)controlId) {
         case eControl_EditWorldName: {
             m_bIgnoreInput = true;
-            InputManager.RequestKeyboard(
+            PlatformInput.RequestKeyboard(
                 app.GetString(IDS_CREATE_NEW_WORLD), m_editWorldName.getLabel(),
                 0, 25,
                 [this](bool bRes) -> int {
@@ -361,7 +361,7 @@ void UIScene_CreateWorldMenu::handlePress(F64 controlId, F64 childId) {
                     // 4J HEG - No reason to set value if keyboard was cancelled
                     if (bRes) {
                         std::wstring str =
-                            convStringToWstring(InputManager.GetText());
+                            convStringToWstring(PlatformInput.GetText());
                         if (!str.empty()) {
                             m_editWorldName.setLabel(str);
                             m_worldName = std::move(str);
@@ -370,7 +370,7 @@ void UIScene_CreateWorldMenu::handlePress(F64 controlId, F64 childId) {
                     }
                     return 0;
                 },
-                C_4JInput::EKeyboardMode_Default);
+                IPlatformInput::EKeyboardMode_Default);
         } break;
         case eControl_GameModeToggle:
             switch (m_iGameModeId) {
@@ -623,7 +623,7 @@ void UIScene_CreateWorldMenu::checkStateAndStartGame() {
         // the sign-in UI again
         int connectedControllers = 0;
         for (unsigned int i = 0; i < XUSER_MAX_COUNT; ++i) {
-            if (InputManager.IsPadConnected(i) || ProfileManager.IsSignedIn(i))
+            if (PlatformInput.IsPadConnected(i) || ProfileManager.IsSignedIn(i))
                 ++connectedControllers;
         }
 
@@ -990,7 +990,7 @@ int UIScene_CreateWorldMenu::ConfirmCreateReturned(
         // the sign-in UI again
         int connectedControllers = 0;
         for (unsigned int i = 0; i < XUSER_MAX_COUNT; ++i) {
-            if (InputManager.IsPadConnected(i) || ProfileManager.IsSignedIn(i))
+            if (PlatformInput.IsPadConnected(i) || ProfileManager.IsSignedIn(i))
                 ++connectedControllers;
         }
 

@@ -4,7 +4,7 @@
 #include <cmath>
 #include <memory>
 
-#include "platform/InputActions.h"
+#include "platform/input/InputActions.h"
 #include "app/common/Tutorial/Tutorial.h"
 #include "app/common/Tutorial/TutorialMode.h"
 #include "app/common/UI/All Platforms/UIStructs.h"

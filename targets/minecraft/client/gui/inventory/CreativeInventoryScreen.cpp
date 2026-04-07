@@ -6,8 +6,8 @@
 #include <algorithm>
 #include <string>
 
-#include "platform/InputActions.h"
-#include "platform/sdl2/Input.h"
+#include "platform/input/InputActions.h"
+#include "platform/input/input.h"
 #include "platform/sdl2/Render.h"
 #include "AbstractContainerScreen.h"
 #include "app/common/UI/All Platforms/IUIScene_CreativeMenu.h"
@@ -255,11 +255,11 @@ void CreativeInventoryScreen::updateEvents() {
         int scrollableRows = totalRows - ROWS;
         if (scrollableRows > 0) {
             float step = 1.0f / (float)scrollableRows;
-            if (InputManager.ButtonDown(0, MINECRAFT_ACTION_LEFT_SCROLL)) {
+            if (PlatformInput.ButtonDown(0, MINECRAFT_ACTION_LEFT_SCROLL)) {
                 currentScroll -= step;
                 currentScroll = std::max(0.0f, std::min(1.0f, currentScroll));
                 container->scrollTo(currentScroll);
-            } else if (InputManager.ButtonDown(0,
+            } else if (PlatformInput.ButtonDown(0,
                                                MINECRAFT_ACTION_RIGHT_SCROLL)) {
                 currentScroll += step;
                 currentScroll = std::max(0.0f, std::min(1.0f, currentScroll));

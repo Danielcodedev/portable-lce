@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <mutex>
 
-#include "platform/sdl2/Input.h"
+#include "platform/input/input.h"
 #include "platform/sdl2/Storage.h"
 #include "EntityTracker.h"
 #include "platform/ShutdownManager.h"
@@ -326,7 +326,7 @@ void ServerLevel::tick() {
 #if !defined(_FINAL_BUILD)
         bool freezeTime =
             gameServices().debugSettingsOn() &&
-            gameServices().debugGetMask(InputManager.GetPrimaryPad()) &
+            gameServices().debugGetMask(PlatformInput.GetPrimaryPad()) &
                 (1L << eDebugSetting_FreezeTime);
         if (!freezeTime)
 #endif

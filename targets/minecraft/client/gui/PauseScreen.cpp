@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-#include "platform/sdl2/Input.h"
+#include "platform/input/input.h"
 #include "Button.h"
 #include "MessageScreen.h"
 #include "minecraft/GameEnums.h"
@@ -33,7 +33,7 @@ void PauseScreen::init() {
     // 4jcraft: solves the issue of client-side only pausing in the java gui
     if (g_NetworkManager.IsLocalGame() &&
         g_NetworkManager.GetPlayerCount() == 1)
-        gameServices().setXuiServerAction(InputManager.GetPrimaryPad(),
+        gameServices().setXuiServerAction(PlatformInput.GetPrimaryPad(),
                                eXuiServerAction_PauseServer, (void*)true);
     buttons.push_back(new Button(1, width / 2 - 100, height / 4 + 24 * 5 + yo,
                                  I18n::get(L"menu.returnToMenu")));
@@ -91,7 +91,7 @@ void PauseScreen::buttonClicked(Button* button) {
         exitWorld(minecraft, true);
     }
     if (button->id == 4) {
-        gameServices().setXuiServerAction(InputManager.GetPrimaryPad(),
+        gameServices().setXuiServerAction(PlatformInput.GetPrimaryPad(),
                                eXuiServerAction_PauseServer, (void*)false);
         minecraft->setScreen(nullptr);
         //       minecraft->grabMouse();		// 4J - removed

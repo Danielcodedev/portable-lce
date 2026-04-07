@@ -6,7 +6,6 @@
 #include "TileEntity.h"
 #include "java/Class.h"
 #include "minecraft/world/entity/player/Player.h"
-#include "platform/IPlatformInput.h"
 
 struct STRING_VERIFY_RESPONSE;
 

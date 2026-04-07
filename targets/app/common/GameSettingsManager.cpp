@@ -20,7 +20,7 @@
 #include "minecraft/server/level/ServerPlayer.h"
 #include "minecraft/world/entity/player/Player.h"
 #include "minecraft/world/level/tile/Tile.h"
-#include "platform/sdl2/Input.h"
+#include "platform/input/input.h"
 #include "platform/sdl2/Render.h"
 #include "platform/sdl2/Storage.h"
 #include "app/common/Audio/SoundEngine.h"
@@ -301,37 +301,37 @@ void GameSettingsManager::actionGameSettings(int iPad, eGameSetting eVal) {
         case eGameSetting_ViewBob:
             break;
         case eGameSetting_ControlScheme:
-            InputManager.SetJoypadMapVal(
+            PlatformInput.SetJoypadMapVal(
                 iPad, (GameSettingsA[iPad]->usBitmaskValues & 0x30) >> 4);
             break;
         case eGameSetting_ControlInvertLook:
             break;
         case eGameSetting_ControlSouthPaw:
             if (GameSettingsA[iPad]->usBitmaskValues & 0x80) {
-                InputManager.SetJoypadStickAxisMap(iPad, AXIS_MAP_LX,
+                PlatformInput.SetJoypadStickAxisMap(iPad, AXIS_MAP_LX,
                                                    AXIS_MAP_RX);
-                InputManager.SetJoypadStickAxisMap(iPad, AXIS_MAP_LY,
+                PlatformInput.SetJoypadStickAxisMap(iPad, AXIS_MAP_LY,
                                                    AXIS_MAP_RY);
-                InputManager.SetJoypadStickAxisMap(iPad, AXIS_MAP_RX,
+                PlatformInput.SetJoypadStickAxisMap(iPad, AXIS_MAP_RX,
                                                    AXIS_MAP_LX);
-                InputManager.SetJoypadStickAxisMap(iPad, AXIS_MAP_RY,
+                PlatformInput.SetJoypadStickAxisMap(iPad, AXIS_MAP_RY,
                                                    AXIS_MAP_LY);
-                InputManager.SetJoypadStickTriggerMap(iPad, TRIGGER_MAP_0,
+                PlatformInput.SetJoypadStickTriggerMap(iPad, TRIGGER_MAP_0,
                                                       TRIGGER_MAP_1);
-                InputManager.SetJoypadStickTriggerMap(iPad, TRIGGER_MAP_1,
+                PlatformInput.SetJoypadStickTriggerMap(iPad, TRIGGER_MAP_1,
                                                       TRIGGER_MAP_0);
             } else {
-                InputManager.SetJoypadStickAxisMap(iPad, AXIS_MAP_LX,
+                PlatformInput.SetJoypadStickAxisMap(iPad, AXIS_MAP_LX,
                                                    AXIS_MAP_LX);
-                InputManager.SetJoypadStickAxisMap(iPad, AXIS_MAP_LY,
+                PlatformInput.SetJoypadStickAxisMap(iPad, AXIS_MAP_LY,
                                                    AXIS_MAP_LY);
-                InputManager.SetJoypadStickAxisMap(iPad, AXIS_MAP_RX,
+                PlatformInput.SetJoypadStickAxisMap(iPad, AXIS_MAP_RX,
                                                    AXIS_MAP_RX);
-                InputManager.SetJoypadStickAxisMap(iPad, AXIS_MAP_RY,
+                PlatformInput.SetJoypadStickAxisMap(iPad, AXIS_MAP_RY,
                                                    AXIS_MAP_RY);
-                InputManager.SetJoypadStickTriggerMap(iPad, TRIGGER_MAP_0,
+                PlatformInput.SetJoypadStickTriggerMap(iPad, TRIGGER_MAP_0,
                                                       TRIGGER_MAP_0);
-                InputManager.SetJoypadStickTriggerMap(iPad, TRIGGER_MAP_1,
+                PlatformInput.SetJoypadStickTriggerMap(iPad, TRIGGER_MAP_1,
                                                       TRIGGER_MAP_1);
             }
             break;

@@ -4,7 +4,7 @@
 #include <string.h>
 #include <wchar.h>
 
-#include "platform/InputActions.h"
+#include "platform/input/InputActions.h"
 #include "app/common/UI/UILayer.h"
 #include "app/common/UI/UIScene.h"
 #include "app/linux/LinuxGame.h"

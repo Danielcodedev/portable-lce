@@ -2,7 +2,7 @@
 #include "app/common/Game.h"
 
 #include "platform/PlatformTypes.h"
-#include "platform/InputActions.h"
+#include "platform/input/InputActions.h"
 #include "platform/sdl2/Profile.h"
 #include "platform/sdl2/Render.h"
 #include "platform/sdl2/Storage.h"
@@ -74,7 +74,7 @@
 #include <utility>
 #include <vector>
 
-#include "platform/sdl2/Input.h"
+#include "platform/input/input.h"
 #include "app/common/Audio/SoundEngine.h"
 #include "app/common/Colours/ColourTable.h"
 #include "app/common/DLC/DLCPack.h"
@@ -258,7 +258,7 @@ bool Game::DebugArtToolsOn() {
 #endif
 
 void Game::SetDebugSequence(const char* pchSeq) {
-    InputManager.SetDebugSequence(pchSeq, [this]() -> int {
+    PlatformInput.SetDebugSequence(pchSeq, [this]() -> int {
         // printf("sequence matched\n");
         m_debugOptions.setDebugOptions(!m_debugOptions.settingsOn());
 
@@ -624,7 +624,7 @@ float Game::getTrialTimer(void) {
 bool Game::IsLocalMultiplayerAvailable() {
     unsigned int connectedControllers = 0;
     for (unsigned int i = 0; i < XUSER_MAX_COUNT; ++i) {
-        if (InputManager.IsPadConnected(i) || ProfileManager.IsSignedIn(i))
+        if (PlatformInput.IsPadConnected(i) || ProfileManager.IsSignedIn(i))
             ++connectedControllers;
     }
 
@@ -635,8 +635,8 @@ bool Game::IsLocalMultiplayerAvailable() {
     // Found this in GameNetworkManager?
     // #ifdef 0
     //		iOtherConnectedControllers =
-    // InputManager.GetConnectedGamepadCount();
-    //		if((InputManager.IsPadConnected(userIndex) ||
+    // PlatformInput.GetConnectedGamepadCount();
+    //		if((PlatformInput.IsPadConnected(userIndex) ||
     // ProfileManager.IsSignedIn(userIndex)))
     //		{
     //			--iOtherConnectedControllers;
@@ -644,7 +644,7 @@ bool Game::IsLocalMultiplayerAvailable() {
     // #else
     //		for(unsigned int i = 0; i < XUSER_MAX_COUNT; ++i)
     //		{
-    //			if( (i!=userIndex) && (InputManager.IsPadConnected(i) ||
+    //			if( (i!=userIndex) && (PlatformInput.IsPadConnected(i) ||
     // ProfileManager.IsSignedIn(i)) )
     //			{
     //				iOtherConnectedControllers++;

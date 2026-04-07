@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <utility>
 
-#include "platform/sdl2/Input.h"
+#include "platform/input/input.h"
 #include "DLCTexturePack.h"
 #include "DefaultTexturePack.h"
 #include "minecraft/GameEnums.h"
@@ -151,7 +151,7 @@ bool TexturePackRepository::selectTexturePackById(std::uint32_t id) {
             selectSkin(newPack);
 
             if (newPack->hasData()) {
-                gameServices().setAction(InputManager.GetPrimaryPad(),
+                gameServices().setAction(PlatformInput.GetPrimaryPad(),
                               eAppAction_ReloadTexturePack);
             } else {
                 newPack->loadData();
@@ -167,7 +167,7 @@ bool TexturePackRepository::selectTexturePackById(std::uint32_t id) {
             "Failed to select texture pack %d as it is not in the list\n", id);
         // Fail safely
         if (selectSkin(DEFAULT_TEXTURE_PACK)) {
-            gameServices().setAction(InputManager.GetPrimaryPad(),
+            gameServices().setAction(PlatformInput.GetPrimaryPad(),
                           eAppAction_ReloadTexturePack);
         }
     }

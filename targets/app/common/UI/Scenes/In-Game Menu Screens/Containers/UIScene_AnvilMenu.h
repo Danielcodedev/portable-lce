@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "platform/sdl2/Input.h"
+#include "platform/input/input.h"
 #include "app/common/Tutorial/TutorialMode.h"
 #include "app/common/UI/All Platforms/IUIScene_AnvilMenu.h"
 #include "app/common/UI/All Platforms/UIEnums.h"

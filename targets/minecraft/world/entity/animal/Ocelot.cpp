@@ -6,7 +6,7 @@
 #include <memory>
 #include <vector>
 
-#include "IPlatformInput.h"
+#include "platform/input/input.h"
 #include "app/linux/LinuxGame.h"
 #include "util/StringHelpers.h"
 #include "java/Random.h"

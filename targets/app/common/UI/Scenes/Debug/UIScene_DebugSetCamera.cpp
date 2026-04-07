@@ -5,8 +5,8 @@
 
 #include <memory>
 
-#include "platform/InputActions.h"
-#include "platform/sdl2/Input.h"
+#include "platform/input/InputActions.h"
+#include "platform/input/input.h"
 #include "platform/sdl2/Profile.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/UI/All Platforms/UIStructs.h"
@@ -119,12 +119,12 @@ void UIScene_DebugSetCamera::handlePress(F64 controlId, F64 childId) {
         case eControl_YRot:
         case eControl_Elevation:
             m_keyboardCallbackControl = (eControls)((int)controlId);
-            InputManager.RequestKeyboard(
+            PlatformInput.RequestKeyboard(
                 L"Enter something", L"", 0, 25,
                 [this](bool bRes) -> int {
                     return handleKeyboardComplete(bRes);
                 },
-                C_4JInput::EKeyboardMode_Default);
+                IPlatformInput::EKeyboardMode_Default);
             break;
     };
 }
@@ -139,7 +139,7 @@ void UIScene_DebugSetCamera::handleCheckboxToggled(F64 controlId,
 }
 
 int UIScene_DebugSetCamera::handleKeyboardComplete(bool bRes) {
-    const char* text = InputManager.GetText();
+    const char* text = PlatformInput.GetText();
     if (text[0] != '\0') {
         std::wstring value = convStringToWstring(text);
         double val = 0;

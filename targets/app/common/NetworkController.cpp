@@ -17,7 +17,7 @@
 #include "minecraft/world/entity/player/Player.h"
 #include "minecraft/world/level/tile/Tile.h"
 #include "minecraft/world/level/storage/ConsoleSaveFileIO/compression.h"
-#include "platform/sdl2/Input.h"
+#include "platform/input/input.h"
 #include "platform/sdl2/Profile.h"
 #include "platform/sdl2/Storage.h"
 #include "app/common/Audio/SoundEngine.h"
@@ -384,7 +384,7 @@ void NetworkController::notificationsCallback(void* pParam,
         case XN_SYS_INPUTDEVICESCHANGED:
             if (app.GetGameStarted() && g_NetworkManager.IsInSession()) {
                 for (unsigned int i = 0; i < XUSER_MAX_COUNT; ++i) {
-                    if (!InputManager.IsPadConnected(i) &&
+                    if (!PlatformInput.IsPadConnected(i) &&
                         Minecraft::GetInstance()->localplayers[i] != nullptr &&
                         !ui.IsPauseMenuDisplayed(i) &&
                         !ui.IsSceneInStack(i, eUIScene_EndPoem)) {

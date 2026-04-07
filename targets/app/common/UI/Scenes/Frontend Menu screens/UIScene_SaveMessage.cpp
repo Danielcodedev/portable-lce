@@ -2,8 +2,8 @@
 #include "UIScene_SaveMessage.h"
 
 #include "platform/PlatformTypes.h"
-#include "platform/InputActions.h"
-#include "platform/sdl2/Input.h"
+#include "platform/input/InputActions.h"
+#include "platform/input/input.h"
 #include "platform/sdl2/Profile.h"
 #include "app/common/App_Defines.h"
 #include "app/common/UI/Controls/UIControl_Button.h"
@@ -39,7 +39,7 @@ UIScene_SaveMessage::UIScene_SaveMessage(int iPad, void* initData,
 
     // 4J-PB - If we have a signed in user connected, let's get the DLC now
     for (unsigned int i = 0; i < XUSER_MAX_COUNT; ++i) {
-        if ((InputManager.IsPadConnected(i) || ProfileManager.IsSignedIn(i))) {
+        if ((PlatformInput.IsPadConnected(i) || ProfileManager.IsSignedIn(i))) {
             if (!app.DLCInstallProcessCompleted() && !app.DLCInstallPending()) {
                 app.StartInstallDLCProcess(i);
                 break;

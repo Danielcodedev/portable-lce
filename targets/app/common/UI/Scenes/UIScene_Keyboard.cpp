@@ -1,6 +1,6 @@
 #include "UIScene_Keyboard.h"
 
-#include "platform/InputActions.h"
+#include "platform/input/InputActions.h"
 #include "app/common/App_Defines.h"
 #include "app/common/UI/Controls/UIControl_Button.h"
 #include "app/common/UI/Controls/UIControl_Label.h"

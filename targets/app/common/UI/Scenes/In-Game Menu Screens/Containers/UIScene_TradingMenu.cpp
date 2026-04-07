@@ -5,7 +5,7 @@
 #include <utility>
 #include <vector>
 
-#include "platform/InputActions.h"
+#include "platform/input/InputActions.h"
 #include "platform/sdl2/Profile.h"
 #include "app/common/Tutorial/Tutorial.h"
 #include "app/common/Tutorial/TutorialEnum.h"

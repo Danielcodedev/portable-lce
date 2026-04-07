@@ -4,8 +4,8 @@
 
 #include <utility>
 
-#include "platform/InputActions.h"
-#include "platform/sdl2/Input.h"
+#include "platform/input/InputActions.h"
+#include "platform/input/input.h"
 #include "platform/sdl2/Profile.h"
 #include "platform/sdl2/Render.h"
 #include "app/common/App_Defines.h"
@@ -547,21 +547,21 @@ void UIScene_LaunchMoreOptionsMenu::handlePress(F64 controlId, F64 childId) {
     switch ((int)controlId) {
         case eControl_EditSeed: {
             m_bIgnoreInput = true;
-            InputManager.RequestKeyboard(
+            PlatformInput.RequestKeyboard(
                 app.GetString(IDS_CREATE_NEW_WORLD_SEED), m_editSeed.getLabel(),
                 0, 60,
                 [this](bool bRes) -> int {
                     // 4J HEG - No reason to set value if keyboard was cancelled
                     if (bRes) {
                         std::wstring str =
-                            convStringToWstring(InputManager.GetText());
+                            convStringToWstring(PlatformInput.GetText());
                         m_editSeed.setLabel(str);
                         m_params->seed = std::move(str);
                     }
                     m_bIgnoreInput = false;
                     return 0;
                 },
-                C_4JInput::EKeyboardMode_Default);
+                IPlatformInput::EKeyboardMode_Default);
         } break;
     }
 }

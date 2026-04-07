@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "platform/InputActions.h"
+#include "platform/input/InputActions.h"
 #include "platform/sdl2/Profile.h"
 #include "platform/sdl2/Storage.h"
 #include "minecraft/GameEnums.h"

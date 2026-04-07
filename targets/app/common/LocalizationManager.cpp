@@ -16,8 +16,8 @@
 #include "minecraft/client/Minecraft.h"
 #include "minecraft/client/skins/TexturePack.h"
 #include "minecraft/client/skins/TexturePackRepository.h"
-#include "platform/InputActions.h"
-#include "platform/sdl2/Input.h"
+#include "platform/input/InputActions.h"
+#include "platform/input/input.h"
 #include "platform/sdl2/Render.h"
 #include "platform/XboxStubs.h"
 #include "strings.h"
@@ -348,8 +348,8 @@ std::wstring LocalizationManager::formatHTMLString(
 
 std::wstring LocalizationManager::getActionReplacement(
     int iPad, unsigned char ucAction) {
-    unsigned int input = InputManager.GetGameJoypadMaps(
-        InputManager.GetJoypadMapVal(iPad), ucAction);
+    unsigned int input = PlatformInput.GetGameJoypadMaps(
+        PlatformInput.GetJoypadMapVal(iPad), ucAction);
 
     std::wstring replacement = L"";
 

@@ -4,8 +4,8 @@
 #include <wchar.h>
 
 #include "platform/PlatformTypes.h"
-#include "platform/InputActions.h"
-#include "platform/sdl2/Input.h"
+#include "platform/input/InputActions.h"
+#include "platform/input/input.h"
 #include "platform/sdl2/Profile.h"
 #include "app/common/UI/Controls/UIControl_BitmapIcon.h"
 #include "app/common/UI/Controls/UIControl_Label.h"
@@ -137,7 +137,7 @@ int UIScene_QuadrantSignin::SignInReturned(void* pParam, bool bContinue,
 
 void UIScene_QuadrantSignin::updateState() {
     for (unsigned int i = 0; i < XUSER_MAX_COUNT; ++i) {
-        if (ProfileManager.IsSignedIn(i) && InputManager.IsPadConnected(i)) {
+        if (ProfileManager.IsSignedIn(i) && PlatformInput.IsPadConnected(i)) {
             // app.DebugPrintf("Index %d is signed in, display name - '%s'\n",
             // i, ProfileManager.GetDisplayName(i).data());
 
@@ -159,7 +159,7 @@ void UIScene_QuadrantSignin::updateState() {
                     m_lastRequestedAvatar = i;
                 }
             }
-        } else if (InputManager.IsPadConnected(i)) {
+        } else if (PlatformInput.IsPadConnected(i)) {
             // app.DebugPrintf("Index %d is not signed in\n", i);
 
             setControllerState(i, eControllerStatus_PressToJoin);
@@ -234,7 +234,7 @@ void UIScene_QuadrantSignin::_initQuadrants() {
             }
 
             m_labelDisplayName[i].init(ProfileManager.GetDisplayName(i));
-        } else if (InputManager.IsPadConnected(i)) {
+        } else if (PlatformInput.IsPadConnected(i)) {
             app.DebugPrintf("Index %d is not signed in\n", i);
 
             setControllerState(i, eControllerStatus_PressToJoin);

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "IPlatformFileIO.h"
-#include "IPlatformInput.h"
+#include "platform/input/input.h"
 #include "IPlatformLeaderboard.h"
 #include "IPlatformNetwork.h"
 #include "IPlatformProfile.h"

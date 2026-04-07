@@ -13,7 +13,7 @@
 #include <unordered_set>
 
 #include "platform/PlatformTypes.h"
-#include "platform/sdl2/Input.h"
+#include "platform/input/input.h"
 #include "platform/sdl2/Profile.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/App_structs.h"
@@ -228,7 +228,7 @@ ClientConnection::ClientConnection(Minecraft* minecraft, Socket* socket,
     this->minecraft = minecraft;
 
     if (iUserIndex < 0) {
-        m_userIndex = InputManager.GetPrimaryPad();
+        m_userIndex = PlatformInput.GetPrimaryPad();
     } else {
         m_userIndex = iUserIndex;
     }
@@ -290,7 +290,7 @@ void ClientConnection::handleLogin(std::shared_ptr<LoginPacket> packet) {
     INetworkPlayer* networkPlayer = connection->getSocket()->getPlayer();
     int iUserID = -1;
 
-    if (m_userIndex == InputManager.GetPrimaryPad()) {
+    if (m_userIndex == PlatformInput.GetPrimaryPad()) {
         iUserID = m_userIndex;
     } else {
         if (!networkPlayer->IsGuest() && networkPlayer->IsLocal()) {
@@ -346,13 +346,13 @@ void ClientConnection::handleLogin(std::shared_ptr<LoginPacket> packet) {
         gameServices().setBanListCheck(iUserID, false);
     }
 
-    if (m_userIndex == InputManager.GetPrimaryPad()) {
+    if (m_userIndex == PlatformInput.GetPrimaryPad()) {
         if (gameServices().getTutorialMode()) {
             minecraft->gameMode = new FullTutorialMode(
-                InputManager.GetPrimaryPad(), minecraft, this);
+                PlatformInput.GetPrimaryPad(), minecraft, this);
         } else {
             minecraft->gameMode = new ConsoleGameMode(
-                InputManager.GetPrimaryPad(), minecraft, this);
+                PlatformInput.GetPrimaryPad(), minecraft, this);
         }
 
         Level* dimensionLevel = minecraft->getLevel(packet->dimension);
@@ -387,7 +387,7 @@ void ClientConnection::handleLogin(std::shared_ptr<LoginPacket> packet) {
         minecraft->player->setCustomSkin(gameServices().getPlayerSkinId(m_userIndex));
         minecraft->player->setCustomCape(gameServices().getPlayerCapeId(m_userIndex));
 
-        minecraft->createPrimaryLocalPlayer(InputManager.GetPrimaryPad());
+        minecraft->createPrimaryLocalPlayer(PlatformInput.GetPrimaryPad());
 
         minecraft->player->dimension = packet->dimension;
         minecraft->setScreen(new ReceivingLevelScreen(this));
@@ -412,7 +412,7 @@ void ClientConnection::handleLogin(std::shared_ptr<LoginPacket> packet) {
         displayPrivilegeChanges(minecraft->player, startingPrivileges);
 
         // update the debugoptions
-        gameServices().setGameSettingsDebugMask(InputManager.GetPrimaryPad(),
+        gameServices().setGameSettingsDebugMask(PlatformInput.GetPrimaryPad(),
                                      gameServices().debugGetMask(-1, true));
     } else {
         // 4J-PB - this isn't the level we want
@@ -1362,12 +1362,12 @@ void ClientConnection::onDisconnect(DisconnectPacket::eDisconnectReason reason,
     if (g_NetworkManager.IsHost() &&
         (reason == DisconnectPacket::eDisconnect_TimeOut ||
          reason == DisconnectPacket::eDisconnect_Overflow) &&
-        m_userIndex == InputManager.GetPrimaryPad() &&
+        m_userIndex == PlatformInput.GetPrimaryPad() &&
         !MinecraftServer::saveOnExitAnswered()) {
         unsigned int uiIDA[1];
         uiIDA[0] = IDS_CONFIRM_OK;
         ui.RequestErrorMessage(IDS_EXITING_GAME, IDS_GENERIC_ERROR, uiIDA, 1,
-                               InputManager.GetPrimaryPad(),
+                               PlatformInput.GetPrimaryPad(),
                                &ClientConnection::HostDisconnectReturned,
                                nullptr);
     } else {
@@ -1936,7 +1936,7 @@ void ClientConnection::handlePreLogin(std::shared_ptr<PreLoginPacket> packet) {
         // 4J-PB - if we go straight in from the menus via an invite, we won't
         // have the DLC info
         if (gameServices().getTMSGlobalFileListRead() == false) {
-            gameServices().setTMSAction(InputManager.GetPrimaryPad(),
+            gameServices().setTMSAction(PlatformInput.GetPrimaryPad(),
                              eTMSAction_TMSPP_RetrieveFiles_RunPlayGame);
         }
     }
@@ -1951,7 +1951,7 @@ void ClientConnection::handlePreLogin(std::shared_ptr<PreLoginPacket> packet) {
         cantPlayContentRestricted) {
         DisconnectPacket::eDisconnectReason reason =
             DisconnectPacket::eDisconnect_NoUGC_Remote;
-        if (m_userIndex == InputManager.GetPrimaryPad()) {
+        if (m_userIndex == PlatformInput.GetPrimaryPad()) {
             if (!isFriendsWithHost)
                 reason = DisconnectPacket::eDisconnect_NotFriendsWithHost;
             else if (!isAtLeastOneFriend)
@@ -1967,7 +1967,7 @@ void ClientConnection::handlePreLogin(std::shared_ptr<PreLoginPacket> packet) {
                 "privileges: %d\n",
                 reason);
             gameServices().setDisconnectReason(reason);
-            gameServices().setAction(InputManager.GetPrimaryPad(), eAppAction_ExitWorld,
+            gameServices().setAction(PlatformInput.GetPrimaryPad(), eAppAction_ExitWorld,
                           (void*)true);
         } else {
             if (!isFriendsWithHost)
@@ -2014,7 +2014,7 @@ void ClientConnection::handlePreLogin(std::shared_ptr<PreLoginPacket> packet) {
         // send this before the LoginPacket so that it gets handled first, as
         // once the LoginPacket is received on the client the game is close to
         // starting
-        if (m_userIndex == InputManager.GetPrimaryPad()) {
+        if (m_userIndex == PlatformInput.GetPrimaryPad()) {
             Minecraft* pMinecraft = Minecraft::GetInstance();
             if (pMinecraft->skins->selectTexturePackById(
                     packet->m_texturePackId)) {
@@ -3009,11 +3009,11 @@ void ClientConnection::handleGameEvent(
         Log::info("handleGameEvent packet for WIN_GAME - %d\n",
                         m_userIndex);
         // This just allows it to be shown
-        if (minecraft->localgameModes[InputManager.GetPrimaryPad()] != nullptr)
-            minecraft->localgameModes[InputManager.GetPrimaryPad()]
+        if (minecraft->localgameModes[PlatformInput.GetPrimaryPad()] != nullptr)
+            minecraft->localgameModes[PlatformInput.GetPrimaryPad()]
                 ->getTutorial()
                 ->showTutorialPopup(false);
-        ui.NavigateToScene(InputManager.GetPrimaryPad(), eUIScene_EndPoem,
+        ui.NavigateToScene(PlatformInput.GetPrimaryPad(), eUIScene_EndPoem,
                            nullptr, eUILayer_Scene, eUIGroup_Fullscreen);
     } else if (event == GameEventPacket::START_SAVING) {
         if (!g_NetworkManager.IsHost()) {
@@ -3021,7 +3021,7 @@ void ClientConnection::handleGameEvent(
             // back-to-back START/STOP packets leave the client stuck in the
             // loading screen
             gameServices().setGameStarted(false);
-            gameServices().setAction(InputManager.GetPrimaryPad(),
+            gameServices().setAction(PlatformInput.GetPrimaryPad(),
                           eAppAction_RemoteServerSave);
         }
     } else if (event == GameEventPacket::STOP_SAVING) {
@@ -3456,7 +3456,7 @@ int ClientConnection::HostDisconnectReturned(
         uiIDA[0] = IDS_CONFIRM_CANCEL;
         uiIDA[1] = IDS_CONFIRM_OK;
         ui.RequestErrorMessage(IDS_TITLE_SAVE_GAME, IDS_CONFIRM_SAVE_GAME,
-                               uiIDA, 2, InputManager.GetPrimaryPad(),
+                               uiIDA, 2, PlatformInput.GetPrimaryPad(),
                                &ClientConnection::ExitGameAndSaveReturned,
                                nullptr);
     } else {
@@ -3475,7 +3475,7 @@ int ClientConnection::ExitGameAndSaveReturned(
         // int32_t saveOrCheckpointId = 0;
         // bool validSave =
         // StorageManager.GetSaveUniqueNumber(&saveOrCheckpointId);
-        // SentientManager.RecordLevelSaveOrCheckpoint(InputManager.GetPrimaryPad(),
+        // SentientManager.RecordLevelSaveOrCheckpoint(PlatformInput.GetPrimaryPad(),
         // saveOrCheckpointId);
         MinecraftServer::getInstance()->setSaveOnExit(true);
     } else {

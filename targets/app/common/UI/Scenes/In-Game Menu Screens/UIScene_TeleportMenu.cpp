@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "platform/InputActions.h"
+#include "platform/input/InputActions.h"
 #include "app/common/Console_Debug_enum.h"
 #include "app/common/Network/GameNetworkManager.h"
 #include "app/common/Network/NetworkPlayerInterface.h"

@@ -1,7 +1,7 @@
 #include "InputConstraint.h"
 
-#include "platform/InputActions.h"
-#include "platform/sdl2/Input.h"
+#include "platform/input/InputActions.h"
+#include "platform/input/input.h"
 
 bool InputConstraint::isMappingConstrained(int iPad, int mapping) {
     // If it's a menu button, then we ignore all inputs
@@ -10,11 +10,11 @@ bool InputConstraint::isMappingConstrained(int iPad, int mapping) {
     }
 
     // Otherwise see if they map to the same actual button
-    unsigned char layoutMapping = InputManager.GetJoypadMapVal(iPad);
+    unsigned char layoutMapping = PlatformInput.GetJoypadMapVal(iPad);
 
     // 4J HEG - Replaced the equivalance test with bitwise AND, important in
     // some mapping configurations (e.g. when comparing two action map values
     // and one has extra buttons mapped)
-    return (InputManager.GetGameJoypadMaps(layoutMapping, m_inputMapping) &
-            InputManager.GetGameJoypadMaps(layoutMapping, mapping)) > 0;
+    return (PlatformInput.GetGameJoypadMaps(layoutMapping, m_inputMapping) &
+            PlatformInput.GetGameJoypadMaps(layoutMapping, mapping)) > 0;
 }

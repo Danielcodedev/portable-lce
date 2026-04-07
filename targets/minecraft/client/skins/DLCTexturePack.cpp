@@ -7,7 +7,7 @@
 #include <limits>
 #include <vector>
 
-#include "platform/sdl2/Input.h"
+#include "platform/input/input.h"
 #include "platform/sdl2/Storage.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/Audio/SoundEngine.h"
@@ -239,7 +239,7 @@ void DLCTexturePack::loadData() {
 
     if (mountIndex > -1) {
         if (StorageManager.MountInstalledDLC(
-                InputManager.GetPrimaryPad(), mountIndex,
+                PlatformInput.GetPrimaryPad(), mountIndex,
                 [this](int pad, std::uint32_t err, std::uint32_t lic) {
                     return onPackMounted(pad, err, lic);
                 },
@@ -249,7 +249,7 @@ void DLCTexturePack::loadData() {
             if (gameServices().getLevelGenerationOptions())
                 gameServices().getLevelGenerationOptions()->setLoadedData();
             Log::info("Failed to mount texture pack DLC %d for pad %d\n",
-                            mountIndex, InputManager.GetPrimaryPad());
+                            mountIndex, PlatformInput.GetPrimaryPad());
         } else {
             m_bLoadingData = true;
             Log::info("Attempted to mount DLC data for texture pack %d\n",
@@ -259,7 +259,7 @@ void DLCTexturePack::loadData() {
         m_bHasLoadedData = true;
         if (gameServices().getLevelGenerationOptions())
             gameServices().getLevelGenerationOptions()->setLoadedData();
-        gameServices().setAction(InputManager.GetPrimaryPad(),
+        gameServices().setAction(PlatformInput.GetPrimaryPad(),
                       eAppAction_ReloadTexturePack);
     }
 }
@@ -404,7 +404,7 @@ int DLCTexturePack::onPackMounted(int iPad, std::uint32_t dwErr,
     texturePack->m_bHasLoadedData = true;
     if (gameServices().getLevelGenerationOptions())
         gameServices().getLevelGenerationOptions()->setLoadedData();
-    gameServices().setAction(InputManager.GetPrimaryPad(), eAppAction_ReloadTexturePack);
+    gameServices().setAction(PlatformInput.GetPrimaryPad(), eAppAction_ReloadTexturePack);
 
     return 0;
 }

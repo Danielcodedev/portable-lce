@@ -7,7 +7,7 @@
 #include <memory>
 #include <utility>
 
-#include "platform/sdl2/Input.h"
+#include "platform/input/input.h"
 #include "platform/sdl2/Profile.h"
 #include "app/common/Tutorial/Tutorial.h"
 #include "app/common/Tutorial/TutorialEnum.h"
@@ -316,20 +316,20 @@ UIControl* UIScene_AnvilMenu::getSection(ESceneSection eSection) {
 
 void UIScene_AnvilMenu::handleEditNamePressed() {
     setIgnoreInput(true);
-    InputManager.RequestKeyboard(
+    PlatformInput.RequestKeyboard(
         app.GetString(IDS_TITLE_RENAME), m_textInputAnvil.getLabel(), m_iPad, 30,
         [this](bool bRes) -> int {
             // 4J HEG - No reason to set value if keyboard was cancelled
             setIgnoreInput(false);
             if (bRes) {
-                std::wstring str = convStringToWstring(InputManager.GetText());
+                std::wstring str = convStringToWstring(PlatformInput.GetText());
                 setEditNameValue(str);
                 m_itemName = std::move(str);
                 updateItemName();
             }
             return 0;
         },
-        C_4JInput::EKeyboardMode_Default);
+        IPlatformInput::EKeyboardMode_Default);
 }
 
 void UIScene_AnvilMenu::setEditNameValue(const std::wstring& name) {

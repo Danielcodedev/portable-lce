@@ -1,7 +1,7 @@
 
 #include "UIScene_TrialExitUpsell.h"
 
-#include "platform/InputActions.h"
+#include "platform/input/InputActions.h"
 #include "platform/sdl2/Profile.h"
 #include "app/common/App_Defines.h"
 #include "app/common/UI/UIScene.h"

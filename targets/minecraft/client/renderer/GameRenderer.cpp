@@ -9,7 +9,7 @@
 #include <numbers>
 
 #include "platform/PlatformTypes.h"
-#include "platform/sdl2/Input.h"
+#include "platform/input/input.h"
 #include "platform/sdl2/Render.h"
 #include "BossMobGuiInfo.h"
 #include "Chunk.h"
@@ -274,7 +274,7 @@ void GameRenderer::tick(bool first)  // 4J - add bFirst
             1.0f / ((float)SharedConstants::TICKS_PER_SECOND * 4);
     }
 
-    if (mc->player != mc->localplayers[InputManager.GetPrimaryPad()])
+    if (mc->player != mc->localplayers[PlatformInput.GetPrimaryPad()])
         return;  // 4J added for split screen - only do rest of processing for
                  // once per frame
 
@@ -1047,8 +1047,8 @@ void GameRenderer::render(float a, bool bFirst) {
     ScreenSizeCalculator ssc(mc->options, mc->width, mc->height);
     int screenWidth = ssc.getWidth();
     int screenHeight = ssc.getHeight();
-    int xMouse = InputManager.GetMouseX() * screenWidth / mc->width;
-    int yMouse = InputManager.GetMouseY() * screenHeight / mc->height - 1;
+    int xMouse = PlatformInput.GetMouseX() * screenWidth / mc->width;
+    int yMouse = PlatformInput.GetMouseY() * screenHeight / mc->height - 1;
 
     int maxFps = getFpsCap(mc->options->framerateLimit);
 
@@ -1242,7 +1242,7 @@ void GameRenderer::renderLevel(float a, int64_t until) {
     // view whatever they have loaded in - we're sharing render data between
     // players.
     bool updateChunks =
-        (mc->player == mc->localplayers[InputManager.GetPrimaryPad()]);
+        (mc->player == mc->localplayers[PlatformInput.GetPrimaryPad()]);
 
     //	if (mc->cameraTargetPlayer == nullptr)	// 4J - removed condition as we
     // want to update this is mc->player changes for different local players

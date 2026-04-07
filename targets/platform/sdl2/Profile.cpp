@@ -5,7 +5,7 @@
 #include <functional>
 
 #include "../ProfileConstants.h"
-#include "../sdl2/Input.h"
+#include "input/input.h"
 
 C_4JProfile ProfileManager;
 
@@ -186,14 +186,12 @@ bool C_4JProfile::CanViewPlayerCreatedContent(int, bool, PlayerUID*,
     return true;
 }
 
-// GetPrimaryPad/SetPrimaryPad — delegates to InputManager.
+// GetPrimaryPad/SetPrimaryPad — delegates to PlatformPlatft.
 // Kept here temporarily for call sites that still use ProfileManager.
-// These forward to the canonical copies in C_4JInput.
+// These forward to the canonical copies in SDL2Input.
 int C_4JProfile::GetPrimaryPad() {
-    extern C_4JInput InputManager;
-    return InputManager.GetPrimaryPad();
+    return PlatformInput.GetPrimaryPad();
 }
 void C_4JProfile::SetPrimaryPad(int iPad) {
-    extern C_4JInput InputManager;
-    InputManager.SetPrimaryPad(iPad);
+    PlatformInput.SetPrimaryPad(iPad);
 }
