@@ -434,11 +434,11 @@ void UIScene_InGameInfoMenu::OnPlayerChanged(void* callbackParam,
 }
 
 int UIScene_InGameInfoMenu::KickPlayerReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     std::uint8_t smallId = *(std::uint8_t*)pParam;
     delete (std::uint8_t*)pParam;
 
-    if (result == C4JStorage::EMessage_ResultAccept) {
+    if (result == IPlatformStorage::EMessage_ResultAccept) {
         Minecraft* pMinecraft = Minecraft::GetInstance();
         std::shared_ptr<MultiplayerLocalPlayer> localPlayer =
             pMinecraft->localplayers[iPad];

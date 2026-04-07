@@ -1229,10 +1229,10 @@ void UIScene_SkinSelectMenu::showNotOnlineDialog(int iPad) {
 }
 
 int UIScene_SkinSelectMenu::UnlockSkinReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     UIScene_SkinSelectMenu* pScene = (UIScene_SkinSelectMenu*)pParam;
 
-    if ((result == C4JStorage::EMessage_ResultAccept) &&
+    if ((result == IPlatformStorage::EMessage_ResultAccept) &&
         PlatformProfile.IsSignedIn(iPad)) {
         if (PlatformProfile.IsSignedInLive(iPad)) {
         } else  // Is signed in, but not live.

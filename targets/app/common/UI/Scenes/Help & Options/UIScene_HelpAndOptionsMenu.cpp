@@ -70,8 +70,8 @@ UIScene_HelpAndOptionsMenu::UIScene_HelpAndOptionsMenu(int iPad, void* initData,
     // example)
     doHorizontalResizeCheck();
 
-    // StorageManager.TMSPP_GetUserQuotaInfo(C4JStorage::eGlobalStorage_TitleUser,iPad);
-    // StorageManager.WebServiceRequestGetFriends(iPad);
+    // PlatformStorage.TMSPP_GetUserQuotaInfo(IPlatformStorage::eGlobalStorage_TitleUser,iPad);
+    // PlatformStorage.WebServiceRequestGetFriends(iPad);
 }
 
 UIScene_HelpAndOptionsMenu::~UIScene_HelpAndOptionsMenu() {}

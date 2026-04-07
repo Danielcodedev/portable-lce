@@ -12,54 +12,11 @@
 
 class C4JStringTable;
 
-#define MAX_DISPLAYNAME_LENGTH 128  // CELL_SAVEDATA_SYSP_SUBTITLE_SIZE on PS3
-#define MAX_DETAILS_LENGTH 128      // CELL_SAVEDATA_SYSP_SUBTITLE_SIZE on PS3
-#define MAX_SAVEFILENAME_LENGTH 32  // CELL_SAVEDATA_DIRNAME_SIZE
-
-struct CONTAINER_METADATA {
-    time_t modifiedTime;
-    unsigned int dataSize;
-    unsigned int thumbnailSize;
-};
-
-struct SAVE_INFO {
-    char UTF8SaveFilename[MAX_SAVEFILENAME_LENGTH];
-    char UTF8SaveTitle[MAX_DISPLAYNAME_LENGTH];
-    CONTAINER_METADATA metaData;
-    std::uint8_t* thumbnailData;
-};
-using PSAVE_INFO = SAVE_INFO*;
-
-struct SAVE_DETAILS {
-    int iSaveC;
-    PSAVE_INFO SaveInfoA;
-};
-using PSAVE_DETAILS = SAVE_DETAILS*;
-
 typedef std::vector<PXMARKETPLACE_CONTENTOFFER_INFO> OfferDataArray;
 typedef std::vector<PXCONTENT_DATA> XContentDataArray;
-// typedef std::vector <PSAVE_DETAILS> SaveDetailsArray;
 
-// Current version of the dlc data creator
-#define CURRENT_DLC_VERSION_NUM 3
-
-class C4JStorage : public IPlatformStorage {
+class StubStorage : public IPlatformStorage {
 public:
-    struct DLC_FILE_DETAILS {
-        unsigned int uiFileSize;
-        std::uint32_t dwType;
-        std::uint32_t dwWchCount;
-        wchar_t wchFile[1];
-    };
-    using PDLC_FILE_DETAILS = DLC_FILE_DETAILS*;
-
-    struct DLC_FILE_PARAM {
-        std::uint32_t dwType;
-        std::uint32_t dwWchCount;
-        wchar_t wchData[1];
-    };
-    using PDLC_FILE_PARAM = DLC_FILE_PARAM*;
-
     struct CACHEINFOSTRUCT {
         wchar_t wchDisplayName[XCONTENT_MAX_DISPLAYNAME_LENGTH];
         char szFileName[XCONTENT_MAX_FILENAME_LENGTH];
@@ -104,20 +61,20 @@ public:
     };
     using PTMSPP_FILE_LIST = TMSPP_FILE_LIST*;
 
-    C4JStorage();
+    StubStorage();
 
     void Tick(void);
 
     // Messages
-    C4JStorage::EMessageResult RequestMessageBox(
+    StubStorage::EMessageResult RequestMessageBox(
         unsigned int uiTitle, unsigned int uiText, unsigned int* uiOptionA,
         unsigned int uiOptionC, unsigned int pad = XUSER_INDEX_ANY,
-        std::function<int(int, const C4JStorage::EMessageResult)> callback =
+        std::function<int(int, const StubStorage::EMessageResult)> callback =
             nullptr,
         C4JStringTable* pStringTable = nullptr,
         wchar_t* pwchFormatString = nullptr, unsigned int focusButton = 0);
 
-    C4JStorage::EMessageResult GetMessageBoxResult();
+    StubStorage::EMessageResult GetMessageBoxResult();
 
     // save device
     bool SetSaveDevice(std::function<int(const bool)> callback,
@@ -150,27 +107,27 @@ public:
         unsigned int textDataBytes);  // Sets the thumbnail & image for the
                                       // save, optionally setting the
                                       // metadata in the png
-    C4JStorage::ESaveGameState SaveSaveData(
+    StubStorage::ESaveGameState SaveSaveData(
         std::function<int(const bool)> callback);
     void CopySaveDataToNewSave(std::uint8_t* pbThumbnail,
                                unsigned int cbThumbnail, wchar_t* wchNewName,
                                std::function<int(bool)> callback);
     void SetSaveDeviceSelected(unsigned int uiPad, bool bSelected);
     bool GetSaveDeviceSelected(unsigned int iPad);
-    C4JStorage::ESaveGameState DoesSaveExist(bool* pbExists);
+    StubStorage::ESaveGameState DoesSaveExist(bool* pbExists);
     bool EnoughSpaceForAMinSaveGame();
 
     void SetSaveMessageVPosition(
         float fY);  // The 'Saving' message will display at a default position
                     // unless changed
     // Get the info for the saves
-    C4JStorage::ESaveGameState GetSavesInfo(
+    StubStorage::ESaveGameState GetSavesInfo(
         int iPad,
         std::function<int(SAVE_DETAILS* pSaveDetails, const bool)> callback,
         char* pszSavePackName);
     PSAVE_DETAILS ReturnSavesInfo();
     void ClearSavesInfo();  // Clears results
-    C4JStorage::ESaveGameState LoadSaveDataThumbnail(
+    StubStorage::ESaveGameState LoadSaveDataThumbnail(
         PSAVE_INFO pSaveInfo,
         std::function<int(std::uint8_t* thumbnailData,
                           unsigned int thumbnailBytes)>
@@ -184,18 +141,18 @@ public:
                               unsigned int* pImageBytes);
 
     // Load the save. Need to call GetSaveData once the callback is called
-    C4JStorage::ESaveGameState LoadSaveData(
+    StubStorage::ESaveGameState LoadSaveData(
         PSAVE_INFO pSaveInfo,
         std::function<int(const bool, const bool)> callback);
-    C4JStorage::ESaveGameState DeleteSaveData(
+    StubStorage::ESaveGameState DeleteSaveData(
         PSAVE_INFO pSaveInfo,
         std::function<int(const bool)> callback);
 
     // DLC
     void RegisterMarketplaceCountsCallback(
-        std::function<int(C4JStorage::DLC_TMS_DETAILS*, int)> callback);
+        std::function<int(StubStorage::DLC_TMS_DETAILS*, int)> callback);
     void SetDLCPackageRoot(char* pszDLCRoot);
-    C4JStorage::EDLCStatus GetDLCOffers(
+    StubStorage::EDLCStatus GetDLCOffers(
         int iPad, std::function<int(int, std::uint32_t, int)> callback,
         std::uint32_t dwOfferTypesBitmask = XMARKETPLACE_OFFERING_TYPE_CONTENT);
     unsigned int CancelGetDLCOffers();
@@ -207,7 +164,7 @@ public:
                               bool bTrial = false);
     unsigned int GetAvailableDLCCount(int iPad);
 
-    C4JStorage::EDLCStatus GetInstalledDLC(
+    StubStorage::EDLCStatus GetInstalledDLC(
         int iPad, std::function<int(int, int)> callback);
     XCONTENT_DATA& GetDLC(unsigned int dw);
     std::uint32_t MountInstalledDLC(
@@ -220,9 +177,9 @@ public:
     std::string GetMountedPath(std::string szMount);
 
     // Global title storage
-    C4JStorage::ETMSStatus ReadTMSFile(
+    StubStorage::ETMSStatus ReadTMSFile(
         int iQuadrant, eGlobalStorage eStorageFacility,
-        C4JStorage::eTMS_FileType eFileType, wchar_t* pwchFilename,
+        StubStorage::eTMS_FileType eFileType, wchar_t* pwchFilename,
         std::uint8_t** ppBuffer, unsigned int* pBufferSize,
         std::function<int(wchar_t*, int, bool, int)> callback = nullptr,
         int iAction = 0);
@@ -235,18 +192,18 @@ public:
 
     // TMS++
 #ifdef _XBOX
-    C4JStorage::ETMSStatus WriteTMSFile(
-        int iPad, C4JStorage::eGlobalStorage eStorageFacility,
-        C4JStorage::eTMS_FileType eFileType, char* pchFilePath, char* pchBuffer,
+    StubStorage::ETMSStatus WriteTMSFile(
+        int iPad, StubStorage::eGlobalStorage eStorageFacility,
+        StubStorage::eTMS_FileType eFileType, char* pchFilePath, char* pchBuffer,
         unsigned int bufferSize, TMSCLIENT_CALLBACK Func, void* lpParam);
     int GetUserQuotaInfo(int iPad, TMSCLIENT_CALLBACK Func, void* lpParam);
 #endif
 
     // Older TMS++ write/quota entry points were kept in platform-specific
     // implementations and are intentionally not part of this shared API.
-    C4JStorage::ETMSStatus TMSPP_ReadFile(
-        int iPad, C4JStorage::eGlobalStorage eStorageFacility,
-        C4JStorage::eTMS_FILETYPEVAL eFileTypeVal, const char* szFilename,
+    StubStorage::ETMSStatus TMSPP_ReadFile(
+        int iPad, StubStorage::eGlobalStorage eStorageFacility,
+        StubStorage::eTMS_FILETYPEVAL eFileTypeVal, const char* szFilename,
         std::function<int(int, int, PTMSPP_FILEDATA, const char*)> callback =
             nullptr,
         int iUserData = 0);
@@ -278,5 +235,3 @@ public:
 
     C4JStringTable* m_pStringTable;
 };
-
-extern C4JStorage StorageManager;

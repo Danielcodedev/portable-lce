@@ -14,7 +14,7 @@
 
 #include "platform/PlatformTypes.h"
 #include "platform/profile/profile.h"
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "ConsoleInput.h"
 #include "DispenserBootstrap.h"
 #include "minecraft/GameEnums.h"
@@ -860,7 +860,7 @@ void MinecraftServer::saveGameRules() {
 void MinecraftServer::Suspend() {
     m_suspending = true;
     time_util::Timer timer;
-    if (m_bLoaded && (!StorageManager.GetSaveDisabled())) {
+    if (m_bLoaded && (!PlatformStorage.GetSaveDisabled())) {
         if (players != nullptr) {
             players->saveAll(nullptr);
         }
@@ -907,7 +907,7 @@ void MinecraftServer::stopServer(bool didInit) {
         // if trial version or saving is disabled, then don't save anything.
         // Also don't save anything if we didn't actually get through the server
         // initialisation.
-        if (m_saveOnExit && (!StorageManager.GetSaveDisabled()) && didInit) {
+        if (m_saveOnExit && (!PlatformStorage.GetSaveDisabled()) && didInit) {
             if (players != nullptr) {
                 players->saveAll(Minecraft::GetInstance()->progressRenderer,
                                  true);

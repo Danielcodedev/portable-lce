@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "app/common/UI/All Platforms/IUIScene_PauseMenu.h"
 #include "app/common/UI/All Platforms/UIEnums.h"
 #include "app/common/UI/Controls/UIControl_Button.h"
@@ -45,7 +45,7 @@ private:
     virtual void HandleDLCMountingComplete();
     virtual void HandleDLCInstalled();
     static int UnlockFullSaveReturned(void* pParam, int iPad,
-                                      C4JStorage::EMessageResult result);
+                                      IPlatformStorage::EMessageResult result);
     static int SaveGame_SignInReturned(void* pParam, bool bContinue, int iPad);
 
 public:

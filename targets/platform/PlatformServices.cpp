@@ -2,10 +2,8 @@
 #include "StdFileIO.h"
 
 #include "sdl2/Render.h"
-#include "sdl2/Storage.h"
 
 static StdFileIO s_stdFileIO;
 
 IPlatformFileIO& PlatformFileIO = s_stdFileIO;
 IPlatformRenderer& PlatformRender = RenderManager;
-IPlatformStorage& PlatformStorage = StorageManager;

@@ -144,11 +144,11 @@ void UIScene_SettingsMenu::handlePress(F64 controlId, F64 childId) {
 }
 
 int UIScene_SettingsMenu::ResetDefaultsDialogReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     UIScene_SettingsMenu* pClass = (UIScene_SettingsMenu*)pParam;
 
     // results switched for this dialog
-    if (result == C4JStorage::EMessage_ResultDecline) {
+    if (result == IPlatformStorage::EMessage_ResultDecline) {
         app.SetDefaultOptions(
             PlatformProfile.GetDashboardProfileSettings(pClass->m_iPad),
             pClass->m_iPad);

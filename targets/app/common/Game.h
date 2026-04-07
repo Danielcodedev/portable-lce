@@ -5,7 +5,7 @@
 
 #include "util/Timer.h"
 #include "platform/profile/profile.h"
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 
 // using namespace std;
 
@@ -145,7 +145,7 @@ public:
 
     bool IsAppPaused();
     void SetAppPaused(bool val);
-    int displaySavingMessage(const C4JStorage::ESavingMessage eMsg, int iPad) {
+    int displaySavingMessage(const IPlatformStorage::ESavingMessage eMsg, int iPad) {
         return m_gameSettingsManager.displaySavingMessage(eMsg, iPad);
     }
     bool GetGameStarted() { return m_bGameStarted; }
@@ -486,11 +486,11 @@ public:
         return NetworkController::signoutExitWorldThreadProc(lpParameter);
     }
     static int PrimaryPlayerSignedOutReturned(void* pParam, int iPad,
-                                              const C4JStorage::EMessageResult result) {
+                                              const IPlatformStorage::EMessageResult result) {
         return NetworkController::primaryPlayerSignedOutReturned(pParam, iPad, result);
     }
     static int EthernetDisconnectReturned(void* pParam, int iPad,
-                                          const C4JStorage::EMessageResult result) {
+                                          const IPlatformStorage::EMessageResult result) {
         return NetworkController::ethernetDisconnectReturned(pParam, iPad, result);
     }
     static void ProfileReadErrorCallback(void* pParam) {
@@ -523,7 +523,7 @@ public:
 #endif
     void SetDebugSequence(const char* pchSeq);
     // bool			UploadFileToGlobalStorage(int iQuadrant,
-    // C4JStorage::eGlobalStorage eStorageFacility, std::wstring *wsFile  );
+    // IPlatformStorage::eGlobalStorage eStorageFacility, std::wstring *wsFile  );
 
     // Installed DLC - delegated to DLCController
     bool StartInstallDLCProcess(int iPad) { return m_dlcController.startInstallDLCProcess(iPad); }
@@ -539,7 +539,7 @@ public:
     bool DLCInstallProcessCompleted() { return m_dlcController.dlcInstallProcessCompleted(); }
     void ClearDLCInstalled() { m_dlcController.clearDLCInstalled(); }
     static int MarketplaceCountsCallback(void* pParam,
-                                         C4JStorage::DLC_TMS_DETAILS* details,
+                                         IPlatformStorage::DLC_TMS_DETAILS* details,
                                          int iPad) {
         return DLCController::marketplaceCountsCallback(pParam, details, iPad);
     }
@@ -677,9 +677,9 @@ public:
 
 private:
     static int BannedLevelDialogReturned(void* pParam, int iPad,
-                                         const C4JStorage::EMessageResult);
+                                         const IPlatformStorage::EMessageResult);
     static int TexturePackDialogReturned(void* pParam, int iPad,
-                                         C4JStorage::EMessageResult result) {
+                                         IPlatformStorage::EMessageResult result) {
         return MenuController::texturePackDialogReturned(pParam, iPad, result);
     }
 
@@ -730,41 +730,41 @@ public:
 private:
 
     static int UnlockFullExitReturned(void* pParam, int iPad,
-                                      C4JStorage::EMessageResult result) {
+                                      IPlatformStorage::EMessageResult result) {
         return MenuController::unlockFullExitReturned(pParam, iPad, result);
     }
     static int UnlockFullSaveReturned(void* pParam, int iPad,
-                                      C4JStorage::EMessageResult result) {
+                                      IPlatformStorage::EMessageResult result) {
         return MenuController::unlockFullSaveReturned(pParam, iPad, result);
     }
     static int UnlockFullInviteReturned(void* pParam, int iPad,
-                                        C4JStorage::EMessageResult result) {
+                                        IPlatformStorage::EMessageResult result) {
         return MenuController::unlockFullInviteReturned(pParam, iPad, result);
     }
     static int TrialOverReturned(void* pParam, int iPad,
-                                 C4JStorage::EMessageResult result) {
+                                 IPlatformStorage::EMessageResult result) {
         return MenuController::trialOverReturned(pParam, iPad, result);
     }
     static int ExitAndJoinFromInvite(void* pParam, int iPad,
-                                     C4JStorage::EMessageResult result) {
+                                     IPlatformStorage::EMessageResult result) {
         return NetworkController::exitAndJoinFromInvite(pParam, iPad, result);
     }
     static int ExitAndJoinFromInviteSaveDialogReturned(
-        void* pParam, int iPad, C4JStorage::EMessageResult result) {
+        void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
         return NetworkController::exitAndJoinFromInviteSaveDialogReturned(pParam, iPad, result);
     }
     static int ExitAndJoinFromInviteAndSaveReturned(
-        void* pParam, int iPad, C4JStorage::EMessageResult result) {
+        void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
         return NetworkController::exitAndJoinFromInviteAndSaveReturned(pParam, iPad, result);
     }
     static int ExitAndJoinFromInviteDeclineSaveReturned(
-        void* pParam, int iPad, C4JStorage::EMessageResult result) {
+        void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
         return NetworkController::exitAndJoinFromInviteDeclineSaveReturned(pParam, iPad, result);
     }
     static int FatalErrorDialogReturned(void* pParam, int iPad,
-                                        C4JStorage::EMessageResult result);
+                                        IPlatformStorage::EMessageResult result);
     static int WarningTrialTexturePackReturned(
-        void* pParam, int iPad, C4JStorage::EMessageResult result) {
+        void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
         return NetworkController::warningTrialTexturePackReturned(pParam, iPad, result);
     }
 
@@ -817,7 +817,7 @@ public:
         MenuController::exitGameFromRemoteSave(lpParameter);
     }
     static int ExitGameFromRemoteSaveDialogReturned(
-        void* pParam, int iPad, C4JStorage::EMessageResult result) {
+        void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
         return MenuController::exitGameFromRemoteSaveDialogReturned(pParam, iPad, result);
     }
 
@@ -1021,7 +1021,7 @@ public:
     int GetDLCInfoTexturesOffersCount() { return m_dlcController.getDLCInfoTexturesOffersCount(); }
 
     static int TMSPPFileReturned(void* pParam, int iPad, int iUserData,
-                                 C4JStorage::PTMSPP_FILEDATA pFileData,
+                                 IPlatformStorage::PTMSPP_FILEDATA pFileData,
                                  const char* szFilename) {
         return DLCController::tmsPPFileReturned(pParam, iPad, iUserData, pFileData, szFilename);
     }

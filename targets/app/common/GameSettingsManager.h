@@ -64,7 +64,7 @@ public:
     static void setActionConfirmed(void* param);
 
     // Saving message
-    int displaySavingMessage(const C4JStorage::ESavingMessage eMsg, int iPad);
+    int displaySavingMessage(const IPlatformStorage::ESavingMessage eMsg, int iPad);
 
     // Game settings array - public, referenced by Game via alias
     GAME_SETTINGS* GameSettingsA[XUSER_MAX_COUNT];

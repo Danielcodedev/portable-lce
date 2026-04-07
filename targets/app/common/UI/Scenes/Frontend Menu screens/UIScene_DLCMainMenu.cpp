@@ -94,7 +94,7 @@ void UIScene_DLCMainMenu::handlePress(F64 controlId, F64 childId) {
 void UIScene_DLCMainMenu::handleTimerComplete(int id) {}
 
 int UIScene_DLCMainMenu::ExitDLCMainMenu(void* pParam, int iPad,
-                                         C4JStorage::EMessageResult result) {
+                                         IPlatformStorage::EMessageResult result) {
     UIScene_DLCMainMenu* pClass = (UIScene_DLCMainMenu*)pParam;
 
     pClass->navigateBack();

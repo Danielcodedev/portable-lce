@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "app/common/UI/All Platforms/UIStructs.h"
 #include "app/common/UI/Controls/UIControl.h"
 #include "app/common/UI/Controls/UIControl_BitmapIcon.h"
@@ -53,9 +53,9 @@ protected:
     void UpdateCurrentTexturePack(int iSlot);
 
     static int TrialTexturePackWarningReturned(
-        void* pParam, int iPad, C4JStorage::EMessageResult result);
+        void* pParam, int iPad, IPlatformStorage::EMessageResult result);
     static int UnlockTexturePackReturned(void* pParam, int iPad,
-                                         C4JStorage::EMessageResult result);
+                                         IPlatformStorage::EMessageResult result);
     static int TexturePackDialogReturned(void* pParam, int iPad,
-                                         C4JStorage::EMessageResult result);
+                                         IPlatformStorage::EMessageResult result);
 };

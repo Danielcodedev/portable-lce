@@ -697,7 +697,7 @@ void UIController::CleanUpSkinReload() {
     if (!Minecraft::GetInstance()->skins->isUsingDefaultSkin()) {
         if (!Minecraft::GetInstance()->skins->getSelected()->hasAudio()) {
             const unsigned int result =
-                StorageManager.UnmountInstalledDLC("TPACK");
+                PlatformStorage.UnmountInstalledDLC("TPACK");
         }
     }
 
@@ -1368,7 +1368,7 @@ void UIController::NavigateToHomeMenu() {
         // 		{
         // 			pDLCTexPack->m_pSoundBank->Destroy();
         // 		}
-        const unsigned int result = StorageManager.UnmountInstalledDLC("TPACK");
+        const unsigned int result = PlatformStorage.UnmountInstalledDLC("TPACK");
 
         app.DebugPrintf("Unmount result is %d\n", result);
     }
@@ -2070,14 +2070,14 @@ void UIController::UpdateAutosaveCountdownTimer(unsigned int uiSeconds) {
 }
 
 void UIController::ShowSavingMessage(unsigned int iPad,
-                                     C4JStorage::ESavingMessage eVal) {
+                                     IPlatformStorage::ESavingMessage eVal) {
     bool show = false;
     switch (eVal) {
-        case C4JStorage::ESavingMessage_None:
+        case IPlatformStorage::ESavingMessage_None:
             show = false;
             break;
-        case C4JStorage::ESavingMessage_Short:
-        case C4JStorage::ESavingMessage_Long:
+        case IPlatformStorage::ESavingMessage_Short:
+        case IPlatformStorage::ESavingMessage_Long:
             show = true;
             break;
     }
@@ -2154,28 +2154,28 @@ void UIController::HidePressStart() {
 
 void UIController::ClearPressStart() { m_iPressStartQuadrantsMask = 0; }
 
-C4JStorage::EMessageResult UIController::RequestAlertMessage(
+IPlatformStorage::EMessageResult UIController::RequestAlertMessage(
     unsigned int uiTitle, unsigned int uiText, unsigned int* uiOptionA,
     unsigned int uiOptionC, unsigned int dwPad,
-    int (*Func)(void*, int, const C4JStorage::EMessageResult), void* lpParam,
+    int (*Func)(void*, int, const IPlatformStorage::EMessageResult), void* lpParam,
     wchar_t* pwchFormatString) {
     return RequestMessageBox(uiTitle, uiText, uiOptionA, uiOptionC, dwPad, Func,
                              lpParam, pwchFormatString, 0, false);
 }
 
-C4JStorage::EMessageResult UIController::RequestErrorMessage(
+IPlatformStorage::EMessageResult UIController::RequestErrorMessage(
     unsigned int uiTitle, unsigned int uiText, unsigned int* uiOptionA,
     unsigned int uiOptionC, unsigned int dwPad,
-    int (*Func)(void*, int, const C4JStorage::EMessageResult), void* lpParam,
+    int (*Func)(void*, int, const IPlatformStorage::EMessageResult), void* lpParam,
     wchar_t* pwchFormatString) {
     return RequestMessageBox(uiTitle, uiText, uiOptionA, uiOptionC, dwPad, Func,
                              lpParam, pwchFormatString, 0, true);
 }
 
-C4JStorage::EMessageResult UIController::RequestMessageBox(
+IPlatformStorage::EMessageResult UIController::RequestMessageBox(
     unsigned int uiTitle, unsigned int uiText, unsigned int* uiOptionA,
     unsigned int uiOptionC, unsigned int dwPad,
-    int (*Func)(void*, int, const C4JStorage::EMessageResult), void* lpParam,
+    int (*Func)(void*, int, const IPlatformStorage::EMessageResult), void* lpParam,
     wchar_t* pwchFormatString, unsigned int dwFocusButton, bool bIsError)
 
 {
@@ -2214,15 +2214,15 @@ C4JStorage::EMessageResult UIController::RequestMessageBox(
         // This may happen if we had to queue the message box, or there was
         // already a message box displaying and so the NavigateToScene returned
         // false;
-        return C4JStorage::EMessage_Pending;
+        return IPlatformStorage::EMessage_Pending;
     } else {
-        return C4JStorage::EMessage_Busy;
+        return IPlatformStorage::EMessage_Busy;
     }
 }
 
-C4JStorage::EMessageResult UIController::RequestUGCMessageBox(
+IPlatformStorage::EMessageResult UIController::RequestUGCMessageBox(
     int title /* = -1 */, int message /* = -1 */, int iPad /* = -1*/,
-    int (*Func)(void*, int, const C4JStorage::EMessageResult) /* = nullptr*/,
+    int (*Func)(void*, int, const IPlatformStorage::EMessageResult) /* = nullptr*/,
     void* lpParam /* = nullptr*/) {
     // Default title / messages
     if (title == -1) {
@@ -2242,9 +2242,9 @@ C4JStorage::EMessageResult UIController::RequestUGCMessageBox(
                                   lpParam);
 }
 
-C4JStorage::EMessageResult UIController::RequestContentRestrictedMessageBox(
+IPlatformStorage::EMessageResult UIController::RequestContentRestrictedMessageBox(
     int title /* = -1 */, int message /* = -1 */, int iPad /* = -1*/,
-    int (*Func)(void*, int, const C4JStorage::EMessageResult) /* = nullptr*/,
+    int (*Func)(void*, int, const IPlatformStorage::EMessageResult) /* = nullptr*/,
     void* lpParam /* = nullptr*/) {
     // Default title / messages
     if (title == -1) {

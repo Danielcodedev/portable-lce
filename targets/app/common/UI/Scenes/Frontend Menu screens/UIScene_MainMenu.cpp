@@ -394,10 +394,10 @@ void UIScene_MainMenu::customDrawSplash(IggyCustomDrawCallbackRegion* region) {
 }
 
 int UIScene_MainMenu::MustSignInReturned(void* pParam, int iPad,
-                                         C4JStorage::EMessageResult result) {
+                                         IPlatformStorage::EMessageResult result) {
     UIScene_MainMenu* pClass = (UIScene_MainMenu*)pParam;
 
-    if (result == C4JStorage::EMessage_ResultAccept) {
+    if (result == IPlatformStorage::EMessage_ResultAccept) {
         // we need to specify local game here to display local and LIVE profiles
         // in the list
         switch (pClass->m_eAction) {
@@ -556,7 +556,7 @@ int UIScene_MainMenu::CreateLoad_SignInReturned(void* pParam, bool bContinue,
                         if (app.GetTMSDLCInfoRead() &&
                             app.GetTMSXUIDsFileRead() &&
                             app.GetBanListRead(iPad)) {
-                            if (StorageManager.SetSaveDevice(
+                            if (PlatformStorage.SetSaveDevice(
                                     &UIScene_MainMenu::DeviceSelectReturned,
                                     pClass) == true) {
                                 // save device already selected
@@ -749,11 +749,11 @@ int UIScene_MainMenu::UnlockFullGame_SignInReturned(void* pParam,
 }
 
 int UIScene_MainMenu::ExitGameReturned(void* pParam, int iPad,
-                                       C4JStorage::EMessageResult result) {
+                                       IPlatformStorage::EMessageResult result) {
     // UIScene_MainMenu* pClass = (UIScene_MainMenu*)pParam;
 
     // buttons reversed on this
-    if (result == C4JStorage::EMessage_ResultDecline) {
+    if (result == IPlatformStorage::EMessage_ResultDecline) {
         // XLaunchNewImage(XLAUNCH_KEYWORD_DASH_ARCADE, 0);
         app.ExitGame();
     }
@@ -799,12 +799,12 @@ void UIScene_MainMenu::RunPlayGame(int iPad) {
 #if TO_BE_IMPLEMENTED
                 // Check if there is any new DLC
                 app.ClearNewDLCAvailable();
-                StorageManager.GetAvailableDLCCount(iPad);
+                PlatformStorage.GetAvailableDLCCount(iPad);
 
                 // check if all the TMS files are loaded
                 if (app.GetTMSDLCInfoRead() && app.GetTMSXUIDsFileRead() &&
                     app.GetBanListRead(iPad)) {
-                    if (StorageManager.SetSaveDevice(
+                    if (PlatformStorage.SetSaveDevice(
                             &CScene_Main::DeviceSelectReturned, this) == true) {
                         // change the minecraft player name
                         pMinecraft->user->name =
@@ -1048,17 +1048,17 @@ void UIScene_MainMenu::LoadTrial(void) {
     // clear out the app's terrain features list
     app.ClearTerrainFeaturePosition();
 
-    StorageManager.ResetSaveData();
+    PlatformStorage.ResetSaveData();
 
     // No saving in the trial
-    StorageManager.SetSaveDisabled(true);
+    PlatformStorage.SetSaveDisabled(true);
     app.SetGameHostOption(eGameHostOption_WasntSaveOwner, false);
 
     // Set the global flag, so that we don't disable saving again once the save
     // is complete
     app.SetGameHostOption(eGameHostOption_DisableSaving, 1);
 
-    StorageManager.SetSaveTitle(L"Tutorial");
+    PlatformStorage.SetSaveTitle(L"Tutorial");
 
     // Reset the autosave time
     app.SetAutosaveTimerTime();

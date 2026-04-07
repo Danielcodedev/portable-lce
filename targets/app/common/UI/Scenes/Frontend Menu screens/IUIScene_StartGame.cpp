@@ -242,10 +242,10 @@ void IUIScene_StartGame::UpdateCurrentTexturePack(int iSlot) {
 }
 
 int IUIScene_StartGame::TrialTexturePackWarningReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     IUIScene_StartGame* pScene = (IUIScene_StartGame*)pParam;
 
-    if (result == C4JStorage::EMessage_ResultAccept) {
+    if (result == IPlatformStorage::EMessage_ResultAccept) {
         pScene->checkStateAndStartGame();
     } else {
         pScene->m_bIgnoreInput = false;
@@ -254,10 +254,10 @@ int IUIScene_StartGame::TrialTexturePackWarningReturned(
 }
 
 int IUIScene_StartGame::UnlockTexturePackReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     IUIScene_StartGame* pScene = (IUIScene_StartGame*)pParam;
 
-    if (result == C4JStorage::EMessage_ResultAccept) {
+    if (result == IPlatformStorage::EMessage_ResultAccept) {
         if (PlatformProfile.IsSignedIn(iPad)) {
             // the license change coming in when the offer has been installed
             // will cause this scene to refresh
@@ -271,7 +271,7 @@ int IUIScene_StartGame::UnlockTexturePackReturned(
 }
 
 int IUIScene_StartGame::TexturePackDialogReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     IUIScene_StartGame* pClass = (IUIScene_StartGame*)pParam;
 
     pClass->m_bIgnoreInput = false;

@@ -58,7 +58,7 @@ UIScene_DLCOffersMenu::~UIScene_DLCOffersMenu() {
 void UIScene_DLCOffersMenu::handleTimerComplete(int id) {}
 
 int UIScene_DLCOffersMenu::ExitDLCOffersMenu(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     UIScene_DLCOffersMenu* pClass = (UIScene_DLCOffersMenu*)pParam;
 
     ui.NavigateToHomeMenu();  // iPad,eUIScene_MainMenu);
@@ -186,8 +186,8 @@ void UIScene_DLCOffersMenu::handlePress(F64 controlId, F64 childId) {
             int iIndex = (int)childId;
 
             uint64_t ullIndexA[1];
-            ullIndexA[0] = StorageManager.GetOffer(iIndex).qwOfferID;
-            StorageManager.InstallOffer(1, ullIndexA, nullptr);
+            ullIndexA[0] = PlatformStorage.GetOffer(iIndex).qwOfferID;
+            PlatformStorage.InstallOffer(1, ullIndexA, nullptr);
         } break;
     }
 }

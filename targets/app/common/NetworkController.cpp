@@ -19,7 +19,7 @@
 #include "minecraft/world/level/storage/ConsoleSaveFileIO/compression.h"
 #include "platform/input/input.h"
 #include "platform/profile/profile.h"
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "app/common/Audio/SoundEngine.h"
 
 #include <cstring>
@@ -97,7 +97,7 @@ void NetworkController::processInvite(std::uint32_t dwUserIndex,
 }
 
 int NetworkController::primaryPlayerSignedOutReturned(
-    void* pParam, int iPad, const C4JStorage::EMessageResult) {
+    void* pParam, int iPad, const IPlatformStorage::EMessageResult) {
     if (g_NetworkManager.IsInSession()) {
         app.SetAction(iPad, eAppAction_PrimaryPlayerSignedOutReturned);
     } else {
@@ -107,7 +107,7 @@ int NetworkController::primaryPlayerSignedOutReturned(
 }
 
 int NetworkController::ethernetDisconnectReturned(
-    void* pParam, int iPad, const C4JStorage::EMessageResult) {
+    void* pParam, int iPad, const IPlatformStorage::EMessageResult) {
     Minecraft* pMinecraft = Minecraft::GetInstance();
 
     if (Minecraft::GetInstance()->player != nullptr) {
@@ -241,7 +241,7 @@ void NetworkController::signInChangeCallback(void* pParam,
             bPrimaryPlayerChanged) {
             pApp->SetAction(iPrimaryPlayer, eAppAction_PrimaryPlayerSignedOut);
             pApp->InvalidateBannedList(iPrimaryPlayer);
-            StorageManager.ClearDLCOffers();
+            PlatformStorage.ClearDLCOffers();
             pApp->ClearAndResetDLCDownloadQueue();
             pApp->ClearDLCInstalled();
         } else {
@@ -349,7 +349,7 @@ void NetworkController::signInChangeCallback(void* pParam,
         m_uiLastSignInData = uiSignInData;
     } else if (iPrimaryPlayer != -1) {
         pApp->InvalidateBannedList(iPrimaryPlayer);
-        StorageManager.ClearDLCOffers();
+        PlatformStorage.ClearDLCOffers();
         pApp->ClearAndResetDLCDownloadQueue();
         pApp->ClearDLCInstalled();
     }
@@ -410,10 +410,10 @@ void NetworkController::liveLinkChangeCallback(void* pParam, bool bConnected) {
 }
 
 int NetworkController::exitAndJoinFromInvite(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     Game* pApp = (Game*)pParam;
 
-    if (result == C4JStorage::EMessage_ResultDecline) {
+    if (result == IPlatformStorage::EMessage_ResultDecline) {
         pApp->SetAction(iPad, eAppAction_ExitAndJoinFromInviteConfirmed);
     }
 
@@ -421,11 +421,11 @@ int NetworkController::exitAndJoinFromInvite(
 }
 
 int NetworkController::exitAndJoinFromInviteSaveDialogReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     Game* pClass = (Game*)pParam;
-    if (result == C4JStorage::EMessage_ResultDecline ||
-        result == C4JStorage::EMessage_ResultThirdOption) {
-        if (result == C4JStorage::EMessage_ResultDecline) {
+    if (result == IPlatformStorage::EMessage_ResultDecline ||
+        result == IPlatformStorage::EMessage_ResultThirdOption) {
+        if (result == IPlatformStorage::EMessage_ResultDecline) {
             if (!Minecraft::GetInstance()->skins->isUsingDefaultSkin()) {
                 TexturePack* tPack =
                     Minecraft::GetInstance()->skins->getSelected();
@@ -446,7 +446,7 @@ int NetworkController::exitAndJoinFromInviteSaveDialogReturned(
                 }
             }
             bool bSaveExists;
-            StorageManager.DoesSaveExist(&bSaveExists);
+            PlatformStorage.DoesSaveExist(&bSaveExists);
             if (bSaveExists) {
                 unsigned int uiIDA[2];
                 uiIDA[0] = IDS_CONFIRM_CANCEL;
@@ -479,13 +479,13 @@ int NetworkController::exitAndJoinFromInviteSaveDialogReturned(
 }
 
 int NetworkController::warningTrialTexturePackReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     return 0;
 }
 
 int NetworkController::exitAndJoinFromInviteAndSaveReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
-    if (result == C4JStorage::EMessage_ResultDecline) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
+    if (result == IPlatformStorage::EMessage_ResultDecline) {
         if (!Minecraft::GetInstance()->skins->isUsingDefaultSkin()) {
             TexturePack* tPack = Minecraft::GetInstance()->skins->getSelected();
             DLCPack* pDLCPack = tPack->getDLCPack();
@@ -509,8 +509,8 @@ int NetworkController::exitAndJoinFromInviteAndSaveReturned(
 }
 
 int NetworkController::exitAndJoinFromInviteDeclineSaveReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
-    if (result == C4JStorage::EMessage_ResultDecline) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
+    if (result == IPlatformStorage::EMessage_ResultDecline) {
         MinecraftServer::getInstance()->setSaveOnExit(false);
         app.SetAction(iPad, eAppAction_ExitAndJoinFromInviteConfirmed);
     }

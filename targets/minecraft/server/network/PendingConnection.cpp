@@ -8,7 +8,7 @@
 #include <vector>
 
 #include "platform/PlatformTypes.h"
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/BuildVer/BuildVer.h"
 #include "app/common/Network/NetworkPlayerInterface.h"
@@ -103,7 +103,7 @@ void PendingConnection::sendPreLoginResponse() {
     std::uint8_t ugcFriendsOnlyBits = 0;
     char szUniqueMapName[14];
 
-    StorageManager.GetSaveUniqueFilename(szUniqueMapName);
+    PlatformStorage.GetSaveUniqueFilename(szUniqueMapName);
 
     PlayerList* playerList = MinecraftServer::getInstance()->getPlayers();
     for (auto it = playerList->players.begin(); it != playerList->players.end();

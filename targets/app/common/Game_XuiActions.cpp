@@ -29,7 +29,7 @@
 #include "minecraft/stats/StatsCounter.h"
 #include "platform/PlatformTypes.h"
 #include "platform/profile/profile.h"
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "util/StringHelpers.h"
 #include "app/common/Audio/SoundEngine.h"
 
@@ -49,11 +49,11 @@ void Game::HandleXuiActions(void) {
                 {
                     unsigned int uiIDA[1];
                     uiIDA[0] = IDS_CONFIRM_OK;
-                    C4JStorage::EMessageResult result =
+                    IPlatformStorage::EMessageResult result =
                         ui.RequestErrorMessage(IDS_CANT_PLACE_NEAR_SPAWN_TITLE,
                                                IDS_CANT_PLACE_NEAR_SPAWN_TEXT,
                                                uiIDA, 1, XUSER_INDEX_ANY);
-                    if (result != C4JStorage::EMessage_Busy)
+                    if (result != IPlatformStorage::EMessage_Busy)
                         SetGlobalXuiAction(eAppAction_Idle);
                 }
                 break;
@@ -127,7 +127,7 @@ void Game::HandleXuiActions(void) {
                     // stop the dialog asking if we want to overwrite it coming
                     // up on an autosave
                     bool bSaveExists;
-                    StorageManager.DoesSaveExist(&bSaveExists);
+                    PlatformStorage.DoesSaveExist(&bSaveExists);
 
                     SetAction(i, eAppAction_Idle);
                     if (!GetChangingSessionType()) {
@@ -147,7 +147,7 @@ void Game::HandleXuiActions(void) {
                     // Check that there is a name for the save - if we're saving
                     // from the tutorial and this is the first save from the
                     // tutorial, we'll not have a name
-                    /*if(StorageManager.GetSaveName()==nullptr)
+                    /*if(PlatformStorage.GetSaveName()==nullptr)
                     {
                     app.NavigateToScene(i,eUIScene_SaveWorld);
                     }
@@ -163,7 +163,7 @@ void Game::HandleXuiActions(void) {
 
                         // int saveOrCheckpointId = 0;
                         // bool validSave =
-                        // StorageManager.GetSaveUniqueNumber(&saveOrCheckpointId);
+                        // PlatformStorage.GetSaveUniqueNumber(&saveOrCheckpointId);
                         // SentientManager.RecordLevelSaveOrCheckpoint(PlatformProfile.GetPrimaryPad(),
                         // saveOrCheckpointId);
 
@@ -229,7 +229,7 @@ void Game::HandleXuiActions(void) {
 
                     // int saveOrCheckpointId = 0;
                     // bool validSave =
-                    // StorageManager.GetSaveUniqueNumber(&saveOrCheckpointId);
+                    // PlatformStorage.GetSaveUniqueNumber(&saveOrCheckpointId);
                     // SentientManager.RecordLevelSaveOrCheckpoint(PlatformProfile.GetPrimaryPad(),
                     // saveOrCheckpointId);
 
@@ -680,7 +680,7 @@ void Game::HandleXuiActions(void) {
 
                     // inform the player they are being returned to the menus
                     // because they signed out
-                    StorageManager.SetSaveDeviceSelected(i, false);
+                    PlatformStorage.SetSaveDeviceSelected(i, false);
                     // need to clear the player stats - can't assume it'll be
                     // done in setlevel - we may not be in the game
                     StatsCounter* pStats = Minecraft::GetInstance()->stats[i];
@@ -877,7 +877,7 @@ void Game::HandleXuiActions(void) {
                     // set the state back to pre-game
                     PlatformProfile.ResetProfileProcessState();
                     // clear the save device
-                    StorageManager.SetSaveDeviceSelected(i, false);
+                    PlatformStorage.SetSaveDeviceSelected(i, false);
 
                     ui.UpdatePlayerBasePositions();
                     // there are multiple layers in the help menu, so a navigate
@@ -926,7 +926,7 @@ void Game::HandleXuiActions(void) {
                     SetAction(i, eAppAction_Idle);
                     // Check the player really wants to do this
 
-                    if (!StorageManager.GetSaveDisabled() &&
+                    if (!PlatformStorage.GetSaveDisabled() &&
                         i == PlatformProfile.GetPrimaryPad() &&
                         g_NetworkManager.IsHost() && GetGameStarted()) {
                         uiIDA[0] = IDS_CONFIRM_CANCEL;
@@ -1000,7 +1000,7 @@ void Game::HandleXuiActions(void) {
                                                                1);
 
                         const unsigned int result =
-                            StorageManager.UnmountInstalledDLC("TPACK");
+                            PlatformStorage.UnmountInstalledDLC("TPACK");
                         app.DebugPrintf("Unmount result is %d\n", result);
                     }
 
@@ -1211,11 +1211,11 @@ void Game::HandleXuiActions(void) {
                 case eAppAction_FailedToJoinNoPrivileges: {
                     unsigned int uiIDA[1];
                     uiIDA[0] = IDS_CONFIRM_OK;
-                    C4JStorage::EMessageResult result = ui.RequestErrorMessage(
+                    IPlatformStorage::EMessageResult result = ui.RequestErrorMessage(
                         IDS_NO_MULTIPLAYER_PRIVILEGE_TITLE,
                         IDS_NO_MULTIPLAYER_PRIVILEGE_JOIN_TEXT, uiIDA, 1,
                         PlatformProfile.GetPrimaryPad());
-                    if (result != C4JStorage::EMessage_Busy)
+                    if (result != IPlatformStorage::EMessage_Busy)
                         SetAction(i, eAppAction_Idle);
                 } break;
                 case eAppAction_ProfileReadError:
@@ -1269,12 +1269,12 @@ void Game::HandleXuiActions(void) {
                         swprintf(wchFormat, 40, L"%ls\n\n%%ls",
                                  player->GetOnlineName());
 
-                        C4JStorage::EMessageResult result =
+                        IPlatformStorage::EMessageResult result =
                             ui.RequestErrorMessage(
                                 IDS_BANNED_LEVEL_TITLE, IDS_PLAYER_BANNED_LEVEL,
                                 uiIDA, 2, i, &Game::BannedLevelDialogReturned,
                                 this, wchFormat);
-                        if (result != C4JStorage::EMessage_Busy)
+                        if (result != IPlatformStorage::EMessage_Busy)
                             SetAction(i, eAppAction_Idle);
                     } else {
                         SetAction(i, eAppAction_Idle);
@@ -1431,7 +1431,7 @@ void Game::HandleXuiActions(void) {
                     */
                 case eTMSAction_TMS_RetrieveFiles_Complete:
                     SetTMSAction(i, eTMSAction_Idle);
-                    // 				if(StorageManager.SetSaveDevice(&CScene_Main::DeviceSelectReturned,pClass))
+                    // 				if(PlatformStorage.SetSaveDevice(&CScene_Main::DeviceSelectReturned,pClass))
                     // 				{
                     // 					// save device already
                     // selected

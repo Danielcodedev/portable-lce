@@ -8,7 +8,7 @@
 #include <mutex>
 
 #include "platform/input/input.h"
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "EntityTracker.h"
 #include "platform/ShutdownManager.h"
 #include "app/common/Console_Debug_enum.h"
@@ -925,7 +925,7 @@ Pos* ServerLevel::getDimensionSpecificSpawn() {
 
 // 4j Added for XboxOne PLM
 void ServerLevel::Suspend() {
-    if (StorageManager.GetSaveDisabled()) return;
+    if (PlatformStorage.GetSaveDisabled()) return;
     saveLevelData();
     chunkSource->saveAllEntities();
 }
@@ -935,7 +935,7 @@ void ServerLevel::save(bool force, ProgressListener* progressListener,
     if (!chunkSource->shouldSave()) return;
 
     // 4J-PB - check that saves are enabled
-    if (StorageManager.GetSaveDisabled()) return;
+    if (PlatformStorage.GetSaveDisabled()) return;
 
     if (progressListener != nullptr) {
         if (bAutosave) {
@@ -983,7 +983,7 @@ void ServerLevel::save(bool force, ProgressListener* progressListener,
 void ServerLevel::saveToDisc(ProgressListener* progressListener,
                              bool autosave) {
     // 4J-PB - check that saves are enabled
-    if (StorageManager.GetSaveDisabled()) return;
+    if (PlatformStorage.GetSaveDisabled()) return;
 
     // Check if we are using a trial version of a texture pack (which will be
     // the case for going into the mash-up pack world with a trial version)

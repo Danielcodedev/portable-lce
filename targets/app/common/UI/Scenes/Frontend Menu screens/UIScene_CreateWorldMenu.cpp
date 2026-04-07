@@ -704,9 +704,9 @@ void UIScene_CreateWorldMenu::CreateGame(UIScene_CreateWorldMenu* pClass,
     // create the world and launch
     std::wstring wWorldName = pClass->m_worldName;
 
-    StorageManager.ResetSaveData();
+    PlatformStorage.ResetSaveData();
     // Make our next save default to the name of the level
-    StorageManager.SetSaveTitle((wchar_t*)wWorldName.c_str());
+    PlatformStorage.SetSaveTitle((wchar_t*)wWorldName.c_str());
 
     std::wstring wSeed;
     if (!pClass->m_MoreOptionsParams.seed.empty()) {
@@ -977,10 +977,10 @@ int UIScene_CreateWorldMenu::StartGame_SignInReturned(void* pParam,
 }
 
 int UIScene_CreateWorldMenu::ConfirmCreateReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     UIScene_CreateWorldMenu* pClass = (UIScene_CreateWorldMenu*)pParam;
 
-    if (result == C4JStorage::EMessage_ResultAccept) {
+    if (result == IPlatformStorage::EMessage_ResultAccept) {
         bool isClientSide =
             PlatformProfile.IsSignedInLive(PlatformProfile.GetPrimaryPad()) &&
             pClass->m_MoreOptionsParams.bOnlineGame;

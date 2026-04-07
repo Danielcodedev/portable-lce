@@ -1470,7 +1470,7 @@ void SoundEngine::playMusicUpdate() {
                         std::string strFile =
                             "TPACK:\\Data\\" + string(szName) + ".binka";
                         std::string mountedPath =
-                            StorageManager.GetMountedPath(strFile);
+                            PlatformStorage.GetMountedPath(strFile);
                         strcpy(m_szStreamName, mountedPath.c_str());
                     } else {
                         SetIsPlayingStreamingGameMusic(false);

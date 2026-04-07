@@ -27,9 +27,9 @@ endif
 sdl2_sources = files(
   'input/sdl2/SDL2Input.cpp',
   'profile/stub/StubProfile.cpp',
+  'storage/stub/StubStorage.cpp',
   'sdl2/Render.cpp',
   'sdl2/render_stubs.cpp',
-  'sdl2/Storage.cpp',
 )
 
 lib_platform_sdl2 = static_library('platform_sdl2',

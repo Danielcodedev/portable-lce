@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "platform/PlatformTypes.h"
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "app/common/Leaderboards/LeaderboardInterface.h"
 #include "app/common/Leaderboards/LeaderboardManager.h"
 #include "app/common/UI/All Platforms/UIEnums.h"
@@ -113,7 +113,7 @@ private:
     UI_END_MAP_ELEMENTS_AND_NAMES()
 
     static int ExitLeaderboards(void* pParam, int iPad,
-                                C4JStorage::EMessageResult result);
+                                IPlatformStorage::EMessageResult result);
 
 public:
     UIScene_LeaderboardsMenu(int iPad, void* initData, UILayer* parentLayer);

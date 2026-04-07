@@ -93,7 +93,7 @@ public:
     int loadSaveDataThumbnailReturned(std::uint8_t* pbThumbnail,
                                      unsigned int thumbnailBytes);
     static int DeleteSaveDialogReturned(void* pParam, int iPad,
-                                        C4JStorage::EMessageResult result);
+                                        IPlatformStorage::EMessageResult result);
     int deleteSaveDataReturned(bool bRes);
 
 protected:

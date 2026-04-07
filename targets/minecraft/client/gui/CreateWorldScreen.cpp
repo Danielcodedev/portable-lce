@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "Button.h"
 #include "EditBox.h"
 #include "MessageScreen.h"
@@ -206,8 +206,8 @@ void CreateWorldScreen::buttonClicked(Button* button) {
             worldName = L"2slimey";
         }
 
-        StorageManager.ResetSaveData();
-        StorageManager.SetSaveTitle((wchar_t*)worldName.c_str());
+        PlatformStorage.ResetSaveData();
+        PlatformStorage.SetSaveTitle((wchar_t*)worldName.c_str());
 
         std::wstring seedString = seedEdit->getValue();
 

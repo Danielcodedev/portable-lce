@@ -114,7 +114,7 @@ void UIScene_MessageBox::handleInput(int iPad, int key, bool repeat,
             if (pressed) {
                 navigateBack();
                 if (m_Func)
-                    m_Func(m_lpParam, iPad, C4JStorage::EMessage_Cancelled);
+                    m_Func(m_lpParam, iPad, IPlatformStorage::EMessage_Cancelled);
             }
             break;
         case ACTION_MENU_OK:
@@ -129,19 +129,19 @@ void UIScene_MessageBox::handleInput(int iPad, int key, bool repeat,
 }
 
 void UIScene_MessageBox::handlePress(F64 controlId, F64 childId) {
-    C4JStorage::EMessageResult result = C4JStorage::EMessage_Cancelled;
+    IPlatformStorage::EMessageResult result = IPlatformStorage::EMessage_Cancelled;
     switch ((int)controlId) {
         case 0:
-            result = C4JStorage::EMessage_ResultAccept;
+            result = IPlatformStorage::EMessage_ResultAccept;
             break;
         case 1:
-            result = C4JStorage::EMessage_ResultDecline;
+            result = IPlatformStorage::EMessage_ResultDecline;
             break;
         case 2:
-            result = C4JStorage::EMessage_ResultThirdOption;
+            result = IPlatformStorage::EMessage_ResultThirdOption;
             break;
         case 3:
-            result = C4JStorage::EMessage_ResultFourthOption;
+            result = IPlatformStorage::EMessage_ResultFourthOption;
             break;
     }
 

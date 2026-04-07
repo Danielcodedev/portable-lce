@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "platform/profile/profile.h"
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/Network/GameNetworkManager.h"
 #include "app/common/Tutorial/Tutorial.h"
@@ -108,7 +108,7 @@ void UIScene_DeathMenu::handlePress(F64 controlId, F64 childId) {
                                    ->getSessionTimer();
                 }
 
-                if (StorageManager.GetSaveDisabled()) {
+                if (PlatformStorage.GetSaveDisabled()) {
                     uiIDA[0] = IDS_CONFIRM_CANCEL;
                     uiIDA[1] = IDS_CONFIRM_OK;
                     ui.RequestAlertMessage(

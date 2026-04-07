@@ -3428,7 +3428,7 @@ void ClientConnection::handleUpdateGameRuleProgressPacket(
 // Fix for #13191 - The host of a game can get a message informing them that the
 // connection to the server has been lost
 int ClientConnection::HostDisconnectReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     // 4J-PB - if they have a trial texture pack, they don't get to save the
     // world
     if (!Minecraft::GetInstance()->skins->isUsingDefaultSkin()) {
@@ -3448,7 +3448,7 @@ int ClientConnection::HostDisconnectReturned(
     // Give the player the option to save their game
     // does the save exist?
     bool bSaveExists;
-    StorageManager.DoesSaveExist(&bSaveExists);
+    PlatformStorage.DoesSaveExist(&bSaveExists);
     // 4J-PB - we check if the save exists inside the libs
     // we need to ask if they are sure they want to overwrite the existing game
     if (bSaveExists) {
@@ -3469,12 +3469,12 @@ int ClientConnection::HostDisconnectReturned(
 }
 
 int ClientConnection::ExitGameAndSaveReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     // results switched for this dialog
-    if (result == C4JStorage::EMessage_ResultDecline) {
+    if (result == IPlatformStorage::EMessage_ResultDecline) {
         // int32_t saveOrCheckpointId = 0;
         // bool validSave =
-        // StorageManager.GetSaveUniqueNumber(&saveOrCheckpointId);
+        // PlatformStorage.GetSaveUniqueNumber(&saveOrCheckpointId);
         // SentientManager.RecordLevelSaveOrCheckpoint(PlatformInput.GetPrimaryPad(),
         // saveOrCheckpointId);
         MinecraftServer::getInstance()->setSaveOnExit(true);

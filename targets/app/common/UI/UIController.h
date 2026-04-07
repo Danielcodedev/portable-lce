@@ -23,7 +23,7 @@
 #include "platform/PlatformTypes.h"
 #include "platform/input/input.h"
 #include "platform/sdl2/Render.h"
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "app/common/UI/All Platforms/IUIController.h"
 #include "app/common/UI/All Platforms/UIEnums.h"
 #include "app/common/UI/All Platforms/UIStructs.h"
@@ -410,7 +410,7 @@ public:
     virtual void ShowAutosaveCountdownTimer(bool show);
     virtual void UpdateAutosaveCountdownTimer(unsigned int uiSeconds);
     virtual void ShowSavingMessage(unsigned int iPad,
-                                   C4JStorage::ESavingMessage eVal);
+                                   IPlatformStorage::ESavingMessage eVal);
 
     virtual void ShowPlayerDisplayname(bool show);
     virtual bool PressStartPlaying(unsigned int iPad);
@@ -418,33 +418,33 @@ public:
     virtual void HidePressStart();
     void ClearPressStart();
 
-    virtual C4JStorage::EMessageResult RequestAlertMessage(
+    virtual IPlatformStorage::EMessageResult RequestAlertMessage(
         uint32_t uiTitle, uint32_t uiText, uint32_t* uiOptionA,
         uint32_t uiOptionC, uint32_t dwPad = XUSER_INDEX_ANY,
-        int (*Func)(void*, int, const C4JStorage::EMessageResult) = nullptr,
+        int (*Func)(void*, int, const IPlatformStorage::EMessageResult) = nullptr,
         void* lpParam = nullptr, wchar_t* pwchFormatString = nullptr);
-    virtual C4JStorage::EMessageResult RequestErrorMessage(
+    virtual IPlatformStorage::EMessageResult RequestErrorMessage(
         uint32_t uiTitle, uint32_t uiText, uint32_t* uiOptionA,
         uint32_t uiOptionC, uint32_t dwPad = XUSER_INDEX_ANY,
-        int (*Func)(void*, int, const C4JStorage::EMessageResult) = nullptr,
+        int (*Func)(void*, int, const IPlatformStorage::EMessageResult) = nullptr,
         void* lpParam = nullptr, wchar_t* pwchFormatString = nullptr);
 
 private:
-    virtual C4JStorage::EMessageResult RequestMessageBox(
+    virtual IPlatformStorage::EMessageResult RequestMessageBox(
         uint32_t uiTitle, uint32_t uiText, uint32_t* uiOptionA,
         uint32_t uiOptionC, uint32_t dwPad,
-        int (*Func)(void*, int, const C4JStorage::EMessageResult),
+        int (*Func)(void*, int, const IPlatformStorage::EMessageResult),
         void* lpParam, wchar_t* pwchFormatString, uint32_t dwFocusButton,
         bool bIsError);
 
 public:
-    C4JStorage::EMessageResult RequestUGCMessageBox(
+    IPlatformStorage::EMessageResult RequestUGCMessageBox(
         int title = -1, int message = -1, int iPad = -1,
-        int (*Func)(void*, int, const C4JStorage::EMessageResult) = nullptr,
+        int (*Func)(void*, int, const IPlatformStorage::EMessageResult) = nullptr,
         void* lpParam = nullptr);
-    C4JStorage::EMessageResult RequestContentRestrictedMessageBox(
+    IPlatformStorage::EMessageResult RequestContentRestrictedMessageBox(
         int title = -1, int message = -1, int iPad = -1,
-        int (*Func)(void*, int, const C4JStorage::EMessageResult) = nullptr,
+        int (*Func)(void*, int, const IPlatformStorage::EMessageResult) = nullptr,
         void* lpParam = nullptr);
 
     virtual void SetWinUserIndex(unsigned int iPad);

@@ -4,7 +4,7 @@
 
 #include "app/common/App_structs.h"
 #include "platform/NetTypes.h"
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "platform/XboxStubs.h"
 #include "minecraft/network/packet/DisconnectPacket.h"
 
@@ -33,9 +33,9 @@ public:
     static void clearSignInChangeUsersMask();
     static int signoutExitWorldThreadProc(void* lpParameter);
     static int primaryPlayerSignedOutReturned(void* pParam, int iPad,
-                                              const C4JStorage::EMessageResult);
+                                              const IPlatformStorage::EMessageResult);
     static int ethernetDisconnectReturned(void* pParam, int iPad,
-                                          const C4JStorage::EMessageResult);
+                                          const IPlatformStorage::EMessageResult);
     static void profileReadErrorCallback(void* pParam);
 
     // Notifications
@@ -51,15 +51,15 @@ public:
                        std::uint32_t dwLocalUsersMask,
                        const INVITE_INFO* pInviteInfo);
     static int exitAndJoinFromInvite(void* pParam, int iPad,
-                                     C4JStorage::EMessageResult result);
+                                     IPlatformStorage::EMessageResult result);
     static int exitAndJoinFromInviteSaveDialogReturned(
-        void* pParam, int iPad, C4JStorage::EMessageResult result);
+        void* pParam, int iPad, IPlatformStorage::EMessageResult result);
     static int exitAndJoinFromInviteAndSaveReturned(
-        void* pParam, int iPad, C4JStorage::EMessageResult result);
+        void* pParam, int iPad, IPlatformStorage::EMessageResult result);
     static int exitAndJoinFromInviteDeclineSaveReturned(
-        void* pParam, int iPad, C4JStorage::EMessageResult result);
+        void* pParam, int iPad, IPlatformStorage::EMessageResult result);
     static int warningTrialTexturePackReturned(
-        void* pParam, int iPad, C4JStorage::EMessageResult result);
+        void* pParam, int iPad, IPlatformStorage::EMessageResult result);
 
     // Disconnect
     DisconnectPacket::eDisconnectReason getDisconnectReason() {

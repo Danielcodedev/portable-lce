@@ -4,7 +4,7 @@
 #include "platform/PlatformTypes.h"
 #include "platform/profile/profile.h"
 #include "platform/sdl2/Render.h"
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "app/common/App_Defines.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/App_structs.h"
@@ -234,10 +234,10 @@ void Game::SetAppPaused(bool val) { m_bIsAppPaused = val; }
 
 
 int Game::BannedLevelDialogReturned(
-    void* pParam, int iPad, const C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, const IPlatformStorage::EMessageResult result) {
     Game* pApp = (Game*)pParam;
 
-    if (result == C4JStorage::EMessage_ResultAccept) {
+    if (result == IPlatformStorage::EMessage_ResultAccept) {
     } else {
         if (iPad == PlatformProfile.GetPrimaryPad()) {
             pApp->SetAction(iPad, eAppAction_ExitWorld);
@@ -316,10 +316,10 @@ int Game::GetLocalPlayerCount(void) {
 // 			 std::uint32_t dwSize=0;
 // 			 // 4J-PB - out for now for DaveK so he doesn't get the
 // birthday cape #ifdef _CONTENT_PACKAGE
-// C4JStorage::ETMSStatus eTMSStatus;
-// 			 eTMSStatus=StorageManager.ReadTMSFile(PlatformProfile.GetPrimaryPad(),C4JStorage::eGlobalStorage_Title,C4JStorage::eTMS_FileType_Graphic,
+// IPlatformStorage::ETMSStatus eTMSStatus;
+// 			 eTMSStatus=PlatformStorage.ReadTMSFile(PlatformProfile.GetPrimaryPad(),IPlatformStorage::eGlobalStorage_Title,IPlatformStorage::eTMS_FileType_Graphic,
 // L"Default_Cape.png",&pBuffer, &dwSize);
-// 			 if(eTMSStatus==C4JStorage::ETMSStatus_Idle)
+// 			 if(eTMSStatus==IPlatformStorage::ETMSStatus_Idle)
 // 			 {
 // 				 app.AddMemoryTextureFile(wTemp,pBuffer,dwSize);
 // 			 }
@@ -330,7 +330,7 @@ int Game::GetLocalPlayerCount(void) {
 
 
 //  int Game::DLCReadCallback(void*
-//  pParam,C4JStorage::DLC_FILE_DETAILS *pDLCData)
+//  pParam,IPlatformStorage::DLC_FILE_DETAILS *pDLCData)
 //  {
 //
 //

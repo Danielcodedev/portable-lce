@@ -63,8 +63,8 @@ void WindowsGame::TemporaryCreateGameStart() {
     app.ClearTerrainFeaturePosition();
     std::wstring wWorldName = L"TestWorld";
 
-    StorageManager.ResetSaveData();
-    StorageManager.SetSaveTitle(wWorldName.c_str());
+    PlatformStorage.ResetSaveData();
+    PlatformStorage.SetSaveTitle(wWorldName.c_str());
 
     bool isFlat = false;
     int64_t seedValue =

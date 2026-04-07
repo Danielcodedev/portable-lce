@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "app/common/UI/All Platforms/UIEnums.h"
 #include "app/common/UI/Controls/UIControl.h"
 #include "app/common/UI/Controls/UIControl_ButtonList.h"
@@ -31,7 +31,7 @@ private:
     UI_END_MAP_ELEMENTS_AND_NAMES()
 
     static int ExitDLCMainMenu(void* pParam, int iPad,
-                               C4JStorage::EMessageResult result);
+                               IPlatformStorage::EMessageResult result);
 
 public:
     UIScene_DLCMainMenu(int iPad, void* initData, UILayer* parentLayer);

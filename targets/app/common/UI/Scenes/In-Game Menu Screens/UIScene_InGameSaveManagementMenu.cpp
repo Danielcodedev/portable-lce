@@ -80,8 +80,8 @@ UIScene_InGameSaveManagementMenu::~UIScene_InGameSaveManagementMenu() {
         delete[] m_saveDetails;
     }
     app.unlockSaveNotification();
-    StorageManager.SetSaveDisabled(false);
-    StorageManager.ContinueIncompleteOperation();
+    PlatformStorage.SetSaveDisabled(false);
+    PlatformStorage.ContinueIncompleteOperation();
 }
 
 void UIScene_InGameSaveManagementMenu::updateTooltips() {
@@ -98,12 +98,12 @@ void UIScene_InGameSaveManagementMenu::updateTooltips() {
 void UIScene_InGameSaveManagementMenu::Initialise() {
     m_iSaveListIndex = 0;
 
-    if (StorageManager.GetSaveDisabled()) {
+    if (PlatformStorage.GetSaveDisabled()) {
         GetSaveInfo();
     } else {
         // 4J-PB - we need to check that there is enough space left to create a
         // copy of the save (for a rename)
-        bool bCanRename = StorageManager.EnoughSpaceForAMinSaveGame();
+        bool bCanRename = PlatformStorage.EnoughSpaceForAMinSaveGame();
 
         GetSaveInfo();
     }
@@ -154,7 +154,7 @@ void UIScene_InGameSaveManagementMenu::tick() {
 
         // Display the saves if we have them
         if (!m_bSavesDisplayed) {
-            m_pSaveDetails = StorageManager.ReturnSavesInfo();
+            m_pSaveDetails = PlatformStorage.ReturnSavesInfo();
             if (m_pSaveDetails != nullptr) {
                 m_spaceIndicatorSaves.reset();
 
@@ -194,15 +194,15 @@ void UIScene_InGameSaveManagementMenu::tick() {
                 m_bRetrievingSaveThumbnails = true;
                 app.DebugPrintf("Requesting the first thumbnail\n");
                 // set the save to load
-                PSAVE_DETAILS pSaveDetails = StorageManager.ReturnSavesInfo();
-                C4JStorage::ESaveGameState eLoadStatus =
-                    StorageManager.LoadSaveDataThumbnail(
+                PSAVE_DETAILS pSaveDetails = PlatformStorage.ReturnSavesInfo();
+                IPlatformStorage::ESaveGameState eLoadStatus =
+                    PlatformStorage.LoadSaveDataThumbnail(
                         &pSaveDetails->SaveInfoA[(int)m_iRequestingThumbnailId],
                         [this](std::uint8_t* data, unsigned int bytes) {
                             return loadSaveDataThumbnailReturned(data, bytes);
                         });
 
-                if (eLoadStatus != C4JStorage::ESaveGame_GetSaveThumbnail) {
+                if (eLoadStatus != IPlatformStorage::ESaveGame_GetSaveThumbnail) {
                     // something went wrong
                     m_bRetrievingSaveThumbnails = false;
                     m_bAllLoaded = true;
@@ -259,16 +259,16 @@ void UIScene_InGameSaveManagementMenu::tick() {
                     app.DebugPrintf("Requesting another thumbnail\n");
                     // set the save to load
                     PSAVE_DETAILS pSaveDetails =
-                        StorageManager.ReturnSavesInfo();
-                    C4JStorage::ESaveGameState eLoadStatus =
-                        StorageManager.LoadSaveDataThumbnail(
+                        PlatformStorage.ReturnSavesInfo();
+                    IPlatformStorage::ESaveGameState eLoadStatus =
+                        PlatformStorage.LoadSaveDataThumbnail(
                             &pSaveDetails
                                  ->SaveInfoA[(int)m_iRequestingThumbnailId],
                             [this](std::uint8_t* data, unsigned int bytes) {
                                 return loadSaveDataThumbnailReturned(data,
                                                                      bytes);
                             });
-                    if (eLoadStatus != C4JStorage::ESaveGame_GetSaveThumbnail) {
+                    if (eLoadStatus != IPlatformStorage::ESaveGame_GetSaveThumbnail) {
                         // something went wrong
                         m_bRetrievingSaveThumbnails = false;
                         m_bAllLoaded = true;
@@ -295,7 +295,7 @@ void UIScene_InGameSaveManagementMenu::tick() {
             m_bSavesDisplayed = false;
             m_iSaveInfoC = 0;
             m_buttonListSaves.clearList();
-            // StorageManager.ClearSavesInfo();
+            // PlatformStorage.ClearSavesInfo();
             // GetSaveInfo();
             m_iState = e_SavesIdle;
             break;
@@ -314,10 +314,10 @@ void UIScene_InGameSaveManagementMenu::GetSaveInfo() {
     m_iSaveInfoC = 0;
     m_controlSavesTimer.setVisible(true);
 
-    m_pSaveDetails = StorageManager.ReturnSavesInfo();
+    m_pSaveDetails = PlatformStorage.ReturnSavesInfo();
     if (m_pSaveDetails == nullptr) {
-        C4JStorage::ESaveGameState eSGIStatus =
-            StorageManager.GetSavesInfo(m_iPad, nullptr, (char*)"save");
+        IPlatformStorage::ESaveGameState eSGIStatus =
+            PlatformStorage.GetSavesInfo(m_iPad, nullptr, (char*)"save");
     }
 
     return;
@@ -394,16 +394,16 @@ void UIScene_InGameSaveManagementMenu::handlePress(F64 controlId, F64 childId) {
 }
 
 int UIScene_InGameSaveManagementMenu::DeleteSaveDialogReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     UIScene_InGameSaveManagementMenu* pClass =
         (UIScene_InGameSaveManagementMenu*)pParam;
     // results switched for this dialog
 
-    if (result == C4JStorage::EMessage_ResultDecline) {
+    if (result == IPlatformStorage::EMessage_ResultDecline) {
         if (app.DebugSettingsOn() && app.GetLoadSavesFromFolderEnabled()) {
             pClass->m_bIgnoreInput = false;
         } else {
-            StorageManager.DeleteSaveData(
+            PlatformStorage.DeleteSaveData(
                 &pClass->m_pSaveDetails->SaveInfoA[pClass->m_iSaveListIndex],
                 [pClass](const bool bRes) {
                     return pClass->deleteSaveDataReturned(bRes);

@@ -8,7 +8,7 @@
 
 #include "app/common/App_structs.h"
 #include "app/common/DLC/DLCManager.h"
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "platform/XboxStubs.h"
 
 struct SCreditTextItemDef;
@@ -32,7 +32,7 @@ public:
     void clearDLCInstalled() { m_bDLCInstallProcessCompleted = false; }
 
     static int marketplaceCountsCallback(void* pParam,
-                                         C4JStorage::DLC_TMS_DETAILS*,
+                                         IPlatformStorage::DLC_TMS_DETAILS*,
                                          int iPad);
 
     // DLC info registration
@@ -73,7 +73,7 @@ public:
     unsigned int addTMSPPFileTypeRequest(eDLCContentType eType,
                                          bool bPromote = false);
     static int tmsPPFileReturned(void* pParam, int iPad, int iUserData,
-                                 C4JStorage::PTMSPP_FILEDATA pFileData,
+                                 IPlatformStorage::PTMSPP_FILEDATA pFileData,
                                  const char* szFilename);
 
     // Credit text

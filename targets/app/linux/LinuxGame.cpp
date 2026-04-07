@@ -6,7 +6,7 @@
 
 #include "platform/profile/profile.h"
 #include "platform/sdl2/Render.h"
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/Game.h"
 #include "app/common/Network/GameNetworkManager.h"
@@ -72,8 +72,8 @@ void LinuxGame::TemporaryCreateGameStart() {
     app.ClearTerrainFeaturePosition();
     std::wstring wWorldName = L"TestWorld";
 
-    StorageManager.ResetSaveData();
-    StorageManager.SetSaveTitle(wWorldName.c_str());
+    PlatformStorage.ResetSaveData();
+    PlatformStorage.SetSaveTitle(wWorldName.c_str());
 
     bool isFlat = false;
     int64_t seedValue =

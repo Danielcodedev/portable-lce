@@ -56,7 +56,7 @@ void BannedListManager::addLevel(int iPad, PlayerUID xuid,
         // 4J-PB - write to TMS++ now
 
         // bool
-        // bRes=StorageManager.WriteTMSFile(iPad,C4JStorage::eGlobalStorage_TitleUser,L"BannedList",(std::uint8_t*)pBannedList,
+        // bRes=PlatformStorage.WriteTMSFile(iPad,IPlatformStorage::eGlobalStorage_TitleUser,L"BannedList",(std::uint8_t*)pBannedList,
         // dwDataBytes);
 
         delete[] pBannedList;

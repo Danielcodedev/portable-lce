@@ -19,7 +19,7 @@
 #include "minecraft/world/level/tile/entity/HopperTileEntity.h"
 #include "minecraft/world/level/storage/ConsoleSaveFileIO/compression.h"
 #include "platform/profile/profile.h"
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 
 #include <cstring>
 #include <sstream>
@@ -431,12 +431,12 @@ bool MenuController::loadBeaconMenu(
 }
 
 int MenuController::texturePackDialogReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     return 0;
 }
 
 int MenuController::unlockFullInviteReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     Minecraft* pMinecraft = Minecraft::GetInstance();
     bool bNoPlayer;
 
@@ -448,16 +448,16 @@ int MenuController::unlockFullInviteReturned(
 }
 
 int MenuController::unlockFullSaveReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     return 0;
 }
 
 int MenuController::unlockFullExitReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     Game* pApp = (Game*)pParam;
     Minecraft* pMinecraft = Minecraft::GetInstance();
 
-    if (result != C4JStorage::EMessage_ResultAccept) {
+    if (result != IPlatformStorage::EMessage_ResultAccept) {
         pApp->SetAction(pMinecraft->player->GetXboxPad(),
                         eAppAction_ExitWorldTrial);
     }
@@ -466,11 +466,11 @@ int MenuController::unlockFullExitReturned(
 }
 
 int MenuController::trialOverReturned(void* pParam, int iPad,
-                                      C4JStorage::EMessageResult result) {
+                                      IPlatformStorage::EMessageResult result) {
     Game* pApp = (Game*)pParam;
     Minecraft* pMinecraft = Minecraft::GetInstance();
 
-    if (result != C4JStorage::EMessage_ResultAccept) {
+    if (result != IPlatformStorage::EMessage_ResultAccept) {
         pApp->SetAction(pMinecraft->player->GetXboxPad(), eAppAction_ExitTrial);
     }
 
@@ -521,8 +521,8 @@ void MenuController::exitGameFromRemoteSave(void* lpParameter) {
 }
 
 int MenuController::exitGameFromRemoteSaveDialogReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
-    if (result == C4JStorage::EMessage_ResultDecline) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
+    if (result == IPlatformStorage::EMessage_ResultDecline) {
         app.SetAction(iPad, eAppAction_ExitWorld);
     } else {
         UIScene_FullscreenProgress* pScene =

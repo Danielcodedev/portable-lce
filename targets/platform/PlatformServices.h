@@ -4,7 +4,6 @@
 #include "IPlatformLeaderboard.h"
 #include "IPlatformNetwork.h"
 #include "IPlatformRenderer.h"
-#include "IPlatformStorage.h"
 
 // Interface references to platform services. Game code uses these
 // instead of concrete globals directly. Bindings are established
@@ -12,4 +11,3 @@
 
 extern IPlatformFileIO& PlatformFileIO;
 extern IPlatformRenderer& PlatformRender;
-extern IPlatformStorage& PlatformStorage;

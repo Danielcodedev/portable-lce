@@ -97,7 +97,7 @@ File::File(const std::wstring& pathname) {
 
 #ifdef _WINDOWS64
     std::string path = std::filesystem::path(m_abstractPathName).string();
-    std::string finalPath = StorageManager.GetMountedPath(path.c_str());
+    std::string finalPath = PlatformStorage.GetMountedPath(path.c_str());
     if (finalPath.size() == 0) finalPath = path;
     m_abstractPathName = convStringToWstring(finalPath);
 #endif

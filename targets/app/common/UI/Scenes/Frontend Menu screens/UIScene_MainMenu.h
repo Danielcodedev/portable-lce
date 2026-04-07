@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "app/common/UI/All Platforms/UIEnums.h"
 #include "app/common/UI/Controls/UIControl.h"
 #include "app/common/UI/Controls/UIControl_Button.h"
@@ -145,14 +145,14 @@ private:
     static int Achievements_SignInReturned(void* pParam, bool bContinue,
                                            int iPad);
     static int MustSignInReturned(void* pParam, int iPad,
-                                  C4JStorage::EMessageResult result);
+                                  IPlatformStorage::EMessageResult result);
 
     static int Leaderboards_SignInReturned(void* pParam, bool bContinue,
                                            int iPad);
     static int UnlockFullGame_SignInReturned(void* pParam, bool bContinue,
                                              int iPad);
     static int ExitGameReturned(void* pParam, int iPad,
-                                C4JStorage::EMessageResult result);
+                                IPlatformStorage::EMessageResult result);
     bool m_bRunGameChosen;
     int32_t m_errorCode;
     bool m_bErrorDialogRunning;

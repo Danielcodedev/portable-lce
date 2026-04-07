@@ -222,7 +222,7 @@ void UIScene_JoinMenu::friendSessionUpdated(bool success, void* pParam) {
 }
 
 int UIScene_JoinMenu::ErrorDialogReturned(void* pParam, int iPad,
-                                          const C4JStorage::EMessageResult) {
+                                          const IPlatformStorage::EMessageResult) {
     UIScene_JoinMenu* scene = (UIScene_JoinMenu*)pParam;
     ui.NavigateBack(scene->m_iPad);
 

@@ -12,7 +12,7 @@
 #include "platform/input/input.h"
 #include "platform/profile/profile.h"
 #include "platform/sdl2/Render.h"
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/Game.h"
 #include "app/common/GameRules/GameRuleManager.h"
@@ -1301,7 +1301,7 @@ void CGameNetworkManager::GameInviteReceived(int userIndex,
 
         // 4J-PB - it's possible there is no primary pad here, when accepting an
         // invite from the dashboard
-        // StorageManager.RequestMessageBox( IDS_NO_MULTIPLAYER_PRIVILEGE_TITLE,
+        // PlatformStorage.RequestMessageBox( IDS_NO_MULTIPLAYER_PRIVILEGE_TITLE,
         // IDS_NO_MULTIPLAYER_PRIVILEGE_JOIN_TEXT,
         // uiIDA,1,PlatformProfile.GetPrimaryPad(),nullptr,nullptr,
         // app.GetStringTable());
@@ -1505,7 +1505,7 @@ void CGameNetworkManager::ServerStoppedWait() {
             result = m_hServerStoppedEvent->waitForSignal(20);
             // Tick some simple things
             PlatformProfile.Tick();
-            StorageManager.Tick();
+            PlatformStorage.Tick();
             PlatformInput.Tick();
             RenderManager.Tick();
             ui.tick();

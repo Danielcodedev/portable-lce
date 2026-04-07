@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "app/common/UI/All Platforms/UIEnums.h"
 #include "app/common/UI/Controls/UIControl_Button.h"
 #include "app/common/UI/Controls/UIControl_ButtonList.h"
@@ -72,7 +72,7 @@ public:
     void tick();
     static void friendSessionUpdated(bool success, void* pParam);
     static int ErrorDialogReturned(void* pParam, int iPad,
-                                   const C4JStorage::EMessageResult);
+                                   const IPlatformStorage::EMessageResult);
 
     virtual void updateTooltips();
     virtual void updateComponents();

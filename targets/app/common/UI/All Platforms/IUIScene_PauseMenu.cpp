@@ -32,12 +32,12 @@
 class TexturePack;
 
 int IUIScene_PauseMenu::ExitGameDialogReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     IUIScene_PauseMenu* pScene = dynamic_cast<IUIScene_PauseMenu*>(
         ui.GetSceneFromCallbackId((std::size_t)pParam));
 
     // Results switched for this dialog
-    if (result == C4JStorage::EMessage_ResultDecline) {
+    if (result == IPlatformStorage::EMessage_ResultDecline) {
         if (pScene) pScene->SetIgnoreInput(true);
         app.SetAction(iPad, eAppAction_ExitWorld);
     }
@@ -45,15 +45,15 @@ int IUIScene_PauseMenu::ExitGameDialogReturned(
 }
 
 int IUIScene_PauseMenu::ExitGameSaveDialogReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     IUIScene_PauseMenu* pScene = dynamic_cast<IUIScene_PauseMenu*>(
         ui.GetSceneFromCallbackId((std::size_t)pParam));
 
     // Exit with or without saving
     // Decline means save in this dialog
-    if (result == C4JStorage::EMessage_ResultDecline ||
-        result == C4JStorage::EMessage_ResultThirdOption) {
-        if (result == C4JStorage::EMessage_ResultDecline)  // Save
+    if (result == IPlatformStorage::EMessage_ResultDecline ||
+        result == IPlatformStorage::EMessage_ResultThirdOption) {
+        if (result == IPlatformStorage::EMessage_ResultDecline)  // Save
         {
             // 4J-PB - Is the player trying to save but they are using a trial
             // texturepack ?
@@ -86,7 +86,7 @@ int IUIScene_PauseMenu::ExitGameSaveDialogReturned(
 
             // does the save exist?
             bool bSaveExists;
-            StorageManager.DoesSaveExist(&bSaveExists);
+            PlatformStorage.DoesSaveExist(&bSaveExists);
             // 4J-PB - we check if the save exists inside the libs
             // we need to ask if they are sure they want to overwrite the
             // existing game
@@ -122,16 +122,16 @@ int IUIScene_PauseMenu::ExitGameSaveDialogReturned(
 }
 
 int IUIScene_PauseMenu::ExitGameAndSaveReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     // 4J-PB - we won't come in here if we have a trial texture pack
     IUIScene_PauseMenu* pScene = dynamic_cast<IUIScene_PauseMenu*>(
         ui.GetSceneFromCallbackId((std::size_t)pParam));
 
     // results switched for this dialog
-    if (result == C4JStorage::EMessage_ResultDecline) {
+    if (result == IPlatformStorage::EMessage_ResultDecline) {
         // int32_t saveOrCheckpointId = 0;
         // bool validSave =
-        // StorageManager.GetSaveUniqueNumber(&saveOrCheckpointId);
+        // PlatformStorage.GetSaveUniqueNumber(&saveOrCheckpointId);
         // SentientManager.RecordLevelSaveOrCheckpoint(PlatformProfile.GetPrimaryPad(),
         // saveOrCheckpointId);
         if (pScene) pScene->SetIgnoreInput(true);
@@ -167,12 +167,12 @@ int IUIScene_PauseMenu::ExitGameAndSaveReturned(
 }
 
 int IUIScene_PauseMenu::ExitGameDeclineSaveReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     IUIScene_PauseMenu* pScene = dynamic_cast<IUIScene_PauseMenu*>(
         ui.GetSceneFromCallbackId((std::size_t)pParam));
 
     // results switched for this dialog
-    if (result == C4JStorage::EMessage_ResultDecline) {
+    if (result == IPlatformStorage::EMessage_ResultDecline) {
         if (pScene) pScene->SetIgnoreInput(true);
         MinecraftServer::getInstance()->setSaveOnExit(false);
         // flag a app action of exit game
@@ -206,7 +206,7 @@ int IUIScene_PauseMenu::ExitGameDeclineSaveReturned(
 }
 
 int IUIScene_PauseMenu::WarningTrialTexturePackReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     return 0;
 }
 
@@ -452,9 +452,9 @@ void IUIScene_PauseMenu::_ExitWorld(void* lpParameter) {
 }
 
 int IUIScene_PauseMenu::SaveGameDialogReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     // results switched for this dialog
-    if (result == C4JStorage::EMessage_ResultDecline) {
+    if (result == IPlatformStorage::EMessage_ResultDecline) {
         // flag a app action of save game
         app.SetAction(iPad, eAppAction_SaveGame);
     }
@@ -462,9 +462,9 @@ int IUIScene_PauseMenu::SaveGameDialogReturned(
 }
 
 int IUIScene_PauseMenu::EnableAutosaveDialogReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     // results switched for this dialog
-    if (result == C4JStorage::EMessage_ResultDecline) {
+    if (result == IPlatformStorage::EMessage_ResultDecline) {
         // Set the global flag, so that we don't disable saving again once the
         // save is complete
         app.SetGameHostOption(eGameHostOption_DisableSaving, 0);
@@ -475,7 +475,7 @@ int IUIScene_PauseMenu::EnableAutosaveDialogReturned(
         app.SetGameHostOption(eGameHostOption_DisableSaving, 1);
     }
     // Re-enable saving temporarily
-    StorageManager.SetSaveDisabled(false);
+    PlatformStorage.SetSaveDisabled(false);
 
     // flag a app action of save game
     app.SetAction(iPad, eAppAction_SaveGame);
@@ -483,13 +483,13 @@ int IUIScene_PauseMenu::EnableAutosaveDialogReturned(
 }
 
 int IUIScene_PauseMenu::DisableAutosaveDialogReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     // results switched for this dialog
-    if (result == C4JStorage::EMessage_ResultDecline) {
+    if (result == IPlatformStorage::EMessage_ResultDecline) {
         // Set the global flag, so that we disable saving again once the save is
         // complete
         app.SetGameHostOption(eGameHostOption_DisableSaving, 1);
-        StorageManager.SetSaveDisabled(false);
+        PlatformStorage.SetSaveDisabled(false);
 
         // flag a app action of save game
         app.SetAction(iPad, eAppAction_SaveGame);

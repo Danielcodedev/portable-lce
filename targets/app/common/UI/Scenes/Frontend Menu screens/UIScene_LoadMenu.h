@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <string>
 
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "IUIScene_StartGame.h"
 #include "app/common/DLC/DLCPack.h"
 #include "app/common/UI/All Platforms/UIEnums.h"
@@ -120,19 +120,19 @@ private:
     void LaunchGame(void);
 
     static int ConfirmLoadReturned(void* pParam, int iPad,
-                                   C4JStorage::EMessageResult result);
+                                   IPlatformStorage::EMessageResult result);
     static void StartGameFromSave(UIScene_LoadMenu* pClass, int localUsersMask);
     int loadSaveDataReturned(bool bIsCorrupt, bool bIsOwner);
     static int TrophyDialogReturned(void* pParam, int iPad,
-                                    C4JStorage::EMessageResult result);
+                                    IPlatformStorage::EMessageResult result);
     static int LoadDataComplete(void* pParam);
     static int CheckResetNetherReturned(void* pParam, int iPad,
-                                        C4JStorage::EMessageResult result);
+                                        IPlatformStorage::EMessageResult result);
     static int DeleteSaveDialogReturned(void* pParam, int iPad,
-                                        C4JStorage::EMessageResult result);
+                                        IPlatformStorage::EMessageResult result);
     int deleteSaveDataReturned(bool bSuccess);
     static int MustSignInReturnedPSN(void* pParam, int iPad,
-                                     C4JStorage::EMessageResult result);
+                                     IPlatformStorage::EMessageResult result);
 
 public:
     int loadSaveDataThumbnailReturned(std::uint8_t* pbThumbnail,

@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "app/common/UI/All Platforms/UIEnums.h"
 #include "app/common/UI/All Platforms/UIStructs.h"
 #include "app/common/UI/Controls/UIControl.h"
@@ -140,11 +140,11 @@ public:
                                      unsigned int thumbnailBytes);
     static int LoadSaveCallback(void* lpParam, bool bRes);
     static int DeleteSaveDialogReturned(void* pParam, int iPad,
-                                        C4JStorage::EMessageResult result);
+                                        IPlatformStorage::EMessageResult result);
     static int SaveOptionsDialogReturned(void* pParam, int iPad,
-                                         C4JStorage::EMessageResult result);
+                                         IPlatformStorage::EMessageResult result);
     static int TexturePackDialogReturned(void* pParam, int iPad,
-                                         C4JStorage::EMessageResult result);
+                                         IPlatformStorage::EMessageResult result);
     int deleteSaveDataReturned(bool bRes);
     int renameSaveDataReturned(bool bRes);
     int handleKeyboardCompleteWorldName(bool bRes);
@@ -202,10 +202,10 @@ private:
     int crossSaveGetSavesInfoCallback(SAVE_DETAILS* pSaveDetails, bool bRes);
     int loadCrossSaveDataCallback(bool bIsCorrupt, bool bIsOwner);
     static int CrossSaveFinishedCallback(void* pParam, int iPad,
-                                         C4JStorage::EMessageResult result);
+                                         IPlatformStorage::EMessageResult result);
     int crossSaveDeleteOnErrorReturned(bool bRes);
     static int RemoteSaveNotFoundCallback(void* pParam, int iPad,
-                                          C4JStorage::EMessageResult result);
+                                          IPlatformStorage::EMessageResult result);
     static int DownloadSonyCrossSaveThreadProc(void* lpParameter);
     static void SaveTransferReturned(void* lpParam, SonyRemoteStorage::Status s,
                                      int error_code);
@@ -238,8 +238,8 @@ private:
                                    int error_code);
     static void CancelSaveUploadCallback(void* lpParam);
     static int SaveTransferDialogReturned(void* pParam, int iPad,
-                                          C4JStorage::EMessageResult result);
+                                          IPlatformStorage::EMessageResult result);
     static int CrossSaveUploadFinishedCallback(
-        void* pParam, int iPad, C4JStorage::EMessageResult result);
+        void* pParam, int iPad, IPlatformStorage::EMessageResult result);
 #endif
 };

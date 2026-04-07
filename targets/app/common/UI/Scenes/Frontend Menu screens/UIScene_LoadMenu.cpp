@@ -764,15 +764,15 @@ void UIScene_LoadMenu::LaunchGame(void) {
                     } else {
                         // set the save to load
                         PSAVE_DETAILS pSaveDetails =
-                            StorageManager.ReturnSavesInfo();
+                            PlatformStorage.ReturnSavesInfo();
                         app.DebugPrintf(
                             "Loading save s [%s]\n",
                             pSaveDetails->SaveInfoA[(int)m_iSaveGameInfoIndex]
                                 .UTF8SaveTitle,
                             pSaveDetails->SaveInfoA[(int)m_iSaveGameInfoIndex]
                                 .UTF8SaveFilename);
-                        C4JStorage::ESaveGameState eLoadStatus =
-                            StorageManager.LoadSaveData(
+                        IPlatformStorage::ESaveGameState eLoadStatus =
+                            PlatformStorage.LoadSaveData(
                                 &pSaveDetails
                                      ->SaveInfoA[(int)m_iSaveGameInfoIndex],
                                 [this](bool bCorrupt, bool bOwner) {
@@ -781,10 +781,10 @@ void UIScene_LoadMenu::LaunchGame(void) {
 
 #if TO_BE_IMPLEMENTED
                         if (eLoadStatus ==
-                            C4JStorage::ELoadGame_DeviceRemoved) {
+                            IPlatformStorage::ELoadGame_DeviceRemoved) {
                             // disable saving
-                            StorageManager.SetSaveDisabled(true);
-                            StorageManager.SetSaveDeviceSelected(m_iPad, false);
+                            PlatformStorage.SetSaveDisabled(true);
+                            PlatformStorage.SetSaveDeviceSelected(m_iPad, false);
                             unsigned int uiIDA[1];
                             uiIDA[0] = IDS_OK;
                             ui.RequestErrorMessage(
@@ -816,24 +816,24 @@ void UIScene_LoadMenu::LaunchGame(void) {
             LoadDataComplete(this);
         } else {
             // set the save to load
-            PSAVE_DETAILS pSaveDetails = StorageManager.ReturnSavesInfo();
+            PSAVE_DETAILS pSaveDetails = PlatformStorage.ReturnSavesInfo();
             app.DebugPrintf("Loading save %s [%s]\n",
                             pSaveDetails->SaveInfoA[(int)m_iSaveGameInfoIndex]
                                 .UTF8SaveTitle,
                             pSaveDetails->SaveInfoA[(int)m_iSaveGameInfoIndex]
                                 .UTF8SaveFilename);
-            C4JStorage::ESaveGameState eLoadStatus =
-                StorageManager.LoadSaveData(
+            IPlatformStorage::ESaveGameState eLoadStatus =
+                PlatformStorage.LoadSaveData(
                     &pSaveDetails->SaveInfoA[(int)m_iSaveGameInfoIndex],
                     [this](bool bCorrupt, bool bOwner) {
                         return loadSaveDataReturned(bCorrupt, bOwner);
                     });
 
 #if TO_BE_IMPLEMENTED
-            if (eLoadStatus == C4JStorage::ELoadGame_DeviceRemoved) {
+            if (eLoadStatus == IPlatformStorage::ELoadGame_DeviceRemoved) {
                 // disable saving
-                StorageManager.SetSaveDisabled(true);
-                StorageManager.SetSaveDeviceSelected(m_iPad, false);
+                PlatformStorage.SetSaveDisabled(true);
+                PlatformStorage.SetSaveDeviceSelected(m_iPad, false);
                 unsigned int uiIDA[1];
                 uiIDA[0] = IDS_OK;
                 ui.RequestErrorMessage(
@@ -849,14 +849,14 @@ void UIScene_LoadMenu::LaunchGame(void) {
 }
 
 int UIScene_LoadMenu::CheckResetNetherReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     UIScene_LoadMenu* pClass = (UIScene_LoadMenu*)pParam;
 
     // results switched for this dialog
-    if (result == C4JStorage::EMessage_ResultDecline) {
+    if (result == IPlatformStorage::EMessage_ResultDecline) {
         // continue and reset the nether
         pClass->LaunchGame();
-    } else if (result == C4JStorage::EMessage_ResultAccept) {
+    } else if (result == IPlatformStorage::EMessage_ResultAccept) {
         // turn off the reset nether and continue
         pClass->m_MoreOptionsParams.bResetNether = false;
         pClass->LaunchGame();
@@ -868,34 +868,34 @@ int UIScene_LoadMenu::CheckResetNetherReturned(
 }
 
 int UIScene_LoadMenu::ConfirmLoadReturned(void* pParam, int iPad,
-                                          C4JStorage::EMessageResult result) {
+                                          IPlatformStorage::EMessageResult result) {
     UIScene_LoadMenu* pClass = (UIScene_LoadMenu*)pParam;
 
-    if (result == C4JStorage::EMessage_ResultAccept) {
+    if (result == IPlatformStorage::EMessage_ResultAccept) {
         if (pClass->m_levelGen != nullptr) {
             pClass->m_bIsCorrupt = false;
             pClass->LoadDataComplete(pClass);
         } else {
             // set the save to load
-            PSAVE_DETAILS pSaveDetails = StorageManager.ReturnSavesInfo();
+            PSAVE_DETAILS pSaveDetails = PlatformStorage.ReturnSavesInfo();
             app.DebugPrintf(
                 "Loading save %s [%s]\n",
                 pSaveDetails->SaveInfoA[(int)pClass->m_iSaveGameInfoIndex]
                     .UTF8SaveTitle,
                 pSaveDetails->SaveInfoA[(int)pClass->m_iSaveGameInfoIndex]
                     .UTF8SaveFilename);
-            C4JStorage::ESaveGameState eLoadStatus =
-                StorageManager.LoadSaveData(
+            IPlatformStorage::ESaveGameState eLoadStatus =
+                PlatformStorage.LoadSaveData(
                     &pSaveDetails->SaveInfoA[(int)pClass->m_iSaveGameInfoIndex],
                     [pClass](const bool bCorrupt, const bool bOwner) {
                         return pClass->loadSaveDataReturned(bCorrupt, bOwner);
                     });
 
 #if TO_BE_IMPLEMENTED
-            if (eLoadStatus == C4JStorage::ELoadGame_DeviceRemoved) {
+            if (eLoadStatus == IPlatformStorage::ELoadGame_DeviceRemoved) {
                 // disable saving
-                StorageManager.SetSaveDisabled(true);
-                StorageManager.SetSaveDeviceSelected(m_iPad, false);
+                PlatformStorage.SetSaveDisabled(true);
+                PlatformStorage.SetSaveDeviceSelected(m_iPad, false);
                 unsigned int uiIDA[1];
                 uiIDA[0] = IDS_OK;
                 ui.RequestErrorMessage(
@@ -1026,19 +1026,19 @@ int UIScene_LoadMenu::loadSaveDataReturned(bool bIsCorrupt, bool bIsOwner) {
 }
 
 int UIScene_LoadMenu::TrophyDialogReturned(void* pParam, int iPad,
-                                           C4JStorage::EMessageResult result) {
+                                           IPlatformStorage::EMessageResult result) {
     UIScene_LoadMenu* pClass = (UIScene_LoadMenu*)pParam;
     return LoadDataComplete(pClass);
 }
 
 int UIScene_LoadMenu::DeleteSaveDialogReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     UIScene_LoadMenu* pClass = (UIScene_LoadMenu*)pParam;
 
     // results switched for this dialog
-    if (result == C4JStorage::EMessage_ResultDecline) {
-        PSAVE_DETAILS pSaveDetails = StorageManager.ReturnSavesInfo();
-        StorageManager.DeleteSaveData(
+    if (result == IPlatformStorage::EMessage_ResultDecline) {
+        PSAVE_DETAILS pSaveDetails = PlatformStorage.ReturnSavesInfo();
+        PlatformStorage.DeleteSaveData(
             &pSaveDetails->SaveInfoA[(int)pClass->m_iSaveGameInfoIndex],
             [pClass](const bool bSuccess) {
                 return pClass->deleteSaveDataReturned(bSuccess);
@@ -1063,11 +1063,11 @@ void UIScene_LoadMenu::StartGameFromSave(UIScene_LoadMenu* pClass,
     if (pClass->m_levelGen == nullptr) {
         int32_t saveOrCheckpointId = 0;
         bool validSave =
-            StorageManager.GetSaveUniqueNumber(&saveOrCheckpointId);
+            PlatformStorage.GetSaveUniqueNumber(&saveOrCheckpointId);
     } else {
-        StorageManager.ResetSaveData();
+        PlatformStorage.ResetSaveData();
         // Make our next save default to the name of the level
-        StorageManager.SetSaveTitle(
+        PlatformStorage.SetSaveTitle(
             pClass->m_levelGen->getDefaultSaveName().c_str());
     }
 
@@ -1080,7 +1080,7 @@ void UIScene_LoadMenu::StartGameFromSave(UIScene_LoadMenu* pClass,
             ? true
             : false;
 
-    PSAVE_DETAILS pSaveDetails = StorageManager.ReturnSavesInfo();
+    PSAVE_DETAILS pSaveDetails = PlatformStorage.ReturnSavesInfo();
 
     NetworkGameInitData* param = new NetworkGameInitData();
     param->seed = pClass->m_seed;

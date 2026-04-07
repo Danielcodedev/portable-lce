@@ -22,7 +22,7 @@
 #include "minecraft/world/level/tile/Tile.h"
 #include "platform/input/input.h"
 #include "platform/sdl2/Render.h"
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "app/common/Audio/SoundEngine.h"
 
 #include <cstring>
@@ -1126,7 +1126,7 @@ void GameSettingsManager::setSpecialTutorialCompletionFlag(int iPad,
 }
 
 int GameSettingsManager::displaySavingMessage(
-    C4JStorage::ESavingMessage eVal, int iPad) {
+    IPlatformStorage::ESavingMessage eVal, int iPad) {
     ui.ShowSavingMessage(iPad, eVal);
     return 0;
 }

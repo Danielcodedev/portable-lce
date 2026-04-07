@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "util/Timer.h"
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "minecraft/network/Connection.h"
 
 #include "minecraft/network/packet/DisconnectPacket.h"
@@ -188,9 +188,9 @@ public:
 
     // 4J Added
     static int HostDisconnectReturned(void* pParam, int iPad,
-                                      C4JStorage::EMessageResult result);
+                                      IPlatformStorage::EMessageResult result);
     static int ExitGameAndSaveReturned(void* pParam, int iPad,
-                                       C4JStorage::EMessageResult result);
+                                       IPlatformStorage::EMessageResult result);
     virtual void handleTextureChange(
         std::shared_ptr<TextureChangePacket> packet);
     virtual void handleTextureAndGeometryChange(

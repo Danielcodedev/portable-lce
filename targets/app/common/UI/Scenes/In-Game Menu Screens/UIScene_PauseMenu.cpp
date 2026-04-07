@@ -169,7 +169,7 @@ void UIScene_PauseMenu::updateControlsVisibility() {
     }
 
     // is saving disabled?
-    if (StorageManager.GetSaveDisabled()) {
+    if (PlatformStorage.GetSaveDisabled()) {
     }
 }
 
@@ -223,7 +223,7 @@ void UIScene_PauseMenu::handleInput(int iPad, int key, bool repeat,
                 // SD, the title crashes.
                 m_bIgnoreInput = true;
 
-                StorageManager.SetSaveDevice(
+                PlatformStorage.SetSaveDevice(
                     &UIScene_PauseMenu::DeviceSelectReturned, this, true);
             }
             rfHandled = true;
@@ -332,7 +332,7 @@ void UIScene_PauseMenu::handlePress(F64 controlId, F64 childId) {
                                    ->getSessionTimer();
                 }
 
-                if (StorageManager.GetSaveDisabled()) {
+                if (PlatformStorage.GetSaveDisabled()) {
                     uiIDA[0] = IDS_CONFIRM_CANCEL;
                     uiIDA[1] = IDS_CONFIRM_OK;
                     ui.RequestAlertMessage(
@@ -418,8 +418,8 @@ void UIScene_PauseMenu::PerformActionSaveGame() {
 
     // does the save exist?
     bool bSaveExists;
-    C4JStorage::ESaveGameState result =
-        StorageManager.DoesSaveExist(&bSaveExists);
+    IPlatformStorage::ESaveGameState result =
+        PlatformStorage.DoesSaveExist(&bSaveExists);
 
     {
         // we need to ask if they are sure they want to overwrite the
@@ -470,7 +470,7 @@ void UIScene_PauseMenu::HandleDLCMountingComplete() {
 }
 
 int UIScene_PauseMenu::UnlockFullSaveReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     Minecraft* pMinecraft = Minecraft::GetInstance();
 
     return 0;

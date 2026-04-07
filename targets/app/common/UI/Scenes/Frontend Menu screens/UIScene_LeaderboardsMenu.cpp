@@ -849,7 +849,7 @@ void UIScene_LeaderboardsMenu::handleRequestMoreData(F64 startIndex, bool up) {
 void UIScene_LeaderboardsMenu::handleTimerComplete(int id) {}
 
 int UIScene_LeaderboardsMenu::ExitLeaderboards(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     UIScene_LeaderboardsMenu* pClass = (UIScene_LeaderboardsMenu*)pParam;
 
     pClass->navigateBack();

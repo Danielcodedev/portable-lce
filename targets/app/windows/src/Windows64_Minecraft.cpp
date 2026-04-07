@@ -794,7 +794,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
         //		PlatformProfile.Tick();
 
-        StorageManager.Tick();
+        PlatformStorage.Tick();
 
         RenderManager.Tick();
 

@@ -15,7 +15,7 @@
 
 #include "platform/profile/profile.h"
 #include "platform/sdl2/Render.h"
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/Audio/SoundEngine.h"
 #include "app/common/DLC/DLCManager.h"
@@ -1074,7 +1074,7 @@ void Minecraft::run_middle() {
                         // autosave If saving isn't disabled, and the main
                         // player has a app action running , or has any crafting
                         // or containers open, don't autosave
-                        if (!StorageManager.GetSaveDisabled() &&
+                        if (!PlatformStorage.GetSaveDisabled() &&
                             (gameServices().getXuiAction(PlatformInput.GetPrimaryPad()) ==
                              eAppAction_Idle)) {
                             if (!ui.IsPauseMenuDisplayed(

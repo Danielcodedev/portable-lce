@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "app/common/UI/All Platforms/UIEnums.h"
 #include "app/common/UI/Controls/UIControl_Button.h"
 #include "app/common/UI/Controls/UIControl_Label.h"
@@ -26,7 +26,7 @@ private:
         eControl_COUNT
     };
 
-    int (*m_Func)(void*, int, const C4JStorage::EMessageResult);
+    int (*m_Func)(void*, int, const IPlatformStorage::EMessageResult);
     void* m_lpParam;
     int m_buttonCount;
 

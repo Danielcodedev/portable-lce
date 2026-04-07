@@ -32,7 +32,7 @@
 #include "minecraft/world/phys/AABB.h"
 #include "platform/PlatformServices.h"
 #include "platform/profile/profile.h"
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "strings.h"
 #include "util/StringHelpers.h"
 
@@ -551,7 +551,7 @@ void LevelGenerationOptions::loadBaseSaveData() {
         mountIndex = m_parentDLCPack->GetDLCMountIndex();
 
     if (mountIndex > -1) {
-        if (StorageManager.MountInstalledDLC(
+        if (PlatformStorage.MountInstalledDLC(
                 PlatformProfile.GetPrimaryPad(), mountIndex,
                 [this](int pad, std::uint32_t err, std::uint32_t lic) {
                     return onPackMounted(pad, err, lic);
@@ -638,7 +638,7 @@ int LevelGenerationOptions::onPackMounted(int iPad, uint32_t dwErr,
                 }
             }
         }
-        uint32_t result = StorageManager.UnmountInstalledDLC("WPACK");
+        uint32_t result = PlatformStorage.UnmountInstalledDLC("WPACK");
     }
 
     lgo->setLoadedData();

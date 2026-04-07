@@ -37,7 +37,7 @@
 #include "minecraft/world/level/storage/ConsoleSaveFileIO/ConsoleSavePath.h"
 #include "minecraft/world/level/storage/ConsoleSaveFileIO/FileHeader.h"
 #include "minecraft/world/level/storage/LevelData.h"
-#include "platform/IPlatformStorage.h"
+#include "platform/storage/storage.h"
 #include "platform/PlatformServices.h"
 
 class ProgressListener;
@@ -1299,7 +1299,7 @@ void ConsoleSaveFileSplit::Flush(bool autosave, bool updateThumbnail) {
     // 4J Stu - Added TU-1 interim
 
     // Attempt to allocate the required memory
-    // We do not own this, it belongs to the StorageManager
+    // We do not own this, it belongs to the PlatformStorage
     std::uint8_t* compData =
         (std::uint8_t*)PlatformStorage.AllocateSaveData(compLength);
 

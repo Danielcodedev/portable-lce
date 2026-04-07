@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "app/common/UI/All Platforms/UIEnums.h"
 #include "app/common/UI/Controls/UIControl.h"
 #include "app/common/UI/Controls/UIControl_BitmapIcon.h"
@@ -45,7 +45,7 @@ public:
     UIScene_DLCOffersMenu(int iPad, void* initData, UILayer* parentLayer);
     ~UIScene_DLCOffersMenu();
     static int ExitDLCOffersMenu(void* pParam, int iPad,
-                                 C4JStorage::EMessageResult result);
+                                 IPlatformStorage::EMessageResult result);
 
     virtual EUIScene getSceneType() { return eUIScene_DLCOffersMenu; }
     virtual void tick();

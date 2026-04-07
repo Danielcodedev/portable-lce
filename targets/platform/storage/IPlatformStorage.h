@@ -8,11 +8,35 @@
 
 #include "PlatformTypes.h"
 
-struct SAVE_INFO;
+#define MAX_DISPLAYNAME_LENGTH 128  // CELL_SAVEDATA_SYSP_SUBTITLE_SIZE on PS3
+#define MAX_DETAILS_LENGTH 128      // CELL_SAVEDATA_SYSP_SUBTITLE_SIZE on PS3
+#define MAX_SAVEFILENAME_LENGTH 32  // CELL_SAVEDATA_DIRNAME_SIZE
+// Current version of the dlc data creator
+#define CURRENT_DLC_VERSION_NUM 3
+
+struct CONTAINER_METADATA {
+    time_t modifiedTime;
+    unsigned int dataSize;
+    unsigned int thumbnailSize;
+};
+
+struct SAVE_INFO {
+    char UTF8SaveFilename[MAX_SAVEFILENAME_LENGTH];
+    char UTF8SaveTitle[MAX_DISPLAYNAME_LENGTH];
+    CONTAINER_METADATA metaData;
+    std::uint8_t* thumbnailData;
+};
 using PSAVE_INFO = SAVE_INFO*;
-struct SAVE_DETAILS;
+
+struct SAVE_DETAILS {
+    int iSaveC;
+    PSAVE_INFO SaveInfoA;
+};
 using PSAVE_DETAILS = SAVE_DETAILS*;
+
 class C4JStringTable;
+
+
 
 class IPlatformStorage {
 public:
@@ -111,6 +135,21 @@ public:
         std::uint32_t dwInstalledTotalOffers;
         std::uint8_t bPadding[1024 - sizeof(std::uint32_t) * 4];
     };
+
+    struct DLC_FILE_DETAILS {
+        unsigned int uiFileSize;
+        std::uint32_t dwType;
+        std::uint32_t dwWchCount;
+        wchar_t wchFile[1];
+    };
+    using PDLC_FILE_DETAILS = DLC_FILE_DETAILS*;
+
+    struct DLC_FILE_PARAM {
+        std::uint32_t dwType;
+        std::uint32_t dwWchCount;
+        wchar_t wchData[1];
+    };
+    using PDLC_FILE_PARAM = DLC_FILE_PARAM*;
 
     virtual ~IPlatformStorage() = default;
 

@@ -194,10 +194,10 @@ void UIScene_LoadOrJoinMenu::updateTooltips() {
     } else if (DoesSavesListHaveFocus()) {
         if ((m_iDefaultButtonsC > 0) &&
             (m_iSaveListIndex >= m_iDefaultButtonsC)) {
-            if (StorageManager.GetSaveDisabled()) {
+            if (PlatformStorage.GetSaveDisabled()) {
                 iRB = IDS_TOOLTIPS_DELETESAVE;
             } else {
-                if (StorageManager.EnoughSpaceForAMinSaveGame()) {
+                if (PlatformStorage.EnoughSpaceForAMinSaveGame()) {
                     iRB = IDS_TOOLTIPS_SAVEOPTIONS;
                 } else {
                     iRB = IDS_TOOLTIPS_DELETESAVE;
@@ -216,7 +216,7 @@ void UIScene_LoadOrJoinMenu::updateTooltips() {
             iLB = IDS_TOOLTIPS_PARTY_GAMES;
     }
 
-    if (StorageManager.GetSaveDisabled()) {
+    if (PlatformStorage.GetSaveDisabled()) {
     } else {
 #if defined(SONY_REMOTE_STORAGE_DOWNLOAD)
         // Is there a save from PS3 or PSVita available?
@@ -247,9 +247,9 @@ void UIScene_LoadOrJoinMenu::Initialise() {
     m_iDefaultButtonsC = 0;
     m_iMashUpButtonsC = 0;
 
-    if (StorageManager.GetSaveDisabled()) {
+    if (PlatformStorage.GetSaveDisabled()) {
 #if TO_BE_IMPLEMENTED
-        if (StorageManager.GetSaveDeviceSelected(m_iPad))
+        if (PlatformStorage.GetSaveDeviceSelected(m_iPad))
 #endif
         {
             // saving is disabled, but we should still be able to load from a
@@ -266,7 +266,7 @@ void UIScene_LoadOrJoinMenu::Initialise() {
     } else {
         // 4J-PB - we need to check that there is enough space left to create a
         // copy of the save (for a rename)
-        bool bCanRename = StorageManager.EnoughSpaceForAMinSaveGame();
+        bool bCanRename = PlatformStorage.EnoughSpaceForAMinSaveGame();
 
         GetSaveInfo();
     }
@@ -376,7 +376,7 @@ void UIScene_LoadOrJoinMenu::tick() {
 #endif
         // Display the saves if we have them
         if (!m_bSavesDisplayed) {
-            m_pSaveDetails = StorageManager.ReturnSavesInfo();
+            m_pSaveDetails = PlatformStorage.ReturnSavesInfo();
             if (m_pSaveDetails != nullptr) {
                 // CD - Fix - Adding define for ORBIS/XBOXONE
 
@@ -419,15 +419,15 @@ void UIScene_LoadOrJoinMenu::tick() {
                 m_bRetrievingSaveThumbnails = true;
                 app.DebugPrintf("Requesting the first thumbnail\n");
                 // set the save to load
-                PSAVE_DETAILS pSaveDetails = StorageManager.ReturnSavesInfo();
-                C4JStorage::ESaveGameState eLoadStatus =
-                    StorageManager.LoadSaveDataThumbnail(
+                PSAVE_DETAILS pSaveDetails = PlatformStorage.ReturnSavesInfo();
+                IPlatformStorage::ESaveGameState eLoadStatus =
+                    PlatformStorage.LoadSaveDataThumbnail(
                         &pSaveDetails->SaveInfoA[(int)m_iRequestingThumbnailId],
                         [this](std::uint8_t* data, unsigned int bytes) {
                             return loadSaveDataThumbnailReturned(data, bytes);
                         });
 
-                if (eLoadStatus != C4JStorage::ESaveGame_GetSaveThumbnail) {
+                if (eLoadStatus != IPlatformStorage::ESaveGame_GetSaveThumbnail) {
                     // something went wrong
                     m_bRetrievingSaveThumbnails = false;
                     m_bAllLoaded = true;
@@ -485,16 +485,16 @@ void UIScene_LoadOrJoinMenu::tick() {
                     app.DebugPrintf("Requesting another thumbnail\n");
                     // set the save to load
                     PSAVE_DETAILS pSaveDetails =
-                        StorageManager.ReturnSavesInfo();
-                    C4JStorage::ESaveGameState eLoadStatus =
-                        StorageManager.LoadSaveDataThumbnail(
+                        PlatformStorage.ReturnSavesInfo();
+                    IPlatformStorage::ESaveGameState eLoadStatus =
+                        PlatformStorage.LoadSaveDataThumbnail(
                             &pSaveDetails
                                  ->SaveInfoA[(int)m_iRequestingThumbnailId],
                             [this](std::uint8_t* data, unsigned int bytes) {
                                 return loadSaveDataThumbnailReturned(data,
                                                                      bytes);
                             });
-                    if (eLoadStatus != C4JStorage::ESaveGame_GetSaveThumbnail) {
+                    if (eLoadStatus != IPlatformStorage::ESaveGame_GetSaveThumbnail) {
                         // something went wrong
                         m_bRetrievingSaveThumbnails = false;
                         m_bAllLoaded = true;
@@ -541,7 +541,7 @@ void UIScene_LoadOrJoinMenu::tick() {
             m_bSavesDisplayed = false;
             m_iSaveInfoC = 0;
             m_buttonListSaves.clearList();
-            StorageManager.ClearSavesInfo();
+            PlatformStorage.ClearSavesInfo();
             GetSaveInfo();
             m_iState = e_SavesIdle;
             break;
@@ -597,14 +597,14 @@ void UIScene_LoadOrJoinMenu::GetSaveInfo() {
         m_iSaveInfoC = 0;
         m_controlSavesTimer.setVisible(true);
 
-        m_pSaveDetails = StorageManager.ReturnSavesInfo();
+        m_pSaveDetails = PlatformStorage.ReturnSavesInfo();
         if (m_pSaveDetails == nullptr) {
-            C4JStorage::ESaveGameState eSGIStatus = StorageManager.GetSavesInfo(
+            IPlatformStorage::ESaveGameState eSGIStatus = PlatformStorage.GetSavesInfo(
                 m_iPad, nullptr, (char*)"save");
         }
 
 #if TO_BE_IMPLEMENTED
-        if (eSGIStatus == C4JStorage::ESGIStatus_NoSaves) {
+        if (eSGIStatus == IPlatformStorage::ESGIStatus_NoSaves) {
             uiSaveC = 0;
             m_controlSavesTimer.setVisible(false);
             m_SavesList.SetEnable(true);
@@ -696,7 +696,7 @@ void UIScene_LoadOrJoinMenu::handleInput(int iPad, int key, bool repeat,
             // the SD screen, disconnects from LIVE, and then selects a SD, the
             // title crashes.
             m_bIgnoreInput = true;
-            StorageManager.SetSaveDevice(
+            PlatformStorage.SetSaveDevice(
                 &CScene_MultiGameJoinLoad::DeviceSelectReturned, this, true);
             ui.PlayUISFX(eSFX_Press);
 #endif
@@ -721,7 +721,7 @@ void UIScene_LoadOrJoinMenu::handleInput(int iPad, int key, bool repeat,
                     m_bIgnoreInput = true;
 
                     // Could be delete save or Save Options
-                    if (StorageManager.GetSaveDisabled()) {
+                    if (PlatformStorage.GetSaveDisabled()) {
                         // delete the save game
                         // Have to ask the player if they are sure they want to
                         // delete this game
@@ -734,7 +734,7 @@ void UIScene_LoadOrJoinMenu::handleInput(int iPad, int key, bool repeat,
                             &UIScene_LoadOrJoinMenu::DeleteSaveDialogReturned,
                             this);
                     } else {
-                        if (StorageManager.EnoughSpaceForAMinSaveGame()) {
+                        if (PlatformStorage.EnoughSpaceForAMinSaveGame()) {
                             unsigned int uiIDA[4];
                             uiIDA[0] = IDS_CONFIRM_CANCEL;
                             uiIDA[1] = IDS_TITLE_RENAMESAVE;
@@ -1023,9 +1023,9 @@ void UIScene_LoadOrJoinMenu::LoadLevelGen(LevelGenerationOptions* levelGen) {
     // clear out the app's terrain features list
     app.ClearTerrainFeaturePosition();
 
-    StorageManager.ResetSaveData();
+    PlatformStorage.ResetSaveData();
     // Make our next save default to the name of the level
-    StorageManager.SetSaveTitle(levelGen->getDefaultSaveName().c_str());
+    PlatformStorage.SetSaveTitle(levelGen->getDefaultSaveName().c_str());
 
     bool isClientSide = false;
     bool isPrivate = false;
@@ -1287,10 +1287,10 @@ void UIScene_LoadOrJoinMenu::LoadSaveFromDisk(
     File* saveFile, ESavePlatform savePlatform /*= SAVE_FILE_PLATFORM_LOCAL*/) {
     // we'll only be coming in here when the tutorial is loaded now
 
-    StorageManager.ResetSaveData();
+    PlatformStorage.ResetSaveData();
 
     // Make our next save default to the name of the level
-    StorageManager.SetSaveTitle(saveFile->getName().c_str());
+    PlatformStorage.SetSaveTitle(saveFile->getName().c_str());
 
     int64_t fileSize = saveFile->length();
     FileInputStream fis(*saveFile);
@@ -1347,14 +1347,14 @@ void UIScene_LoadOrJoinMenu::LoadSaveFromCloud() {
         strlen(app.getRemoteStorage()->getLocalFilename()) + 1);  // plus null
     File cloudFile(wFileName);
 
-    StorageManager.ResetSaveData();
+    PlatformStorage.ResetSaveData();
 
     // Make our next save default to the name of the level
     wchar_t wSaveName[128];
     mbstowcs(
         wSaveName, app.getRemoteStorage()->getSaveNameUTF8(),
         strlen(app.getRemoteStorage()->getSaveNameUTF8()) + 1);  // plus null
-    StorageManager.SetSaveTitle(wSaveName);
+    PlatformStorage.SetSaveTitle(wSaveName);
 
     int64_t fileSize = cloudFile.length();
     FileInputStream fis(cloudFile);
@@ -1407,7 +1407,7 @@ void UIScene_LoadOrJoinMenu::LoadSaveFromCloud() {
 #endif
 
 int UIScene_LoadOrJoinMenu::DeleteSaveDialogReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     UIScene_LoadOrJoinMenu* pClass = (UIScene_LoadOrJoinMenu*)pParam;
     // results switched for this dialog
 
@@ -1417,13 +1417,13 @@ int UIScene_LoadOrJoinMenu::DeleteSaveDialogReturned(
         pClass->m_iDefaultButtonsC != 0 &&
         pClass->m_iSaveListIndex >= pClass->m_iDefaultButtonsC;
 
-    if (result == C4JStorage::EMessage_ResultDecline && validSelection) {
+    if (result == IPlatformStorage::EMessage_ResultDecline && validSelection) {
         if (app.DebugSettingsOn() && app.GetLoadSavesFromFolderEnabled()) {
             pClass->m_bIgnoreInput = false;
         } else {
             {
                 size_t cbId = pClass->GetCallbackUniqueId();
-                StorageManager.DeleteSaveData(
+                PlatformStorage.DeleteSaveData(
                     &pClass->m_pSaveDetails
                          ->SaveInfoA[pClass->m_iSaveListIndex -
                                      pClass->m_iDefaultButtonsC],
@@ -1470,13 +1470,13 @@ int UIScene_LoadOrJoinMenu::renameSaveDataReturned(bool bRes) {
 }
 
 int UIScene_LoadOrJoinMenu::SaveOptionsDialogReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     UIScene_LoadOrJoinMenu* pClass = (UIScene_LoadOrJoinMenu*)pParam;
 
     // results switched for this dialog
     // EMessage_ResultAccept means cancel
     switch (result) {
-        case C4JStorage::EMessage_ResultDecline:  // rename
+        case IPlatformStorage::EMessage_ResultDecline:  // rename
         {
             pClass->m_bIgnoreInput = true;
             // bring up a keyboard
@@ -1499,7 +1499,7 @@ int UIScene_LoadOrJoinMenu::SaveOptionsDialogReturned(
                 IPlatformInput::EKeyboardMode_Default);
         } break;
 
-        case C4JStorage::EMessage_ResultThirdOption:  // delete -
+        case IPlatformStorage::EMessage_ResultThirdOption:  // delete -
         {
             // delete the save game
             // Have to ask the player if they are sure they want to delete this
@@ -1513,7 +1513,7 @@ int UIScene_LoadOrJoinMenu::SaveOptionsDialogReturned(
         } break;
 
 #if defined(SONY_REMOTE_STORAGE_UPLOAD)
-        case C4JStorage::EMessage_ResultFourthOption:  // upload to cloud
+        case IPlatformStorage::EMessage_ResultFourthOption:  // upload to cloud
         {
             unsigned int uiIDA[2];
             uiIDA[0] = IDS_CONFIRM_OK;
@@ -1526,7 +1526,7 @@ int UIScene_LoadOrJoinMenu::SaveOptionsDialogReturned(
         } break;
 #endif
 
-        case C4JStorage::EMessage_Cancelled:
+        case IPlatformStorage::EMessage_Cancelled:
         default: {
             // reset the tooltips
             pClass->updateTooltips();
@@ -1537,11 +1537,11 @@ int UIScene_LoadOrJoinMenu::SaveOptionsDialogReturned(
 }
 
 int UIScene_LoadOrJoinMenu::TexturePackDialogReturned(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     UIScene_LoadOrJoinMenu* pClass = (UIScene_LoadOrJoinMenu*)pParam;
 
     // Exit with or without saving
-    if (result == C4JStorage::EMessage_ResultAccept) {
+    if (result == IPlatformStorage::EMessage_ResultAccept) {
         // we need to enable background downloading for the DLC
         // XBackgroundDownloadSetMode(XBACKGROUND_DOWNLOAD_MODE_ALWAYS_ALLOW);
     }
@@ -1606,7 +1606,7 @@ int UIScene_LoadOrJoinMenu::loadCrossSaveDataCallback(bool bIsCorrupt,
 }
 
 int UIScene_LoadOrJoinMenu::CrossSaveFinishedCallback(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     UIScene_LoadOrJoinMenu* pClass = (UIScene_LoadOrJoinMenu*)pParam;
     pClass->m_eSaveTransferState = eSaveTransfer_Idle;
     return 0;
@@ -1618,7 +1618,7 @@ int UIScene_LoadOrJoinMenu::crossSaveDeleteOnErrorReturned(bool bRes) {
 }
 
 int UIScene_LoadOrJoinMenu::RemoteSaveNotFoundCallback(
-    void* pParam, int iPad, C4JStorage::EMessageResult result) {
+    void* pParam, int iPad, IPlatformStorage::EMessageResult result) {
     UIScene_LoadOrJoinMenu* pClass = (UIScene_LoadOrJoinMenu*)pParam;
     pClass->m_eSaveTransferState = eSaveTransfer_Idle;
     return 0;
@@ -1696,27 +1696,27 @@ int UIScene_LoadOrJoinMenu::DownloadSonyCrossSaveThreadProc(void* lpParameter) {
                 }
                 break;
             case eSaveTransfer_CreateDummyFile: {
-                StorageManager.ResetSaveData();
-                byte* compData = (byte*)StorageManager.AllocateSaveData(
+                PlatformStorage.ResetSaveData();
+                byte* compData = (byte*)PlatformStorage.AllocateSaveData(
                     app.getRemoteStorage()->getSaveFilesize());
                 // Make our next save default to the name of the level
                 const char* pNameUTF8 =
                     app.getRemoteStorage()->getSaveNameUTF8();
                 mbstowcs(wSaveName, pNameUTF8,
                          strlen(pNameUTF8) + 1);  // plus null
-                StorageManager.SetSaveTitle(wSaveName);
+                PlatformStorage.SetSaveTitle(wSaveName);
                 std::uint8_t* pbThumbnailData = nullptr;
                 unsigned int dwThumbnailDataSize = 0;
 
                 std::uint8_t* pbDataSaveImage = nullptr;
                 unsigned int dwDataSizeSaveImage = 0;
 
-                StorageManager.GetDefaultSaveImage(
+                PlatformStorage.GetDefaultSaveImage(
                     &pbDataSaveImage,
                     &dwDataSizeSaveImage);  // Get the default save thumbnail
                                             // (as set by SetDefaultImages) for
                                             // use on saving games t
-                StorageManager.GetDefaultSaveThumbnail(
+                PlatformStorage.GetDefaultSaveThumbnail(
                     &pbThumbnailData,
                     &dwThumbnailDataSize);  // Get the default save image (as
                                             // set by SetDefaultImages) for use
@@ -1731,17 +1731,17 @@ int UIScene_LoadOrJoinMenu::DownloadSonyCrossSaveThreadProc(void* lpParameter) {
                     hostOptions, app.getRemoteStorage()->getSaveTexturePack());
 
                 // set the icon and save image
-                StorageManager.SetSaveImages(
+                PlatformStorage.SetSaveImages(
                     pbThumbnailData, dwThumbnailDataSize, pbDataSaveImage,
                     dwDataSizeSaveImage, bTextMetadata, iTextMetadataBytes);
 
-                app.getRemoteStorage()->waitForStorageManagerIdle();
-                C4JStorage::ESaveGameState saveState =
-                    StorageManager.SaveSaveData(
+                app.getRemoteStorage()->waitForPlatformStorageIdle();
+                IPlatformStorage::ESaveGameState saveState =
+                    PlatformStorage.SaveSaveData(
                         [pClass](const bool bRes) {
                             return pClass->createDummySaveDataCallback(bRes);
                         });
-                if (saveState == C4JStorage::ESaveGame_Save) {
+                if (saveState == IPlatformStorage::ESaveGame_Save) {
                     pClass->m_eSaveTransferState =
                         eSaveTransfer_CreatingDummyFile;
                 } else {
@@ -1766,10 +1766,10 @@ int UIScene_LoadOrJoinMenu::DownloadSonyCrossSaveThreadProc(void* lpParameter) {
                         m_wstrStageText);
                 }
 
-                app.getRemoteStorage()->waitForStorageManagerIdle();
+                app.getRemoteStorage()->waitForPlatformStorageIdle();
                 app.DebugPrintf("CALL GetSavesInfo B\n");
-                C4JStorage::ESaveGameState eSGIStatus =
-                    StorageManager.GetSavesInfo(
+                IPlatformStorage::ESaveGameState eSGIStatus =
+                    PlatformStorage.GetSavesInfo(
                         pClass->m_iPad,
                         [pClass](SAVE_DETAILS* pSaveDetails, const bool bRes) {
                             return pClass->crossSaveGetSavesInfoCallback(
@@ -1794,16 +1794,16 @@ int UIScene_LoadOrJoinMenu::DownloadSonyCrossSaveThreadProc(void* lpParameter) {
 
             case eSaveTransfer_GetFileData: {
                 bSaveFileCreated = true;
-                StorageManager.GetSaveUniqueFileDir(
+                PlatformStorage.GetSaveUniqueFileDir(
                     pClass->m_downloadedUniqueFilename);
 
                 if (pClass->m_saveTransferDownloadCancelled) {
                     pClass->m_eSaveTransferState = eSaveTransfer_Error;
                     break;
                 }
-                PSAVE_DETAILS pSaveDetails = StorageManager.ReturnSavesInfo();
+                PSAVE_DETAILS pSaveDetails = PlatformStorage.ReturnSavesInfo();
                 int idx = pClass->m_iSaveListIndex - pClass->m_iDefaultButtonsC;
-                app.getRemoteStorage()->waitForStorageManagerIdle();
+                app.getRemoteStorage()->waitForPlatformStorageIdle();
                 bool bGettingOK = app.getRemoteStorage()->getSaveData(
                     pClass->m_downloadedUniqueFilename, SaveTransferReturned,
                     pClass);
@@ -1846,7 +1846,7 @@ int UIScene_LoadOrJoinMenu::DownloadSonyCrossSaveThreadProc(void* lpParameter) {
                     break;
                 }
 
-                PSAVE_DETAILS pSaveDetails = StorageManager.ReturnSavesInfo();
+                PSAVE_DETAILS pSaveDetails = PlatformStorage.ReturnSavesInfo();
                 int saveInfoIndex = -1;
                 for (int i = 0; i < pSaveDetails->iSaveC; i++) {
                     if (strcmp(pSaveDetails->SaveInfoA[i].UTF8SaveFilename,
@@ -1861,15 +1861,15 @@ int UIScene_LoadOrJoinMenu::DownloadSonyCrossSaveThreadProc(void* lpParameter) {
                         "CrossSaveGetSavesInfoCallback failed - couldn't find "
                         "save\n");
                 } else {
-                    C4JStorage::ESaveGameState eLoadStatus =
-                        StorageManager.LoadSaveData(
+                    IPlatformStorage::ESaveGameState eLoadStatus =
+                        PlatformStorage.LoadSaveData(
                             &pSaveDetails->SaveInfoA[saveInfoIndex],
                             [pClass](const bool bIsCorrupt,
                                      const bool bIsOwner) {
                                 return pClass->loadCrossSaveDataCallback(
                                     bIsCorrupt, bIsOwner);
                             });
-                    if (eLoadStatus == C4JStorage::ESaveGame_Load) {
+                    if (eLoadStatus == IPlatformStorage::ESaveGame_Load) {
                         pClass->m_eSaveTransferState =
                             eSaveTransfer_LoadingSaveFromDisc;
                     } else {
@@ -1881,12 +1881,12 @@ int UIScene_LoadOrJoinMenu::DownloadSonyCrossSaveThreadProc(void* lpParameter) {
 
                 break;
             case eSaveTransfer_CreatingNewSave: {
-                unsigned int fileSize = StorageManager.GetSaveSize();
+                unsigned int fileSize = PlatformStorage.GetSaveSize();
                 std::vector<uint8_t> ba(fileSize);
-                StorageManager.GetSaveData(ba.data(), &fileSize);
+                PlatformStorage.GetSaveData(ba.data(), &fileSize);
                 assert(ba.size() == fileSize);
 
-                StorageManager.ResetSaveData();
+                PlatformStorage.ResetSaveData();
                 {
                     std::uint8_t* pbThumbnailData = nullptr;
                     unsigned int dwThumbnailDataSize = 0;
@@ -1894,13 +1894,13 @@ int UIScene_LoadOrJoinMenu::DownloadSonyCrossSaveThreadProc(void* lpParameter) {
                     std::uint8_t* pbDataSaveImage = nullptr;
                     unsigned int dwDataSizeSaveImage = 0;
 
-                    StorageManager.GetDefaultSaveImage(
+                    PlatformStorage.GetDefaultSaveImage(
                         &pbDataSaveImage,
                         &dwDataSizeSaveImage);  // Get the default save
                                                 // thumbnail (as set by
                                                 // SetDefaultImages) for use on
                                                 // saving games t
-                    StorageManager.GetDefaultSaveThumbnail(
+                    PlatformStorage.GetDefaultSaveThumbnail(
                         &pbThumbnailData,
                         &dwThumbnailDataSize);  // Get the default save image
                                                 // (as set by SetDefaultImages)
@@ -1918,7 +1918,7 @@ int UIScene_LoadOrJoinMenu::DownloadSonyCrossSaveThreadProc(void* lpParameter) {
                         app.getRemoteStorage()->getSaveTexturePack());
 
                     // set the icon and save image
-                    StorageManager.SetSaveImages(
+                    PlatformStorage.SetSaveImages(
                         pbThumbnailData, dwThumbnailDataSize, pbDataSaveImage,
                         dwDataSizeSaveImage, bTextMetadata, iTextMetadataBytes);
                 }
@@ -1949,12 +1949,12 @@ int UIScene_LoadOrJoinMenu::DownloadSonyCrossSaveThreadProc(void* lpParameter) {
                 pClass->m_eSaveTransferState = eSaveTransfer_Saving;
                 pMinecraft->progressRenderer->progressStage(
                     IDS_SAVETRANSFER_STAGE_SAVING);
-                StorageManager.SetSaveTitle(wSaveName);
-                StorageManager.SetSaveUniqueFilename(
+                PlatformStorage.SetSaveTitle(wSaveName);
+                PlatformStorage.SetSaveUniqueFilename(
                     pClass->m_downloadedUniqueFilename);
 
                 app.getRemoteStorage()
-                    ->waitForStorageManagerIdle();  // we need to wait for the
+                    ->waitForPlatformStorageIdle();  // we need to wait for the
                                                     // save system to be idle
                                                     // here, as Flush doesn't
                                                     // check for it.
@@ -1981,7 +1981,7 @@ int UIScene_LoadOrJoinMenu::DownloadSonyCrossSaveThreadProc(void* lpParameter) {
                 unsigned int uiIDA[1];
                 uiIDA[0] = IDS_CONFIRM_OK;
                 app.getRemoteStorage()
-                    ->waitForStorageManagerIdle();  // wait for everything to
+                    ->waitForPlatformStorageIdle();  // wait for everything to
                                                     // complete before we hand
                                                     // control back to the
                                                     // player
@@ -2015,7 +2015,7 @@ int UIScene_LoadOrJoinMenu::DownloadSonyCrossSaveThreadProc(void* lpParameter) {
                     // if the save file has already been created we have to
                     // delete it again if there's been an error
                     PSAVE_DETAILS pSaveDetails =
-                        StorageManager.ReturnSavesInfo();
+                        PlatformStorage.ReturnSavesInfo();
                     int saveInfoIndex = -1;
                     for (int i = 0; i < pSaveDetails->iSaveC; i++) {
                         if (strcmp(pSaveDetails->SaveInfoA[i].UTF8SaveFilename,
@@ -2033,20 +2033,20 @@ int UIScene_LoadOrJoinMenu::DownloadSonyCrossSaveThreadProc(void* lpParameter) {
                             eSaveTransfer_ErrorMesssage;
                     } else {
                         // delete the save file
-                        app.getRemoteStorage()->waitForStorageManagerIdle();
-                        C4JStorage::ESaveGameState eDeleteStatus =
-                            StorageManager.DeleteSaveData(
+                        app.getRemoteStorage()->waitForPlatformStorageIdle();
+                        IPlatformStorage::ESaveGameState eDeleteStatus =
+                            PlatformStorage.DeleteSaveData(
                                 &pSaveDetails->SaveInfoA[saveInfoIndex],
                                 [pClass](const bool bRes) {
                                     return pClass
                                         ->crossSaveDeleteOnErrorReturned(bRes);
                                 });
-                        if (eDeleteStatus == C4JStorage::ESaveGame_Delete) {
+                        if (eDeleteStatus == IPlatformStorage::ESaveGame_Delete) {
                             pClass->m_eSaveTransferState =
                                 eSaveTransfer_ErrorDeletingSave;
                         } else {
                             app.DebugPrintf(
-                                "StorageManager.DeleteSaveData failed!!\n");
+                                "PlatformStorage.DeleteSaveData failed!!\n");
                             pClass->m_eSaveTransferState =
                                 eSaveTransfer_ErrorMesssage;
                         }
@@ -2060,7 +2060,7 @@ int UIScene_LoadOrJoinMenu::DownloadSonyCrossSaveThreadProc(void* lpParameter) {
                 break;
             case eSaveTransfer_ErrorMesssage: {
                 app.getRemoteStorage()
-                    ->waitForStorageManagerIdle();  // wait for everything to
+                    ->waitForPlatformStorageIdle();  // wait for everything to
                                                     // complete before we hand
                                                     // control back to the
                                                     // player

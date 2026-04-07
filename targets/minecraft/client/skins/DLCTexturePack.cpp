@@ -8,7 +8,7 @@
 #include <vector>
 
 #include "platform/input/input.h"
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/Audio/SoundEngine.h"
 #include "app/common/Colours/ColourTable.h"
@@ -238,7 +238,7 @@ void DLCTexturePack::loadData() {
     int mountIndex = m_dlcInfoPack->GetDLCMountIndex();
 
     if (mountIndex > -1) {
-        if (StorageManager.MountInstalledDLC(
+        if (PlatformStorage.MountInstalledDLC(
                 PlatformInput.GetPrimaryPad(), mountIndex,
                 [this](int pad, std::uint32_t err, std::uint32_t lic) {
                     return onPackMounted(pad, err, lic);
@@ -420,7 +420,7 @@ void DLCTexturePack::loadUI() {
 
     AbstractTexturePack::loadUI();
     if (hasAudio() == false && !ui.IsReloadingSkin()) {
-        StorageManager.UnmountInstalledDLC("TPACK");
+        PlatformStorage.UnmountInstalledDLC("TPACK");
     }
 }
 

@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "app/common/UI/All Platforms/UIEnums.h"
 #include "app/common/UI/Controls/UIControl_Button.h"
 #include "app/common/UI/UIScene.h"
@@ -52,5 +52,5 @@ protected:
     void handlePress(F64 controlId, F64 childId);
 
     static int ResetDefaultsDialogReturned(void* pParam, int iPad,
-                                           C4JStorage::EMessageResult result);
+                                           IPlatformStorage::EMessageResult result);
 };

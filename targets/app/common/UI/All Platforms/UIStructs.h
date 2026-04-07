@@ -6,7 +6,7 @@
 #include <cstring>
 #include <functional>
 
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "app/common/App_Defines.h"
 #include "UIEnums.h"
 #include "platform/C4JThread.h"
@@ -397,7 +397,7 @@ typedef struct _MessageBoxInfo {
     uint32_t* uiOptionA;
     uint32_t uiOptionC;
     uint32_t dwPad;
-    int (*Func)(void*, int, const C4JStorage::EMessageResult);
+    int (*Func)(void*, int, const IPlatformStorage::EMessageResult);
     void* lpParam;
     // C4JStringTable *pStringTable; // 4J Stu - We don't need this for our
     // internal message boxes

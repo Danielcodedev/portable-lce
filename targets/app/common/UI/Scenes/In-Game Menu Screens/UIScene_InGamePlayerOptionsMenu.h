@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <string>
 
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "app/common/Network/GameNetworkManager.h"
 #include "app/common/UI/All Platforms/UIEnums.h"
 #include "app/common/UI/Controls/UIControl_Button.h"
@@ -101,7 +101,7 @@ public:
     virtual void handlePress(F64 controlId, F64 childId);
 
     static int KickPlayerReturned(void* pParam, int iPad,
-                                  C4JStorage::EMessageResult result);
+                                  IPlatformStorage::EMessageResult result);
     static void OnPlayerChanged(void* callbackParam, INetworkPlayer* pPlayer,
                                 bool leaving);
 

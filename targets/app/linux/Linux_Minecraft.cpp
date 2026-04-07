@@ -57,7 +57,7 @@ static void sigsegv_handler(int sig) {
 #include "platform/input/input.h"
 #include "platform/profile/profile.h"
 #include "platform/sdl2/Render.h"
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "app/common/App_Defines.h"
 #include "app/common/Audio/SoundEngine.h"
 #include "app/common/Network/GameNetworkManager.h"
@@ -457,10 +457,10 @@ int main(int argc, const char* argv[]) {
     initGameServices(&services);
     ui.init(1920, 1080);
     // storage manager is needed for the trial key check
-    StorageManager.Init(
+    PlatformStorage.Init(
         0, app.GetString(IDS_DEFAULT_SAVENAME), (char*)"savegame.dat",
         FIFTY_ONE_MB,
-        [](const C4JStorage::ESavingMessage eMsg, int iPad) {
+        [](const IPlatformStorage::ESavingMessage eMsg, int iPad) {
             return app.displaySavingMessage(eMsg, iPad);
         },
         (char*)"");
@@ -497,7 +497,7 @@ int main(int argc, const char* argv[]) {
         });
 
     // Set a callback for when there is a read error on profile data
-    // StorageManager.SetProfileReadErrorCallback(&Game::ProfileReadErrorCallback,
+    // PlatformStorage.SetProfileReadErrorCallback(&Game::ProfileReadErrorCallback,
     // &app);
 
     // QNet needs to be setup after profile manager, as we do not want its
@@ -535,7 +535,7 @@ int main(int argc, const char* argv[]) {
 
         PlatformProfile.Tick();
 
-        StorageManager.Tick();
+        PlatformStorage.Tick();
 
         RenderManager.Tick();
 

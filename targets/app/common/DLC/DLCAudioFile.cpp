@@ -6,7 +6,7 @@
 #include <unordered_map>
 
 #include "platform/sdl2/Render.h"
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "DLCManager.h"
 #include "app/common/DLC/DLCFile.h"
 #include "app/linux/LinuxGame.h"
@@ -53,19 +53,19 @@ void ReadAudioDlcStruct(T* out, const std::uint8_t* data,
 }
 
 inline unsigned int AudioParamAdvance(unsigned int wcharCount) {
-    return static_cast<unsigned int>(sizeof(C4JStorage::DLC_FILE_PARAM) +
+    return static_cast<unsigned int>(sizeof(IPlatformStorage::DLC_FILE_PARAM) +
                                      wcharCount * AUDIO_DLC_WCHAR_BIN_SIZE);
 }
 
 inline unsigned int AudioDetailAdvance(unsigned int wcharCount) {
-    return static_cast<unsigned int>(sizeof(C4JStorage::DLC_FILE_DETAILS) +
+    return static_cast<unsigned int>(sizeof(IPlatformStorage::DLC_FILE_DETAILS) +
                                      wcharCount * AUDIO_DLC_WCHAR_BIN_SIZE);
 }
 
 inline std::wstring ReadAudioParamString(const std::uint8_t* data,
                                          unsigned int offset) {
     return ReadAudioDlcWString(data + offset +
-                               offsetof(C4JStorage::DLC_FILE_PARAM, wchData));
+                               offsetof(IPlatformStorage::DLC_FILE_PARAM, wchData));
 }
 }  // namespace
 
@@ -196,7 +196,7 @@ bool DLCAudioFile::processDLCDataFile(std::uint8_t* pbData,
     unsigned int uiParameterTypeCount =
         ReadAudioDlcValue<unsigned int>(pbData, uiCurrentByte);
     uiCurrentByte += sizeof(int);
-    C4JStorage::DLC_FILE_PARAM paramBuf;
+    IPlatformStorage::DLC_FILE_PARAM paramBuf;
     ReadAudioDlcStruct(&paramBuf, pbData, uiCurrentByte);
 
     for (unsigned int i = 0; i < uiParameterTypeCount; i++) {
@@ -214,7 +214,7 @@ bool DLCAudioFile::processDLCDataFile(std::uint8_t* pbData,
     unsigned int uiFileCount =
         ReadAudioDlcValue<unsigned int>(pbData, uiCurrentByte);
     uiCurrentByte += sizeof(int);
-    C4JStorage::DLC_FILE_DETAILS fileBuf;
+    IPlatformStorage::DLC_FILE_DETAILS fileBuf;
     ReadAudioDlcStruct(&fileBuf, pbData, uiCurrentByte);
 
     unsigned int tempByteOffset = uiCurrentByte;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "platform/sdl2/Storage.h"
+#include "platform/storage/storage.h"
 #include "UIEnums.h"
 #include "UIStructs.h"
 #include "minecraft/sounds/SoundTypes.h"
@@ -82,7 +82,7 @@ public:
     virtual void ShowAutosaveCountdownTimer(bool show) = 0;
     virtual void UpdateAutosaveCountdownTimer(unsigned int uiSeconds) = 0;
     virtual void ShowSavingMessage(unsigned int iPad,
-                                   C4JStorage::ESavingMessage eVal) = 0;
+                                   IPlatformStorage::ESavingMessage eVal) = 0;
 
     virtual bool PressStartPlaying(unsigned int iPad) = 0;
     virtual void ShowPressStart(unsigned int iPad) = 0;
