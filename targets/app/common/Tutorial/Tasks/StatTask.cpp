@@ -1,6 +1,6 @@
 #include "StatTask.h"
 
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "app/common/Tutorial/Tasks/TutorialTask.h"
 #include "minecraft/client/Minecraft.h"
 #include "minecraft/stats/StatsCounter.h"
@@ -14,7 +14,7 @@ StatTask::StatTask(Tutorial* tutorial, int descriptionId,
 
     Minecraft* minecraft = Minecraft::GetInstance();
     targetValue =
-        minecraft->stats[ProfileManager.GetPrimaryPad()]->getTotalValue(stat) +
+        minecraft->stats[PlatformProfile.GetPrimaryPad()]->getTotalValue(stat) +
         variance;
 }
 
@@ -23,7 +23,7 @@ bool StatTask::isCompleted() {
 
     Minecraft* minecraft = Minecraft::GetInstance();
     bIsCompleted =
-        minecraft->stats[ProfileManager.GetPrimaryPad()]->getTotalValue(stat) >=
+        minecraft->stats[PlatformProfile.GetPrimaryPad()]->getTotalValue(stat) >=
         (unsigned int)targetValue;
     return bIsCompleted;
 }

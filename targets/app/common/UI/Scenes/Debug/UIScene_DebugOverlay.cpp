@@ -6,7 +6,7 @@
 #include <memory>
 
 #include "platform/input/InputActions.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/Tutorial/Tutorial.h"
 #include "app/common/UI/All Platforms/UIEnums.h"
@@ -199,17 +199,17 @@ void UIScene_DebugOverlay::handlePress(F64 controlId, F64 childId) {
             // app.SetXuiServerAction(m_iPad, eXuiServerAction_DropItem, (void
             // *)m_itemIds[id]);
             ClientConnection* conn = Minecraft::GetInstance()->getConnection(
-                ProfileManager.GetPrimaryPad());
+                PlatformProfile.GetPrimaryPad());
             conn->send(GiveItemCommand::preparePacket(
                 std::dynamic_pointer_cast<Player>(
                     Minecraft::GetInstance()
-                        ->localplayers[ProfileManager.GetPrimaryPad()]),
+                        ->localplayers[PlatformProfile.GetPrimaryPad()]),
                 m_itemIds[id]));
         } break;
         case eControl_Mobs: {
             int id = childId;
             if (id < m_mobFactories.size()) {
-                app.SetXuiServerAction(ProfileManager.GetPrimaryPad(),
+                app.SetXuiServerAction(PlatformProfile.GetPrimaryPad(),
                                        eXuiServerAction_SpawnMob,
                                        (void*)m_mobFactories[id]);
             }
@@ -217,50 +217,50 @@ void UIScene_DebugOverlay::handlePress(F64 controlId, F64 childId) {
         case eControl_Enchantments: {
             int id = childId;
             ClientConnection* conn = Minecraft::GetInstance()->getConnection(
-                ProfileManager.GetPrimaryPad());
+                PlatformProfile.GetPrimaryPad());
             conn->send(EnchantItemCommand::preparePacket(
                 std::dynamic_pointer_cast<Player>(
                     Minecraft::GetInstance()
-                        ->localplayers[ProfileManager.GetPrimaryPad()]),
+                        ->localplayers[PlatformProfile.GetPrimaryPad()]),
                 m_enchantmentIdAndLevels[id].first,
                 m_enchantmentIdAndLevels[id].second));
         } break;
         case eControl_Schematic: {
 #ifndef _CONTENT_PACKAGE
-            ui.NavigateToScene(ProfileManager.GetPrimaryPad(),
+            ui.NavigateToScene(PlatformProfile.GetPrimaryPad(),
                                eUIScene_DebugCreateSchematic, nullptr,
                                eUILayer_Debug);
 #endif
         } break;
         case eControl_SetCamera: {
 #ifndef _CONTENT_PACKAGE
-            ui.NavigateToScene(ProfileManager.GetPrimaryPad(),
+            ui.NavigateToScene(PlatformProfile.GetPrimaryPad(),
                                eUIScene_DebugSetCamera, nullptr,
                                eUILayer_Debug);
 #endif
         } break;
         case eControl_Rain: {
-            // app.SetXuiServerAction(ProfileManager.GetPrimaryPad(),eXuiServerAction_ToggleRain);
+            // app.SetXuiServerAction(PlatformProfile.GetPrimaryPad(),eXuiServerAction_ToggleRain);
             ClientConnection* conn = Minecraft::GetInstance()->getConnection(
-                ProfileManager.GetPrimaryPad());
+                PlatformProfile.GetPrimaryPad());
             conn->send(ToggleDownfallCommand::preparePacket());
         } break;
         case eControl_Thunder:
-            app.SetXuiServerAction(ProfileManager.GetPrimaryPad(),
+            app.SetXuiServerAction(PlatformProfile.GetPrimaryPad(),
                                    eXuiServerAction_ToggleThunder);
             break;
         case eControl_ResetTutorial:
             Tutorial::debugResetPlayerSavedProgress(
-                ProfileManager.GetPrimaryPad());
+                PlatformProfile.GetPrimaryPad());
             break;
         case eControl_SetDay: {
             ClientConnection* conn = Minecraft::GetInstance()->getConnection(
-                ProfileManager.GetPrimaryPad());
+                PlatformProfile.GetPrimaryPad());
             conn->send(TimeCommand::preparePacket(false));
         } break;
         case eControl_SetNight: {
             ClientConnection* conn = Minecraft::GetInstance()->getConnection(
-                ProfileManager.GetPrimaryPad());
+                PlatformProfile.GetPrimaryPad());
             conn->send(TimeCommand::preparePacket(true));
         } break;
     };

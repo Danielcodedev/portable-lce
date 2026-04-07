@@ -26,7 +26,7 @@ endif
 
 sdl2_sources = files(
   'input/sdl2/SDL2Input.cpp',
-  'sdl2/Profile.cpp',
+  'profile/stub/StubProfile.cpp',
   'sdl2/Render.cpp',
   'sdl2/render_stubs.cpp',
   'sdl2/Storage.cpp',

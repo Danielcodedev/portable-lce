@@ -14,7 +14,7 @@
 
 #include "platform/PlatformTypes.h"
 #include "platform/input/input.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/App_structs.h"
 #include "app/common/ConsoleGameMode.h"
@@ -272,7 +272,7 @@ void ClientConnection::handleLogin(std::shared_ptr<LoginPacket> packet) {
     if (done) return;
 
     PlayerUID OnlineXuid;
-    ProfileManager.GetXUID(m_userIndex, &OnlineXuid, true);  // online xuid
+    PlatformProfile.GetXUID(m_userIndex, &OnlineXuid, true);  // online xuid
     MOJANG_DATA* pMojangData = nullptr;
 
     if (!g_NetworkManager.IsLocalGame()) {
@@ -445,7 +445,7 @@ void ClientConnection::handleLogin(std::shared_ptr<LoginPacket> packet) {
             dimensionLevel->difficulty = packet->difficulty;  // 4J Added
             dimensionLevel->isClientSide = true;
             level = dimensionLevel;
-            // 4J Stu - At time of writing ProfileManager.GetGamertag() does not
+            // 4J Stu - At time of writing PlatformProfile.GetGamertag() does not
             // always return the correct name, if sign-ins are turned off while
             // the player signed in. Using the qnetPlayer instead. need to have
             // a level before create extra local player
@@ -869,12 +869,12 @@ void ClientConnection::handleAddPlayer(
         // need to use the XUID here
         PlayerUID playerXUIDOnline = INVALID_XUID,
                   playerXUIDOffline = INVALID_XUID;
-        ProfileManager.GetXUID(idx, &playerXUIDOnline, true);
-        ProfileManager.GetXUID(idx, &playerXUIDOffline, false);
+        PlatformProfile.GetXUID(idx, &playerXUIDOnline, true);
+        PlatformProfile.GetXUID(idx, &playerXUIDOffline, false);
         if ((playerXUIDOnline != INVALID_XUID &&
-             ProfileManager.AreXUIDSEqual(playerXUIDOnline, packet->xuid)) ||
+             PlatformProfile.AreXUIDSEqual(playerXUIDOnline, packet->xuid)) ||
             (playerXUIDOffline != INVALID_XUID &&
-             ProfileManager.AreXUIDSEqual(playerXUIDOffline, packet->xuid))) {
+             PlatformProfile.AreXUIDSEqual(playerXUIDOffline, packet->xuid))) {
             Log::info(
                 "AddPlayerPacket received with XUID of local player\n");
             return;
@@ -2040,22 +2040,22 @@ void ClientConnection::handlePreLogin(std::shared_ptr<PreLoginPacket> packet) {
         // need to use the XUID here
         PlayerUID offlineXUID = INVALID_XUID;
         PlayerUID onlineXUID = INVALID_XUID;
-        if (ProfileManager.IsSignedInLive(m_userIndex)) {
+        if (PlatformProfile.IsSignedInLive(m_userIndex)) {
             // Guest don't have an offline XUID as they cannot play offline, so
             // use their online one
-            ProfileManager.GetXUID(m_userIndex, &onlineXUID, true);
+            PlatformProfile.GetXUID(m_userIndex, &onlineXUID, true);
         }
 
         // On PS3, all non-signed in players (even guests) can get a useful
         // offlineXUID
-        if (!ProfileManager.IsGuest(m_userIndex)) {
+        if (!PlatformProfile.IsGuest(m_userIndex)) {
             // All other players we use their offline XUID so that they can play
             // the game offline
-            ProfileManager.GetXUID(m_userIndex, &offlineXUID, false);
+            PlatformProfile.GetXUID(m_userIndex, &offlineXUID, false);
         }
         bool allAllowed = false;
         bool friendsAllowed = false;
-        ProfileManager.AllowedPlayerCreatedContent(
+        PlatformProfile.AllowedPlayerCreatedContent(
             m_userIndex, true, &allAllowed, &friendsAllowed);
         fprintf(stderr,
                 "[LOGIN] Sending LoginPacket: user=%ls netVer=%d userIdx=%d "
@@ -2068,7 +2068,7 @@ void ClientConnection::handlePreLogin(std::shared_ptr<PreLoginPacket> packet) {
             offlineXUID, onlineXUID, (!allAllowed && friendsAllowed),
             packet->m_ugcPlayersVersion, gameServices().getPlayerSkinId(m_userIndex),
             gameServices().getPlayerCapeId(m_userIndex),
-            ProfileManager.IsGuest(m_userIndex)));
+            PlatformProfile.IsGuest(m_userIndex)));
         fprintf(stderr, "[LOGIN] LoginPacket sent successfully\n");
 
         if (!g_NetworkManager.IsHost()) {

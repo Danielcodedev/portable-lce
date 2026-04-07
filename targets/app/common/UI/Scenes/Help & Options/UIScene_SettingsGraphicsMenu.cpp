@@ -3,7 +3,7 @@
 #include <wchar.h>
 
 #include "platform/input/InputActions.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/Network/GameNetworkManager.h"
 #include "app/common/UI/Controls/UIControl_CheckBox.h"
@@ -51,7 +51,7 @@ UIScene_SettingsGraphicsMenu::UIScene_SettingsGraphicsMenu(int iPad,
     doHorizontalResizeCheck();
 
     bool bInGame = (Minecraft::GetInstance()->level != nullptr);
-    bool bIsPrimaryPad = (ProfileManager.GetPrimaryPad() == m_iPad);
+    bool bIsPrimaryPad = (PlatformProfile.GetPrimaryPad() == m_iPad);
     // if we're not in the game, we need to use basescene 0
     if (bInGame) {
         // If the game has started, then you need to be the host to change the

@@ -9,7 +9,7 @@
 #include <thread>
 #include <vector>
 
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/DLC/DLCManager.h"
 #include "app/common/DLC/DLCPack.h"
@@ -76,7 +76,7 @@ int IUIScene_PauseMenu::ExitGameSaveDialogReturned(
                     ui.RequestAlertMessage(
                         IDS_WARNING_DLC_TRIALTEXTUREPACK_TITLE,
                         IDS_WARNING_DLC_TRIALTEXTUREPACK_TEXT, uiIDA, 2,
-                        ProfileManager.GetPrimaryPad(),
+                        PlatformProfile.GetPrimaryPad(),
                         &IUIScene_PauseMenu::WarningTrialTexturePackReturned,
                         pParam);
 
@@ -96,7 +96,7 @@ int IUIScene_PauseMenu::ExitGameSaveDialogReturned(
                 uiIDA[1] = IDS_CONFIRM_OK;
                 ui.RequestAlertMessage(
                     IDS_TITLE_SAVE_GAME, IDS_CONFIRM_SAVE_GAME, uiIDA, 2,
-                    ProfileManager.GetPrimaryPad(),
+                    PlatformProfile.GetPrimaryPad(),
                     &IUIScene_PauseMenu::ExitGameAndSaveReturned, pParam);
                 return 0;
             } else {
@@ -109,7 +109,7 @@ int IUIScene_PauseMenu::ExitGameSaveDialogReturned(
             uiIDA[1] = IDS_CONFIRM_OK;
             ui.RequestAlertMessage(
                 IDS_TITLE_DECLINE_SAVE_GAME, IDS_CONFIRM_DECLINE_SAVE_GAME,
-                uiIDA, 2, ProfileManager.GetPrimaryPad(),
+                uiIDA, 2, PlatformProfile.GetPrimaryPad(),
                 &IUIScene_PauseMenu::ExitGameDeclineSaveReturned, pParam);
             return 0;
         }
@@ -132,7 +132,7 @@ int IUIScene_PauseMenu::ExitGameAndSaveReturned(
         // int32_t saveOrCheckpointId = 0;
         // bool validSave =
         // StorageManager.GetSaveUniqueNumber(&saveOrCheckpointId);
-        // SentientManager.RecordLevelSaveOrCheckpoint(ProfileManager.GetPrimaryPad(),
+        // SentientManager.RecordLevelSaveOrCheckpoint(PlatformProfile.GetPrimaryPad(),
         // saveOrCheckpointId);
         if (pScene) pScene->SetIgnoreInput(true);
         MinecraftServer::getInstance()->setSaveOnExit(true);
@@ -141,7 +141,7 @@ int IUIScene_PauseMenu::ExitGameAndSaveReturned(
     } else {
         // has someone disconnected the ethernet here, causing the pause menu to
         // shut?
-        if (ui.IsPauseMenuDisplayed(ProfileManager.GetPrimaryPad())) {
+        if (ui.IsPauseMenuDisplayed(PlatformProfile.GetPrimaryPad())) {
             unsigned int uiIDA[3];
             // you cancelled the save on exit after choosing exit and save? You
             // go back to the Exit choices then.
@@ -153,12 +153,12 @@ int IUIScene_PauseMenu::ExitGameAndSaveReturned(
                 ui.RequestAlertMessage(
                     IDS_EXIT_GAME,
                     IDS_CONFIRM_EXIT_GAME_CONFIRM_DISCONNECT_SAVE, uiIDA, 3,
-                    ProfileManager.GetPrimaryPad(),
+                    PlatformProfile.GetPrimaryPad(),
                     &IUIScene_PauseMenu::ExitGameSaveDialogReturned, pParam);
             } else {
                 ui.RequestAlertMessage(
                     IDS_EXIT_GAME, IDS_CONFIRM_EXIT_GAME, uiIDA, 3,
-                    ProfileManager.GetPrimaryPad(),
+                    PlatformProfile.GetPrimaryPad(),
                     &IUIScene_PauseMenu::ExitGameSaveDialogReturned, pParam);
             }
         }
@@ -180,7 +180,7 @@ int IUIScene_PauseMenu::ExitGameDeclineSaveReturned(
     } else {
         // has someone disconnected the ethernet here, causing the pause menu to
         // shut?
-        if (ui.IsPauseMenuDisplayed(ProfileManager.GetPrimaryPad())) {
+        if (ui.IsPauseMenuDisplayed(PlatformProfile.GetPrimaryPad())) {
             unsigned int uiIDA[3];
             // you cancelled the save on exit after choosing exit and save? You
             // go back to the Exit choices then.
@@ -192,12 +192,12 @@ int IUIScene_PauseMenu::ExitGameDeclineSaveReturned(
                 ui.RequestAlertMessage(
                     IDS_EXIT_GAME,
                     IDS_CONFIRM_EXIT_GAME_CONFIRM_DISCONNECT_SAVE, uiIDA, 3,
-                    ProfileManager.GetPrimaryPad(),
+                    PlatformProfile.GetPrimaryPad(),
                     &IUIScene_PauseMenu::ExitGameSaveDialogReturned, pParam);
             } else {
                 ui.RequestAlertMessage(
                     IDS_EXIT_GAME, IDS_CONFIRM_EXIT_GAME, uiIDA, 3,
-                    ProfileManager.GetPrimaryPad(),
+                    PlatformProfile.GetPrimaryPad(),
                     &IUIScene_PauseMenu::ExitGameSaveDialogReturned, pParam);
             }
         }
@@ -213,10 +213,10 @@ int IUIScene_PauseMenu::WarningTrialTexturePackReturned(
 int IUIScene_PauseMenu::SaveWorldThreadProc(void* lpParameter) {
     bool bAutosave = (bool)lpParameter;
     if (bAutosave) {
-        app.SetXuiServerAction(ProfileManager.GetPrimaryPad(),
+        app.SetXuiServerAction(PlatformProfile.GetPrimaryPad(),
                                eXuiServerAction_AutoSaveGame);
     } else {
-        app.SetXuiServerAction(ProfileManager.GetPrimaryPad(),
+        app.SetXuiServerAction(PlatformProfile.GetPrimaryPad(),
                                eXuiServerAction_SaveGame);
     }
 
@@ -230,7 +230,7 @@ int IUIScene_PauseMenu::SaveWorldThreadProc(void* lpParameter) {
 
     app.SetGameStarted(false);
 
-    while (app.GetXuiServerAction(ProfileManager.GetPrimaryPad()) !=
+    while (app.GetXuiServerAction(PlatformProfile.GetPrimaryPad()) !=
                eXuiServerAction_Idle &&
            !MinecraftServer::serverHalted()) {
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -272,7 +272,7 @@ void IUIScene_PauseMenu::_ExitWorld(void* lpParameter) {
     if (pMinecraft->isClientSide() || g_NetworkManager.IsInSession()) {
         if (lpParameter != nullptr) {
             // 4J-PB - check if we have lost connection to Live
-            // if (ProfileManager.GetLiveConnectionStatus() !=
+            // if (PlatformProfile.GetLiveConnectionStatus() !=
             //     XONLINE_S_LOGON_CONNECTION_ESTABLISHED) {
             //     exitReasonStringId = IDS_CONNECTION_LOST_LIVE;
             // } else {
@@ -336,10 +336,10 @@ void IUIScene_PauseMenu::_ExitWorld(void* lpParameter) {
             // that is most likely the cause of the disconnection so don't
             // display a message box. This will allow the message box requested
             // by the libraries to be brought up
-            if (ProfileManager.IsSignedIn(ProfileManager.GetPrimaryPad()))
+            if (PlatformProfile.IsSignedIn(PlatformProfile.GetPrimaryPad()))
                 ui.RequestErrorMessage(exitReasonTitleId, exitReasonStringId,
                                        uiIDA, 1,
-                                       ProfileManager.GetPrimaryPad());
+                                       PlatformProfile.GetPrimaryPad());
             exitReasonStringId = -1;
 
             // 4J - Force a disconnection, this handles the situation that the
@@ -375,7 +375,7 @@ void IUIScene_PauseMenu::_ExitWorld(void* lpParameter) {
         g_NetworkManager.LeaveGame(false);
     } else {
         if (lpParameter != nullptr &&
-            ProfileManager.IsSignedIn(ProfileManager.GetPrimaryPad())) {
+            PlatformProfile.IsSignedIn(PlatformProfile.GetPrimaryPad())) {
             switch (app.GetDisconnectReason()) {
                 case DisconnectPacket::eDisconnect_Kicked:
                     exitReasonStringId = IDS_DISCONNECTED_KICKED;
@@ -417,7 +417,7 @@ void IUIScene_PauseMenu::_ExitWorld(void* lpParameter) {
             unsigned int uiIDA[1];
             uiIDA[0] = IDS_CONFIRM_OK;
             ui.RequestErrorMessage(exitReasonTitleId, exitReasonStringId, uiIDA,
-                                   1, ProfileManager.GetPrimaryPad());
+                                   1, PlatformProfile.GetPrimaryPad());
             exitReasonStringId = -1;
         }
     }

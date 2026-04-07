@@ -18,7 +18,7 @@
 #include "minecraft/world/level/tile/Tile.h"
 #include "minecraft/world/level/tile/entity/HopperTileEntity.h"
 #include "minecraft/world/level/storage/ConsoleSaveFileIO/compression.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "platform/sdl2/Storage.h"
 
 #include <cstring>
@@ -489,17 +489,17 @@ int MenuController::remoteSaveThreadProc(void* lpParameter) {
     pMinecraft->progressRenderer->progressStagePercentage(0);
 
     while (!app.GetGameStarted() &&
-           app.GetXuiAction(ProfileManager.GetPrimaryPad()) ==
+           app.GetXuiAction(PlatformProfile.GetPrimaryPad()) ==
                eAppAction_WaitRemoteServerSaveComplete) {
         pMinecraft->tickAllConnections();
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 
-    if (app.GetXuiAction(ProfileManager.GetPrimaryPad()) !=
+    if (app.GetXuiAction(PlatformProfile.GetPrimaryPad()) !=
         eAppAction_WaitRemoteServerSaveComplete) {
         return ERROR_CANCELLED;
     }
-    app.SetAction(ProfileManager.GetPrimaryPad(), eAppAction_Idle);
+    app.SetAction(PlatformProfile.GetPrimaryPad(), eAppAction_Idle);
 
     ui.UpdatePlayerBasePositions();
 
@@ -509,7 +509,7 @@ int MenuController::remoteSaveThreadProc(void* lpParameter) {
 }
 
 void MenuController::exitGameFromRemoteSave(void* lpParameter) {
-    int primaryPad = ProfileManager.GetPrimaryPad();
+    int primaryPad = PlatformProfile.GetPrimaryPad();
 
     unsigned int uiIDA[3];
     uiIDA[0] = IDS_CONFIRM_CANCEL;

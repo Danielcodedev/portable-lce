@@ -3,7 +3,7 @@
 #include <cstdint>
 
 #include "app/common/App_structs.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "platform/XboxStubs.h"
 
 class GameSettingsManager {
@@ -15,9 +15,9 @@ public:
                                          const unsigned short usVersion,
                                          const int iPad);
     static int defaultOptionsCallback(void* pParam,
-                                      C_4JProfile::PROFILESETTINGS* pSettings,
+                                      IPlatformProfile::PROFILESETTINGS* pSettings,
                                       const int iPad);
-    int setDefaultOptions(C_4JProfile::PROFILESETTINGS* pSettings,
+    int setDefaultOptions(IPlatformProfile::PROFILESETTINGS* pSettings,
                           const int iPad);
 
     void setGameSettings(int iPad, eGameSetting eVal, unsigned char ucVal);

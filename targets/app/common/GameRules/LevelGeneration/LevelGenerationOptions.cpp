@@ -31,7 +31,7 @@
 #include "minecraft/world/level/levelgen/structure/BoundingBox.h"
 #include "minecraft/world/phys/AABB.h"
 #include "platform/PlatformServices.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "platform/sdl2/Storage.h"
 #include "strings.h"
 #include "util/StringHelpers.h"
@@ -552,7 +552,7 @@ void LevelGenerationOptions::loadBaseSaveData() {
 
     if (mountIndex > -1) {
         if (StorageManager.MountInstalledDLC(
-                ProfileManager.GetPrimaryPad(), mountIndex,
+                PlatformProfile.GetPrimaryPad(), mountIndex,
                 [this](int pad, std::uint32_t err, std::uint32_t lic) {
                     return onPackMounted(pad, err, lic);
                 },
@@ -560,7 +560,7 @@ void LevelGenerationOptions::loadBaseSaveData() {
             // corrupt DLC
             setLoadedData();
             app.DebugPrintf("Failed to mount LGO DLC %d for pad %d\n",
-                            mountIndex, ProfileManager.GetPrimaryPad());
+                            mountIndex, PlatformProfile.GetPrimaryPad());
         } else {
             m_bLoadingData = true;
             app.DebugPrintf("Attempted to mount DLC data for LGO %d\n",
@@ -568,7 +568,7 @@ void LevelGenerationOptions::loadBaseSaveData() {
         }
     } else {
         setLoadedData();
-        app.SetAction(ProfileManager.GetPrimaryPad(),
+        app.SetAction(PlatformProfile.GetPrimaryPad(),
                       eAppAction_ReloadTexturePack);
     }
 }

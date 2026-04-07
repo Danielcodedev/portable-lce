@@ -30,7 +30,7 @@
 // 4J Stu - Added for tutorial callbacks
 #include "platform/input/InputActions.h"
 #include "platform/input/input.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "platform/sdl2/Render.h"
 #include "app/common/App_structs.h"
 #include "app/common/Audio/SoundEngine.h"
@@ -486,7 +486,7 @@ void LocalPlayer::aiStep() {
 
     // Check if the player is idle and the rich presence needs updated
     if (!m_bIsIdle && PlatformInput.GetIdleSeconds(m_iPad) > PLAYER_IDLE_TIME) {
-        ProfileManager.SetCurrentGameActivity(m_iPad, CONTEXT_PRESENCE_IDLE,
+        PlatformProfile.SetCurrentGameActivity(m_iPad, CONTEXT_PRESENCE_IDLE,
                                               false);
         m_bIsIdle = true;
     } else if (m_bIsIdle &&
@@ -495,18 +495,18 @@ void LocalPlayer::aiStep() {
         if (g_NetworkManager.GetPlayerCount() > 1) {
             // only do it for this player here - each player will run this code
             if (g_NetworkManager.IsLocalGame()) {
-                ProfileManager.SetCurrentGameActivity(
+                PlatformProfile.SetCurrentGameActivity(
                     m_iPad, CONTEXT_PRESENCE_MULTIPLAYEROFFLINE, false);
             } else {
-                ProfileManager.SetCurrentGameActivity(
+                PlatformProfile.SetCurrentGameActivity(
                     m_iPad, CONTEXT_PRESENCE_MULTIPLAYER, false);
             }
         } else {
             if (g_NetworkManager.IsLocalGame()) {
-                ProfileManager.SetCurrentGameActivity(
+                PlatformProfile.SetCurrentGameActivity(
                     m_iPad, CONTEXT_PRESENCE_MULTIPLAYER_1POFFLINE, false);
             } else {
-                ProfileManager.SetCurrentGameActivity(
+                PlatformProfile.SetCurrentGameActivity(
                     m_iPad, CONTEXT_PRESENCE_MULTIPLAYER_1P, false);
             }
         }
@@ -845,14 +845,14 @@ void LocalPlayer::awardStat(Stat* stat, const std::vector<uint8_t>& param) {
             // achievements don't get awarded to all players e.g. Splitscreen
             // players cannot get theme/avatar/gamerpic and Trial players cannot
             // get any This causes some extreme flooding of some awards
-            if (ProfileManager.CanBeAwarded(m_iPad, ach->getAchievementID())) {
+            if (PlatformProfile.CanBeAwarded(m_iPad, ach->getAchievementID())) {
                 // 4J Stu - Some awards cause a menu to popup. This can be bad,
                 // especially if you are surrounded by mobs! We cannot pause the
                 // game unless in offline single player, but lets at least do it
                 // then
                 if (g_NetworkManager.IsLocalGame() &&
                     g_NetworkManager.GetPlayerCount() == 1 &&
-                    ProfileManager.GetAwardType(ach->getAchievementID()) !=
+                    PlatformProfile.GetAwardType(ach->getAchievementID()) !=
                         EAwardType::Achievement) {
                     ui.CloseUIScenes(m_iPad);
                     ui.NavigateToScene(m_iPad, eUIScene_PauseMenu);
@@ -863,7 +863,7 @@ void LocalPlayer::awardStat(Stat* stat, const std::vector<uint8_t>& param) {
             unsigned long long achBit = ((unsigned long long)1)
                                         << ach->getAchievementID();
             if (!(achBit & m_awardedThisSession)) {
-                ProfileManager.Award(m_iPad, ach->getAchievementID());
+                PlatformProfile.Award(m_iPad, ach->getAchievementID());
                 m_awardedThisSession |= achBit;
             }
         }

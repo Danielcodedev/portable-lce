@@ -8,7 +8,7 @@
 #include <vector>
 
 #include "platform/input/InputActions.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "platform/sdl2/Render.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/Console_Debug_enum.h"
@@ -199,7 +199,7 @@ bool IUIScene_CraftingMenu::handleKeyDown(int iPad, int iAction, bool bRepeat) {
                 // Force a make if the debug is on
                 if (app.DebugSettingsOn() &&
                     app.GetGameSettingsDebugMask(
-                        ProfileManager.GetPrimaryPad()) &
+                        PlatformProfile.GetPrimaryPad()) &
                         (1L << eDebugSetting_CraftAnything)) {
                     if (CanBeMadeA[m_iCurrentSlotHIndex].iCount != 0) {
                         int iSlot = iVSlotIndexA[m_iCurrentSlotVIndex];
@@ -907,7 +907,7 @@ void IUIScene_CraftingMenu::CheckRecipesAvailable() {
         unsigned int uiAlpha;
 
         if (app.DebugSettingsOn() &&
-            app.GetGameSettingsDebugMask(ProfileManager.GetPrimaryPad()) &
+            app.GetGameSettingsDebugMask(PlatformProfile.GetPrimaryPad()) &
                 (1L << eDebugSetting_CraftAnything)) {
             uiAlpha = 31;
         } else {
@@ -1054,7 +1054,7 @@ void IUIScene_CraftingMenu::UpdateVerticalSlots() {
             unsigned int uiAlpha;
 
             if (app.DebugSettingsOn() &&
-                app.GetGameSettingsDebugMask(ProfileManager.GetPrimaryPad()) &
+                app.GetGameSettingsDebugMask(PlatformProfile.GetPrimaryPad()) &
                     (1L << eDebugSetting_CraftAnything)) {
                 uiAlpha = 31;
             } else {
@@ -1171,7 +1171,7 @@ void IUIScene_CraftingMenu::DisplayIngredients() {
         setCraftingOutputSlotItem(getPad(), pTempItemInst);
 
         if (app.DebugSettingsOn() &&
-            app.GetGameSettingsDebugMask(ProfileManager.GetPrimaryPad()) &
+            app.GetGameSettingsDebugMask(PlatformProfile.GetPrimaryPad()) &
                 (1L << eDebugSetting_CraftAnything)) {
             setCraftingOutputSlotRedBox(false);
         } else {
@@ -1212,7 +1212,7 @@ void IUIScene_CraftingMenu::DisplayIngredients() {
                     // recipe
                     if (app.DebugSettingsOn() &&
                         app.GetGameSettingsDebugMask(
-                            ProfileManager.GetPrimaryPad()) &
+                            PlatformProfile.GetPrimaryPad()) &
                             (1L << eDebugSetting_CraftAnything)) {
                         setIngredientSlotRedBox(index, false);
                     } else {

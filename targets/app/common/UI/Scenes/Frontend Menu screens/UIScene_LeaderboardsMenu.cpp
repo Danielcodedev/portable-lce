@@ -9,7 +9,7 @@
 #include <memory>
 
 #include "platform/input/InputActions.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "app/common/Console_Debug_enum.h"
 #include "app/common/Leaderboards/LeaderboardInterface.h"
 #include "app/common/Leaderboards/LeaderboardManager.h"
@@ -375,7 +375,7 @@ void UIScene_LeaderboardsMenu::ReadStats(int startIndex) {
         } break;
         case IPlatformLeaderboard::eFM_MyScore: {
             PlayerUID uid;
-            ProfileManager.GetXUID(ProfileManager.GetPrimaryPad(), &uid, true);
+            PlatformProfile.GetXUID(PlatformProfile.GetPrimaryPad(), &uid, true);
             m_interface.ReadStats_MyScore(
                 this, m_currentDifficulty,
                 (IPlatformLeaderboard::EStatsType)m_currentLeaderboard,
@@ -383,7 +383,7 @@ void UIScene_LeaderboardsMenu::ReadStats(int startIndex) {
         } break;
         case IPlatformLeaderboard::eFM_Friends: {
             PlayerUID uid;
-            ProfileManager.GetXUID(ProfileManager.GetPrimaryPad(), &uid, true);
+            PlatformProfile.GetXUID(PlatformProfile.GetPrimaryPad(), &uid, true);
             m_interface.ReadStats_Friends(
                 this, m_currentDifficulty,
                 (IPlatformLeaderboard::EStatsType)m_currentLeaderboard,

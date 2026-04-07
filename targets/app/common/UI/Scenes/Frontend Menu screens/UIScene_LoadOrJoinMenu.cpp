@@ -8,7 +8,7 @@
 
 #include "platform/input/InputActions.h"
 #include "platform/input/input.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "app/common/App_Defines.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/DLC/DLCManager.h"
@@ -115,8 +115,8 @@ UIScene_LoadOrJoinMenu::UIScene_LoadOrJoinMenu(int iPad, void* initData,
     m_bSaveTransferInProgress = false;
     m_eAction = eAction_None;
 
-    m_bMultiplayerAllowed = ProfileManager.IsSignedInLive(m_iPad) &&
-                            ProfileManager.AllowedToPlayMultiplayer(m_iPad);
+    m_bMultiplayerAllowed = PlatformProfile.IsSignedInLive(m_iPad) &&
+                            PlatformProfile.AllowedToPlayMultiplayer(m_iPad);
 
     int iLB = -1;
 
@@ -226,7 +226,7 @@ void UIScene_LoadOrJoinMenu::updateTooltips() {
         // available
         // if(app.getRemoteStorage()->saveIsAvailable())
         {
-            bool bSignedInLive = ProfileManager.IsSignedInLive(m_iPad);
+            bool bSignedInLive = PlatformProfile.IsSignedInLive(m_iPad);
             if (bSignedInLive) {
                 iX = IDS_TOOLTIPS_SAVETRANSFER_DOWNLOAD;
             }
@@ -296,8 +296,8 @@ void UIScene_LoadOrJoinMenu::handleGainFocus(bool navBack) {
     if (navBack) {
         app.SetLiveLinkRequired(true);
 
-        m_bMultiplayerAllowed = ProfileManager.IsSignedInLive(m_iPad) &&
-                                ProfileManager.AllowedToPlayMultiplayer(m_iPad);
+        m_bMultiplayerAllowed = PlatformProfile.IsSignedInLive(m_iPad) &&
+                                PlatformProfile.AllowedToPlayMultiplayer(m_iPad);
 
         // re-enable button presses
         m_bIgnoreInput = false;
@@ -704,7 +704,7 @@ void UIScene_LoadOrJoinMenu::handleInput(int iPad, int key, bool repeat,
             // Save Transfer
 #if defined(SONY_REMOTE_STORAGE_DOWNLOAD)
             {
-                bool bSignedInLive = ProfileManager.IsSignedInLive(iPad);
+                bool bSignedInLive = PlatformProfile.IsSignedInLive(iPad);
                 if (bSignedInLive) {
                     LaunchSaveTransfer();
                 }
@@ -742,8 +742,8 @@ void UIScene_LoadOrJoinMenu::handleInput(int iPad, int key, bool repeat,
                             uiIDA[2] = IDS_TOOLTIPS_DELETESAVE;
                             int numOptions = 3;
 #if defined(SONY_REMOTE_STORAGE_UPLOAD)
-                            if (ProfileManager.IsSignedInLive(
-                                    ProfileManager.GetPrimaryPad())) {
+                            if (PlatformProfile.IsSignedInLive(
+                                    PlatformProfile.GetPrimaryPad())) {
                                 numOptions = 4;
                                 uiIDA[3] = IDS_TOOLTIPS_SAVETRANSFER_UPLOAD;
                             }
@@ -911,7 +911,7 @@ void UIScene_LoadOrJoinMenu::handlePress(F64 controlId, F64 childId) {
                     params->saveDetails = nullptr;
 
                     // navigate to the settings scene
-                    ui.NavigateToScene(ProfileManager.GetPrimaryPad(),
+                    ui.NavigateToScene(PlatformProfile.GetPrimaryPad(),
                                        eUIScene_LoadMenu, params);
                 }
             } else {
@@ -937,7 +937,7 @@ void UIScene_LoadOrJoinMenu::handlePress(F64 controlId, F64 childId) {
 
                         {
                             // navigate to the settings scene
-                            ui.NavigateToScene(ProfileManager.GetPrimaryPad(),
+                            ui.NavigateToScene(PlatformProfile.GetPrimaryPad(),
                                                eUIScene_LoadMenu, params);
                         }
                     }
@@ -1011,7 +1011,7 @@ void UIScene_LoadOrJoinMenu::CheckAndJoinGame(int gameIndex) {
         m_controlJoinTimer.setVisible(false);
 
         m_bIgnoreInput = true;
-        ui.NavigateToScene(ProfileManager.GetPrimaryPad(), eUIScene_JoinMenu,
+        ui.NavigateToScene(PlatformProfile.GetPrimaryPad(), eUIScene_JoinMenu,
                            m_initData);
     }
 }
@@ -1068,7 +1068,7 @@ void UIScene_LoadOrJoinMenu::LoadLevelGen(LevelGenerationOptions* levelGen) {
     completionData->iPad = DEFAULT_XUI_MENU_USER;
     loadingParams->completionData = completionData;
 
-    ui.NavigateToScene(ProfileManager.GetPrimaryPad(),
+    ui.NavigateToScene(PlatformProfile.GetPrimaryPad(),
                        eUIScene_FullscreenProgress, loadingParams);
 }
 
@@ -1264,8 +1264,8 @@ void UIScene_LoadOrJoinMenu::handleTimerComplete(int id) {
     switch (id) {
         case JOIN_LOAD_ONLINE_TIMER_ID: {
             bool bMultiplayerAllowed =
-                ProfileManager.IsSignedInLive(m_iPad) &&
-                ProfileManager.AllowedToPlayMultiplayer(m_iPad);
+                PlatformProfile.IsSignedInLive(m_iPad) &&
+                PlatformProfile.AllowedToPlayMultiplayer(m_iPad);
             if (bMultiplayerAllowed != m_bMultiplayerAllowed) {
                 if (bMultiplayerAllowed) {
                     // 					m_CheckboxOnline.SetEnable(true);
@@ -1336,7 +1336,7 @@ void UIScene_LoadOrJoinMenu::LoadSaveFromDisk(
     completionData->iPad = DEFAULT_XUI_MENU_USER;
     loadingParams->completionData = completionData;
 
-    ui.NavigateToScene(ProfileManager.GetPrimaryPad(),
+    ui.NavigateToScene(PlatformProfile.GetPrimaryPad(),
                        eUIScene_FullscreenProgress, loadingParams);
 }
 
@@ -1401,7 +1401,7 @@ void UIScene_LoadOrJoinMenu::LoadSaveFromCloud() {
     completionData->iPad = DEFAULT_XUI_MENU_USER;
     loadingParams->completionData = completionData;
 
-    ui.NavigateToScene(ProfileManager.GetPrimaryPad(),
+    ui.NavigateToScene(PlatformProfile.GetPrimaryPad(),
                        eUIScene_FullscreenProgress, loadingParams);
 }
 
@@ -1680,7 +1680,7 @@ int UIScene_LoadOrJoinMenu::DownloadSonyCrossSaveThreadProc(void* lpParameter) {
                             ui.RequestAlertMessage(
                                 IDS_TOOLTIPS_SAVETRANSFER_DOWNLOAD,
                                 IDS_SAVE_TRANSFER_WRONG_VERSION, uiIDA, 1,
-                                ProfileManager.GetPrimaryPad(),
+                                PlatformProfile.GetPrimaryPad(),
                                 RemoteSaveNotFoundCallback, pClass);
                         }
                     } else {
@@ -1691,7 +1691,7 @@ int UIScene_LoadOrJoinMenu::DownloadSonyCrossSaveThreadProc(void* lpParameter) {
                         ui.RequestAlertMessage(
                             IDS_TOOLTIPS_SAVETRANSFER_DOWNLOAD,
                             IDS_SAVE_TRANSFER_NOT_AVAILABLE_TEXT, uiIDA, 1,
-                            ProfileManager.GetPrimaryPad(),
+                            PlatformProfile.GetPrimaryPad(),
                             RemoteSaveNotFoundCallback, pClass);
                     }
                 }
@@ -1988,7 +1988,7 @@ int UIScene_LoadOrJoinMenu::DownloadSonyCrossSaveThreadProc(void* lpParameter) {
                                                     // player
                 ui.RequestErrorMessage(IDS_TOOLTIPS_SAVETRANSFER_DOWNLOAD,
                                        IDS_SAVE_TRANSFER_DOWNLOADCOMPLETE,
-                                       uiIDA, 1, ProfileManager.GetPrimaryPad(),
+                                       uiIDA, 1, PlatformProfile.GetPrimaryPad(),
                                        CrossSaveFinishedCallback, pClass);
                 pClass->m_eSaveTransferState = eSaveTransfer_Finished;
             } break;
@@ -2071,14 +2071,14 @@ int UIScene_LoadOrJoinMenu::DownloadSonyCrossSaveThreadProc(void* lpParameter) {
                     unsigned int uiIDA[1];
                     uiIDA[0] = IDS_CONFIRM_OK;
                     uint32_t errorMessage = IDS_SAVE_TRANSFER_DOWNLOADFAILED;
-                    if (!ProfileManager.IsSignedInLive(
-                            ProfileManager.GetPrimaryPad())) {
+                    if (!PlatformProfile.IsSignedInLive(
+                            PlatformProfile.GetPrimaryPad())) {
                         errorMessage =
                             IDS_ERROR_NETWORK;  // show "A network error has
                                                 // occurred."
 #if defined(__VITA__)
-                        if (!ProfileManager.IsSignedInPSN(
-                                ProfileManager.GetPrimaryPad())) {
+                        if (!PlatformProfile.IsSignedInPSN(
+                                PlatformProfile.GetPrimaryPad())) {
                             errorMessage =
                                 IDS_PRO_NOTONLINE_TEXT;  // show "not signed
                                                          // into PSN"
@@ -2087,7 +2087,7 @@ int UIScene_LoadOrJoinMenu::DownloadSonyCrossSaveThreadProc(void* lpParameter) {
                     }
                     ui.RequestErrorMessage(IDS_TOOLTIPS_SAVETRANSFER_DOWNLOAD,
                                            errorMessage, uiIDA, 1,
-                                           ProfileManager.GetPrimaryPad(),
+                                           PlatformProfile.GetPrimaryPad(),
                                            CrossSaveFinishedCallback, pClass);
                     pClass->m_eSaveTransferState = eSaveTransfer_Finished;
                 }

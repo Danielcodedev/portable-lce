@@ -13,7 +13,7 @@
 #include <utility>
 
 #include "platform/PlatformTypes.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "platform/sdl2/Storage.h"
 #include "ConsoleInput.h"
 #include "DispenserBootstrap.h"
@@ -903,7 +903,7 @@ void MinecraftServer::stopServer(bool didInit) {
     // also need to check for a profile switch here - primary player signs out,
     // and another player signs in before dismissing the dash
     if ((m_bPrimaryPlayerSignedOut == false) &&
-        ProfileManager.IsSignedIn(PlatformInput.GetPrimaryPad())) {
+        PlatformProfile.IsSignedIn(PlatformInput.GetPrimaryPad())) {
         // if trial version or saving is disabled, then don't save anything.
         // Also don't save anything if we didn't actually get through the server
         // initialisation.

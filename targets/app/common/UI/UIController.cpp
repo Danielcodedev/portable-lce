@@ -11,7 +11,7 @@
 #include <utility>
 
 #include "platform/input/input.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/Audio/SoundEngine.h"
 #include "app/common/DLC/DLCManager.h"
@@ -387,7 +387,7 @@ void UIController::SetupFont() {
     if (m_eTargetFont == m_eCurrentFont) {
         // 4J-JEV: If we're ingame, reload the font to update all the text.
         if (app.GetGameStarted())
-            app.SetAction(ProfileManager.GetPrimaryPad(),
+            app.SetAction(PlatformProfile.GetPrimaryPad(),
                           eAppAction_ReloadFont);
         return;
     }
@@ -434,7 +434,7 @@ void UIController::SetupFont() {
 
     // Reload ui to set new font.
     if (m_eCurrentFont != eFont_NotLoaded) {
-        app.SetAction(ProfileManager.GetPrimaryPad(), eAppAction_ReloadFont);
+        app.SetAction(PlatformProfile.GetPrimaryPad(), eAppAction_ReloadFont);
     } else {
         updateCurrentFont();
     }
@@ -459,7 +459,7 @@ void UIController::tick() {
         ui.CleanUpSkinReload();
 
         if (m_navigateToHomeOnReload || !g_NetworkManager.IsInSession()) {
-            ui.NavigateToScene(ProfileManager.GetPrimaryPad(),
+            ui.NavigateToScene(PlatformProfile.GetPrimaryPad(),
                                eUIScene_MainMenu);
         } else {
             ui.CloseAllPlayersScenes();
@@ -737,7 +737,7 @@ void UIController::tickInput() {
     if (!m_bSystemUIShowing) {
 #if defined(ENABLE_IGGY_PERFMON)
         if (m_iggyPerfmonEnabled) {
-            if (PlatformInput.ButtonPressed(ProfileManager.GetPrimaryPad(),
+            if (PlatformInput.ButtonPressed(PlatformProfile.GetPrimaryPad(),
                                            ACTION_MENU_STICK_PRESS))
                 m_iggyPerfmonEnabled = !m_iggyPerfmonEnabled;
         } else
@@ -848,29 +848,29 @@ void UIController::renderScenes() {
 
         pm_pad.bits = 0;
         pm_pad.field.dpad_up = PlatformInput.ButtonPressed(
-            ProfileManager.GetPrimaryPad(), ACTION_MENU_UP);
+            PlatformProfile.GetPrimaryPad(), ACTION_MENU_UP);
         pm_pad.field.dpad_down = PlatformInput.ButtonPressed(
-            ProfileManager.GetPrimaryPad(), ACTION_MENU_DOWN);
+            PlatformProfile.GetPrimaryPad(), ACTION_MENU_DOWN);
         pm_pad.field.dpad_left = PlatformInput.ButtonPressed(
-            ProfileManager.GetPrimaryPad(), ACTION_MENU_LEFT);
+            PlatformProfile.GetPrimaryPad(), ACTION_MENU_LEFT);
         pm_pad.field.dpad_right = PlatformInput.ButtonPressed(
-            ProfileManager.GetPrimaryPad(), ACTION_MENU_RIGHT);
+            PlatformProfile.GetPrimaryPad(), ACTION_MENU_RIGHT);
         pm_pad.field.button_up = PlatformInput.ButtonPressed(
-            ProfileManager.GetPrimaryPad(), ACTION_MENU_Y);
+            PlatformProfile.GetPrimaryPad(), ACTION_MENU_Y);
         pm_pad.field.button_down = PlatformInput.ButtonPressed(
-            ProfileManager.GetPrimaryPad(), ACTION_MENU_A);
+            PlatformProfile.GetPrimaryPad(), ACTION_MENU_A);
         pm_pad.field.button_left = PlatformInput.ButtonPressed(
-            ProfileManager.GetPrimaryPad(), ACTION_MENU_X);
+            PlatformProfile.GetPrimaryPad(), ACTION_MENU_X);
         pm_pad.field.button_right = PlatformInput.ButtonPressed(
-            ProfileManager.GetPrimaryPad(), ACTION_MENU_B);
+            PlatformProfile.GetPrimaryPad(), ACTION_MENU_B);
         pm_pad.field.shoulder_left_hi = PlatformInput.ButtonPressed(
-            ProfileManager.GetPrimaryPad(), ACTION_MENU_LEFT_SCROLL);
+            PlatformProfile.GetPrimaryPad(), ACTION_MENU_LEFT_SCROLL);
         pm_pad.field.shoulder_right_hi = PlatformInput.ButtonPressed(
-            ProfileManager.GetPrimaryPad(), ACTION_MENU_RIGHT_SCROLL);
+            PlatformProfile.GetPrimaryPad(), ACTION_MENU_RIGHT_SCROLL);
         pm_pad.field.trigger_left_low = PlatformInput.ButtonPressed(
-            ProfileManager.GetPrimaryPad(), ACTION_MENU_PAGEUP);
+            PlatformProfile.GetPrimaryPad(), ACTION_MENU_PAGEUP);
         pm_pad.field.trigger_right_low = PlatformInput.ButtonPressed(
-            ProfileManager.GetPrimaryPad(), ACTION_MENU_PAGEDOWN);
+            PlatformProfile.GetPrimaryPad(), ACTION_MENU_PAGEDOWN);
         // IggyPerfmonPadFromXInputStatePointer(pm_pad, &xi_pad);
 
         // gdraw_D3D_SetTileOrigin( fb,
@@ -1195,7 +1195,7 @@ bool UIController::NavigateToScene(int iPad, EUIScene scene, void* initData,
     // times
     if ((scene == eUIScene_LoadOrJoinMenu) &&
         (bSeenUpdateTextThisSession == false) &&
-        (app.GetGameSettings(ProfileManager.GetPrimaryPad(),
+        (app.GetGameSettings(PlatformProfile.GetPrimaryPad(),
                              eGameSetting_DisplayUpdateMessage) != 0)) {
         scene = eUIScene_NewUpdateMessage;
         bSeenUpdateTextThisSession = true;
@@ -1378,7 +1378,7 @@ void UIController::NavigateToHomeMenu() {
     if (pMinecraft->skins->needsUIUpdate()) {
         m_navigateToHomeOnReload = true;
     } else {
-        ui.NavigateToScene(ProfileManager.GetPrimaryPad(), eUIScene_MainMenu);
+        ui.NavigateToScene(PlatformProfile.GetPrimaryPad(), eUIScene_MainMenu);
 #if defined(ENABLE_JAVA_GUIS)
         pMinecraft->setScreen(new TitleScreen());
 #endif
@@ -1482,7 +1482,7 @@ void UIController::CloseUIScenes(int iPad, bool forceIPad) {
 void UIController::setFullscreenMenuDisplayed(bool displayed) {
     // Show/hide the tooltips for the fullscreen group
     m_groups[(int)eUIGroup_Fullscreen]->showComponent(
-        ProfileManager.GetPrimaryPad(), eUIComponent_Tooltips,
+        PlatformProfile.GetPrimaryPad(), eUIComponent_Tooltips,
         eUILayer_Tooltips, displayed);
 
     // Show/hide tooltips for the other layers
@@ -1777,7 +1777,7 @@ void UIController::PlayUISFX(ESoundEffect eSound) {
 
 void UIController::DisplayGamertag(unsigned int iPad, bool show) {
     // The host decides whether these are on or off
-    if (app.GetGameSettings(ProfileManager.GetPrimaryPad(),
+    if (app.GetGameSettings(PlatformProfile.GetPrimaryPad(),
                             eGameSetting_DisplaySplitscreenGamertags) == 0) {
         show = false;
     }
@@ -2234,7 +2234,7 @@ C4JStorage::EMessageResult UIController::RequestUGCMessageBox(
     }
 
     // Default pad to primary player
-    if (iPad == -1) iPad = ProfileManager.GetPrimaryPad();
+    if (iPad == -1) iPad = PlatformProfile.GetPrimaryPad();
 
     unsigned int uiIDA[1];
     uiIDA[0] = IDS_CONFIRM_OK;
@@ -2261,7 +2261,7 @@ C4JStorage::EMessageResult UIController::RequestContentRestrictedMessageBox(
     }
 
     // Default pad to primary player
-    if (iPad == -1) iPad = ProfileManager.GetPrimaryPad();
+    if (iPad == -1) iPad = PlatformProfile.GetPrimaryPad();
 
     unsigned int uiIDA[1];
     uiIDA[0] = IDS_CONFIRM_OK;

@@ -1,6 +1,6 @@
 #include "UIComponent_Tooltips.h"
 
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "platform/sdl2/Render.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/UI/All Platforms/UIEnums.h"
@@ -120,7 +120,7 @@ void UIComponent_Tooltips::tick() {
     UIScene::tick();
 
     // set the opacity of the tooltip items
-    unsigned char ucAlpha = app.GetGameSettings(ProfileManager.GetPrimaryPad(),
+    unsigned char ucAlpha = app.GetGameSettings(PlatformProfile.GetPrimaryPad(),
                                                 eGameSetting_InterfaceOpacity);
     float fVal;
 
@@ -167,7 +167,7 @@ void UIComponent_Tooltips::tick() {
 
 void UIComponent_Tooltips::render(S32 width, S32 height,
                                   C4JRender::eViewportType viewport) {
-    if ((ProfileManager.GetLockedProfile() != -1) &&
+    if ((PlatformProfile.GetLockedProfile() != -1) &&
         !ui.GetMenuDisplayed(m_iPad) &&
         (app.GetGameSettings(m_iPad, eGameSetting_Tooltips) == 0 ||
          app.GetGameSettings(m_iPad, eGameSetting_DisplayHUD) == 0)) {

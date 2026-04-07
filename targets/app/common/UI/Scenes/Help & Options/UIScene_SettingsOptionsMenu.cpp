@@ -4,7 +4,7 @@
 #include <wchar.h>
 
 #include "platform/input/InputActions.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "platform/sdl2/Render.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/Network/GameNetworkManager.h"
@@ -114,7 +114,7 @@ UIScene_SettingsOptionsMenu::UIScene_SettingsOptionsMenu(int iPad,
     bool bRemoveInGameGamertags = false;
 
     bool bNotInGame = (Minecraft::GetInstance()->level == nullptr);
-    bool bPrimaryPlayer = ProfileManager.GetPrimaryPad() == m_iPad;
+    bool bPrimaryPlayer = PlatformProfile.GetPrimaryPad() == m_iPad;
     if (!bPrimaryPlayer) {
         bRemoveDifficulty = true;
         bRemoveAutosave = true;
@@ -318,7 +318,7 @@ void UIScene_SettingsOptionsMenu::handleReload() {
     bool bRemoveInGameGamertags = false;
 
     bool bNotInGame = (Minecraft::GetInstance()->level == nullptr);
-    bool bPrimaryPlayer = ProfileManager.GetPrimaryPad() == m_iPad;
+    bool bPrimaryPlayer = PlatformProfile.GetPrimaryPad() == m_iPad;
     if (!bPrimaryPlayer) {
         bRemoveDifficulty = true;
         bRemoveAutosave = true;

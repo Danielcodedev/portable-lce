@@ -6,7 +6,7 @@
 #include "platform/PlatformTypes.h"
 #include "platform/input/InputActions.h"
 #include "platform/input/input.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "app/common/UI/Controls/UIControl_BitmapIcon.h"
 #include "app/common/UI/Controls/UIControl_Label.h"
 #include "app/common/UI/UILayer.h"
@@ -81,7 +81,7 @@ void UIScene_QuadrantSignin::handleInput(int iPad, int key, bool repeat,
                     {
                         m_bIgnoreInput = true;
                         m_signInInfo.Func(false, iPad);
-                        ProfileManager.CancelProfileAvatarRequest();
+                        PlatformProfile.CancelProfileAvatarRequest();
 
                         navigateBack();
                     }
@@ -90,16 +90,16 @@ void UIScene_QuadrantSignin::handleInput(int iPad, int key, bool repeat,
             case ACTION_MENU_OK:
                 if (pressed) {
                     m_bIgnoreInput = true;
-                    if (ProfileManager.IsSignedIn(iPad)) {
+                    if (PlatformProfile.IsSignedIn(iPad)) {
                         app.DebugPrintf("Signed in pad pressed\n");
-                        ProfileManager.CancelProfileAvatarRequest();
+                        PlatformProfile.CancelProfileAvatarRequest();
 
                         navigateBack();
                         m_signInInfo.Func(true, m_iPad);
                     } else {
                         {
                             app.DebugPrintf("Non-signed in pad pressed\n");
-                            ProfileManager.RequestSignInUI(
+                            PlatformProfile.RequestSignInUI(
                                 false, false, false, true, true,
                                 [this](bool bContinue, int pad) {
                                     return SignInReturned(this, bContinue, pad);
@@ -137,20 +137,20 @@ int UIScene_QuadrantSignin::SignInReturned(void* pParam, bool bContinue,
 
 void UIScene_QuadrantSignin::updateState() {
     for (unsigned int i = 0; i < XUSER_MAX_COUNT; ++i) {
-        if (ProfileManager.IsSignedIn(i) && PlatformInput.IsPadConnected(i)) {
+        if (PlatformProfile.IsSignedIn(i) && PlatformInput.IsPadConnected(i)) {
             // app.DebugPrintf("Index %d is signed in, display name - '%s'\n",
-            // i, ProfileManager.GetDisplayName(i).data());
+            // i, PlatformProfile.GetDisplayName(i).data());
 
             {
                 setControllerState(i, eControllerStatus_PlayerDetails);
             }
 
-            m_labelDisplayName[i].setLabel(ProfileManager.GetDisplayName(i));
+            m_labelDisplayName[i].setLabel(PlatformProfile.GetDisplayName(i));
             // m_buttonControllers[i].setLabel(app.GetString(IDS_TOOLTIPS_CONTINUE),i);
 
             if (!m_iconRequested[i]) {
                 app.DebugPrintf(app.USER_SR, "Requesting avatar for %d\n", i);
-                if (ProfileManager.GetProfileAvatar(
+                if (PlatformProfile.GetProfileAvatar(
                         i,
                         [this](std::uint8_t* data, unsigned int bytes) {
                             return AvatarReturned(this, data, bytes);
@@ -226,14 +226,14 @@ void UIScene_QuadrantSignin::_initQuadrants() {
 
         m_controllerStatus[i] = eControllerStatus_ConnectController;
 
-        if (ProfileManager.IsSignedIn(i)) {
+        if (PlatformProfile.IsSignedIn(i)) {
             app.DebugPrintf("Index %d is signed in\n", i);
 
             {
                 setControllerState(i, eControllerStatus_PlayerDetails);
             }
 
-            m_labelDisplayName[i].init(ProfileManager.GetDisplayName(i));
+            m_labelDisplayName[i].init(PlatformProfile.GetDisplayName(i));
         } else if (PlatformInput.IsPadConnected(i)) {
             app.DebugPrintf("Index %d is not signed in\n", i);
 

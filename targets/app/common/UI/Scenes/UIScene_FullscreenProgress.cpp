@@ -6,7 +6,7 @@
 
 #include "platform/PlatformTypes.h"
 #include "platform/input/InputActions.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/Network/GameNetworkManager.h"
 #include "app/common/Tutorial/Tutorial.h"
@@ -233,9 +233,9 @@ void UIScene_FullscreenProgress::tick() {
                             // This just allows it to be shown
                             Minecraft* pMinecraft = Minecraft::GetInstance();
                             if (pMinecraft->localgameModes
-                                    [ProfileManager.GetPrimaryPad()] != nullptr)
+                                    [PlatformProfile.GetPrimaryPad()] != nullptr)
                                 pMinecraft
-                                    ->localgameModes[ProfileManager
+                                    ->localgameModes[PlatformProfile
                                                          .GetPrimaryPad()]
                                     ->getTutorial()
                                     ->showTutorialPopup(true);

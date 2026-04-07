@@ -7,7 +7,7 @@
 #include <compare>
 
 #include "platform/input/InputActions.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/App_structs.h"
 #include "app/common/Tutorial/Constraints/TutorialConstraint.h"
@@ -1969,7 +1969,7 @@ Tutorial::~Tutorial() {
 
 void Tutorial::debugResetPlayerSavedProgress(int iPad) {
     GAME_SETTINGS* pGameSettings =
-        (GAME_SETTINGS*)ProfileManager.GetGameDefinedProfileData(iPad);
+        (GAME_SETTINGS*)PlatformProfile.GetGameDefinedProfileData(iPad);
     memset(pGameSettings->ucTutorialCompletion, 0,
            TUTORIAL_PROFILE_STORAGE_BYTES);
     pGameSettings->uiSpecialTutorialBitmask = 0;
@@ -1994,7 +1994,7 @@ void Tutorial::setCompleted(int completableId) {
         completableIndex < TUTORIAL_PROFILE_STORAGE_BITS) {
         // Set the bit for this position
         GAME_SETTINGS* pGameSettings =
-            (GAME_SETTINGS*)ProfileManager.GetGameDefinedProfileData(m_iPad);
+            (GAME_SETTINGS*)PlatformProfile.GetGameDefinedProfileData(m_iPad);
         int arrayIndex = completableIndex >> 3;
         int bitIndex = 7 - (completableIndex % 8);
         pGameSettings->ucTutorialCompletion[arrayIndex] |= 1 << bitIndex;
@@ -2023,7 +2023,7 @@ bool Tutorial::getCompleted(int completableId) {
         // Read the bit for this position
         // Retrieve the data pointer from the profile
         GAME_SETTINGS* pGameSettings =
-            (GAME_SETTINGS*)ProfileManager.GetGameDefinedProfileData(m_iPad);
+            (GAME_SETTINGS*)PlatformProfile.GetGameDefinedProfileData(m_iPad);
         int arrayIndex = completableIndex >> 3;
         int bitIndex = 7 - (completableIndex % 8);
         return (pGameSettings->ucTutorialCompletion[arrayIndex] &

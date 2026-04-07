@@ -1,4 +1,4 @@
-#include "Profile.h"
+#include "StubProfile.h"
 
 #include <cstdio>
 #include <cstring>
@@ -7,7 +7,8 @@
 #include "../ProfileConstants.h"
 #include "input/input.h"
 
-C_4JProfile ProfileManager;
+StubProfile stub_profile_instance;
+IPlatformProfile& PlatformProfile = stub_profile_instance;
 
 namespace {
 constexpr PlayerUID kFakeXuidBase = 0xe000d45248242f2eULL;
@@ -46,11 +47,11 @@ static_assert(sizeof(ProfileGameSettings) == 204,
               "ProfileGameSettings must match GAME_SETTINGS profile storage");
 
 void* s_profileData[XUSER_MAX_COUNT] = {};
-C_4JProfile::PROFILESETTINGS s_dashboardSettings[XUSER_MAX_COUNT] = {};
+IPlatformProfile::PROFILESETTINGS s_dashboardSettings[XUSER_MAX_COUNT] = {};
 char s_gamertags[XUSER_MAX_COUNT][16] = {};
 std::wstring s_displayNames[XUSER_MAX_COUNT];
 int s_lockedProfile = 0;
-std::function<int(C_4JProfile::PROFILESETTINGS*, int)>
+std::function<int(IPlatformProfile::PROFILESETTINGS*, int)>
     s_defaultOptionsCallback;
 
 bool isValidPad(int iPad) { return iPad >= 0 && iPad < XUSER_MAX_COUNT; }
@@ -103,7 +104,7 @@ void initialiseDefaultGameSettings(ProfileGameSettings* gameSettings) {
 }
 }  // namespace
 
-void C_4JProfile::Initialise(std::uint32_t, std::uint32_t, unsigned short,
+void StubProfile::Initialise(std::uint32_t, std::uint32_t, unsigned short,
                              unsigned int, unsigned int, std::uint32_t*,
                              int iGameDefinedDataSizeX4, unsigned int*) {
     s_lockedProfile = 0;
@@ -119,27 +120,27 @@ void C_4JProfile::Initialise(std::uint32_t, std::uint32_t, unsigned short,
     }
 }
 
-int C_4JProfile::GetLockedProfile() { return s_lockedProfile; }
-void C_4JProfile::SetLockedProfile(int iProf) { s_lockedProfile = iProf; }
-bool C_4JProfile::IsSignedIn(int iQuadrant) { return iQuadrant == 0; }
-bool C_4JProfile::IsSignedInLive(int iProf) { return IsSignedIn(iProf); }
-bool C_4JProfile::IsGuest(int) { return false; }
-bool C_4JProfile::QuerySigninStatus() { return true; }
+int StubProfile::GetLockedProfile() { return s_lockedProfile; }
+void StubProfile::SetLockedProfile(int iProf) { s_lockedProfile = iProf; }
+bool StubProfile::IsSignedIn(int iQuadrant) { return iQuadrant == 0; }
+bool StubProfile::IsSignedInLive(int iProf) { return IsSignedIn(iProf); }
+bool StubProfile::IsGuest(int) { return false; }
+bool StubProfile::QuerySigninStatus() { return true; }
 
-void C_4JProfile::GetXUID(int iPad, PlayerUID* pXuid, bool) {
+void StubProfile::GetXUID(int iPad, PlayerUID* pXuid, bool) {
     if (pXuid)
         *pXuid =
             kFakeXuidBase + static_cast<PlayerUID>(isValidPad(iPad) ? iPad : 0);
 }
 
-bool C_4JProfile::AreXUIDSEqual(PlayerUID xuid1, PlayerUID xuid2) {
+bool StubProfile::AreXUIDSEqual(PlayerUID xuid1, PlayerUID xuid2) {
     return xuid1 == xuid2;
 }
 
-bool C_4JProfile::XUIDIsGuest(PlayerUID) { return false; }
-bool C_4JProfile::AllowedToPlayMultiplayer(int) { return true; }
+bool StubProfile::XUIDIsGuest(PlayerUID) { return false; }
+bool StubProfile::AllowedToPlayMultiplayer(int) { return true; }
 
-bool C_4JProfile::GetChatAndContentRestrictions(int, bool* pbChatRestricted,
+bool StubProfile::GetChatAndContentRestrictions(int, bool* pbChatRestricted,
                                                 bool* pbContentRestricted,
                                                 int* piAge) {
     if (pbChatRestricted) *pbChatRestricted = false;
@@ -148,50 +149,50 @@ bool C_4JProfile::GetChatAndContentRestrictions(int, bool* pbChatRestricted,
     return true;
 }
 
-char* C_4JProfile::GetGamertag(int iPad) {
+char* StubProfile::GetGamertag(int iPad) {
     const int p = isValidPad(iPad) ? iPad : 0;
     ensureFakeIdentity(p);
     return s_gamertags[p];
 }
 
-std::wstring C_4JProfile::GetDisplayName(int iPad) {
+std::wstring StubProfile::GetDisplayName(int iPad) {
     const int p = isValidPad(iPad) ? iPad : 0;
     ensureFakeIdentity(p);
     return s_displayNames[p];
 }
 
-int C_4JProfile::SetDefaultOptionsCallback(
+int StubProfile::SetDefaultOptionsCallback(
     std::function<int(PROFILESETTINGS*, int)> callback) {
     s_defaultOptionsCallback = std::move(callback);
     return 0;
 }
 
-C_4JProfile::PROFILESETTINGS* C_4JProfile::GetDashboardProfileSettings(
+IPlatformProfile::PROFILESETTINGS* StubProfile::GetDashboardProfileSettings(
     int iPad) {
     return &s_dashboardSettings[isValidPad(iPad) ? iPad : 0];
 }
 
-void* C_4JProfile::GetGameDefinedProfileData(int iQuadrant) {
+void* StubProfile::GetGameDefinedProfileData(int iQuadrant) {
     return isValidPad(iQuadrant) ? s_profileData[iQuadrant] : nullptr;
 }
 
-void C_4JProfile::AllowedPlayerCreatedContent(int, bool, bool* allAllowed,
+void StubProfile::AllowedPlayerCreatedContent(int, bool, bool* allAllowed,
                                               bool* friendsAllowed) {
     if (allAllowed) *allAllowed = true;
     if (friendsAllowed) *friendsAllowed = true;
 }
 
-bool C_4JProfile::CanViewPlayerCreatedContent(int, bool, PlayerUID*,
+bool StubProfile::CanViewPlayerCreatedContent(int, bool, PlayerUID*,
                                               unsigned int) {
     return true;
 }
 
 // GetPrimaryPad/SetPrimaryPad — delegates to PlatformPlatft.
-// Kept here temporarily for call sites that still use ProfileManager.
+// Kept here temporarily for call sites that still use PlatformPlatfore.
 // These forward to the canonical copies in SDL2Input.
-int C_4JProfile::GetPrimaryPad() {
+int StubProfile::GetPrimaryPad() {
     return PlatformInput.GetPrimaryPad();
 }
-void C_4JProfile::SetPrimaryPad(int iPad) {
+void StubProfile::SetPrimaryPad(int iPad) {
     PlatformInput.SetPrimaryPad(iPad);
 }

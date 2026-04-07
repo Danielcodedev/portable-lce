@@ -1,6 +1,6 @@
 #pragma once
 
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "platform/sdl2/Storage.h"
 #include "app/common/DLC/DLCPack.h"
 

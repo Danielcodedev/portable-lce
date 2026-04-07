@@ -10,7 +10,7 @@
 #include <utility>
 #include <vector>
 
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "app/common/App_structs.h"
 #include "app/common/Leaderboards/LeaderboardManager.h"
 #include "app/linux/LinuxGame.h"
@@ -191,7 +191,7 @@ void StatsCounter::save(int player, bool force) {
 
     // Retrieve the data pointer from the profile
     std::uint8_t* pbData = reinterpret_cast<std::uint8_t*>(
-        ProfileManager.GetGameDefinedProfileData(player));
+        PlatformProfile.GetGameDefinedProfileData(player));
     pbData += sizeof(GAME_SETTINGS);
 
     // Pointer to current position in stat array
@@ -285,7 +285,7 @@ void StatsCounter::writeStats() {
     // unsigned int locale = XGetLocale();
 
     int viewCount = 0;
-    int iPad = ProfileManager.GetLockedProfile();
+    int iPad = PlatformProfile.GetLockedProfile();
 }
 
 void StatsCounter::setupStatBoards() {

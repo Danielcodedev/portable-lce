@@ -10,7 +10,7 @@
 #include "minecraft/client/skins/TexturePack.h"
 #include "minecraft/client/skins/TexturePackRepository.h"
 #include "platform/sdl2/Storage.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "platform/XboxStubs.h"
 
 #include <cstring>
@@ -413,8 +413,8 @@ unsigned int DLCController::addDLCRequest(eDLCMarketplaceType eType,
 }
 
 bool DLCController::retrieveNextDLCContent() {
-    int primPad = ProfileManager.GetPrimaryPad();
-    if (primPad == -1 || !ProfileManager.IsSignedInLive(primPad)) {
+    int primPad = PlatformProfile.GetPrimaryPad();
+    if (primPad == -1 || !PlatformProfile.IsSignedInLive(primPad)) {
         return true;
     }
 
@@ -437,7 +437,7 @@ bool DLCController::retrieveNextDLCContent() {
                                 pCurrent->dwType);
 #endif
                 C4JStorage::EDLCStatus status = StorageManager.GetDLCOffers(
-                    ProfileManager.GetPrimaryPad(),
+                    PlatformProfile.GetPrimaryPad(),
                     [this](int iOfferC, std::uint32_t dwType, int pad) {
                         return dlcOffersReturned(iOfferC, dwType, pad);
                     },

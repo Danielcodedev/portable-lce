@@ -3,7 +3,7 @@
 #include <cmath>
 #include <memory>
 
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "platform/sdl2/Render.h"
 #include "minecraft/GameEnums.h"
 #include "app/linux/LinuxGame.h"
@@ -77,10 +77,10 @@ void IUIScene_HUD::updateFrameTick() {
     }
     SetHudSize(iGuiScale);
 
-    SetDisplayName(ProfileManager.GetDisplayName(iPad));
+    SetDisplayName(PlatformProfile.GetDisplayName(iPad));
 
-    SetTooltipsEnabled(((ui.GetMenuDisplayed(ProfileManager.GetPrimaryPad())) ||
-                        (app.GetGameSettings(ProfileManager.GetPrimaryPad(),
+    SetTooltipsEnabled(((ui.GetMenuDisplayed(PlatformProfile.GetPrimaryPad())) ||
+                        (app.GetGameSettings(PlatformProfile.GetPrimaryPad(),
                                              eGameSetting_Tooltips) != 0)));
 
     SetActiveSlot(pMinecraft->localplayers[iPad]->inventory->selected);
@@ -137,7 +137,7 @@ void IUIScene_HUD::updateFrameTick() {
         }
     }
 
-    unsigned char ucAlpha = app.GetGameSettings(ProfileManager.GetPrimaryPad(),
+    unsigned char ucAlpha = app.GetGameSettings(PlatformProfile.GetPrimaryPad(),
                                                 eGameSetting_InterfaceOpacity);
     float fVal;
 

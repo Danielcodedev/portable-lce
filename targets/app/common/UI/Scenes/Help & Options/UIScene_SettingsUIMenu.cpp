@@ -4,7 +4,7 @@
 #include <wchar.h>
 
 #include "platform/input/InputActions.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/UI/Controls/UIControl_CheckBox.h"
 #include "app/common/UI/Controls/UIControl_Slider.h"
@@ -63,7 +63,7 @@ UIScene_SettingsUIMenu::UIScene_SettingsUIMenu(int iPad, void* initData,
     doHorizontalResizeCheck();
 
     bool bInGame = (Minecraft::GetInstance()->level != nullptr);
-    bool bPrimaryPlayer = ProfileManager.GetPrimaryPad() == m_iPad;
+    bool bPrimaryPlayer = PlatformProfile.GetPrimaryPad() == m_iPad;
 
     // if we're not in the game, we need to use basescene 0
     if (bInGame) {

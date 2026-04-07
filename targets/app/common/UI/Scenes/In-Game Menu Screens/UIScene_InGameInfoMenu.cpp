@@ -4,7 +4,7 @@
 
 #include "platform/PlatformTypes.h"
 #include "platform/input/InputActions.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/Console_Debug_enum.h"
 #include "app/common/Network/GameNetworkManager.h"
@@ -269,7 +269,7 @@ void UIScene_InGameInfoMenu::handleInput(int iPad, int key, bool repeat,
                 if (player != nullptr) {
                     PlayerUID uid = player->GetUID();
                     if (uid != INVALID_XUID) {
-                        ProfileManager.ShowProfileCard(iPad, uid);
+                        PlatformProfile.ShowProfileCard(iPad, uid);
                     }
                 }
             }

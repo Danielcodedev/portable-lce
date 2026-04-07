@@ -2,7 +2,7 @@
 #include "UIScene_HelpAndOptionsMenu.h"
 
 #include "platform/input/InputActions.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "app/common/UI/Controls/UIControl_Button.h"
 #include "app/common/UI/UILayer.h"
 #include "app/common/UI/UIScene.h"
@@ -47,7 +47,7 @@ UIScene_HelpAndOptionsMenu::UIScene_HelpAndOptionsMenu(int iPad, void* initData,
     bool bNotInGame = (Minecraft::GetInstance()->level == nullptr);
 
     // any content to be re-installed?
-    if (m_iPad == ProfileManager.GetPrimaryPad() && bNotInGame) {
+    if (m_iPad == PlatformProfile.GetPrimaryPad() && bNotInGame) {
         // We should show the reinstall menu
         app.DebugPrintf("Reinstall Menu required...\n");
     } else {
@@ -61,7 +61,7 @@ UIScene_HelpAndOptionsMenu::UIScene_HelpAndOptionsMenu(int iPad, void* initData,
 #if TO_BE_IMPLEMENTED
         app.AdjustSplitscreenScene(m_hObj, &m_OriginalPosition, m_iPad, false);
 #endif
-        if (ProfileManager.GetPrimaryPad() != m_iPad) {
+        if (PlatformProfile.GetPrimaryPad() != m_iPad) {
             removeControl(&m_buttons[BUTTON_HAO_REINSTALL], false);
         }
     }
@@ -117,7 +117,7 @@ void UIScene_HelpAndOptionsMenu::handleReload() {
     bool bNotInGame = (Minecraft::GetInstance()->level == nullptr);
 
     // any content to be re-installed?
-    if (m_iPad == ProfileManager.GetPrimaryPad() && bNotInGame) {
+    if (m_iPad == PlatformProfile.GetPrimaryPad() && bNotInGame) {
         // We should show the reinstall menu
         app.DebugPrintf("Reinstall Menu required...\n");
     } else {
@@ -131,7 +131,7 @@ void UIScene_HelpAndOptionsMenu::handleReload() {
 #if TO_BE_IMPLEMENTED
         app.AdjustSplitscreenScene(m_hObj, &m_OriginalPosition, m_iPad, false);
 #endif
-        if (ProfileManager.GetPrimaryPad() != m_iPad) {
+        if (PlatformProfile.GetPrimaryPad() != m_iPad) {
             removeControl(&m_buttons[BUTTON_HAO_REINSTALL], false);
         }
     }

@@ -2,7 +2,7 @@
 #include "UIScene_TrialExitUpsell.h"
 
 #include "platform/input/InputActions.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "app/common/App_Defines.h"
 #include "app/common/UI/UIScene.h"
 #include "app/linux/LinuxGame.h"
@@ -49,7 +49,7 @@ void UIScene_TrialExitUpsell::handleInput(int iPad, int key, bool repeat,
             }
             break;
         case ACTION_MENU_X:
-            if (ProfileManager.IsSignedIn(iPad)) {
+            if (PlatformProfile.IsSignedIn(iPad)) {
                 // CD - Added for audio
                 ui.PlayUISFX(eSFX_Press);
             }

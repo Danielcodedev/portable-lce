@@ -10,7 +10,7 @@
 #include <vector>
 
 #include "platform/input/input.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "platform/sdl2/Render.h"
 #include "platform/sdl2/Storage.h"
 #include "minecraft/GameEnums.h"
@@ -108,7 +108,7 @@ bool CGameNetworkManager::_RunNetworkGame(void* lpParameter) {
 
         success = s_pPlatformNetworkManager->_RunNetworkGame();
         if (!success) {
-            app.SetAction(ProfileManager.GetPrimaryPad(), eAppAction_ExitWorld,
+            app.SetAction(PlatformProfile.GetPrimaryPad(), eAppAction_ExitWorld,
                           (void*)true);
             return true;
         }
@@ -118,7 +118,7 @@ bool CGameNetworkManager::_RunNetworkGame(void* lpParameter) {
 
     app.SetGameStarted(true);
 
-    // app.CloseXuiScenes(ProfileManager.GetPrimaryPad());
+    // app.CloseXuiScenes(PlatformProfile.GetPrimaryPad());
 
     return success;
 }
@@ -268,10 +268,10 @@ bool CGameNetworkManager::StartNetworkGame(Minecraft* minecraft,
     } else {
         INetworkPlayer* pNetworkPlayer =
             g_NetworkManager.GetLocalPlayerByUserIndex(
-                ProfileManager.GetLockedProfile());
+                PlatformProfile.GetLockedProfile());
         if (pNetworkPlayer == nullptr) {
             MinecraftServer::HaltServer();
-            app.DebugPrintf("%d\n", ProfileManager.GetLockedProfile());
+            app.DebugPrintf("%d\n", PlatformProfile.GetLockedProfile());
             // If the player is nullptr here then something went wrong in the
             // session setup, and continuing will end up in a crash
             return false;
@@ -341,33 +341,33 @@ bool CGameNetworkManager::StartNetworkGame(Minecraft* minecraft,
     if (connection->isStarted() && !connection->isClosed()) {
         createdConnections.push_back(connection);
 
-        int primaryPad = ProfileManager.GetPrimaryPad();
+        int primaryPad = PlatformProfile.GetPrimaryPad();
         app.SetRichPresenceContext(primaryPad, CONTEXT_GAME_STATE_BLANK);
         if (GetPlayerCount() >
             1)  // Are we offline or online, and how many players are there
         {
             if (IsLocalGame())
-                ProfileManager.SetCurrentGameActivity(
+                PlatformProfile.SetCurrentGameActivity(
                     primaryPad, CONTEXT_PRESENCE_MULTIPLAYEROFFLINE, false);
             else
-                ProfileManager.SetCurrentGameActivity(
+                PlatformProfile.SetCurrentGameActivity(
                     primaryPad, CONTEXT_PRESENCE_MULTIPLAYER, false);
         } else {
             if (IsLocalGame())
-                ProfileManager.SetCurrentGameActivity(
+                PlatformProfile.SetCurrentGameActivity(
                     primaryPad, CONTEXT_PRESENCE_MULTIPLAYER_1POFFLINE, false);
             else
-                ProfileManager.SetCurrentGameActivity(
+                PlatformProfile.SetCurrentGameActivity(
                     primaryPad, CONTEXT_PRESENCE_MULTIPLAYER_1P, false);
         }
 
         // ALL OTHER LOCAL PLAYERS
         for (int idx = 0; idx < XUSER_MAX_COUNT; ++idx) {
             // Already have setup the primary pad
-            if (idx == ProfileManager.GetPrimaryPad()) continue;
+            if (idx == PlatformProfile.GetPrimaryPad()) continue;
 
             if (GetLocalPlayerByUserIndex(idx) != nullptr &&
-                !ProfileManager.IsSignedIn(idx)) {
+                !PlatformProfile.IsSignedIn(idx)) {
                 INetworkPlayer* pNetworkPlayer =
                     g_NetworkManager.GetLocalPlayerByUserIndex(idx);
                 Socket* socket = pNetworkPlayer->GetSocket();
@@ -396,13 +396,13 @@ bool CGameNetworkManager::StartNetworkGame(Minecraft* minecraft,
 
             minecraft->addPendingLocalConnection(idx, connection);
             // minecraft->createExtraLocalPlayer(idx, (convStringToWstring(
-            // ProfileManager.GetGamertag(idx) )).c_str(), idx, connection);
+            // PlatformProfile.GetGamertag(idx) )).c_str(), idx, connection);
 
             // Open the socket on the server end to accept incoming data
             Socket::addIncomingSocket(socket);
 
             connection->send(std::shared_ptr<PreLoginPacket>(new PreLoginPacket(
-                convStringToWstring(ProfileManager.GetGamertag(idx)))));
+                convStringToWstring(PlatformProfile.GetGamertag(idx)))));
 
             createdConnections.push_back(connection);
 
@@ -427,11 +427,11 @@ bool CGameNetworkManager::StartNetworkGame(Minecraft* minecraft,
                 app.DebugPrintf("<***> %d %d %d %d %d\n", IsInSession(),
                                 !connection->isStarted(),
                                 !connection->isClosed(),
-                                ProfileManager.IsSignedIn(idx),
+                                PlatformProfile.IsSignedIn(idx),
                                 !g_NetworkManager.IsLeavingGame());
                 // TODO - This SHOULD be something just like the code above but
                 // temporarily changing here so that we don't have to depend on
-                // the profilemanager behaviour
+                // the platformprofile behaviour
             } while (IsInSession() && !connection->isStarted() &&
                      !connection->isClosed() &&
                      !g_NetworkManager.IsLeavingGame());
@@ -443,13 +443,13 @@ bool CGameNetworkManager::StartNetworkGame(Minecraft* minecraft,
             // get closed at the end of the thread
             if (g_NetworkManager.IsLeavingGame() || !IsInSession()) break;
 
-            if (ProfileManager.IsSignedIn(idx) && !connection->isClosed()) {
+            if (PlatformProfile.IsSignedIn(idx) && !connection->isClosed()) {
                 app.SetRichPresenceContext(idx, CONTEXT_GAME_STATE_BLANK);
                 if (IsLocalGame())
-                    ProfileManager.SetCurrentGameActivity(
+                    PlatformProfile.SetCurrentGameActivity(
                         idx, CONTEXT_PRESENCE_MULTIPLAYEROFFLINE, false);
                 else
-                    ProfileManager.SetCurrentGameActivity(
+                    PlatformProfile.SetCurrentGameActivity(
                         idx, CONTEXT_PRESENCE_MULTIPLAYER, false);
             } else {
                 connection->close();
@@ -639,13 +639,13 @@ CGameNetworkManager::eJoinGameResult CGameNetworkManager::JoinGame(
     app.SetTutorialMode(false);
     g_NetworkManager.SetLocalGame(false);
 
-    int primaryUserIndex = ProfileManager.GetLockedProfile();
+    int primaryUserIndex = PlatformProfile.GetLockedProfile();
 
     // 4J-PB - clear any previous connection errors
     Minecraft::GetInstance()->clearConnectionFailed();
 
     // Make sure that the Primary Pad is in by default
-    localUsersMask |= GetLocalPlayerMask(ProfileManager.GetPrimaryPad());
+    localUsersMask |= GetLocalPlayerMask(PlatformProfile.GetPrimaryPad());
 
     return (eJoinGameResult)(s_pPlatformNetworkManager->JoinGame(
         searchResult, localUsersMask, primaryUserIndex));
@@ -666,8 +666,8 @@ int CGameNetworkManager::JoinFromInvite_SignInReturned(void* pParam,
     if (bContinue == true) {
         app.DebugPrintf("JoinFromInvite_SignInReturned, iPad %d\n", iPad);
         // It's possible that the player has not signed in - they can back out
-        if (ProfileManager.IsSignedIn(iPad) &&
-            ProfileManager.IsSignedInLive(iPad)) {
+        if (PlatformProfile.IsSignedIn(iPad) &&
+            PlatformProfile.IsSignedInLive(iPad)) {
             app.DebugPrintf(
                 "JoinFromInvite_SignInReturned, passed sign-in tests\n");
             int localUsersMask = 0;
@@ -675,9 +675,9 @@ int CGameNetworkManager::JoinFromInvite_SignInReturned(void* pParam,
 
             bool noPrivileges = false;
             for (unsigned int index = 0; index < XUSER_MAX_COUNT; ++index) {
-                if (ProfileManager.IsSignedIn(index)) {
+                if (PlatformProfile.IsSignedIn(index)) {
                     ++joiningUsers;
-                    if (!ProfileManager.AllowedToPlayMultiplayer(index))
+                    if (!PlatformProfile.AllowedToPlayMultiplayer(index))
                         noPrivileges = true;
                     localUsersMask |= GetLocalPlayerMask(index);
                 }
@@ -701,24 +701,24 @@ int CGameNetworkManager::JoinFromInvite_SignInReturned(void* pParam,
                 ui.RequestErrorMessage(IDS_NO_MULTIPLAYER_PRIVILEGE_TITLE,
                                        IDS_NO_MULTIPLAYER_PRIVILEGE_JOIN_TEXT,
                                        uiIDA, 1,
-                                       ProfileManager.GetPrimaryPad());
+                                       PlatformProfile.GetPrimaryPad());
             } else {
-                ProfileManager.SetLockedProfile(iPad);
-                ProfileManager.SetPrimaryPad(iPad);
+                PlatformProfile.SetLockedProfile(iPad);
+                PlatformProfile.SetPrimaryPad(iPad);
 
                 g_NetworkManager.SetLocalGame(false);
 
                 // If the player was signed in before selecting play, we'll not
                 // have read the profile yet, so query the sign-in status to get
                 // this to happen
-                ProfileManager.QuerySigninStatus();
+                PlatformProfile.QuerySigninStatus();
 
                 // 4J-PB - clear any previous connection errors
                 Minecraft::GetInstance()->clearConnectionFailed();
 
                 // change the minecraft player name
                 Minecraft::GetInstance()->user->name = convStringToWstring(
-                    ProfileManager.GetGamertag(ProfileManager.GetPrimaryPad()));
+                    PlatformProfile.GetGamertag(PlatformProfile.GetPrimaryPad()));
 
                 bool success = g_NetworkManager.JoinGameFromInviteInfo(
                     iPad,            // dwUserIndex
@@ -731,8 +731,8 @@ int CGameNetworkManager::JoinFromInvite_SignInReturned(void* pParam,
         } else {
             app.DebugPrintf(
                 "JoinFromInvite_SignInReturned, failed sign-in tests :%d %d\n",
-                ProfileManager.IsSignedIn(iPad),
-                ProfileManager.IsSignedInLive(iPad));
+                PlatformProfile.IsSignedIn(iPad),
+                PlatformProfile.IsSignedInLive(iPad));
         }
     }
     return 0;
@@ -875,12 +875,12 @@ int CGameNetworkManager::ChangeSessionTypeThreadProc(void* lpParam) {
     pMinecraft->progressRenderer->progressStage(
         IDS_PROGRESS_CONVERTING_TO_OFFLINE_GAME);
 
-    while (app.GetXuiServerAction(ProfileManager.GetPrimaryPad()) !=
+    while (app.GetXuiServerAction(PlatformProfile.GetPrimaryPad()) !=
                eXuiServerAction_Idle &&
            !MinecraftServer::serverHalted()) {
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
-    app.SetXuiServerAction(ProfileManager.GetPrimaryPad(),
+    app.SetXuiServerAction(PlatformProfile.GetPrimaryPad(),
                            eXuiServerAction_PauseServer, (void*)true);
 
     // wait for the server to be in a non-ticking state
@@ -937,7 +937,7 @@ int CGameNetworkManager::ChangeSessionTypeThreadProc(void* lpParam) {
     int localUsersMask = 0;
     char numLocalPlayers = 0;
     for (unsigned int index = 0; index < XUSER_MAX_COUNT; ++index) {
-        if (ProfileManager.IsSignedIn(index) &&
+        if (PlatformProfile.IsSignedIn(index) &&
             pMinecraft->localplayers[index] != nullptr) {
             numLocalPlayers++;
             localUsersMask |= GetLocalPlayerMask(index);
@@ -956,7 +956,7 @@ int CGameNetworkManager::ChangeSessionTypeThreadProc(void* lpParam) {
     // Restore the network player of all the server players that are local
     if (pServer != nullptr) {
         for (unsigned int index = 0; index < XUSER_MAX_COUNT; ++index) {
-            if (ProfileManager.IsSignedIn(index) &&
+            if (PlatformProfile.IsSignedIn(index) &&
                 pMinecraft->localplayers[index] != nullptr) {
                 PlayerUID localPlayerXuid =
                     pMinecraft->localplayers[index]->getXuid();
@@ -1008,7 +1008,7 @@ int CGameNetworkManager::ChangeSessionTypeThreadProc(void* lpParam) {
 
     // Start the game again
     app.SetGameStarted(true);
-    app.SetXuiServerAction(ProfileManager.GetPrimaryPad(),
+    app.SetXuiServerAction(PlatformProfile.GetPrimaryPad(),
                            eXuiServerAction_PauseServer, (void*)false);
     app.SetChangingSessionType(false);
     app.SetReallyChangingSessionType(false);
@@ -1048,13 +1048,13 @@ void CGameNetworkManager::StateChange_AnyToJoining() {
     Minecraft::GetInstance()->clearPendingClientTextureRequests();
 
     ConnectionProgressParams* param = new ConnectionProgressParams();
-    param->iPad = ProfileManager.GetPrimaryPad();
+    param->iPad = PlatformProfile.GetPrimaryPad();
     param->stringId = -1;
     param->showTooltips = false;
     param->setFailTimer = true;
     param->timerTime = CONNECTING_PROGRESS_CHECK_TIME;
 
-    ui.NavigateToScene(ProfileManager.GetPrimaryPad(),
+    ui.NavigateToScene(PlatformProfile.GetPrimaryPad(),
                        eUIScene_ConnectingProgress, param);
 }
 
@@ -1068,7 +1068,7 @@ void CGameNetworkManager::StateChange_JoiningToIdle(
         case IPlatformNetwork::JOIN_FAILED_INSUFFICIENT_PRIVILEGES:
             disconnectReason =
                 DisconnectPacket::eDisconnect_NoMultiplayerPrivilegesJoin;
-            app.SetAction(ProfileManager.GetPrimaryPad(),
+            app.SetAction(PlatformProfile.GetPrimaryPad(),
                           eAppAction_FailedToJoinNoPrivileges);
             break;
         default:
@@ -1077,7 +1077,7 @@ void CGameNetworkManager::StateChange_JoiningToIdle(
             break;
     };
     Minecraft::GetInstance()->connectionDisconnected(
-        ProfileManager.GetPrimaryPad(), disconnectReason);
+        PlatformProfile.GetPrimaryPad(), disconnectReason);
 }
 
 void CGameNetworkManager::StateChange_AnyToStarting() {
@@ -1091,10 +1091,10 @@ void CGameNetworkManager::StateChange_AnyToStarting() {
         completionData->bShowBackground = true;
         completionData->bShowLogo = true;
         completionData->type = e_ProgressCompletion_CloseAllPlayersUIScenes;
-        completionData->iPad = ProfileManager.GetPrimaryPad();
+        completionData->iPad = PlatformProfile.GetPrimaryPad();
         loadingParams->completionData = completionData;
 
-        ui.NavigateToScene(ProfileManager.GetPrimaryPad(),
+        ui.NavigateToScene(PlatformProfile.GetPrimaryPad(),
                            eUIScene_FullscreenProgress, loadingParams);
     }
 }
@@ -1106,7 +1106,7 @@ void CGameNetworkManager::StateChange_AnyToEnding(bool bStateWasPlaying) {
         for (unsigned int i = 0; i < XUSER_MAX_COUNT; ++i) {
             INetworkPlayer* pNetworkPlayer =
                 g_NetworkManager.GetLocalPlayerByUserIndex(i);
-            if (pNetworkPlayer != nullptr && ProfileManager.IsSignedIn(i)) {
+            if (pNetworkPlayer != nullptr && PlatformProfile.IsSignedIn(i)) {
                 app.DebugPrintf(
                     "Stats save for an offline game for the player at index "
                     "%d\n",
@@ -1127,7 +1127,7 @@ void CGameNetworkManager::StateChange_AnyToEnding(bool bStateWasPlaying) {
         // The host has notified that the game is about to end
         if (app.GetDisconnectReason() == DisconnectPacket::eDisconnect_None)
             app.SetDisconnectReason(DisconnectPacket::eDisconnect_Quitting);
-        app.SetAction(ProfileManager.GetPrimaryPad(), eAppAction_ExitWorld,
+        app.SetAction(PlatformProfile.GetPrimaryPad(), eAppAction_ExitWorld,
                       (void*)true);
     }
 }
@@ -1221,17 +1221,17 @@ void CGameNetworkManager::PlayerJoining(INetworkPlayer* pNetworkPlayer) {
             app.SetRichPresenceContext(iPad, CONTEXT_GAME_STATE_BLANK);
             if (multiplayer) {
                 if (localgame)
-                    ProfileManager.SetCurrentGameActivity(
+                    PlatformProfile.SetCurrentGameActivity(
                         iPad, CONTEXT_PRESENCE_MULTIPLAYEROFFLINE, false);
                 else
-                    ProfileManager.SetCurrentGameActivity(
+                    PlatformProfile.SetCurrentGameActivity(
                         iPad, CONTEXT_PRESENCE_MULTIPLAYER, false);
             } else {
                 if (localgame)
-                    ProfileManager.SetCurrentGameActivity(
+                    PlatformProfile.SetCurrentGameActivity(
                         iPad, CONTEXT_PRESENCE_MULTIPLAYER_1POFFLINE, false);
                 else
-                    ProfileManager.SetCurrentGameActivity(
+                    PlatformProfile.SetCurrentGameActivity(
                         iPad, CONTEXT_PRESENCE_MULTIPLAYER_1P, false);
             }
         }
@@ -1240,14 +1240,14 @@ void CGameNetworkManager::PlayerJoining(INetworkPlayer* pNetworkPlayer) {
 
 void CGameNetworkManager::PlayerLeaving(INetworkPlayer* pNetworkPlayer) {
     if (pNetworkPlayer->IsLocal()) {
-        ProfileManager.SetCurrentGameActivity(pNetworkPlayer->GetUserIndex(),
+        PlatformProfile.SetCurrentGameActivity(pNetworkPlayer->GetUserIndex(),
                                               CONTEXT_PRESENCE_IDLE, false);
     }
 }
 
 void CGameNetworkManager::HostChanged() {
     // Disable host migration
-    app.SetAction(ProfileManager.GetPrimaryPad(), eAppAction_ExitWorld,
+    app.SetAction(PlatformProfile.GetPrimaryPad(), eAppAction_ExitWorld,
                   (void*)true);
 }
 
@@ -1263,7 +1263,7 @@ void CGameNetworkManager::GameInviteReceived(int userIndex,
 
     bool noPrivileges = false;
     for (unsigned int index = 0; index < XUSER_MAX_COUNT; ++index) {
-        if (ProfileManager.IsSignedIn(index)) {
+        if (PlatformProfile.IsSignedIn(index)) {
             // 4J-PB we shouldn't bring any inactive players into the game,
             // except for the invited player (who may be an inactive player) 4J
             // Stu - If we are not in a game, then bring in all players signed
@@ -1271,7 +1271,7 @@ void CGameNetworkManager::GameInviteReceived(int userIndex,
             if (index == userIndex ||
                 pMinecraft->localplayers[index] != nullptr) {
                 ++joiningUsers;
-                if (!ProfileManager.AllowedToPlayMultiplayer(index))
+                if (!PlatformProfile.AllowedToPlayMultiplayer(index))
                     noPrivileges = true;
                 localUsersMask |= GetLocalPlayerMask(index);
             }
@@ -1284,8 +1284,8 @@ void CGameNetworkManager::GameInviteReceived(int userIndex,
     bool bContentRestricted = false;
     bool pccAllowed = true;
     bool pccFriendsAllowed = true;
-    ProfileManager.AllowedPlayerCreatedContent(
-        ProfileManager.GetPrimaryPad(), false, &pccAllowed, &pccFriendsAllowed);
+    PlatformProfile.AllowedPlayerCreatedContent(
+        PlatformProfile.GetPrimaryPad(), false, &pccAllowed, &pccFriendsAllowed);
     if (!pccAllowed && !pccFriendsAllowed) noUGC = true;
 
     if (noUGC) {
@@ -1303,7 +1303,7 @@ void CGameNetworkManager::GameInviteReceived(int userIndex,
         // invite from the dashboard
         // StorageManager.RequestMessageBox( IDS_NO_MULTIPLAYER_PRIVILEGE_TITLE,
         // IDS_NO_MULTIPLAYER_PRIVILEGE_JOIN_TEXT,
-        // uiIDA,1,ProfileManager.GetPrimaryPad(),nullptr,nullptr,
+        // uiIDA,1,PlatformProfile.GetPrimaryPad(),nullptr,nullptr,
         // app.GetStringTable());
         ui.RequestErrorMessage(IDS_NO_MULTIPLAYER_PRIVILEGE_TITLE,
                                IDS_NO_MULTIPLAYER_PRIVILEGE_JOIN_TEXT, uiIDA, 1,
@@ -1336,7 +1336,7 @@ void CGameNetworkManager::HandleInviteWhenInMenus(
     // We are in the root menus somewhere
 
     {
-        ProfileManager.SetPrimaryPad(userIndex);
+        PlatformProfile.SetPrimaryPad(userIndex);
 
         // 4J Stu - If we accept an invite from the main menu before going to
         // play game we need to load the DLC These checks are done within the
@@ -1348,11 +1348,11 @@ void CGameNetworkManager::HandleInviteWhenInMenus(
         // stuck in a soft-locked state after selecting the guest account when
         // prompted The locked profile should not be changed if we are in menus
         // as the main player might sign out in the sign-in ui
-        // ProfileManager.SetLockedProfile(-1);
+        // PlatformProfile.SetLockedProfile(-1);
 
         if (!app.IsLocalMultiplayerAvailable()) {
             bool noPrivileges =
-                !ProfileManager.AllowedToPlayMultiplayer(userIndex);
+                !PlatformProfile.AllowedToPlayMultiplayer(userIndex);
 
             if (noPrivileges) {
                 unsigned int uiIDA[1];
@@ -1360,10 +1360,10 @@ void CGameNetworkManager::HandleInviteWhenInMenus(
                 ui.RequestErrorMessage(IDS_NO_MULTIPLAYER_PRIVILEGE_TITLE,
                                        IDS_NO_MULTIPLAYER_PRIVILEGE_JOIN_TEXT,
                                        uiIDA, 1,
-                                       ProfileManager.GetPrimaryPad());
+                                       PlatformProfile.GetPrimaryPad());
             } else {
-                ProfileManager.SetLockedProfile(userIndex);
-                ProfileManager.SetPrimaryPad(userIndex);
+                PlatformProfile.SetLockedProfile(userIndex);
+                PlatformProfile.SetPrimaryPad(userIndex);
 
                 int localUsersMask = 0;
                 localUsersMask |= GetLocalPlayerMask(userIndex);
@@ -1371,7 +1371,7 @@ void CGameNetworkManager::HandleInviteWhenInMenus(
                 // If the player was signed in before selecting play, we'll not
                 // have read the profile yet, so query the sign-in status to get
                 // this to happen
-                ProfileManager.QuerySigninStatus();
+                PlatformProfile.QuerySigninStatus();
 
                 // 4J-PB - clear any previous connection errors
                 Minecraft::GetInstance()->clearConnectionFailed();
@@ -1380,7 +1380,7 @@ void CGameNetworkManager::HandleInviteWhenInMenus(
 
                 // change the minecraft player name
                 Minecraft::GetInstance()->user->name = convStringToWstring(
-                    ProfileManager.GetGamertag(ProfileManager.GetPrimaryPad()));
+                    PlatformProfile.GetGamertag(PlatformProfile.GetPrimaryPad()));
 
                 bool success = g_NetworkManager.JoinGameFromInviteInfo(
                     userIndex, localUsersMask, pInviteInfo);
@@ -1398,7 +1398,7 @@ void CGameNetworkManager::HandleInviteWhenInMenus(
             };
             info.requireOnline = true;
             app.DebugPrintf("Using fullscreen layer\n");
-            ui.NavigateToScene(ProfileManager.GetPrimaryPad(),
+            ui.NavigateToScene(PlatformProfile.GetPrimaryPad(),
                                eUIScene_QuadrantSignin, &info, eUILayer_Alert,
                                eUIGroup_Fullscreen);
         }
@@ -1426,23 +1426,23 @@ void CGameNetworkManager::HandleDisconnect(bool bLostRoomOnly) {
 }
 
 int CGameNetworkManager::GetPrimaryPad() {
-    return ProfileManager.GetPrimaryPad();
+    return PlatformProfile.GetPrimaryPad();
 }
 
 int CGameNetworkManager::GetLockedProfile() {
-    return ProfileManager.GetLockedProfile();
+    return PlatformProfile.GetLockedProfile();
 }
 
 bool CGameNetworkManager::IsSignedInLive(int playerIdx) {
-    return ProfileManager.IsSignedInLive(playerIdx);
+    return PlatformProfile.IsSignedInLive(playerIdx);
 }
 
 bool CGameNetworkManager::AllowedToPlayMultiplayer(int playerIdx) {
-    return ProfileManager.AllowedToPlayMultiplayer(playerIdx);
+    return PlatformProfile.AllowedToPlayMultiplayer(playerIdx);
 }
 
 char* CGameNetworkManager::GetOnlineName(int playerIdx) {
-    return ProfileManager.GetGamertag(playerIdx);
+    return PlatformProfile.GetGamertag(playerIdx);
 }
 
 void CGameNetworkManager::ServerReadyCreate(bool create) {
@@ -1504,7 +1504,7 @@ void CGameNetworkManager::ServerStoppedWait() {
             RenderManager.StartFrame();
             result = m_hServerStoppedEvent->waitForSignal(20);
             // Tick some simple things
-            ProfileManager.Tick();
+            PlatformProfile.Tick();
             StorageManager.Tick();
             PlatformInput.Tick();
             RenderManager.Tick();

@@ -3,7 +3,7 @@
 
 #include "platform/PlatformTypes.h"
 #include "platform/input/InputActions.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "app/common/UI/All Platforms/UIStructs.h"
 #include "app/common/UI/Controls/UIControl_Button.h"
 #include "app/common/UI/Controls/UIControl_Label.h"
@@ -156,7 +156,7 @@ bool UIScene_MessageBox::hasFocus(int iPad) {
     if (m_iPad == 255) {
         // Message box is for everyone
         return bHasFocus;
-    } else if (ProfileManager.IsSignedIn(m_iPad)) {
+    } else if (PlatformProfile.IsSignedIn(m_iPad)) {
         // Owner is still present
         return bHasFocus && (iPad == m_iPad);
     } else {

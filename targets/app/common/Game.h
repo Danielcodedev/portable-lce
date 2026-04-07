@@ -4,7 +4,7 @@
 #include <mutex>
 
 #include "util/Timer.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "platform/sdl2/Storage.h"
 
 // using namespace std;
@@ -344,11 +344,11 @@ public:
     }
 
     static int DefaultOptionsCallback(void* pParam,
-                                      C_4JProfile::PROFILESETTINGS* pSettings,
+                                      IPlatformProfile::PROFILESETTINGS* pSettings,
                                       const int iPad) {
         return GameSettingsManager::defaultOptionsCallback(pParam, pSettings, iPad);
     }
-    int SetDefaultOptions(C_4JProfile::PROFILESETTINGS* pSettings,
+    int SetDefaultOptions(IPlatformProfile::PROFILESETTINGS* pSettings,
                           const int iPad) {
         return m_gameSettingsManager.setDefaultOptions(pSettings, iPad);
     }

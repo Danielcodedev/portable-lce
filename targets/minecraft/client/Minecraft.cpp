@@ -14,7 +14,7 @@
 #include <thread>
 
 #include "platform/input/InputActions.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "platform/sdl2/Render.h"
 #include "platform/sdl2/Storage.h"
 #include "minecraft/GameEnums.h"
@@ -886,13 +886,13 @@ std::shared_ptr<MultiplayerLocalPlayer> Minecraft::createExtraLocalPlayer(
 
         PlayerUID playerXUIDOffline = INVALID_XUID;
         PlayerUID playerXUIDOnline = INVALID_XUID;
-        ProfileManager.GetXUID(idx, &playerXUIDOffline, false);
-        ProfileManager.GetXUID(idx, &playerXUIDOnline, true);
+        PlatformProfile.GetXUID(idx, &playerXUIDOffline, false);
+        PlatformProfile.GetXUID(idx, &playerXUIDOnline, true);
         localplayers[idx]->setXuid(playerXUIDOffline);
         localplayers[idx]->setOnlineXuid(playerXUIDOnline);
-        localplayers[idx]->setIsGuest(ProfileManager.IsGuest(idx));
+        localplayers[idx]->setIsGuest(PlatformProfile.IsGuest(idx));
 
-        localplayers[idx]->m_displayName = ProfileManager.GetDisplayName(idx);
+        localplayers[idx]->m_displayName = PlatformProfile.GetDisplayName(idx);
 
         localplayers[idx]->m_iScreenSection = tempScreenSection;
 
@@ -940,9 +940,9 @@ void Minecraft::storeExtraLocalPlayer(int idx) {
     if (localplayers[idx]->input != nullptr) delete localplayers[idx]->input;
     localplayers[idx]->input = new Input();
 
-    if (ProfileManager.IsSignedIn(idx)) {
+    if (PlatformProfile.IsSignedIn(idx)) {
         localplayers[idx]->name =
-            convStringToWstring(ProfileManager.GetGamertag(idx));
+            convStringToWstring(PlatformProfile.GetGamertag(idx));
     }
 }
 
@@ -1014,9 +1014,9 @@ void Minecraft::createPrimaryLocalPlayer(int iPad) {
     localplayers[iPad] = player;
     // gameRenderer->itemInHandRenderer = localitemInHandRenderers[iPad];
     //  Give them the gamertag if they're signed in
-    if (ProfileManager.IsSignedIn(PlatformInput.GetPrimaryPad())) {
+    if (PlatformProfile.IsSignedIn(PlatformInput.GetPrimaryPad())) {
         user->name = convStringToWstring(
-            ProfileManager.GetGamertag(PlatformInput.GetPrimaryPad()));
+            PlatformProfile.GetGamertag(PlatformInput.GetPrimaryPad()));
     }
 }
 
@@ -1171,11 +1171,11 @@ void Minecraft::run_middle() {
                 for (int i = 0; i < XUSER_MAX_COUNT; i++) {
                     if (localplayers[i] && (gameServices().getBanListCheck(i) == false) &&
                         !Minecraft::GetInstance()->isTutorial() &&
-                        ProfileManager.IsSignedInLive(i) &&
-                        !ProfileManager.IsGuest(i)) {
+                        PlatformProfile.IsSignedInLive(i) &&
+                        !PlatformProfile.IsGuest(i)) {
                         // If there is a sys ui displayed, we can't display the
                         // message box here, so ignore until we can
-                        if (!ProfileManager.IsSystemUIDisplayed()) {
+                        if (!PlatformProfile.IsSystemUIDisplayed()) {
                             gameServices().setBanListCheck(i, true);
                             // 4J-PB - check if the level is in the banned level
                             // list get the unique save name and xuid from
@@ -1199,7 +1199,7 @@ void Minecraft::run_middle() {
                     }
                 }
 
-                if (!ProfileManager.IsSystemUIDisplayed() &&
+                if (!PlatformProfile.IsSystemUIDisplayed() &&
                     gameServices().dlcInstallProcessCompleted() &&
                     !gameServices().dlcInstallPending() &&
                     gameServices().dlcNeedsCorruptCheck()) {
@@ -1398,12 +1398,12 @@ void Minecraft::run_middle() {
                                     // Let them join
 
                                     // are they signed in?
-                                    if (ProfileManager.IsSignedIn(i)) {
+                                    if (PlatformProfile.IsSignedIn(i)) {
                                         // if this is a local game, then the
                                         // player just needs to be signed in
                                         if (g_NetworkManager.IsLocalGame() ||
-                                            (ProfileManager.IsSignedInLive(i) &&
-                                             ProfileManager
+                                            (PlatformProfile.IsSignedInLive(i) &&
+                                             PlatformProfile
                                                  .AllowedToPlayMultiplayer(
                                                      i))) {
                                             if (level->isClientSide) {
@@ -1415,7 +1415,7 @@ void Minecraft::run_middle() {
                                                         "Bringing up the sign "
                                                         "in "
                                                         "ui\n");
-                                                    ProfileManager.RequestSignInUI(
+                                                    PlatformProfile.RequestSignInUI(
                                                         false,
                                                         g_NetworkManager
                                                             .IsLocalGame(),
@@ -1436,7 +1436,7 @@ void Minecraft::run_middle() {
                                                         createExtraLocalPlayer(
                                                             i,
                                                             (convStringToWstring(
-                                                                 ProfileManager
+                                                                 PlatformProfile
                                                                      .GetGamertag(
                                                                          i)))
                                                                 .c_str(),
@@ -1446,13 +1446,13 @@ void Minecraft::run_middle() {
                                                 }
                                             }
                                         } else {
-                                            if (ProfileManager.IsSignedInLive(
-                                                    ProfileManager
+                                            if (PlatformProfile.IsSignedInLive(
+                                                    PlatformProfile
                                                         .GetPrimaryPad()) &&
-                                                !ProfileManager
+                                                !PlatformProfile
                                                      .AllowedToPlayMultiplayer(
                                                          i)) {
-                                                ProfileManager
+                                                PlatformProfile
                                                     .RequestConvertOfflineToGuestUI(
                                                         [this](bool b, int p) {
                                                             return InGame_SignInReturned(
@@ -1470,7 +1470,7 @@ void Minecraft::run_middle() {
                                                 // signs-in on console which
                                                 // takes part in Xbox LIVE
                                                 // multiplayer session.
-                                                // ProfileManager.RequestConvertOfflineToGuestUI(
+                                                // PlatformProfile.RequestConvertOfflineToGuestUI(
                                                 // &Minecraft::InGame_SignInReturned,
                                                 // this,i);
 
@@ -1491,7 +1491,7 @@ void Minecraft::run_middle() {
                                                 Log::info(
                                                     "Bringing up the sign in "
                                                     "ui\n");
-                                                ProfileManager.RequestSignInUI(
+                                                PlatformProfile.RequestSignInUI(
                                                     false,
                                                     g_NetworkManager
                                                         .IsLocalGame(),
@@ -1507,7 +1507,7 @@ void Minecraft::run_middle() {
                                         // bring up the sign in dialog
                                         Log::info(
                                             "Bringing up the sign in ui\n");
-                                        ProfileManager.RequestSignInUI(
+                                        PlatformProfile.RequestSignInUI(
                                             false,
                                             g_NetworkManager.IsLocalGame(),
                                             true, false, true,
@@ -3690,11 +3690,11 @@ void Minecraft::forceStatsSave(int idx) {
     stats[idx]->save(idx, true);
 
     // 4J Gordon: If the player is signed in, save the leaderboards
-    if (ProfileManager.IsSignedInLive(idx)) {
-        int tempLockedProfile = ProfileManager.GetLockedProfile();
-        ProfileManager.SetLockedProfile(idx);
+    if (PlatformProfile.IsSignedInLive(idx)) {
+        int tempLockedProfile = PlatformProfile.GetLockedProfile();
+        PlatformProfile.SetLockedProfile(idx);
         stats[idx]->saveLeaderboards();
-        ProfileManager.SetLockedProfile(tempLockedProfile);
+        PlatformProfile.SetLockedProfile(tempLockedProfile);
     }
 }
 
@@ -3845,13 +3845,13 @@ void Minecraft::setLevel(MultiPlayerLevel* level, int message /*=-1*/,
 
             PlayerUID playerXUIDOffline = INVALID_XUID;
             PlayerUID playerXUIDOnline = INVALID_XUID;
-            ProfileManager.GetXUID(iPrimaryPlayer, &playerXUIDOffline, false);
-            ProfileManager.GetXUID(iPrimaryPlayer, &playerXUIDOnline, true);
+            PlatformProfile.GetXUID(iPrimaryPlayer, &playerXUIDOffline, false);
+            PlatformProfile.GetXUID(iPrimaryPlayer, &playerXUIDOnline, true);
             player->setXuid(playerXUIDOffline);
             player->setOnlineXuid(playerXUIDOnline);
 
             player->m_displayName =
-                ProfileManager.GetDisplayName(iPrimaryPlayer);
+                PlatformProfile.GetDisplayName(iPrimaryPlayer);
 
             player->resetPos();
             gameMode->initPlayer(player);
@@ -4012,13 +4012,13 @@ void Minecraft::respawnPlayer(int iPad, int dimension, int newEntityId) {
 
     PlayerUID playerXUIDOffline = INVALID_XUID;
     PlayerUID playerXUIDOnline = INVALID_XUID;
-    ProfileManager.GetXUID(iTempPad, &playerXUIDOffline, false);
-    ProfileManager.GetXUID(iTempPad, &playerXUIDOnline, true);
+    PlatformProfile.GetXUID(iTempPad, &playerXUIDOffline, false);
+    PlatformProfile.GetXUID(iTempPad, &playerXUIDOnline, true);
     player->setXuid(playerXUIDOffline);
     player->setOnlineXuid(playerXUIDOnline);
-    player->setIsGuest(ProfileManager.IsGuest(iTempPad));
+    player->setIsGuest(PlatformProfile.IsGuest(iTempPad));
 
-    player->m_displayName = ProfileManager.GetDisplayName(iPad);
+    player->m_displayName = PlatformProfile.GetDisplayName(iPad);
 
     player->SetXboxPad(iTempPad);
 
@@ -4471,7 +4471,7 @@ int Minecraft::InGame_SignInReturned(void* pParam, bool bContinue, int iPad) {
         pMinecraftClass->localplayers[iPad] == nullptr) {
         // It's possible that the player has not signed in - they can back out
         // or choose no for the converttoguest
-        if (ProfileManager.IsSignedIn(iPad)) {
+        if (PlatformProfile.IsSignedIn(iPad)) {
             if (!g_NetworkManager.SessionHasSpace()) {
                 unsigned int uiIDA[1];
                 uiIDA[0] = IDS_OK;
@@ -4480,8 +4480,8 @@ int Minecraft::InGame_SignInReturned(void* pParam, bool bContinue, int iPad) {
             }
             // if this is a local game then profiles just need to be signed in
             else if (g_NetworkManager.IsLocalGame() ||
-                     (ProfileManager.IsSignedInLive(iPad) &&
-                      ProfileManager.AllowedToPlayMultiplayer(iPad))) {
+                     (PlatformProfile.IsSignedInLive(iPad) &&
+                      PlatformProfile.AllowedToPlayMultiplayer(iPad))) {
                 if (pMinecraftClass->level->isClientSide) {
                     pMinecraftClass->addLocalPlayer(iPad);
                 } else {
@@ -4492,20 +4492,20 @@ int Minecraft::InGame_SignInReturned(void* pParam, bool bContinue, int iPad) {
                         player = pMinecraftClass->createExtraLocalPlayer(
                             iPad,
                             (convStringToWstring(
-                                 ProfileManager.GetGamertag(iPad)))
+                                 PlatformProfile.GetGamertag(iPad)))
                                 .c_str(),
                             iPad, pMinecraftClass->level->dimension->id);
                     }
                 }
-            } else if (ProfileManager.IsSignedInLive(
+            } else if (PlatformProfile.IsSignedInLive(
                            PlatformInput.GetPrimaryPad()) &&
-                       !ProfileManager.AllowedToPlayMultiplayer(iPad)) {
+                       !PlatformProfile.AllowedToPlayMultiplayer(iPad)) {
                 // 4J Stu - Don't allow converting to guests as we don't allow
                 // any guest sign-in while in the game Fix for #66516 - TCR
                 // #124: MPS Guest Support ; #001: BAS Game Stability: TU8: The
                 // game crashes when second Guest signs-in on console which
                 // takes part in Xbox LIVE multiplayer session.
-                // ProfileManager.RequestConvertOfflineToGuestUI(
+                // PlatformProfile.RequestConvertOfflineToGuestUI(
                 // &Minecraft::InGame_SignInReturned, pMinecraftClass,iPad);
                 unsigned int uiIDA[1];
                 uiIDA[0] = IDS_CONFIRM_OK;

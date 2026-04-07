@@ -17,7 +17,7 @@
 #include "minecraft/client/renderer/entity/EntityRenderer.h"
 #include "minecraft/client/renderer/entity/EntityRenderDispatcher.h"
 #include "minecraft/world/entity/player/Player.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 
 SkinManager::SkinManager() : m_xuidNotch(INVALID_XUID) {
     for (int i = 0; i < XUSER_MAX_COUNT; i++) {
@@ -183,7 +183,7 @@ void SkinManager::validateFavoriteSkins(int iPad,
 
 bool SkinManager::isXuidNotch(PlayerUID xuid) {
     if (m_xuidNotch != INVALID_XUID && xuid != INVALID_XUID) {
-        return ProfileManager.AreXUIDSEqual(xuid, m_xuidNotch);
+        return PlatformProfile.AreXUIDSEqual(xuid, m_xuidNotch);
     }
     return false;
 }

@@ -7,7 +7,7 @@
 
 #include "platform/input/InputActions.h"
 #include "platform/input/input.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/UI/All Platforms/UIStructs.h"
 #include "app/common/UI/Controls/UIControl_Button.h"
@@ -109,7 +109,7 @@ void UIScene_DebugSetCamera::handleInput(int iPad, int key, bool repeat,
 void UIScene_DebugSetCamera::handlePress(F64 controlId, F64 childId) {
     switch ((int)controlId) {
         case eControl_Teleport:
-            app.SetXuiServerAction(ProfileManager.GetPrimaryPad(),
+            app.SetXuiServerAction(PlatformProfile.GetPrimaryPad(),
                                    eXuiServerAction_SetCameraLocation,
                                    (void*)currentPosition);
             break;

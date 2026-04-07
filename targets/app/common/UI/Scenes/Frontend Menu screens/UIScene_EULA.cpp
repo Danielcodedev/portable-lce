@@ -6,7 +6,7 @@
 #include "platform/PlatformTypes.h"
 #include "platform/input/InputActions.h"
 #include "platform/input/input.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "app/common/App_Defines.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/UI/Controls/UIControl_Button.h"
@@ -46,7 +46,7 @@ UIScene_EULA::UIScene_EULA(int iPad, void* initData, UILayer* parentLayer)
 
     // 4J-PB - If we have a signed in user connected, let's get the DLC now
     for (unsigned int i = 0; i < XUSER_MAX_COUNT; ++i) {
-        if ((PlatformInput.IsPadConnected(i) || ProfileManager.IsSignedIn(i))) {
+        if ((PlatformInput.IsPadConnected(i) || PlatformProfile.IsSignedIn(i))) {
             if (!app.DLCInstallProcessCompleted() && !app.DLCInstallPending()) {
                 app.StartInstallDLCProcess(i);
                 break;

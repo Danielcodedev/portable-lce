@@ -56,7 +56,7 @@ static void sigsegv_handler(int sig) {
 #include "platform/PlatformTypes.h"
 #include "platform/input/InputActions.h"
 #include "platform/input/input.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "platform/sdl2/Render.h"
 #include "platform/sdl2/Storage.h"
 #include "app/common/App_Defines.h"
@@ -484,7 +484,7 @@ int main(int argc, const char* argv[]) {
     // Initialise the profile manager with the game Title ID, Offer ID, a
     // profile version number, and the number of profile values and settings
 
-    ProfileManager.Initialise(
+    PlatformProfile.Initialise(
         TITLEID_MINECRAFT, app.m_dwOfferID, PROFILE_VERSION_10,
         NUM_PROFILE_VALUES, NUM_PROFILE_SETTINGS, dwProfileSettingsA,
         app.GAME_DEFINED_PROFILE_DATA_BYTES * XUSER_MAX_COUNT,
@@ -492,7 +492,7 @@ int main(int argc, const char* argv[]) {
 
     // set a function to be called when there's a sign in change, so we can exit
     // a level if the primary player signs out
-    ProfileManager.SetSignInChangeCallback(
+    PlatformProfile.SetSignInChangeCallback(
         [](bool bVal, unsigned int uiSignInData) {
             Game::SignInChangeCallback(&app, bVal, uiSignInData);
         });
@@ -503,13 +503,13 @@ int main(int argc, const char* argv[]) {
 
     // QNet needs to be setup after profile manager, as we do not want its
     // Notify listener to handle XN_SYS_SIGNINCHANGED notifications. This does
-    // mean that we need to have a callback in the ProfileManager for
+    // mean that we need to have a callback in the PlatformProfile for
     // XN_LIVE_INVITE_ACCEPTED for QNet.
 
     g_NetworkManager.Initialise();
 
     // debug switch to trial version
-    ProfileManager.SetDebugFullOverride(true);
+    PlatformProfile.SetDebugFullOverride(true);
     // Initialise TLS for tesselator, for this main thread
     Tesselator::CreateNewThreadStorage(1024 * 1024);
     // Initialise TLS for AABB and Vec3 pools, for this main thread
@@ -534,7 +534,7 @@ int main(int argc, const char* argv[]) {
         app.UpdateTime();
         PlatformInput.Tick();
 
-        ProfileManager.Tick();
+        PlatformProfile.Tick();
 
         StorageManager.Tick();
 
@@ -564,7 +564,7 @@ int main(int argc, const char* argv[]) {
                 //
                 // g_NetworkManager.IsLocalGame() &&
                 g_NetworkManager.GetPlayerCount() == 1 &&
-                ui.IsPauseMenuDisplayed(ProfileManager.GetPrimaryPad()));
+                ui.IsPauseMenuDisplayed(PlatformProfile.GetPrimaryPad()));
         } else {
             pMinecraft->soundEngine->tick(nullptr, 0.0f);
             pMinecraft->textures->tick(true, false);

@@ -2,7 +2,7 @@
 #include "UIScene_ConnectingProgress.h"
 
 #include "platform/input/InputActions.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/Network/GameNetworkManager.h"
 #include "app/common/UI/All Platforms/UIStructs.h"
@@ -148,7 +148,7 @@ void UIScene_ConnectingProgress::handleTimerComplete(int id) {
                 break;
         }
 
-        if (m_iPad != ProfileManager.GetPrimaryPad() &&
+        if (m_iPad != PlatformProfile.GetPrimaryPad() &&
             g_NetworkManager.IsInSession()) {
             m_buttonConfirm.setVisible(true);
             m_showingButton = true;
@@ -162,11 +162,11 @@ void UIScene_ConnectingProgress::handleTimerComplete(int id) {
             unsigned int uiIDA[1];
             uiIDA[0] = IDS_CONFIRM_OK;
             ui.RequestErrorMessage(IDS_CONNECTION_FAILED, exitReasonStringId,
-                                   uiIDA, 1, ProfileManager.GetPrimaryPad());
+                                   uiIDA, 1, PlatformProfile.GetPrimaryPad());
             exitReasonStringId = -1;
 
             // app.NavigateToHomeMenu();
-            app.SetAction(ProfileManager.GetPrimaryPad(), eAppAction_ExitWorld,
+            app.SetAction(PlatformProfile.GetPrimaryPad(), eAppAction_ExitWorld,
                           (void*)true);
         }
     }
@@ -219,7 +219,7 @@ void UIScene_ConnectingProgress::handlePress(F64 controlId, F64 childId) {
     switch ((int)controlId) {
         case eControl_Confirm:
             if (m_showingButton) {
-                if (m_iPad != ProfileManager.GetPrimaryPad() &&
+                if (m_iPad != PlatformProfile.GetPrimaryPad() &&
                     g_NetworkManager.IsInSession()) {
                     // The connection failed if we see the button, so the temp
                     // player should be removed and the viewports updated again
@@ -228,7 +228,7 @@ void UIScene_ConnectingProgress::handlePress(F64 controlId, F64 childId) {
                     m_removeLocalPlayer = true;
                 } else {
                     ui.NavigateToHomeMenu();
-                    // app.NavigateBack( ProfileManager.GetPrimaryPad() );
+                    // app.NavigateBack( PlatformProfile.GetPrimaryPad() );
                 }
             }
             break;

@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <memory>
 
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/UI/Components/UIComponent_Chat.h"
 #include "app/common/UI/Controls/UIControl_Label.h"
@@ -169,7 +169,7 @@ void UIScene_HUD::customDraw(IggyCustomDrawCallbackRegion* region) {
         std::shared_ptr<ItemInstance> item = invSlot->getItem();
         if (item != nullptr) {
             unsigned char ucAlpha = app.GetGameSettings(
-                ProfileManager.GetPrimaryPad(), eGameSetting_InterfaceOpacity);
+                PlatformProfile.GetPrimaryPad(), eGameSetting_InterfaceOpacity);
             float fVal;
 
             if (ucAlpha < 80) {
@@ -257,12 +257,12 @@ void UIScene_HUD::handleReload() {
     }
     SetHudSize(iGuiScale);
 
-    SetDisplayName(ProfileManager.GetDisplayName(m_iPad));
+    SetDisplayName(PlatformProfile.GetDisplayName(m_iPad));
 
     repositionHud();
 
-    SetTooltipsEnabled(((ui.GetMenuDisplayed(ProfileManager.GetPrimaryPad())) ||
-                        (app.GetGameSettings(ProfileManager.GetPrimaryPad(),
+    SetTooltipsEnabled(((ui.GetMenuDisplayed(PlatformProfile.GetPrimaryPad())) ||
+                        (app.GetGameSettings(PlatformProfile.GetPrimaryPad(),
                                              eGameSetting_Tooltips) != 0)));
 }
 

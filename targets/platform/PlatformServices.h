@@ -3,7 +3,6 @@
 #include "IPlatformFileIO.h"
 #include "IPlatformLeaderboard.h"
 #include "IPlatformNetwork.h"
-#include "IPlatformProfile.h"
 #include "IPlatformRenderer.h"
 #include "IPlatformStorage.h"
 
@@ -12,6 +11,5 @@
 // by the app layer at startup.
 
 extern IPlatformFileIO& PlatformFileIO;
-extern IPlatformProfile& PlatformProfile;
 extern IPlatformRenderer& PlatformRender;
 extern IPlatformStorage& PlatformStorage;

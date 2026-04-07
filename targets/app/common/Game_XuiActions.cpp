@@ -28,7 +28,7 @@
 #include "minecraft/server/MinecraftServer.h"
 #include "minecraft/stats/StatsCounter.h"
 #include "platform/PlatformTypes.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "platform/sdl2/Storage.h"
 #include "util/StringHelpers.h"
 #include "app/common/Audio/SoundEngine.h"
@@ -71,7 +71,7 @@ void Game::HandleXuiActions(void) {
             switch (eAction) {
                 //     // the renderer will capture a screenshot
                 // case eAppAction_SocialPost:
-                //     if (ProfileManager.IsFullVersion()) {
+                //     if (PlatformProfile.IsFullVersion()) {
                 //         // Facebook Share
                 //         if (CSocialManager::Instance()
                 //                 ->IsTitleAllowedToPostImages() &&
@@ -159,12 +159,12 @@ void Game::HandleXuiActions(void) {
 
                         // Hide the other players scenes
                         ui.ShowOtherPlayersBaseScene(
-                            ProfileManager.GetPrimaryPad(), false);
+                            PlatformProfile.GetPrimaryPad(), false);
 
                         // int saveOrCheckpointId = 0;
                         // bool validSave =
                         // StorageManager.GetSaveUniqueNumber(&saveOrCheckpointId);
-                        // SentientManager.RecordLevelSaveOrCheckpoint(ProfileManager.GetPrimaryPad(),
+                        // SentientManager.RecordLevelSaveOrCheckpoint(PlatformProfile.GetPrimaryPad(),
                         // saveOrCheckpointId);
 
                         LoadingInputParams* loadingParams =
@@ -184,9 +184,9 @@ void Game::HandleXuiActions(void) {
                         completionData->bShowLogo = true;
                         completionData->type =
                             e_ProgressCompletion_NavigateBackToScene;
-                        completionData->iPad = ProfileManager.GetPrimaryPad();
+                        completionData->iPad = PlatformProfile.GetPrimaryPad();
 
-                        if (ui.IsSceneInStack(ProfileManager.GetPrimaryPad(),
+                        if (ui.IsSceneInStack(PlatformProfile.GetPrimaryPad(),
                                               eUIScene_EndPoem)) {
                             completionData->scene = eUIScene_EndPoem;
                         } else {
@@ -197,7 +197,7 @@ void Game::HandleXuiActions(void) {
 
                         // 4J Stu - Xbox only
 
-                        ui.NavigateToScene(ProfileManager.GetPrimaryPad(),
+                        ui.NavigateToScene(PlatformProfile.GetPrimaryPad(),
                                            eUIScene_FullscreenProgress,
                                            loadingParams, eUILayer_Fullscreen,
                                            eUIGroup_Fullscreen);
@@ -215,22 +215,22 @@ void Game::HandleXuiActions(void) {
 
                     // app.CloseAllPlayersXuiScenes();
                     //  Hide the other players scenes
-                    ui.ShowOtherPlayersBaseScene(ProfileManager.GetPrimaryPad(),
+                    ui.ShowOtherPlayersBaseScene(PlatformProfile.GetPrimaryPad(),
                                                  false);
 
                     // This just allows it to be shown
                     if (pMinecraft
-                            ->localgameModes[ProfileManager.GetPrimaryPad()] !=
+                            ->localgameModes[PlatformProfile.GetPrimaryPad()] !=
                         nullptr)
                         pMinecraft
-                            ->localgameModes[ProfileManager.GetPrimaryPad()]
+                            ->localgameModes[PlatformProfile.GetPrimaryPad()]
                             ->getTutorial()
                             ->showTutorialPopup(false);
 
                     // int saveOrCheckpointId = 0;
                     // bool validSave =
                     // StorageManager.GetSaveUniqueNumber(&saveOrCheckpointId);
-                    // SentientManager.RecordLevelSaveOrCheckpoint(ProfileManager.GetPrimaryPad(),
+                    // SentientManager.RecordLevelSaveOrCheckpoint(PlatformProfile.GetPrimaryPad(),
                     // saveOrCheckpointId);
 
                     LoadingInputParams* loadingParams =
@@ -246,13 +246,13 @@ void Game::HandleXuiActions(void) {
                     completionData->bShowLogo = true;
                     completionData->type =
                         e_ProgressCompletion_AutosaveNavigateBack;
-                    completionData->iPad = ProfileManager.GetPrimaryPad();
-                    // completionData->bAutosaveWasMenuDisplayed=ui.GetMenuDisplayed(ProfileManager.GetPrimaryPad());
+                    completionData->iPad = PlatformProfile.GetPrimaryPad();
+                    // completionData->bAutosaveWasMenuDisplayed=ui.GetMenuDisplayed(PlatformProfile.GetPrimaryPad());
                     loadingParams->completionData = completionData;
 
                     // 4J Stu - Xbox only
 
-                    ui.NavigateToScene(ProfileManager.GetPrimaryPad(),
+                    ui.NavigateToScene(PlatformProfile.GetPrimaryPad(),
                                        eUIScene_FullscreenProgress,
                                        loadingParams, eUILayer_Fullscreen,
                                        eUIGroup_Fullscreen);
@@ -265,7 +265,7 @@ void Game::HandleXuiActions(void) {
                         // Since the player is exiting, let's flush any profile
                         // writes for them, and hope we're not breaking TCR
                         // 136...
-                        ProfileManager.ForceQueuedProfileWrites(i);
+                        PlatformProfile.ForceQueuedProfileWrites(i);
 
                         // not required - it's done within the
                         // removeLocalPlayerIdx
@@ -285,7 +285,7 @@ void Game::HandleXuiActions(void) {
                         // Make sure we've not got this player selected as
                         // current - this shouldn't be the case anyway
                         pMinecraft->setLocalPlayerIdx(
-                            ProfileManager.GetPrimaryPad());
+                            PlatformProfile.GetPrimaryPad());
                         pMinecraft->removeLocalPlayerIdx(i);
 
                         // Wipe out the tooltips
@@ -303,12 +303,12 @@ void Game::HandleXuiActions(void) {
                                 if ((iPlayer != i) &&
                                     pMinecraft->localplayers[iPlayer]) {
                                     if (g_NetworkManager.IsLocalGame()) {
-                                        ProfileManager.SetCurrentGameActivity(
+                                        PlatformProfile.SetCurrentGameActivity(
                                             iPlayer,
                                             CONTEXT_PRESENCE_MULTIPLAYEROFFLINE,
                                             false);
                                     } else {
-                                        ProfileManager.SetCurrentGameActivity(
+                                        PlatformProfile.SetCurrentGameActivity(
                                             iPlayer,
                                             CONTEXT_PRESENCE_MULTIPLAYER,
                                             false);
@@ -321,12 +321,12 @@ void Game::HandleXuiActions(void) {
                                 if ((iPlayer != i) &&
                                     pMinecraft->localplayers[iPlayer]) {
                                     if (g_NetworkManager.IsLocalGame()) {
-                                        ProfileManager.SetCurrentGameActivity(
+                                        PlatformProfile.SetCurrentGameActivity(
                                             iPlayer,
                                             CONTEXT_PRESENCE_MULTIPLAYER_1POFFLINE,
                                             false);
                                     } else {
-                                        ProfileManager.SetCurrentGameActivity(
+                                        PlatformProfile.SetCurrentGameActivity(
                                             iPlayer,
                                             CONTEXT_PRESENCE_MULTIPLAYER_1P,
                                             false);
@@ -342,7 +342,7 @@ void Game::HandleXuiActions(void) {
                     int iPlayerC = g_NetworkManager.GetPlayerCount();
                     // Since the player is exiting, let's flush any profile
                     // writes for them, and hope we're not breaking TCR 136...
-                    ProfileManager.ForceQueuedProfileWrites(i);
+                    PlatformProfile.ForceQueuedProfileWrites(i);
                     // if there are any tips showing, we need to close them
 
                     pMinecraft->gui->clearMessages(i);
@@ -350,7 +350,7 @@ void Game::HandleXuiActions(void) {
                     // Make sure we've not got this player selected as current -
                     // this shouldn't be the case anyway
                     pMinecraft->setLocalPlayerIdx(
-                        ProfileManager.GetPrimaryPad());
+                        PlatformProfile.GetPrimaryPad());
                     pMinecraft->removeLocalPlayerIdx(i);
 
                     // Wipe out the tooltips
@@ -367,12 +367,12 @@ void Game::HandleXuiActions(void) {
                             if ((iPlayer != i) &&
                                 pMinecraft->localplayers[iPlayer]) {
                                 if (g_NetworkManager.IsLocalGame()) {
-                                    ProfileManager.SetCurrentGameActivity(
+                                    PlatformProfile.SetCurrentGameActivity(
                                         iPlayer,
                                         CONTEXT_PRESENCE_MULTIPLAYEROFFLINE,
                                         false);
                                 } else {
-                                    ProfileManager.SetCurrentGameActivity(
+                                    PlatformProfile.SetCurrentGameActivity(
                                         iPlayer, CONTEXT_PRESENCE_MULTIPLAYER,
                                         false);
                                 }
@@ -384,12 +384,12 @@ void Game::HandleXuiActions(void) {
                             if ((iPlayer != i) &&
                                 pMinecraft->localplayers[iPlayer]) {
                                 if (g_NetworkManager.IsLocalGame()) {
-                                    ProfileManager.SetCurrentGameActivity(
+                                    PlatformProfile.SetCurrentGameActivity(
                                         iPlayer,
                                         CONTEXT_PRESENCE_MULTIPLAYER_1POFFLINE,
                                         false);
                                 } else {
-                                    ProfileManager.SetCurrentGameActivity(
+                                    PlatformProfile.SetCurrentGameActivity(
                                         iPlayer,
                                         CONTEXT_PRESENCE_MULTIPLAYER_1P, false);
                                 }
@@ -434,11 +434,11 @@ void Game::HandleXuiActions(void) {
 
                     // In a split screen, only the primary player actually
                     // quits the game, others just remove their players
-                    if (i != ProfileManager.GetPrimaryPad()) {
+                    if (i != PlatformProfile.GetPrimaryPad()) {
                         // Make sure we've not got this player selected as
                         // current - this shouldn't be the case anyway
                         pMinecraft->setLocalPlayerIdx(
-                            ProfileManager.GetPrimaryPad());
+                            PlatformProfile.GetPrimaryPad());
                         pMinecraft->removeLocalPlayerIdx(i);
 
                         SetAction(i, eAppAction_Idle);
@@ -456,13 +456,13 @@ void Game::HandleXuiActions(void) {
                                 if (g_NetworkManager.IsLocalGame()) {
                                     app.SetRichPresenceContext(
                                         j, CONTEXT_GAME_STATE_BLANK);
-                                    ProfileManager.SetCurrentGameActivity(
+                                    PlatformProfile.SetCurrentGameActivity(
                                         j, CONTEXT_PRESENCE_MULTIPLAYEROFFLINE,
                                         false);
                                 } else {
                                     app.SetRichPresenceContext(
                                         j, CONTEXT_GAME_STATE_BLANK);
-                                    ProfileManager.SetCurrentGameActivity(
+                                    PlatformProfile.SetCurrentGameActivity(
                                         j, CONTEXT_PRESENCE_MULTIPLAYER, false);
                                 }
                             }
@@ -470,11 +470,11 @@ void Game::HandleXuiActions(void) {
                     } else {
                         app.SetRichPresenceContext(i, CONTEXT_GAME_STATE_BLANK);
                         if (g_NetworkManager.IsLocalGame()) {
-                            ProfileManager.SetCurrentGameActivity(
+                            PlatformProfile.SetCurrentGameActivity(
                                 i, CONTEXT_PRESENCE_MULTIPLAYER_1POFFLINE,
                                 false);
                         } else {
-                            ProfileManager.SetCurrentGameActivity(
+                            PlatformProfile.SetCurrentGameActivity(
                                 i, CONTEXT_PRESENCE_MULTIPLAYER_1P, false);
                         }
                     }
@@ -524,7 +524,7 @@ void Game::HandleXuiActions(void) {
                     completionData->iPad = DEFAULT_XUI_MENU_USER;
                     loadingParams->completionData = completionData;
 
-                    ui.NavigateToScene(ProfileManager.GetPrimaryPad(),
+                    ui.NavigateToScene(PlatformProfile.GetPrimaryPad(),
                                        eUIScene_FullscreenProgress,
                                        loadingParams);
                 } break;
@@ -566,7 +566,7 @@ void Game::HandleXuiActions(void) {
                     completionData->iPad = DEFAULT_XUI_MENU_USER;
                     loadingParams->completionData = completionData;
 
-                    ui.NavigateToScene(ProfileManager.GetPrimaryPad(),
+                    ui.NavigateToScene(PlatformProfile.GetPrimaryPad(),
                                        eUIScene_FullscreenProgress,
                                        loadingParams);
                 }
@@ -823,7 +823,7 @@ void Game::HandleXuiActions(void) {
                     ui.HideAllGameUIElements();
 
                     // set the state back to pre-game
-                    ProfileManager.ResetProfileProcessState();
+                    PlatformProfile.ResetProfileProcessState();
 
                     if (g_NetworkManager.IsLeavingGame()) {
                         // 4J Stu - If we are already leaving the game, then we
@@ -867,7 +867,7 @@ void Game::HandleXuiActions(void) {
                             e_ProgressCompletion_NavigateToHomeMenu;
                         loadingParams->completionData = completionData;
 
-                        ui.NavigateToScene(ProfileManager.GetPrimaryPad(),
+                        ui.NavigateToScene(PlatformProfile.GetPrimaryPad(),
                                            eUIScene_FullscreenProgress,
                                            loadingParams);
                     }
@@ -875,7 +875,7 @@ void Game::HandleXuiActions(void) {
                 case eAppAction_PrimaryPlayerSignedOutReturned_Menus:
                     SetAction(i, eAppAction_Idle);
                     // set the state back to pre-game
-                    ProfileManager.ResetProfileProcessState();
+                    PlatformProfile.ResetProfileProcessState();
                     // clear the save device
                     StorageManager.SetSaveDeviceSelected(i, false);
 
@@ -888,7 +888,7 @@ void Game::HandleXuiActions(void) {
                 case eAppAction_EthernetDisconnectedReturned_Menus:
                     SetAction(i, eAppAction_Idle);
                     // set the state back to pre-game
-                    ProfileManager.ResetProfileProcessState();
+                    PlatformProfile.ResetProfileProcessState();
 
                     ui.UpdatePlayerBasePositions();
 
@@ -927,7 +927,7 @@ void Game::HandleXuiActions(void) {
                     // Check the player really wants to do this
 
                     if (!StorageManager.GetSaveDisabled() &&
-                        i == ProfileManager.GetPrimaryPad() &&
+                        i == PlatformProfile.GetPrimaryPad() &&
                         g_NetworkManager.IsHost() && GetGameStarted()) {
                         uiIDA[0] = IDS_CONFIRM_CANCEL;
                         uiIDA[1] = IDS_EXIT_GAME_SAVE;
@@ -1018,7 +1018,7 @@ void Game::HandleXuiActions(void) {
                     completionData->type = e_ProgressCompletion_NoAction;
                     loadingParams->completionData = completionData;
 
-                    ui.NavigateToScene(ProfileManager.GetPrimaryPad(),
+                    ui.NavigateToScene(PlatformProfile.GetPrimaryPad(),
                                        eUIScene_FullscreenProgress,
                                        loadingParams);
                 }
@@ -1043,15 +1043,15 @@ void Game::HandleXuiActions(void) {
                     app.DebugPrintf(
                         "Changing Primary Pad on an invite accept - pad was "
                         "%d, and is now %d\n",
-                        ProfileManager.GetPrimaryPad(),
+                        PlatformProfile.GetPrimaryPad(),
                         inviteData->dwUserIndex);
-                    ProfileManager.SetLockedProfile(inviteData->dwUserIndex);
-                    ProfileManager.SetPrimaryPad(inviteData->dwUserIndex);
+                    PlatformProfile.SetLockedProfile(inviteData->dwUserIndex);
+                    PlatformProfile.SetPrimaryPad(inviteData->dwUserIndex);
 
                     // change the minecraft player name
                     Minecraft::GetInstance()->user->name =
-                        convStringToWstring(ProfileManager.GetGamertag(
-                            ProfileManager.GetPrimaryPad()));
+                        convStringToWstring(PlatformProfile.GetGamertag(
+                            PlatformProfile.GetPrimaryPad()));
 
                     bool success = g_NetworkManager.JoinGameFromInviteInfo(
                         inviteData->dwUserIndex,       // dwUserIndex
@@ -1069,7 +1069,7 @@ void Game::HandleXuiActions(void) {
                         uiIDA[0] = IDS_CONFIRM_OK;
                         ui.RequestErrorMessage(
                             IDS_CONNECTION_FAILED, IDS_CONNECTION_LOST_SERVER,
-                            uiIDA, 1, ProfileManager.GetPrimaryPad());
+                            uiIDA, 1, PlatformProfile.GetPrimaryPad());
 
                         ui.NavigateToHomeMenu();
                         ui.UpdatePlayerBasePositions();
@@ -1097,12 +1097,12 @@ void Game::HandleXuiActions(void) {
                             ui.HideAllGameUIElements();
 
                             if (!ui.IsSceneInStack(
-                                    ProfileManager.GetPrimaryPad(),
+                                    PlatformProfile.GetPrimaryPad(),
                                     eUIScene_EndPoem)) {
                                 ui.CloseAllPlayersScenes();
                             }
                             ui.ShowOtherPlayersBaseScene(
-                                ProfileManager.GetPrimaryPad(), true);
+                                PlatformProfile.GetPrimaryPad(), true);
 
                             // Remove this line to fix:
                             // #49084 - TU5: Code: Gameplay: The title crashes
@@ -1125,7 +1125,7 @@ void Game::HandleXuiActions(void) {
                             completionData->bShowLogo = true;
                             completionData->iPad = DEFAULT_XUI_MENU_USER;
                             if (ui.IsSceneInStack(
-                                    ProfileManager.GetPrimaryPad(),
+                                    PlatformProfile.GetPrimaryPad(),
                                     eUIScene_EndPoem)) {
                                 completionData->type =
                                     e_ProgressCompletion_NavigateBackToScene;
@@ -1136,7 +1136,7 @@ void Game::HandleXuiActions(void) {
                             }
                             loadingParams->completionData = completionData;
 
-                            ui.NavigateToScene(ProfileManager.GetPrimaryPad(),
+                            ui.NavigateToScene(PlatformProfile.GetPrimaryPad(),
                                                eUIScene_FullscreenProgress,
                                                loadingParams);
                         }
@@ -1148,7 +1148,7 @@ void Game::HandleXuiActions(void) {
                 } break;
                 case eAppAction_SetDefaultOptions:
                     SetAction(i, eAppAction_Idle);
-                    SetDefaultOptions((C_4JProfile::PROFILESETTINGS*)param, i);
+                    SetDefaultOptions((IPlatformProfile::PROFILESETTINGS*)param, i);
 
                     // if the profile data has been changed, then force a
                     // profile write It seems we're allowed to break the 5
@@ -1161,7 +1161,7 @@ void Game::HandleXuiActions(void) {
                     // If the remote server save has already finished, don't
                     // complete the action
                     if (GetGameStarted()) {
-                        SetAction(ProfileManager.GetPrimaryPad(),
+                        SetAction(PlatformProfile.GetPrimaryPad(),
                                   eAppAction_Idle);
                         break;
                     }
@@ -1187,7 +1187,7 @@ void Game::HandleXuiActions(void) {
                     completionData->bShowBackground = true;
                     completionData->bShowLogo = true;
                     completionData->iPad = DEFAULT_XUI_MENU_USER;
-                    if (ui.IsSceneInStack(ProfileManager.GetPrimaryPad(),
+                    if (ui.IsSceneInStack(PlatformProfile.GetPrimaryPad(),
                                           eUIScene_EndPoem)) {
                         completionData->type =
                             e_ProgressCompletion_NavigateBackToScene;
@@ -1201,7 +1201,7 @@ void Game::HandleXuiActions(void) {
                     loadingParams->cancelFunc = &Game::ExitGameFromRemoteSave;
                     loadingParams->cancelText = IDS_TOOLTIPS_EXIT;
 
-                    ui.NavigateToScene(ProfileManager.GetPrimaryPad(),
+                    ui.NavigateToScene(PlatformProfile.GetPrimaryPad(),
                                        eUIScene_FullscreenProgress,
                                        loadingParams);
                 } break;
@@ -1214,7 +1214,7 @@ void Game::HandleXuiActions(void) {
                     C4JStorage::EMessageResult result = ui.RequestErrorMessage(
                         IDS_NO_MULTIPLAYER_PRIVILEGE_TITLE,
                         IDS_NO_MULTIPLAYER_PRIVILEGE_JOIN_TEXT, uiIDA, 1,
-                        ProfileManager.GetPrimaryPad());
+                        PlatformProfile.GetPrimaryPad());
                     if (result != C4JStorage::EMessage_Busy)
                         SetAction(i, eAppAction_Idle);
                 } break;
@@ -1245,7 +1245,7 @@ void Game::HandleXuiActions(void) {
                         !g_NetworkManager.IsLeavingGame()) {
                         // primary player would exit the world, secondary would
                         // exit the player
-                        if (ProfileManager.GetPrimaryPad() == i) {
+                        if (PlatformProfile.GetPrimaryPad() == i) {
                             SetAction(i, eAppAction_ExitWorld);
                         } else {
                             SetAction(i, eAppAction_ExitPlayer);
@@ -1341,7 +1341,7 @@ void Game::HandleXuiActions(void) {
                     ui.RequestErrorMessage(
                         IDS_DLC_TEXTUREPACK_NOT_PRESENT_TITLE,
                         IDS_DLC_TEXTUREPACK_NOT_PRESENT, uiIDA, 2,
-                        ProfileManager.GetPrimaryPad(),
+                        PlatformProfile.GetPrimaryPad(),
                         &Game::TexturePackDialogReturned, this);
                     SetAction(i, eAppAction_Idle);
                 }
@@ -1437,8 +1437,8 @@ void Game::HandleXuiActions(void) {
                     // selected
                     // 					// ensure we've applied
                     // this player's settings
-                    // 					app.ApplyGameSettingsChanged(ProfileManager.GetPrimaryPad());
-                    // 					app.NavigateToScene(ProfileManager.GetPrimaryPad(),eUIScene_MultiGameJoinLoad);
+                    // 					app.ApplyGameSettingsChanged(PlatformProfile.GetPrimaryPad());
+                    // 					app.NavigateToScene(PlatformProfile.GetPrimaryPad(),eUIScene_MultiGameJoinLoad);
                     // 				}
                     break;
                 default:

@@ -13,7 +13,7 @@
 #include <unordered_map>
 #include <utility>
 
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "platform/sdl2/Storage.h"
 #include "DLCFile.h"
 #include "DLCPack.h"
@@ -361,12 +361,12 @@ unsigned int DLCManager::checkForCorruptDLCAndAlert(
 
             C4JStorage::EMessageResult result = ui.RequestErrorMessage(
                 IDS_CORRUPT_DLC_TITLE, IDS_CORRUPT_DLC, uiIDA, 1,
-                ProfileManager.GetPrimaryPad(), nullptr, nullptr, wchFormat);
+                PlatformProfile.GetPrimaryPad(), nullptr, nullptr, wchFormat);
 
         } else {
             C4JStorage::EMessageResult result = ui.RequestErrorMessage(
                 IDS_CORRUPT_DLC_TITLE, IDS_CORRUPT_DLC_MULTIPLE, uiIDA, 1,
-                ProfileManager.GetPrimaryPad());
+                PlatformProfile.GetPrimaryPad());
         }
     }
 

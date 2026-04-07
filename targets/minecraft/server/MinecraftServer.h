@@ -239,7 +239,7 @@ private:
         m_bPrimaryPlayerSignedOut;  // 4J-PB added to tell the stopserver not to
                                     // save the game - another player may have
                                     // signed in in their place, so
-                                    // ProfileManager.IsSignedIn isn't enough
+                                    // PlatformProfile.IsSignedIn isn't enough
     static bool s_bServerHalted;  // 4J Stu Added so that we can halt the server
                                   // even before it's been created properly
     static bool s_bSaveOnExitAnswered;  // 4J Stu Added so that we only ask this

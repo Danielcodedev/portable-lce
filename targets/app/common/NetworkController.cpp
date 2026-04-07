@@ -18,7 +18,7 @@
 #include "minecraft/world/level/tile/Tile.h"
 #include "minecraft/world/level/storage/ConsoleSaveFileIO/compression.h"
 #include "platform/input/input.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "platform/sdl2/Storage.h"
 #include "app/common/Audio/SoundEngine.h"
 
@@ -121,7 +121,7 @@ int NetworkController::ethernetDisconnectReturned(
 
 void NetworkController::profileReadErrorCallback(void* pParam) {
     Game* pApp = (Game*)pParam;
-    int iPrimaryPlayer = ProfileManager.GetPrimaryPad();
+    int iPrimaryPlayer = PlatformProfile.GetPrimaryPad();
     pApp->SetAction(iPrimaryPlayer, eAppAction_ProfileReadError);
 }
 
@@ -219,7 +219,7 @@ int NetworkController::signoutExitWorldThreadProc(void* lpParameter) {
 }
 
 void NetworkController::clearSignInChangeUsersMask() {
-    int iPrimaryPlayer = ProfileManager.GetPrimaryPad();
+    int iPrimaryPlayer = PlatformProfile.GetPrimaryPad();
 
     if (m_uiLastSignInData != 0) {
         if (iPrimaryPlayer >= 0) {
@@ -234,9 +234,9 @@ void NetworkController::signInChangeCallback(void* pParam,
                                              bool bPrimaryPlayerChanged,
                                              unsigned int uiSignInData) {
     Game* pApp = (Game*)pParam;
-    int iPrimaryPlayer = ProfileManager.GetPrimaryPad();
+    int iPrimaryPlayer = PlatformProfile.GetPrimaryPad();
 
-    if ((ProfileManager.GetLockedProfile() != -1) && iPrimaryPlayer != -1) {
+    if ((PlatformProfile.GetLockedProfile() != -1) && iPrimaryPlayer != -1) {
         if (((uiSignInData & (1 << iPrimaryPlayer)) == 0) ||
             bPrimaryPlayerChanged) {
             pApp->SetAction(iPrimaryPlayer, eAppAction_PrimaryPlayerSignedOut);
@@ -251,7 +251,7 @@ void NetworkController::signInChangeCallback(void* pParam,
                 bool hasGuestIdChanged = false;
                 for (unsigned int i = 0; i < XUSER_MAX_COUNT; ++i) {
                     unsigned int guestNumber = 0;
-                    if (ProfileManager.IsSignedIn(i)) {
+                    if (PlatformProfile.IsSignedIn(i)) {
                         XUSER_SIGNIN_INFO info;
                         XUserGetSigninInfo(
                             i, XUSER_GET_SIGNIN_INFO_OFFLINE_XUID_ONLY, &info);
@@ -274,12 +274,12 @@ void NetworkController::signInChangeCallback(void* pParam,
                     uiIDA[0] = IDS_CONFIRM_OK;
                     ui.RequestErrorMessage(IDS_GUEST_ORDER_CHANGED_TITLE,
                                            IDS_GUEST_ORDER_CHANGED_TEXT, uiIDA,
-                                           1, ProfileManager.GetPrimaryPad());
+                                           1, PlatformProfile.GetPrimaryPad());
                 }
 
                 bool switchToOffline = false;
-                if (!ProfileManager.IsSignedInLive(
-                        ProfileManager.GetLockedProfile()) &&
+                if (!PlatformProfile.IsSignedInLive(
+                        PlatformProfile.GetLockedProfile()) &&
                     !g_NetworkManager.IsLocalGame()) {
                     switchToOffline = true;
                 }
@@ -309,7 +309,7 @@ void NetworkController::signInChangeCallback(void* pParam,
                         if (bPlayerChanged &&
                             (!bPlayerSignedIn ||
                              (bPlayerSignedIn &&
-                              !ProfileManager.AreXUIDSEqual(
+                              !PlatformProfile.AreXUIDSEqual(
                                   pApp->m_networkController
                                       .m_currentSigninInfo[i]
                                       .xuid,
@@ -338,8 +338,8 @@ void NetworkController::signInChangeCallback(void* pParam,
 
                 g_NetworkManager.HandleSignInChange();
             } else if (pApp->GetLiveLinkRequired() &&
-                       !ProfileManager.IsSignedInLive(
-                           ProfileManager.GetLockedProfile())) {
+                       !PlatformProfile.IsSignedInLive(
+                           PlatformProfile.GetLockedProfile())) {
                 {
                     pApp->SetAction(iPrimaryPlayer,
                                     eAppAction_EthernetDisconnected);
@@ -396,7 +396,7 @@ void NetworkController::notificationsCallback(void* pParam,
             break;
         case XN_LIVE_CONTENT_INSTALLED: {
             app.ClearDLCInstalled();
-            ui.HandleDLCInstalled(ProfileManager.GetPrimaryPad());
+            ui.HandleDLCInstalled(PlatformProfile.GetPrimaryPad());
         } break;
         case XN_SYS_STORAGEDEVICESCHANGED: {
         } break;
@@ -453,7 +453,7 @@ int NetworkController::exitAndJoinFromInviteSaveDialogReturned(
                 uiIDA[1] = IDS_CONFIRM_OK;
                 ui.RequestErrorMessage(
                     IDS_TITLE_SAVE_GAME, IDS_CONFIRM_SAVE_GAME, uiIDA, 2,
-                    ProfileManager.GetPrimaryPad(),
+                    PlatformProfile.GetPrimaryPad(),
                     &NetworkController::exitAndJoinFromInviteAndSaveReturned,
                     pClass);
                 return 0;
@@ -466,13 +466,13 @@ int NetworkController::exitAndJoinFromInviteSaveDialogReturned(
             uiIDA[1] = IDS_CONFIRM_OK;
             ui.RequestErrorMessage(
                 IDS_TITLE_DECLINE_SAVE_GAME, IDS_CONFIRM_DECLINE_SAVE_GAME,
-                uiIDA, 2, ProfileManager.GetPrimaryPad(),
+                uiIDA, 2, PlatformProfile.GetPrimaryPad(),
                 &NetworkController::exitAndJoinFromInviteDeclineSaveReturned,
                 pClass);
             return 0;
         }
 
-        app.SetAction(ProfileManager.GetPrimaryPad(),
+        app.SetAction(PlatformProfile.GetPrimaryPad(),
                       eAppAction_ExitAndJoinFromInviteConfirmed);
     }
     return 0;

@@ -10,7 +10,7 @@
 #include <compare>
 #include <cstdint>
 
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/GameRules/LevelRules/RuleDefinitions/GameRuleDefinition.h"
 #include "app/common/GameRules/LevelRules/RuleDefinitions/LevelRuleset.h"
@@ -1083,7 +1083,7 @@ void PlayerList::tick() {
                         std::shared_ptr<ServerPlayer> p = players.at(i);
                         PlayerUID playersXuid = p->getOnlineXuid();
                         if (p != nullptr &&
-                            ProfileManager.AreXUIDSEqual(playersXuid, xuid)) {
+                            PlatformProfile.AreXUIDSEqual(playersXuid, xuid)) {
                             player = p;
                             break;
                         }
@@ -1690,7 +1690,7 @@ bool PlayerList::isXuidBanned(PlayerUID xuid) {
     bool banned = false;
 
     for (auto it = m_bannedXuids.begin(); it != m_bannedXuids.end(); ++it) {
-        if (ProfileManager.AreXUIDSEqual(xuid, *it)) {
+        if (PlatformProfile.AreXUIDSEqual(xuid, *it)) {
             banned = true;
             break;
         }

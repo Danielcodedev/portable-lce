@@ -4,7 +4,7 @@
 
 #include <vector>
 
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/Tutorial/Tutorial.h"
 #include "app/common/Tutorial/TutorialEnum.h"
@@ -67,12 +67,12 @@ void UIComponent_TutorialPopup::UpdateTutorialPopup() {
     // has the Splitscreen Gamertag visibility been changed? Re-Adjust Layout to
     // prevent overlaps!
     if (m_bSplitscreenGamertagVisible !=
-        (bool)(app.GetGameSettings(ProfileManager.GetPrimaryPad(),
+        (bool)(app.GetGameSettings(PlatformProfile.GetPrimaryPad(),
                                    eGameSetting_DisplaySplitscreenGamertags) !=
                0)) {
         m_bSplitscreenGamertagVisible =
             (bool)(app.GetGameSettings(
-                       ProfileManager.GetPrimaryPad(),
+                       PlatformProfile.GetPrimaryPad(),
                        eGameSetting_DisplaySplitscreenGamertags) != 0);
         handleReload();
     }
@@ -83,7 +83,7 @@ void UIComponent_TutorialPopup::handleReload() {
     IggyDataValue value[1];
     value[0].type = IGGY_DATATYPE_boolean;
     value[0].boolval =
-        (bool)((app.GetGameSettings(ProfileManager.GetPrimaryPad(),
+        (bool)((app.GetGameSettings(PlatformProfile.GetPrimaryPad(),
                                     eGameSetting_DisplaySplitscreenGamertags) !=
                 0) &&
                !m_bContainerMenuVisible);  // 4J - TomK - Offset for splitscreen
@@ -232,7 +232,7 @@ void UIComponent_TutorialPopup::_SetDescription(UIScene* interactScene,
         // Layout function (so we can offset it to stay clear of the gamertag)
         m_bSplitscreenGamertagVisible =
             (bool)(app.GetGameSettings(
-                       ProfileManager.GetPrimaryPad(),
+                       PlatformProfile.GetPrimaryPad(),
                        eGameSetting_DisplaySplitscreenGamertags) != 0);
         IggyDataValue result;
         IggyDataValue value[1];

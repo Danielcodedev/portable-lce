@@ -8,7 +8,7 @@
 
 #include "platform/PlatformTypes.h"
 #include "platform/input/InputActions.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "platform/sdl2/Render.h"
 #include "app/common/App_Defines.h"
 #include "minecraft/GameEnums.h"
@@ -145,13 +145,13 @@ void UIScene_MainMenu::handleGainFocus(bool navBack) {
     if (!navBack) {
         for (int iPad = 0; iPad < MAX_LOCAL_PLAYERS; iPad++) {
             // For returning to menus after exiting a game.
-            if (ProfileManager.IsSignedIn(iPad)) {
-                ProfileManager.SetCurrentGameActivity(
+            if (PlatformProfile.IsSignedIn(iPad)) {
+                PlatformProfile.SetCurrentGameActivity(
                     iPad, CONTEXT_PRESENCE_MENUS, false);
             }
         }
     }
-    ProfileManager.SetLockedProfile(-1);
+    PlatformProfile.SetLockedProfile(-1);
 
     m_bIgnorePress = false;
     updateTooltips();
@@ -214,8 +214,8 @@ void UIScene_MainMenu::handleInput(int iPad, int key, bool repeat, bool pressed,
     switch (key) {
         case ACTION_MENU_OK:
             if (pressed) {
-                ProfileManager.SetPrimaryPad(iPad);
-                ProfileManager.SetLockedProfile(-1);
+                PlatformProfile.SetPrimaryPad(iPad);
+                PlatformProfile.SetLockedProfile(-1);
                 sendInputToMovie(key, repeat, pressed, released);
             }
             break;
@@ -228,7 +228,7 @@ void UIScene_MainMenu::handleInput(int iPad, int key, bool repeat, bool pressed,
 }
 
 void UIScene_MainMenu::handlePress(F64 controlId, F64 childId) {
-    int primaryPad = ProfileManager.GetPrimaryPad();
+    int primaryPad = PlatformProfile.GetPrimaryPad();
 
     std::function<int(bool, int)> signInReturnedFunc;
 
@@ -294,9 +294,9 @@ void UIScene_MainMenu::handlePress(F64 controlId, F64 childId) {
 
     // Note: if no sign in returned func, assume this isn't required
     if (signInReturnedFunc) {
-        if (ProfileManager.IsSignedIn(primaryPad)) {
+        if (PlatformProfile.IsSignedIn(primaryPad)) {
             if (confirmUser) {
-                ProfileManager.RequestSignInUI(false, false, true, false, true,
+                PlatformProfile.RequestSignInUI(false, false, true, false, true,
                                                signInReturnedFunc,
                                                primaryPad);
             } else {
@@ -403,7 +403,7 @@ int UIScene_MainMenu::MustSignInReturned(void* pParam, int iPad,
         // in the list
         switch (pClass->m_eAction) {
             case eAction_RunGame:
-                ProfileManager.RequestSignInUI(
+                PlatformProfile.RequestSignInUI(
                     false, true, false, false, true,
                     [pClass](bool b, int p) {
                         return CreateLoad_SignInReturned(pClass, b, p);
@@ -411,7 +411,7 @@ int UIScene_MainMenu::MustSignInReturned(void* pParam, int iPad,
                     iPad);
                 break;
             case eAction_RunHelpAndOptions:
-                ProfileManager.RequestSignInUI(
+                PlatformProfile.RequestSignInUI(
                     false, false, true, false, true,
                     [pClass](bool b, int p) {
                         return HelpAndOptions_SignInReturned(pClass, b, p);
@@ -419,7 +419,7 @@ int UIScene_MainMenu::MustSignInReturned(void* pParam, int iPad,
                     iPad);
                 break;
             case eAction_RunLeaderboards:
-                ProfileManager.RequestSignInUI(
+                PlatformProfile.RequestSignInUI(
                     false, false, true, false, true,
                     [pClass](bool b, int p) {
                         return Leaderboards_SignInReturned(pClass, b, p);
@@ -427,7 +427,7 @@ int UIScene_MainMenu::MustSignInReturned(void* pParam, int iPad,
                     iPad);
                 break;
             case eAction_RunAchievements:
-                ProfileManager.RequestSignInUI(
+                PlatformProfile.RequestSignInUI(
                     false, false, true, false, true,
                     [pClass](bool b, int p) {
                         return Achievements_SignInReturned(pClass, b, p);
@@ -435,7 +435,7 @@ int UIScene_MainMenu::MustSignInReturned(void* pParam, int iPad,
                     iPad);
                 break;
             case eAction_RunUnlockOrDLC:
-                ProfileManager.RequestSignInUI(
+                PlatformProfile.RequestSignInUI(
                     false, false, true, false, true,
                     [pClass](bool b, int p) {
                         return UnlockFullGame_SignInReturned(pClass, b, p);
@@ -448,11 +448,11 @@ int UIScene_MainMenu::MustSignInReturned(void* pParam, int iPad,
     } else {
         pClass->m_bIgnorePress = false;
         // unlock the profile
-        ProfileManager.SetLockedProfile(-1);
+        PlatformProfile.SetLockedProfile(-1);
         for (int i = 0; i < XUSER_MAX_COUNT; i++) {
             // if the user is valid, we should set the presence
-            if (ProfileManager.IsSignedIn(i)) {
-                ProfileManager.SetCurrentGameActivity(i, CONTEXT_PRESENCE_MENUS,
+            if (PlatformProfile.IsSignedIn(i)) {
+                PlatformProfile.SetCurrentGameActivity(i, CONTEXT_PRESENCE_MENUS,
                                                       false);
             }
         }
@@ -468,14 +468,14 @@ int UIScene_MainMenu::HelpAndOptions_SignInReturned(void* pParam,
     if (bContinue) {
         // 4J-JEV: Don't we only need to update rich-presence if the sign-in
         // status changes.
-        ProfileManager.SetCurrentGameActivity(iPad, CONTEXT_PRESENCE_MENUS,
+        PlatformProfile.SetCurrentGameActivity(iPad, CONTEXT_PRESENCE_MENUS,
                                               false);
 
 #if TO_BE_IMPLEMENTED
         if (app.GetTMSDLCInfoRead())
 #endif
         {
-            ProfileManager.SetLockedProfile(ProfileManager.GetPrimaryPad());
+            PlatformProfile.SetLockedProfile(PlatformProfile.GetPrimaryPad());
             proceedToScene(iPad, eUIScene_HelpAndOptionsMenu);
         }
 #if TO_BE_IMPLEMENTED
@@ -500,11 +500,11 @@ int UIScene_MainMenu::HelpAndOptions_SignInReturned(void* pParam,
     } else {
         pClass->m_bIgnorePress = false;
         // unlock the profile
-        ProfileManager.SetLockedProfile(-1);
+        PlatformProfile.SetLockedProfile(-1);
         for (int i = 0; i < XUSER_MAX_COUNT; i++) {
             // if the user is valid, we should set the presence
-            if (ProfileManager.IsSignedIn(i)) {
-                ProfileManager.SetCurrentGameActivity(i, CONTEXT_PRESENCE_MENUS,
+            if (PlatformProfile.IsSignedIn(i)) {
+                PlatformProfile.SetCurrentGameActivity(i, CONTEXT_PRESENCE_MENUS,
                                                       false);
             }
         }
@@ -520,24 +520,24 @@ int UIScene_MainMenu::CreateLoad_SignInReturned(void* pParam, bool bContinue,
     if (bContinue) {
         // 4J-JEV: We only need to update rich-presence if the sign-in status
         // changes.
-        ProfileManager.SetCurrentGameActivity(iPad, CONTEXT_PRESENCE_MENUS,
+        PlatformProfile.SetCurrentGameActivity(iPad, CONTEXT_PRESENCE_MENUS,
                                               false);
 
         unsigned int uiIDA[1] = {IDS_OK};
 
-        if (ProfileManager.IsGuest(ProfileManager.GetPrimaryPad())) {
+        if (PlatformProfile.IsGuest(PlatformProfile.GetPrimaryPad())) {
             pClass->m_bIgnorePress = false;
             ui.RequestErrorMessage(IDS_PRO_GUESTPROFILE_TITLE,
                                    IDS_PRO_GUESTPROFILE_TEXT, uiIDA, 1);
         } else {
-            ProfileManager.SetLockedProfile(ProfileManager.GetPrimaryPad());
+            PlatformProfile.SetLockedProfile(PlatformProfile.GetPrimaryPad());
 
             // change the minecraft player name
             Minecraft::GetInstance()->user->name = convStringToWstring(
-                ProfileManager.GetGamertag(ProfileManager.GetPrimaryPad()));
+                PlatformProfile.GetGamertag(PlatformProfile.GetPrimaryPad()));
 
             {
-                bool bSignedInLive = ProfileManager.IsSignedInLive(iPad);
+                bool bSignedInLive = PlatformProfile.IsSignedInLive(iPad);
 
                 // Check if we're signed in to LIVE
                 if (bSignedInLive) {
@@ -545,7 +545,7 @@ int UIScene_MainMenu::CreateLoad_SignInReturned(void* pParam, bool bContinue,
                     if (!app.DLCInstallProcessCompleted())
                         app.StartInstallDLCProcess(iPad);
 
-                    if (ProfileManager.IsGuest(iPad)) {
+                    if (PlatformProfile.IsGuest(iPad)) {
                         pClass->m_bIgnorePress = false;
                         ui.RequestErrorMessage(IDS_PRO_GUESTPROFILE_TITLE,
                                                IDS_PRO_GUESTPROFILE_TEXT, uiIDA,
@@ -564,14 +564,14 @@ int UIScene_MainMenu::CreateLoad_SignInReturned(void* pParam, bool bContinue,
 
                                 // ensure we've applied this player's settings
                                 app.ApplyGameSettingsChanged(
-                                    ProfileManager.GetPrimaryPad());
+                                    PlatformProfile.GetPrimaryPad());
                                 // check for DLC
                                 // start timer to track DLC check finished
                                 pClass->m_Timer.SetShow(true);
                                 XuiSetTimer(pClass->m_hObj,
                                             DLC_INSTALLED_TIMER_ID,
                                             DLC_INSTALLED_TIMER_TIME);
-                                // app.NavigateToScene(ProfileManager.GetPrimaryPad(),eUIScene_MultiGameJoinLoad);
+                                // app.NavigateToScene(PlatformProfile.GetPrimaryPad(),eUIScene_MultiGameJoinLoad);
                             }
                         } else {
                             // Changing to async TMS calls
@@ -595,29 +595,29 @@ int UIScene_MainMenu::CreateLoad_SignInReturned(void* pParam, bool bContinue,
 #else
                         Minecraft* pMinecraft = Minecraft::GetInstance();
                         pMinecraft->user->name =
-                            convStringToWstring(ProfileManager.GetGamertag(
-                                ProfileManager.GetPrimaryPad()));
+                            convStringToWstring(PlatformProfile.GetGamertag(
+                                PlatformProfile.GetPrimaryPad()));
 
                         // ensure we've applied this player's settings
                         app.ApplyGameSettingsChanged(iPad);
 
-                        proceedToScene(ProfileManager.GetPrimaryPad(),
+                        proceedToScene(PlatformProfile.GetPrimaryPad(),
                                        eUIScene_LoadOrJoinMenu);
 #endif
                     }
                 } else {
 #if TO_BE_IMPLEMENTED
                     // offline
-                    ProfileManager.DisplayOfflineProfile(
+                    PlatformProfile.DisplayOfflineProfile(
                         [pClass](bool b, int p) {
                             return CScene_Main::CreateLoad_OfflineProfileReturned(
                                 pClass, b, p);
                         },
-                        ProfileManager.GetPrimaryPad());
+                        PlatformProfile.GetPrimaryPad());
 #else
                     app.DebugPrintf(
                         "Offline Profile returned not implemented\n");
-                    proceedToScene(ProfileManager.GetPrimaryPad(),
+                    proceedToScene(PlatformProfile.GetPrimaryPad(),
                                    eUIScene_LoadOrJoinMenu);
 #endif
                 }
@@ -627,11 +627,11 @@ int UIScene_MainMenu::CreateLoad_SignInReturned(void* pParam, bool bContinue,
         pClass->m_bIgnorePress = false;
 
         // unlock the profile
-        ProfileManager.SetLockedProfile(-1);
+        PlatformProfile.SetLockedProfile(-1);
         for (int i = 0; i < XUSER_MAX_COUNT; i++) {
             // if the user is valid, we should set the presence
-            if (ProfileManager.IsSignedIn(i)) {
-                ProfileManager.SetCurrentGameActivity(i, CONTEXT_PRESENCE_MENUS,
+            if (PlatformProfile.IsSignedIn(i)) {
+                PlatformProfile.SetCurrentGameActivity(i, CONTEXT_PRESENCE_MENUS,
                                                       false);
             }
         }
@@ -646,18 +646,18 @@ int UIScene_MainMenu::Leaderboards_SignInReturned(void* pParam, bool bContinue,
     if (bContinue) {
         // 4J-JEV: We only need to update rich-presence if the sign-in status
         // changes.
-        ProfileManager.SetCurrentGameActivity(iPad, CONTEXT_PRESENCE_MENUS,
+        PlatformProfile.SetCurrentGameActivity(iPad, CONTEXT_PRESENCE_MENUS,
                                               false);
 
         unsigned int uiIDA[1] = {IDS_OK};
 
         // guests can't look at leaderboards
-        if (ProfileManager.IsGuest(ProfileManager.GetPrimaryPad())) {
+        if (PlatformProfile.IsGuest(PlatformProfile.GetPrimaryPad())) {
             pClass->m_bIgnorePress = false;
             ui.RequestErrorMessage(IDS_PRO_GUESTPROFILE_TITLE,
                                    IDS_PRO_GUESTPROFILE_TEXT, uiIDA, 1);
-        } else if (!ProfileManager.IsSignedInLive(
-                       ProfileManager.GetPrimaryPad())) {
+        } else if (!PlatformProfile.IsSignedInLive(
+                       PlatformProfile.GetPrimaryPad())) {
             pClass->m_bIgnorePress = false;
             ui.RequestErrorMessage(IDS_PRO_NOTONLINE_TITLE,
                                    IDS_PRO_NOTONLINE_TEXT, uiIDA, 1);
@@ -672,22 +672,22 @@ int UIScene_MainMenu::Leaderboards_SignInReturned(void* pParam, bool bContinue,
                 uiIDA[0] = IDS_CONFIRM_OK;
                 ui.RequestErrorMessage(IDS_ONLINE_SERVICE_TITLE,
                                        IDS_CONTENT_RESTRICTION, uiIDA, 1,
-                                       ProfileManager.GetPrimaryPad());
+                                       PlatformProfile.GetPrimaryPad());
 #endif
             } else {
-                ProfileManager.SetLockedProfile(ProfileManager.GetPrimaryPad());
-                proceedToScene(ProfileManager.GetPrimaryPad(),
+                PlatformProfile.SetLockedProfile(PlatformProfile.GetPrimaryPad());
+                proceedToScene(PlatformProfile.GetPrimaryPad(),
                                eUIScene_LeaderboardsMenu);
             }
         }
     } else {
         pClass->m_bIgnorePress = false;
         // unlock the profile
-        ProfileManager.SetLockedProfile(-1);
+        PlatformProfile.SetLockedProfile(-1);
         for (int i = 0; i < XUSER_MAX_COUNT; i++) {
             // if the user is valid, we should set the presence
-            if (ProfileManager.IsSignedIn(i)) {
-                ProfileManager.SetCurrentGameActivity(i, CONTEXT_PRESENCE_MENUS,
+            if (PlatformProfile.IsSignedIn(i)) {
+                PlatformProfile.SetCurrentGameActivity(i, CONTEXT_PRESENCE_MENUS,
                                                       false);
             }
         }
@@ -703,18 +703,18 @@ int UIScene_MainMenu::Achievements_SignInReturned(void* pParam, bool bContinue,
         pClass->m_bIgnorePress = false;
         // 4J-JEV: We only need to update rich-presence if the sign-in status
         // changes.
-        ProfileManager.SetCurrentGameActivity(iPad, CONTEXT_PRESENCE_MENUS,
+        PlatformProfile.SetCurrentGameActivity(iPad, CONTEXT_PRESENCE_MENUS,
                                               false);
 
-        // XShowAchievementsUI(ProfileManager.GetPrimaryPad());
+        // XShowAchievementsUI(PlatformProfile.GetPrimaryPad());
     } else {
         pClass->m_bIgnorePress = false;
         // unlock the profile
-        ProfileManager.SetLockedProfile(-1);
+        PlatformProfile.SetLockedProfile(-1);
         for (int i = 0; i < XUSER_MAX_COUNT; i++) {
             // if the user is valid, we should set the presence
-            if (ProfileManager.IsSignedIn(i)) {
-                ProfileManager.SetCurrentGameActivity(i, CONTEXT_PRESENCE_MENUS,
+            if (PlatformProfile.IsSignedIn(i)) {
+                PlatformProfile.SetCurrentGameActivity(i, CONTEXT_PRESENCE_MENUS,
                                                       false);
             }
         }
@@ -729,18 +729,18 @@ int UIScene_MainMenu::UnlockFullGame_SignInReturned(void* pParam,
     if (bContinue) {
         // 4J-JEV: We only need to update rich-presence if the sign-in status
         // changes.
-        ProfileManager.SetCurrentGameActivity(iPad, CONTEXT_PRESENCE_MENUS,
+        PlatformProfile.SetCurrentGameActivity(iPad, CONTEXT_PRESENCE_MENUS,
                                               false);
 
         pClass->RunUnlockOrDLC(iPad);
     } else {
         pClass->m_bIgnorePress = false;
         // unlock the profile
-        ProfileManager.SetLockedProfile(-1);
+        PlatformProfile.SetLockedProfile(-1);
         for (int i = 0; i < XUSER_MAX_COUNT; i++) {
             // if the user is valid, we should set the presence
-            if (ProfileManager.IsSignedIn(i)) {
-                ProfileManager.SetCurrentGameActivity(i, CONTEXT_PRESENCE_MENUS,
+            if (PlatformProfile.IsSignedIn(i)) {
+                PlatformProfile.SetCurrentGameActivity(i, CONTEXT_PRESENCE_MENUS,
                                                       false);
             }
         }
@@ -770,7 +770,7 @@ void UIScene_MainMenu::RunPlayGame(int iPad) {
 
     app.ReleaseSaveThumbnail();
 
-    if (ProfileManager.IsGuest(iPad)) {
+    if (PlatformProfile.IsGuest(iPad)) {
         unsigned int uiIDA[1];
         uiIDA[0] = IDS_OK;
 
@@ -778,23 +778,23 @@ void UIScene_MainMenu::RunPlayGame(int iPad) {
         ui.RequestErrorMessage(IDS_PRO_GUESTPROFILE_TITLE,
                                IDS_PRO_GUESTPROFILE_TEXT, uiIDA, 1);
     } else {
-        ProfileManager.SetLockedProfile(iPad);
+        PlatformProfile.SetLockedProfile(iPad);
 
         // If the player was signed in before selecting play, we'll not have
         // read the profile yet, so query the sign-in status to get this to
         // happen
-        ProfileManager.QuerySigninStatus();
+        PlatformProfile.QuerySigninStatus();
 
         // 4J-PB - Need to check for installed DLC
         if (!app.DLCInstallProcessCompleted()) app.StartInstallDLCProcess(iPad);
 
         {
             // are we offline?
-            bool bSignedInLive = ProfileManager.IsSignedInLive(iPad);
+            bool bSignedInLive = PlatformProfile.IsSignedInLive(iPad);
 
             if (!bSignedInLive) {
-                ProfileManager.SetLockedProfile(iPad);
-                proceedToScene(ProfileManager.GetPrimaryPad(),
+                PlatformProfile.SetLockedProfile(iPad);
+                proceedToScene(PlatformProfile.GetPrimaryPad(),
                                eUIScene_LoadOrJoinMenu);
             } else {
 #if TO_BE_IMPLEMENTED
@@ -809,8 +809,8 @@ void UIScene_MainMenu::RunPlayGame(int iPad) {
                             &CScene_Main::DeviceSelectReturned, this) == true) {
                         // change the minecraft player name
                         pMinecraft->user->name =
-                            convStringToWstring(ProfileManager.GetGamertag(
-                                ProfileManager.GetPrimaryPad()));
+                            convStringToWstring(PlatformProfile.GetGamertag(
+                                PlatformProfile.GetPrimaryPad()));
                         // save device already selected
 
                         // ensure we've applied this player's settings
@@ -841,12 +841,12 @@ void UIScene_MainMenu::RunPlayGame(int iPad) {
                 }
 #else
                 pMinecraft->user->name = convStringToWstring(
-                    ProfileManager.GetGamertag(ProfileManager.GetPrimaryPad()));
+                    PlatformProfile.GetGamertag(PlatformProfile.GetPrimaryPad()));
 
                 // ensure we've applied this player's settings
                 app.ApplyGameSettingsChanged(iPad);
 
-                proceedToScene(ProfileManager.GetPrimaryPad(),
+                proceedToScene(PlatformProfile.GetPrimaryPad(),
                                eUIScene_LoadOrJoinMenu);
 #endif
             }
@@ -859,10 +859,10 @@ void UIScene_MainMenu::RunLeaderboards(int iPad) {
     uiIDA[0] = IDS_OK;
 
     // guests can't look at leaderboards
-    if (ProfileManager.IsGuest(iPad)) {
+    if (PlatformProfile.IsGuest(iPad)) {
         ui.RequestErrorMessage(IDS_PRO_GUESTPROFILE_TITLE,
                                IDS_PRO_GUESTPROFILE_TEXT, uiIDA, 1);
-    } else if (!ProfileManager.IsSignedInLive(iPad)) {
+    } else if (!PlatformProfile.IsSignedInLive(iPad)) {
         ui.RequestErrorMessage(IDS_PRO_NOTONLINE_TITLE, IDS_PRO_NOTONLINE_TEXT,
                                uiIDA, 1);
     } else {
@@ -885,14 +885,14 @@ void UIScene_MainMenu::RunLeaderboards(int iPad) {
             uiIDA[0] = IDS_CONFIRM_OK;
             ui.RequestErrorMessage(
                 IDS_ONLINE_SERVICE_TITLE, IDS_CONTENT_RESTRICTION, uiIDA, 1,
-                ProfileManager.GetPrimaryPad(), nullptr, this);
+                PlatformProfile.GetPrimaryPad(), nullptr, this);
 #endif
         } else {
-            ProfileManager.SetLockedProfile(iPad);
+            PlatformProfile.SetLockedProfile(iPad);
             // If the player was signed in before selecting play, we'll not have
             // read the profile yet, so query the sign-in status to get this to
             // happen
-            ProfileManager.QuerySigninStatus();
+            PlatformProfile.QuerySigninStatus();
 
             proceedToScene(iPad, eUIScene_LeaderboardsMenu);
         }
@@ -903,8 +903,8 @@ void UIScene_MainMenu::RunUnlockOrDLC(int iPad) {
     uiIDA[0] = IDS_OK;
 
     // downloadable content
-    if (ProfileManager.IsSignedInLive(iPad)) {
-        if (ProfileManager.IsGuest(iPad)) {
+    if (PlatformProfile.IsSignedInLive(iPad)) {
+        if (PlatformProfile.IsGuest(iPad)) {
             m_bIgnorePress = false;
             ui.RequestErrorMessage(IDS_PRO_GUESTPROFILE_TITLE,
                                    IDS_PRO_GUESTPROFILE_TEXT, uiIDA, 1);
@@ -912,7 +912,7 @@ void UIScene_MainMenu::RunUnlockOrDLC(int iPad) {
             // If the player was signed in before selecting play, we'll not
             // have read the profile yet, so query the sign-in status to get
             // this to happen
-            ProfileManager.QuerySigninStatus();
+            PlatformProfile.QuerySigninStatus();
 
             {
                 bool bContentRestricted = false;
@@ -925,12 +925,12 @@ void UIScene_MainMenu::RunUnlockOrDLC(int iPad) {
                     uiIDA[0] = IDS_CONFIRM_OK;
                     ui.RequestErrorMessage(IDS_ONLINE_SERVICE_TITLE,
                                            IDS_CONTENT_RESTRICTION, uiIDA, 1,
-                                           ProfileManager.GetPrimaryPad(),
+                                           PlatformProfile.GetPrimaryPad(),
                                            nullptr, this);
 #endif
                 } else {
-                    ProfileManager.SetLockedProfile(iPad);
-                    proceedToScene(ProfileManager.GetPrimaryPad(),
+                    PlatformProfile.SetLockedProfile(iPad);
+                    proceedToScene(PlatformProfile.GetPrimaryPad(),
                                    eUIScene_DLCMainMenu);
                 }
             }
@@ -941,7 +941,7 @@ void UIScene_MainMenu::RunUnlockOrDLC(int iPad) {
             // We want to navigate to the DLC scene, but block input until
             // we get the DLC file in from TMS Don't navigate - we might
             // have an uplink disconnect
-            // app.NavigateToScene(ProfileManager.GetPrimaryPad(),eUIScene_DLCMainMenu);
+            // app.NavigateToScene(PlatformProfile.GetPrimaryPad(),eUIScene_DLCMainMenu);
         }
     } else {
         unsigned int uiIDA[1];
@@ -976,7 +976,7 @@ void UIScene_MainMenu::tick() {
 #endif
 
     if ((eNavigateWhenReady >= 0)) {
-        int lockedProfile = ProfileManager.GetLockedProfile();
+        int lockedProfile = PlatformProfile.GetLockedProfile();
 
         {
             app.DebugPrintf("[MainMenu] Navigating away from MainMenu.\n");
@@ -992,7 +992,7 @@ void UIScene_MainMenu::RunAchievements(int iPad) {
     uiIDA[0] = IDS_OK;
 
     // guests can't look at achievements
-    if (ProfileManager.IsGuest(iPad)) {
+    if (PlatformProfile.IsGuest(iPad)) {
         ui.RequestErrorMessage(IDS_PRO_GUESTPROFILE_TITLE,
                                IDS_PRO_GUESTPROFILE_TEXT, uiIDA, 1);
     } else {
@@ -1002,7 +1002,7 @@ void UIScene_MainMenu::RunAchievements(int iPad) {
 }
 
 void UIScene_MainMenu::RunHelpAndOptions(int iPad) {
-    if (ProfileManager.IsGuest(iPad)) {
+    if (PlatformProfile.IsGuest(iPad)) {
         unsigned int uiIDA[1];
         uiIDA[0] = IDS_OK;
         ui.RequestErrorMessage(IDS_PRO_GUESTPROFILE_TITLE,
@@ -1011,14 +1011,14 @@ void UIScene_MainMenu::RunHelpAndOptions(int iPad) {
         // If the player was signed in before selecting play, we'll not have
         // read the profile yet, so query the sign-in status to get this to
         // happen
-        ProfileManager.QuerySigninStatus();
+        PlatformProfile.QuerySigninStatus();
 
 #if TO_BE_IMPLEMENTED
         // 4J-PB - You can be offline and still can go into help and options
-        if (app.GetTMSDLCInfoRead() || !ProfileManager.IsSignedInLive(iPad))
+        if (app.GetTMSDLCInfoRead() || !PlatformProfile.IsSignedInLive(iPad))
 #endif
         {
-            ProfileManager.SetLockedProfile(iPad);
+            PlatformProfile.SetLockedProfile(iPad);
             proceedToScene(iPad, eUIScene_HelpAndOptionsMenu);
         }
 #if TO_BE_IMPLEMENTED
@@ -1087,12 +1087,12 @@ void UIScene_MainMenu::LoadTrial(void) {
     completionData->bShowBackground = true;
     completionData->bShowLogo = true;
     completionData->type = e_ProgressCompletion_CloseAllPlayersUIScenes;
-    completionData->iPad = ProfileManager.GetPrimaryPad();
+    completionData->iPad = PlatformProfile.GetPrimaryPad();
     loadingParams->completionData = completionData;
 
     ui.ShowTrialTimer(true);
 
-    ui.NavigateToScene(ProfileManager.GetPrimaryPad(),
+    ui.NavigateToScene(PlatformProfile.GetPrimaryPad(),
                        eUIScene_FullscreenProgress, loadingParams);
 }
 

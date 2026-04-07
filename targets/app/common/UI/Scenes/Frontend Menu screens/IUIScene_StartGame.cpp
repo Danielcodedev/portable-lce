@@ -4,7 +4,7 @@
 
 #include <cstdint>
 
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "app/common/App_structs.h"
 #include "app/common/DLC/DLCManager.h"
 #include "app/common/UI/Controls/UIControl_BitmapIcon.h"
@@ -228,7 +228,7 @@ void IUIScene_StartGame::UpdateCurrentTexturePack(int iSlot) {
         // Give the player a warning about the texture pack missing
         ui.RequestErrorMessage(IDS_DLC_TEXTUREPACK_NOT_PRESENT_TITLE,
                                IDS_DLC_TEXTUREPACK_NOT_PRESENT, uiIDA, 3,
-                               ProfileManager.GetPrimaryPad(),
+                               PlatformProfile.GetPrimaryPad(),
                                & : TexturePackDialogReturned, this);
 
         // do set the texture pack id, and on the user pressing create world,
@@ -258,7 +258,7 @@ int IUIScene_StartGame::UnlockTexturePackReturned(
     IUIScene_StartGame* pScene = (IUIScene_StartGame*)pParam;
 
     if (result == C4JStorage::EMessage_ResultAccept) {
-        if (ProfileManager.IsSignedIn(iPad)) {
+        if (PlatformProfile.IsSignedIn(iPad)) {
             // the license change coming in when the offer has been installed
             // will cause this scene to refresh
         }

@@ -6,7 +6,7 @@
 #include "app/common/Game.h"
 #include "app/common/Network/GameNetworkManager.h"
 #include "minecraft/server/MinecraftServer.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 
 void SaveManager::setAutosaveTimerTime(int settingValue) {
     m_uiAutosaveTimer =
@@ -35,7 +35,7 @@ void SaveManager::lock() {
 
             if (g_NetworkManager.IsLocalGame() &&
                 g_NetworkManager.GetPlayerCount() == 1) {
-                app.SetXuiServerAction(ProfileManager.GetPrimaryPad(),
+                app.SetXuiServerAction(PlatformProfile.GetPrimaryPad(),
                                        eXuiServerAction_PauseServer,
                                        (void*)true);
             }
@@ -54,7 +54,7 @@ void SaveManager::unlock() {
 
             if (g_NetworkManager.IsLocalGame() &&
                 g_NetworkManager.GetPlayerCount() == 1) {
-                app.SetXuiServerAction(ProfileManager.GetPrimaryPad(),
+                app.SetXuiServerAction(PlatformProfile.GetPrimaryPad(),
                                        eXuiServerAction_PauseServer,
                                        (void*)false);
             }

@@ -4,7 +4,7 @@
 
 #include <string>
 
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "platform/sdl2/Render.h"
 #include "platform/sdl2/Storage.h"
 #include "minecraft/GameEnums.h"
@@ -54,7 +54,7 @@ void LinuxGame::TemporaryCreateGameStart() {
     // From CScene_Main::RunPlayGame
     Minecraft* pMinecraft = Minecraft::GetInstance();
     app.ReleaseSaveThumbnail();
-    ProfileManager.SetLockedProfile(0);
+    PlatformProfile.SetLockedProfile(0);
     pMinecraft->user->name = L"Windows";
     app.ApplyGameSettingsChanged(0);
 

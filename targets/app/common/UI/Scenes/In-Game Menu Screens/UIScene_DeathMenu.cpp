@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "platform/input/InputActions.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "platform/sdl2/Storage.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/Network/GameNetworkManager.h"
@@ -101,7 +101,7 @@ void UIScene_DeathMenu::handlePress(F64 controlId, F64 childId) {
             // then cancels the exit player becomes stuck at game over screen
             // m_bIgnoreInput = true;
             // is it the primary player exiting?
-            if (m_iPad == ProfileManager.GetPrimaryPad()) {
+            if (m_iPad == PlatformProfile.GetPrimaryPad()) {
                 unsigned int uiIDA[3];
                 int playTime = -1;
                 if (pMinecraft->localplayers[m_iPad] != nullptr) {

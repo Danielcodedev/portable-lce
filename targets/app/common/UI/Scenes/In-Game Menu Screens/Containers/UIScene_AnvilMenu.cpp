@@ -8,7 +8,7 @@
 #include <utility>
 
 #include "platform/input/input.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "app/common/Tutorial/Tutorial.h"
 #include "app/common/Tutorial/TutorialEnum.h"
 #include "app/common/Tutorial/TutorialMode.h"

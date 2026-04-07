@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "platform/input/InputActions.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "platform/sdl2/Render.h"
 #include "app/common/App_Defines.h"
 #include "app/common/Minecraft_Macros.h"
@@ -427,7 +427,7 @@ void UIScene_SkinSelectMenu::InputActionOK(unsigned int iPad) {
                         uiIDA[0] = IDS_OK;
 
                         // We need to upsell the full version
-                        if (ProfileManager.IsGuest(iPad)) {
+                        if (PlatformProfile.IsGuest(iPad)) {
                             // can't buy
                             ui.RequestAlertMessage(IDS_PRO_GUESTPROFILE_TITLE,
                                                    IDS_PRO_GUESTPROFILE_TEXT,
@@ -1234,8 +1234,8 @@ int UIScene_SkinSelectMenu::UnlockSkinReturned(
     UIScene_SkinSelectMenu* pScene = (UIScene_SkinSelectMenu*)pParam;
 
     if ((result == C4JStorage::EMessage_ResultAccept) &&
-        ProfileManager.IsSignedIn(iPad)) {
-        if (ProfileManager.IsSignedInLive(iPad)) {
+        PlatformProfile.IsSignedIn(iPad)) {
+        if (PlatformProfile.IsSignedInLive(iPad)) {
         } else  // Is signed in, but not live.
         {
             pScene->showNotOnlineDialog(iPad);

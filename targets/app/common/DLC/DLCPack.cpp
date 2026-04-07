@@ -6,7 +6,7 @@
 #include <sstream>
 #include <utility>
 
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "DLCAudioFile.h"
 #include "DLCCapeFile.h"
 #include "DLCColourTableFile.h"
@@ -332,7 +332,7 @@ bool DLCPack::hasPurchasedFile(DLCManager::EDLCType type,
         return false;
     }
 #if !defined(_CONTENT_PACKAGE)
-    if (app.GetGameSettingsDebugMask(ProfileManager.GetPrimaryPad()) &
+    if (app.GetGameSettingsDebugMask(PlatformProfile.GetPrimaryPad()) &
         (1L << eDebugSetting_UnlockAllDLC)) {
         return true;
     } else

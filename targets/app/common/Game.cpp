@@ -3,7 +3,7 @@
 
 #include "platform/PlatformTypes.h"
 #include "platform/input/InputActions.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "platform/sdl2/Render.h"
 #include "platform/sdl2/Storage.h"
 #include "app/common/App_Defines.h"
@@ -240,7 +240,7 @@ int Game::BannedLevelDialogReturned(
 
     if (result == C4JStorage::EMessage_ResultAccept) {
     } else {
-        if (iPad == ProfileManager.GetPrimaryPad()) {
+        if (iPad == PlatformProfile.GetPrimaryPad()) {
             pApp->SetAction(iPad, eAppAction_ExitWorld);
         } else {
             pApp->SetAction(iPad, eAppAction_ExitPlayer);
@@ -253,7 +253,7 @@ int Game::BannedLevelDialogReturned(
 #if defined(_DEBUG_MENUS_ENABLED)
 bool Game::DebugArtToolsOn() {
     return m_debugOptions.debugArtToolsOn(
-        GetGameSettingsDebugMask(ProfileManager.GetPrimaryPad()));
+        GetGameSettingsDebugMask(PlatformProfile.GetPrimaryPad()));
 }
 #endif
 
@@ -318,7 +318,7 @@ int Game::GetLocalPlayerCount(void) {
 // 			 // 4J-PB - out for now for DaveK so he doesn't get the
 // birthday cape #ifdef _CONTENT_PACKAGE
 // C4JStorage::ETMSStatus eTMSStatus;
-// 			 eTMSStatus=StorageManager.ReadTMSFile(ProfileManager.GetPrimaryPad(),C4JStorage::eGlobalStorage_Title,C4JStorage::eTMS_FileType_Graphic,
+// 			 eTMSStatus=StorageManager.ReadTMSFile(PlatformProfile.GetPrimaryPad(),C4JStorage::eGlobalStorage_Title,C4JStorage::eTMS_FileType_Graphic,
 // L"Default_Cape.png",&pBuffer, &dwSize);
 // 			 if(eTMSStatus==C4JStorage::ETMSStatus_Idle)
 // 			 {
@@ -608,7 +608,7 @@ int32_t Game::RegisterConfigValues(wchar_t* pType, int iValue) {
 
 // AUTOSAVE
 void Game::SetAutosaveTimerTime(void) {
-    int settingValue = GetGameSettings(ProfileManager.GetPrimaryPad(), eGameSetting_Autosave);
+    int settingValue = GetGameSettings(PlatformProfile.GetPrimaryPad(), eGameSetting_Autosave);
     m_saveManager.setAutosaveTimerTime(settingValue);
 }
 
@@ -624,7 +624,7 @@ float Game::getTrialTimer(void) {
 bool Game::IsLocalMultiplayerAvailable() {
     unsigned int connectedControllers = 0;
     for (unsigned int i = 0; i < XUSER_MAX_COUNT; ++i) {
-        if (PlatformInput.IsPadConnected(i) || ProfileManager.IsSignedIn(i))
+        if (PlatformInput.IsPadConnected(i) || PlatformProfile.IsSignedIn(i))
             ++connectedControllers;
     }
 
@@ -637,7 +637,7 @@ bool Game::IsLocalMultiplayerAvailable() {
     //		iOtherConnectedControllers =
     // PlatformInput.GetConnectedGamepadCount();
     //		if((PlatformInput.IsPadConnected(userIndex) ||
-    // ProfileManager.IsSignedIn(userIndex)))
+    // PlatformProfile.IsSignedIn(userIndex)))
     //		{
     //			--iOtherConnectedControllers;
     //		}
@@ -645,7 +645,7 @@ bool Game::IsLocalMultiplayerAvailable() {
     //		for(unsigned int i = 0; i < XUSER_MAX_COUNT; ++i)
     //		{
     //			if( (i!=userIndex) && (PlatformInput.IsPadConnected(i) ||
-    // ProfileManager.IsSignedIn(i)) )
+    // PlatformProfile.IsSignedIn(i)) )
     //			{
     //				iOtherConnectedControllers++;
     //			}

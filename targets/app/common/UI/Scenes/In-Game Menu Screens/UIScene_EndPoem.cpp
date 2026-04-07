@@ -8,7 +8,7 @@
 
 #include "platform/PlatformTypes.h"
 #include "platform/input/InputActions.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/Tutorial/Tutorial.h"
 #include "app/common/UI/UIScene.h"
@@ -62,7 +62,7 @@ UIScene_EndPoem::UIScene_EndPoem(int iPad, void* initData, UILayer* parentLayer)
             pMinecraft->localplayers[ui.GetWinUserIndex()]->getDisplayName());
     } else {
         playerName =
-            escapeXML(pMinecraft->localplayers[ProfileManager.GetPrimaryPad()]
+            escapeXML(pMinecraft->localplayers[PlatformProfile.GetPrimaryPad()]
                           ->getDisplayName());
     }
     noNoiseString = replaceAll(noNoiseString, L"{*PLAYER*}", playerName);
@@ -168,9 +168,9 @@ void UIScene_EndPoem::handleInput(int iPad, int key, bool repeat, bool pressed,
 
                 // This just allows it to be shown
                 if (pMinecraft
-                        ->localgameModes[ProfileManager.GetPrimaryPad()] !=
+                        ->localgameModes[PlatformProfile.GetPrimaryPad()] !=
                     nullptr)
-                    pMinecraft->localgameModes[ProfileManager.GetPrimaryPad()]
+                    pMinecraft->localgameModes[PlatformProfile.GetPrimaryPad()]
                         ->getTutorial()
                         ->showTutorialPopup(true);
 

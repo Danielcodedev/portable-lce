@@ -727,21 +727,21 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
     // Initialise the profile manager with the game Title ID, Offer ID, a
     // profile version number, and the number of profile values and settings
-    ProfileManager.Initialise(
+    PlatformProfile.Initialise(
         TITLEID_MINECRAFT, app.m_dwOfferID, PROFILE_VERSION_10,
         NUM_PROFILE_VALUES, NUM_PROFILE_SETTINGS, dwProfileSettingsA,
         app.GAME_DEFINED_PROFILE_DATA_BYTES * XUSER_MAX_COUNT,
         &app.uiGameDefinedDataChangedBitmask);
     // Set a callback for the default player options to be set - when there is
     // no profile data for the player
-    ProfileManager.SetDefaultOptionsCallback(
-        [](C_4JProfile::PROFILESETTINGS* pSettings, int iPad) {
+    PlatformProfile.SetDefaultOptionsCallback(
+        [](IPlatformProfile::PROFILESETTINGS* pSettings, int iPad) {
             return Game::DefaultOptionsCallback(&app, pSettings,
                                                 iPad);
         });
     // QNet needs to be setup after profile manager, as we do not want its
     // Notify listener to handle XN_SYS_SIGNINCHANGED notifications. This does
-    // mean that we need to have a callback in the ProfileManager for
+    // mean that we need to have a callback in the PlatformProfile for
     // XN_LIVE_INVITE_ACCEPTED for QNet.
     g_NetworkManager.Initialise();
 
@@ -749,7 +749,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
     // app.InitGameSettings();
 
     // debug switch to trial version
-    ProfileManager.SetDebugFullOverride(true);
+    PlatformProfile.SetDebugFullOverride(true);
 
     // Initialise TLS for tesselator, for this main thread
     Tesselator::CreateNewThreadStorage(1024 * 1024);
@@ -792,7 +792,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
         app.UpdateTime();
         PlatformInput.Tick();
 
-        //		ProfileManager.Tick();
+        //		PlatformProfile.Tick();
 
         StorageManager.Tick();
 
@@ -813,7 +813,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
             app.SetAppPaused(
                 g_NetworkManager.IsLocalGame() &&
                 g_NetworkManager.GetPlayerCount() == 1 &&
-                ui.IsPauseMenuDisplayed(ProfileManager.GetPrimaryPad()));
+                ui.IsPauseMenuDisplayed(PlatformProfile.GetPrimaryPad()));
         } else {
             pMinecraft->soundEngine->tick(nullptr, 0.0f);
             pMinecraft->textures->tick(true, false);

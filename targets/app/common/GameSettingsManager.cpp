@@ -35,26 +35,26 @@ GameSettingsManager::GameSettingsManager() {
 void GameSettingsManager::initGameSettings() {
     for (int i = 0; i < XUSER_MAX_COUNT; i++) {
         GameSettingsA[i] =
-            (GAME_SETTINGS*)ProfileManager.GetGameDefinedProfileData(i);
+            (GAME_SETTINGS*)PlatformProfile.GetGameDefinedProfileData(i);
         // clear the flag to say the settings have changed
         GameSettingsA[i]->bSettingsChanged = false;
 
 #if defined(_WINDOWS64)
-        C_4JProfile::PROFILESETTINGS* pProfileSettings =
-            ProfileManager.GetDashboardProfileSettings(i);
-        memset(pProfileSettings, 0, sizeof(C_4JProfile::PROFILESETTINGS));
+        IPlatformProfile::PROFILESETTINGS* pProfileSettings =
+            PlatformProfile.GetDashboardProfileSettings(i);
+        memset(pProfileSettings, 0, sizeof(IPlatformProfile::PROFILESETTINGS));
         setDefaultOptions(pProfileSettings, i);
 #else
-        C_4JProfile::PROFILESETTINGS* pProfileSettings =
-            ProfileManager.GetDashboardProfileSettings(i);
-        memset(pProfileSettings, 0, sizeof(C_4JProfile::PROFILESETTINGS));
+        IPlatformProfile::PROFILESETTINGS* pProfileSettings =
+            PlatformProfile.GetDashboardProfileSettings(i);
+        memset(pProfileSettings, 0, sizeof(IPlatformProfile::PROFILESETTINGS));
         setDefaultOptions(pProfileSettings, i);
 #endif
     }
 }
 
 int GameSettingsManager::setDefaultOptions(
-    C_4JProfile::PROFILESETTINGS* pSettings, const int iPad) {
+    IPlatformProfile::PROFILESETTINGS* pSettings, const int iPad) {
     setGameSettings(iPad, eGameSetting_MusicVolume, DEFAULT_VOLUME_LEVEL);
     setGameSettings(iPad, eGameSetting_SoundFXVolume, DEFAULT_VOLUME_LEVEL);
     setGameSettings(iPad, eGameSetting_Gamma, 50);
@@ -133,7 +133,7 @@ int GameSettingsManager::setDefaultOptions(
 }
 
 int GameSettingsManager::defaultOptionsCallback(
-    void* pParam, C_4JProfile::PROFILESETTINGS* pSettings, const int iPad) {
+    void* pParam, IPlatformProfile::PROFILESETTINGS* pSettings, const int iPad) {
     Game* pApp = (Game*)pParam;
 
     pApp->DebugPrintf("Setting default options for player %d", iPad);
@@ -249,27 +249,27 @@ void GameSettingsManager::actionGameSettings(int iPad, eGameSetting eVal) {
     Minecraft* pMinecraft = Minecraft::GetInstance();
     switch (eVal) {
         case eGameSetting_MusicVolume:
-            if (iPad == ProfileManager.GetPrimaryPad()) {
+            if (iPad == PlatformProfile.GetPrimaryPad()) {
                 pMinecraft->options->set(
                     Options::Option::MUSIC,
                     ((float)GameSettingsA[iPad]->ucMusicVolume) / 100.0f);
             }
             break;
         case eGameSetting_SoundFXVolume:
-            if (iPad == ProfileManager.GetPrimaryPad()) {
+            if (iPad == PlatformProfile.GetPrimaryPad()) {
                 pMinecraft->options->set(
                     Options::Option::SOUND,
                     ((float)GameSettingsA[iPad]->ucSoundFXVolume) / 100.0f);
             }
             break;
         case eGameSetting_Gamma:
-            if (iPad == ProfileManager.GetPrimaryPad()) {
+            if (iPad == PlatformProfile.GetPrimaryPad()) {
                 float fVal = ((float)GameSettingsA[iPad]->ucGamma) * 327.68f;
                 RenderManager.UpdateGamma((unsigned short)fVal);
             }
             break;
         case eGameSetting_Difficulty:
-            if (iPad == ProfileManager.GetPrimaryPad()) {
+            if (iPad == PlatformProfile.GetPrimaryPad()) {
                 pMinecraft->options->toggle(
                     Options::Option::DIFFICULTY,
                     GameSettingsA[iPad]->usBitmaskValues & 0x03);
@@ -282,7 +282,7 @@ void GameSettingsManager::actionGameSettings(int iPad, eGameSetting eVal) {
                 bool bInGame = pMinecraft->level != nullptr;
 
                 if (bInGame && g_NetworkManager.IsHost() &&
-                    (iPad == ProfileManager.GetPrimaryPad())) {
+                    (iPad == PlatformProfile.GetPrimaryPad())) {
                     app.SetXuiServerAction(
                         iPad, eXuiServerAction_ServerSettingChanged_Difficulty);
                 }
@@ -290,7 +290,7 @@ void GameSettingsManager::actionGameSettings(int iPad, eGameSetting eVal) {
                 app.DebugPrintf(
                     "NOT ACTIONING DIFFICULTY - Primary pad is %d, This pad is "
                     "%d\n",
-                    ProfileManager.GetPrimaryPad(), iPad);
+                    PlatformProfile.GetPrimaryPad(), iPad);
             }
             break;
         case eGameSetting_Sensitivity_InGame:
@@ -336,7 +336,7 @@ void GameSettingsManager::actionGameSettings(int iPad, eGameSetting eVal) {
             }
             break;
         case eGameSetting_SplitScreenVertical:
-            if (iPad == ProfileManager.GetPrimaryPad()) {
+            if (iPad == PlatformProfile.GetPrimaryPad()) {
                 pMinecraft->updatePlayerViewportAssignments();
             }
             break;
@@ -345,7 +345,7 @@ void GameSettingsManager::actionGameSettings(int iPad, eGameSetting eVal) {
 
             // Game Host only
             if (bInGame && g_NetworkManager.IsHost() &&
-                (iPad == ProfileManager.GetPrimaryPad())) {
+                (iPad == PlatformProfile.GetPrimaryPad())) {
                 app.SetGameHostOption(
                     eGameHostOption_Gamertags,
                     ((GameSettingsA[iPad]->usBitmaskValues & 0x0008) != 0) ? 1
@@ -403,7 +403,7 @@ void GameSettingsManager::actionGameSettings(int iPad, eGameSetting eVal) {
             bool bInGame = pMinecraft->level != nullptr;
 
             if (bInGame && g_NetworkManager.IsHost() &&
-                (iPad == ProfileManager.GetPrimaryPad())) {
+                (iPad == PlatformProfile.GetPrimaryPad())) {
                 app.SetGameHostOption(
                     eGameHostOption_BedrockFog,
                     getGameSettings(iPad, eGameSetting_BedrockFog) ? 1 : 0);
@@ -484,7 +484,7 @@ void GameSettingsManager::setGameSettings(int iPad, eGameSetting eVal,
         case eGameSetting_MusicVolume:
             if (GameSettingsA[iPad]->ucMusicVolume != ucVal) {
                 GameSettingsA[iPad]->ucMusicVolume = ucVal;
-                if (iPad == ProfileManager.GetPrimaryPad()) {
+                if (iPad == PlatformProfile.GetPrimaryPad()) {
                     actionGameSettings(iPad, eVal);
                 }
                 GameSettingsA[iPad]->bSettingsChanged = true;
@@ -493,7 +493,7 @@ void GameSettingsManager::setGameSettings(int iPad, eGameSetting eVal,
         case eGameSetting_SoundFXVolume:
             if (GameSettingsA[iPad]->ucSoundFXVolume != ucVal) {
                 GameSettingsA[iPad]->ucSoundFXVolume = ucVal;
-                if (iPad == ProfileManager.GetPrimaryPad()) {
+                if (iPad == PlatformProfile.GetPrimaryPad()) {
                     actionGameSettings(iPad, eVal);
                 }
                 GameSettingsA[iPad]->bSettingsChanged = true;
@@ -502,7 +502,7 @@ void GameSettingsManager::setGameSettings(int iPad, eGameSetting eVal,
         case eGameSetting_Gamma:
             if (GameSettingsA[iPad]->ucGamma != ucVal) {
                 GameSettingsA[iPad]->ucGamma = ucVal;
-                if (iPad == ProfileManager.GetPrimaryPad()) {
+                if (iPad == PlatformProfile.GetPrimaryPad()) {
                     actionGameSettings(iPad, eVal);
                 }
                 GameSettingsA[iPad]->bSettingsChanged = true;
@@ -513,7 +513,7 @@ void GameSettingsManager::setGameSettings(int iPad, eGameSetting eVal,
                 (ucVal & 0x03)) {
                 GameSettingsA[iPad]->usBitmaskValues &= ~0x03;
                 GameSettingsA[iPad]->usBitmaskValues |= ucVal & 0x03;
-                if (iPad == ProfileManager.GetPrimaryPad()) {
+                if (iPad == PlatformProfile.GetPrimaryPad()) {
                     actionGameSettings(iPad, eVal);
                 }
                 GameSettingsA[iPad]->bSettingsChanged = true;
@@ -864,7 +864,7 @@ void GameSettingsManager::setGameSettings(int iPad, eGameSetting eVal,
 }
 
 unsigned char GameSettingsManager::getGameSettings(eGameSetting eVal) {
-    int iPad = ProfileManager.GetPrimaryPad();
+    int iPad = PlatformProfile.GetPrimaryPad();
     return getGameSettings(iPad, eVal);
 }
 
@@ -979,13 +979,13 @@ void GameSettingsManager::checkGameSettingsChanged(bool bOverride5MinuteTimer,
     if (iPad == XUSER_INDEX_ANY) {
         for (int i = 0; i < XUSER_MAX_COUNT; i++) {
             if (GameSettingsA[i]->bSettingsChanged) {
-                ProfileManager.WriteToProfile(i, true, bOverride5MinuteTimer);
+                PlatformProfile.WriteToProfile(i, true, bOverride5MinuteTimer);
                 GameSettingsA[i]->bSettingsChanged = false;
             }
         }
     } else {
         if (GameSettingsA[iPad]->bSettingsChanged) {
-            ProfileManager.WriteToProfile(iPad, true, bOverride5MinuteTimer);
+            PlatformProfile.WriteToProfile(iPad, true, bOverride5MinuteTimer);
             GameSettingsA[iPad]->bSettingsChanged = false;
         }
     }
@@ -1011,7 +1011,7 @@ void GameSettingsManager::actionDebugMask(int iPad, bool bSetAllClear) {}
 unsigned int GameSettingsManager::getGameSettingsDebugMask(
     int iPad, bool bOverridePlayer) {
     if (iPad == -1) {
-        iPad = ProfileManager.GetPrimaryPad();
+        iPad = PlatformProfile.GetPrimaryPad();
     }
     if (iPad < 0) iPad = 0;
 
@@ -1046,7 +1046,7 @@ void GameSettingsManager::actionDebugMask(int iPad, bool bSetAllClear) {
 
     if (bSetAllClear) ulBitmask = 0L;
 
-    if (ProfileManager.GetPrimaryPad() != iPad) return;
+    if (PlatformProfile.GetPrimaryPad() != iPad) return;
 
     for (int i = 0; i < eDebugSetting_Max; i++) {
         switch (i) {

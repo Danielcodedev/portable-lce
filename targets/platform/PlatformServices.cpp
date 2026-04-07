@@ -8,6 +8,6 @@
 static StdFileIO s_stdFileIO;
 
 IPlatformFileIO& PlatformFileIO = s_stdFileIO;
-IPlatformProfile& PlatformProfile = ProfileManager;
+IPlatformProfile& PlatformProfile = PlatformProfile;
 IPlatformRenderer& PlatformRender = RenderManager;
 IPlatformStorage& PlatformStorage = StorageManager;

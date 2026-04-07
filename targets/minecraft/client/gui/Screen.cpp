@@ -3,7 +3,7 @@
 
 #include "platform/input/InputActions.h"
 #include "platform/input/input.h"
-#include "platform/sdl2/Profile.h"
+#include "platform/profile/profile.h"
 #include "Button.h"
 #include "minecraft/GameEnums.h"
 #include "app/common/Audio/SoundEngine.h"
