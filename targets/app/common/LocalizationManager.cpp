@@ -142,7 +142,7 @@ void LocalizationManager::initialiseTips() {
 
         if (m_TipIDA[i] == 0) {
 #if !defined(_CONTENT_PACKAGE)
-            __debugbreak();
+            assert(0);
 #endif
         }
     }

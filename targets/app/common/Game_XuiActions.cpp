@@ -1,37 +1,31 @@
-#include "minecraft/GameHostOptions.h"
-#include "minecraft/GameHostOptions.h"
-#include "app/common/Game.h"
-#include "platform/PlatformTypes.h"
-#include "platform/InputActions.h"
-#include "platform/sdl2/Profile.h"
-#include "platform/sdl2/Render.h"
-#include "platform/sdl2/Storage.h"
 #include "app/common/App_Defines.h"
-#include "minecraft/GameEnums.h"
 #include "app/common/App_structs.h"
 #include "app/common/Console_Debug_enum.h"
 #include "app/common/DLC/DLCManager.h"
 #include "app/common/DLC/DLCSkinFile.h"
+#include "app/common/Game.h"
 #include "app/common/GameRules/GameRuleManager.h"
 #include "app/common/Network/GameNetworkManager.h"
 #include "app/common/Network/NetworkPlayerInterface.h"
 #include "app/common/Tutorial/Tutorial.h"
 #include "app/common/UI/All Platforms/UIEnums.h"
 #include "app/common/UI/All Platforms/UIStructs.h"
+#include "app/common/UI/Scenes/In-Game Menu Screens/UIScene_PauseMenu.h"
 #include "app/common/UI/Scenes/UIScene_FullscreenProgress.h"
 #include "app/linux/LinuxGame.h"
 #include "app/linux/Linux_UIController.h"
 #include "app/linux/Stubs/winapi_stubs.h"
-#include "platform/NetTypes.h"
-#include "minecraft/client/model/SkinBox.h"
-#include "platform/XboxStubs.h"
-#include "platform/PlatformServices.h"
 #include "java/Class.h"
 #include "java/File.h"
 #include "java/Random.h"
+#include "minecraft/GameEnums.h"
+#include "minecraft/GameHostOptions.h"
 #include "minecraft/client/Minecraft.h"
 #include "minecraft/client/Options.h"
 #include "minecraft/client/ProgressRenderer.h"
+#include "minecraft/client/User.h"
+#include "minecraft/client/gui/Gui.h"
+#include "minecraft/client/model/SkinBox.h"
 #include "minecraft/client/model/geom/Model.h"
 #include "minecraft/client/multiplayer/ClientConnection.h"
 #include "minecraft/client/multiplayer/MultiPlayerGameMode.h"
@@ -40,7 +34,9 @@
 #include "minecraft/client/renderer/GameRenderer.h"
 #include "minecraft/client/renderer/Textures.h"
 #include "minecraft/client/renderer/entity/EntityRenderer.h"
+#include "minecraft/client/skins/DLCTexturePack.h"
 #include "minecraft/client/skins/TexturePack.h"
+#include "minecraft/client/skins/TexturePackRepository.h"
 #include "minecraft/network/packet/DisconnectPacket.h"
 #include "minecraft/server/MinecraftServer.h"
 #include "minecraft/stats/StatsCounter.h"
@@ -48,8 +44,16 @@
 #include "minecraft/world/entity/item/MinecartHopper.h"
 #include "minecraft/world/entity/player/Player.h"
 #include "minecraft/world/item/crafting/Recipy.h"
+#include "platform/InputActions.h"
+#include "platform/NetTypes.h"
+#include "platform/PlatformServices.h"
+#include "platform/PlatformTypes.h"
+#include "platform/XboxStubs.h"
+#include "platform/sdl2/Profile.h"
+#include "platform/sdl2/Render.h"
+#include "platform/sdl2/Storage.h"
 #include "util/StringHelpers.h"
-#include "minecraft/client/User.h"
+#include "app/common/Audio/SoundEngine.h"
 
 void Game::HandleXuiActions(void) {
     eXuiAction eAction;
@@ -797,8 +801,7 @@ void Game::HandleXuiActions(void) {
                                         g_NetworkManager.CorrectErrorIDS(
                                             IDS_CONNECTION_LOST_LIVE),
                                         uiIDA, 1, i,
-                                        &Game::
-                                            EthernetDisconnectReturned,
+                                        &Game::EthernetDisconnectReturned,
                                         this);
                                 } else {
                                     // 2. Switch to offline
@@ -825,8 +828,7 @@ void Game::HandleXuiActions(void) {
                                     g_NetworkManager.CorrectErrorIDS(
                                         IDS_CONNECTION_LOST_LIVE),
                                     uiIDA, 1, i,
-                                    &Game::EthernetDisconnectReturned,
-                                    this);
+                                    &Game::EthernetDisconnectReturned, this);
                             }
                         }
                     }
@@ -876,8 +878,7 @@ void Game::HandleXuiActions(void) {
 
                         LoadingInputParams* loadingParams =
                             new LoadingInputParams();
-                        loadingParams->func =
-                            &Game::SignoutExitWorldThreadProc;
+                        loadingParams->func = &Game::SignoutExitWorldThreadProc;
 
                         UIFullscreenProgressCompletionData* completionData =
                             new UIFullscreenProgressCompletionData();
@@ -925,9 +926,9 @@ void Game::HandleXuiActions(void) {
                     uiIDA[0] = IDS_UNLOCK_TITLE;
                     uiIDA[1] = IDS_EXIT_GAME;
 
-                    ui.RequestErrorMessage(
-                        IDS_TRIALOVER_TITLE, IDS_TRIALOVER_TEXT, uiIDA, 2, i,
-                        &Game::TrialOverReturned, this);
+                    ui.RequestErrorMessage(IDS_TRIALOVER_TITLE,
+                                           IDS_TRIALOVER_TEXT, uiIDA, 2, i,
+                                           &Game::TrialOverReturned, this);
                 } break;
 
                     // INVITES
@@ -957,8 +958,7 @@ void Game::HandleXuiActions(void) {
                         ui.RequestAlertMessage(
                             IDS_EXIT_GAME, IDS_CONFIRM_LEAVE_VIA_INVITE, uiIDA,
                             3, i,
-                            &Game::
-                                ExitAndJoinFromInviteSaveDialogReturned,
+                            &Game::ExitAndJoinFromInviteSaveDialogReturned,
                             this);
                     } else {
                         uiIDA[0] = IDS_CONFIRM_CANCEL;
@@ -1220,8 +1220,7 @@ void Game::HandleXuiActions(void) {
                     }
                     loadingParams->completionData = completionData;
 
-                    loadingParams->cancelFunc =
-                        &Game::ExitGameFromRemoteSave;
+                    loadingParams->cancelFunc = &Game::ExitGameFromRemoteSave;
                     loadingParams->cancelText = IDS_TOOLTIPS_EXIT;
 
                     ui.NavigateToScene(ProfileManager.GetPrimaryPad(),
@@ -1295,9 +1294,8 @@ void Game::HandleXuiActions(void) {
                         C4JStorage::EMessageResult result =
                             ui.RequestErrorMessage(
                                 IDS_BANNED_LEVEL_TITLE, IDS_PLAYER_BANNED_LEVEL,
-                                uiIDA, 2, i,
-                                &Game::BannedLevelDialogReturned, this,
-                                wchFormat);
+                                uiIDA, 2, i, &Game::BannedLevelDialogReturned,
+                                this, wchFormat);
                         if (result != C4JStorage::EMessage_Busy)
                             SetAction(i, eAppAction_Idle);
                     } else {
@@ -1472,15 +1470,5 @@ void Game::HandleXuiActions(void) {
     }
 }
 
-// loadMediaArchive and loadStringTable moved to ArchiveManager/LocalizationManager
-
-
-
-
-
-
-
-
-
-
-
+// loadMediaArchive and loadStringTable moved to
+// ArchiveManager/LocalizationManager
