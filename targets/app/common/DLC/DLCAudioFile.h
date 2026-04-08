@@ -27,7 +27,7 @@ public:
         e_AudioParamType_Max,
 
     };
-    static const wchar_t* wchTypeNamesA[e_AudioParamType_Max];
+    static const char* wchTypeNamesA[e_AudioParamType_Max];
 
     DLCAudioFile(const std::string& path);
 
@@ -52,5 +52,5 @@ private:
                       DLCAudioFile::EAudioParameterType ptype,
                       const std::string& value);
     DLCAudioFile::EAudioParameterType getParameterType(
-        const std::wstring& paramName);
+        const std::string& paramName);
 };

@@ -47,7 +47,7 @@ public:
         e_DLCParamType_Max,
 
     };
-    const static wchar_t* wchTypeNamesA[e_DLCParamType_Max];
+    const static char* wchTypeNamesA[e_DLCParamType_Max];
 
 private:
     std::vector<DLCPack*> m_packs;
@@ -59,7 +59,7 @@ public:
     DLCManager();
     ~DLCManager();
 
-    static EDLCParameterType getParameterType(const std::wstring& paramName);
+    static EDLCParameterType getParameterType(const std::string& paramName);
 
     unsigned int getPackCount(EDLCType type = e_DLCType_All);
 
@@ -108,3 +108,5 @@ private:
     std::uint32_t retrievePackID(std::uint8_t* pbData, unsigned int dwLength,
                                  DLCPack* pack);
 };
+
+std::string dlc_read_wstring(const void* data);

@@ -13,6 +13,8 @@
 #include <unordered_map>
 #include <utility>
 
+#include "simdutf.h"
+
 #include "platform/profile/profile.h"
 #include "platform/storage/storage.h"
 #include "DLCFile.h"
@@ -30,43 +32,22 @@
 // the DLC was created on windows, with wchar_t beeing 2 bytes and UTF-16
 static const std::size_t DLC_WCHAR_BIN_SIZE = 2;
 
-#if WCHAR_MAX > 0xFFFF
-// than sizeof(char) != DLC_WCHAR_BIN_SIZE
-// e.g. Linux and all Posix/Unix systems with char beeing 4B/32bit
-static_assert(sizeof(wchar_t) == 4,
-              "char is not 4bytes but larger than 2bytes ???");
-
-static inline std::wstring dlc_read_wstring(const void* data) {
-    const std::uint16_t* p = static_cast<const std::uint16_t*>(data);
-    // find the end (nullterminated)
-    const std::uint16_t* end = p;
-    while (*end) {
+std::string dlc_read_wstring(const void* data) {
+    const char16_t* chars = static_cast<const char16_t*>(data);
+    const char16_t* end = chars;
+    while (*end != 0) {
         ++end;
     }
 
-    std::size_t len = static_cast<std::size_t>(end - p);
+    const std::size_t len16 = static_cast<std::size_t>(end - chars);
+    std::string result(simdutf::utf8_length_from_utf16le(chars, len16), '\0');
+    auto len = simdutf::convert_utf16le_to_utf8(chars, len16, result.data());
+    result.resize(len);
 
-    // allocate wstring with length len
-    // it will be nullterminated internally, do not worry.
-    std::wstring out(len, 0);
-
-    // and copy them into thje string
-    for (std::size_t i = 0; i < len; ++i) {
-        out[i] = static_cast<wchar_t>(p[i]);
-    }
-
-    return out;
+    return result;
 }
 
 #define DLC_WSTRING(ptr) dlc_read_wstring(ptr)
-
-#else
-// just in case.
-static_assert(sizeof(wchar_t) == 2,
-              "How did we get here? wide char smaller than 2 bytes");
-// perfectly fine scince char will be 2 bytes (UCS-2/UTF-16)
-#define DLC_WSTRING(ptr) std::wstring((wchar_t*)(ptr))
-#endif
 
 #define DLC_PARAM_ADV(n) \
     (sizeof(IPlatformStorage::DLC_FILE_PARAM) + (n) * DLC_WCHAR_BIN_SIZE)
@@ -123,20 +104,20 @@ bool readOwnedDlcFile(const std::string& path, std::uint8_t** ppData,
 }
 }  // namespace
 
-const wchar_t* DLCManager::wchTypeNamesA[] = {
-    L"DISPLAYNAME",
-    L"THEMENAME",
-    L"FREE",
-    L"CREDIT",
-    L"CAPEPATH",
-    L"BOX",
-    L"ANIM",
-    L"PACKID",
-    L"NETHERPARTICLECOLOUR",
-    L"ENCHANTTEXTCOLOUR",
-    L"ENCHANTTEXTFOCUSCOLOUR",
-    L"DATAPATH",
-    L"PACKVERSION",
+const char* DLCManager::wchTypeNamesA[] = {
+    "DISPLAYNAME",
+    "THEMENAME",
+    "FREE",
+    "CREDIT",
+    "CAPEPATH",
+    "BOX",
+    "ANIM",
+    "PACKID",
+    "NETHERPARTICLECOLOUR",
+    "ENCHANTTEXTCOLOUR",
+    "ENCHANTTEXTFOCUSCOLOUR",
+    "DATAPATH",
+    "PACKVERSION",
 };
 
 DLCManager::DLCManager() {
@@ -152,7 +133,7 @@ DLCManager::~DLCManager() {
 }
 
 DLCManager::EDLCParameterType DLCManager::getParameterType(
-    const std::wstring& paramName) {
+    const std::string& paramName) {
     EDLCParameterType type = e_DLCParamType_Invalid;
 
     for (unsigned int i = 0; i < e_DLCParamType_Max; ++i) {
@@ -472,7 +453,7 @@ bool DLCManager::processDLCDataFile(unsigned int& dwFilesProcessed,
     for (unsigned int i = 0; i < uiParameterCount; i++) {
         // Map DLC strings to application strings, then store the DLC index
         // mapping to application index
-        std::wstring parameterName = DLC_PARAM_WSTR(pbData, uiCurrentByte);
+        std::string parameterName = DLC_PARAM_WSTR(pbData, uiCurrentByte);
         DLCManager::EDLCParameterType type =
             DLCManager::getParameterType(parameterName);
         if (type != DLCManager::e_DLCParamType_Invalid) {
@@ -510,7 +491,7 @@ bool DLCManager::processDLCDataFile(unsigned int& dwFilesProcessed,
                 new DLCPack(pack->getName(), pack->getLicenseMask());
         } else if (type != e_DLCType_PackConfig) {
             dlcFile =
-                pack->addFile(type, wstringtofilename(DLC_DETAIL_WSTR(pbData, uiCurrentByte)));
+                pack->addFile(type, DLC_DETAIL_WSTR(pbData, uiCurrentByte));
         }
 
         // Params
@@ -527,14 +508,14 @@ bool DLCManager::processDLCDataFile(unsigned int& dwFilesProcessed,
 
             if (it != parameterMapping.end()) {
                 if (type == e_DLCType_PackConfig) {
-                    pack->addParameter(it->second, wstringtofilename(DLC_PARAM_WSTR(pbTemp, 0)));
+                    pack->addParameter(it->second, DLC_PARAM_WSTR(pbTemp, 0));
                 } else {
                     if (dlcFile != nullptr)
                         dlcFile->addParameter(it->second,
-                                              wstringtofilename(DLC_PARAM_WSTR(pbTemp, 0)));
+                                              DLC_PARAM_WSTR(pbTemp, 0));
                     else if (dlcTexturePack != nullptr)
                         dlcTexturePack->addParameter(it->second,
-                                                     wstringtofilename(DLC_PARAM_WSTR(pbTemp, 0)));
+                                                     DLC_PARAM_WSTR(pbTemp, 0));
                 }
             }
             pbTemp += DLC_PARAM_ADV(parBuf.dwWchCount);
@@ -571,7 +552,7 @@ bool DLCManager::processDLCDataFile(unsigned int& dwFilesProcessed,
             switch (fileBuf.dwType) {
                 case DLCManager::e_DLCType_Skin:
                     app.vSkinNames.push_back(
-                        wstringtofilename(DLC_DETAIL_WSTR(pbData, uiCurrentByte)));
+                        DLC_DETAIL_WSTR(pbData, uiCurrentByte));
                     break;
             }
 
@@ -648,7 +629,7 @@ std::uint32_t DLCManager::retrievePackID(std::uint8_t* pbData,
     for (unsigned int i = 0; i < uiParameterCount; i++) {
         // Map DLC strings to application strings, then store the DLC index
         // mapping to application index
-        std::wstring parameterName = DLC_PARAM_WSTR(pbData, uiCurrentByte);
+        std::string parameterName = DLC_PARAM_WSTR(pbData, uiCurrentByte);
         DLCManager::EDLCParameterType type =
             DLCManager::getParameterType(parameterName);
         if (type != DLCManager::e_DLCParamType_Invalid) {
@@ -685,8 +666,8 @@ std::uint32_t DLCManager::retrievePackID(std::uint8_t* pbData,
             if (it != parameterMapping.end()) {
                 if (type == e_DLCType_PackConfig) {
                     if (it->second == e_DLCParamType_PackId) {
-                        std::wstring wsTemp = DLC_PARAM_WSTR(pbTemp, 0);
-                        std::wstringstream ss;
+                        std::string wsTemp = DLC_PARAM_WSTR(pbTemp, 0);
+                        std::stringstream ss;
                         // 4J Stu - numbered using decimal to make it easier for
                         // artists/people to number manually
                         ss << std::dec << wsTemp.c_str();
