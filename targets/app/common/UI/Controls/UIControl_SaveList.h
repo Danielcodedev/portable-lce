@@ -20,19 +20,19 @@ public:
 
     using UIControl_ButtonList::addItem;
 
-    void addItem(const std::wstring& label);
     void addItem(const std::string& label);
+    // void addItem(const std::wstring& label);
 
-    void addItem(const std::wstring& label, int data);
     void addItem(const std::string& label, int data);
+    // void addItem(const std::wstring& label, int data);
 
-    void addItem(const std::string& label, const std::wstring& iconName);
-    void addItem(const std::wstring& label, const std::wstring& iconName);
-    void setTextureName(int iId, const std::wstring& iconName);
+    void addItem(const std::string& label, const std::string& iconName);
+    // void addItem(const std::string& label, const std::wstring& iconName);
+    void setTextureName(int iId, const std::string& iconName);
 
 private:
-    void addItem(const std::string& label, const std::wstring& iconName,
+    void addItem(const std::string& label, const std::string& iconName,
                  int data);
-    void addItem(const std::wstring& label, const std::wstring& iconName,
-                 int data);
+    // void addItem(const std::string& label, const std::string& iconName,
+    //              int data);
 };

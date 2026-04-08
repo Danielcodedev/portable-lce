@@ -49,37 +49,37 @@ UIScene_DebugSetCamera::UIScene_DebugSetCamera(int iPad, void* initData,
         currentPosition->m_elev = pMinecraft->localplayers[playerNo]->xRot;
     }
 
-    wchar_t TempString[256];
+    char TempString[256];
 
-    swprintf(TempString, 256, L"%f", currentPosition->m_camX);
+    snprintf(TempString, 256, "%f", currentPosition->m_camX);
     m_textInputX.init(TempString, eControl_CamX);
 
-    swprintf(TempString, 256, L"%f", currentPosition->m_camY);
+    snprintf(TempString, 256, "%f", currentPosition->m_camY);
     m_textInputY.init(TempString, eControl_CamY);
 
-    swprintf(TempString, 256, L"%f", currentPosition->m_camZ);
+    snprintf(TempString, 256, "%f", currentPosition->m_camZ);
     m_textInputZ.init(TempString, eControl_CamZ);
 
-    swprintf(TempString, 256, L"%f", currentPosition->m_yRot);
+    snprintf(TempString, 256, "%f", currentPosition->m_yRot);
     m_textInputYRot.init(TempString, eControl_YRot);
 
-    swprintf(TempString, 256, L"%f", currentPosition->m_elev);
+    snprintf(TempString, 256, "%f", currentPosition->m_elev);
     m_textInputElevation.init(TempString, eControl_Elevation);
 
-    m_checkboxLockPlayer.init(L"Lock Player", eControl_LockPlayer,
+    m_checkboxLockPlayer.init("Lock Player", eControl_LockPlayer,
                               app.GetFreezePlayers());
 
-    m_buttonTeleport.init(L"Teleport", eControl_Teleport);
+    m_buttonTeleport.init("Teleport", eControl_Teleport);
 
-    m_labelTitle.init(L"Set Camera Position");
-    m_labelCamX.init(L"CamX");
-    m_labelCamY.init(L"CamY");
-    m_labelCamZ.init(L"CamZ");
-    m_labelYRotElev.init(L"Y-Rot & Elevation (Degs)");
+    m_labelTitle.init("Set Camera Position");
+    m_labelCamX.init("CamX");
+    m_labelCamY.init("CamY");
+    m_labelCamZ.init("CamZ");
+    m_labelYRotElev.init("Y-Rot & Elevation (Degs)");
 }
 
-std::wstring UIScene_DebugSetCamera::getMoviePath() {
-    return L"DebugSetCamera";
+std::string UIScene_DebugSetCamera::getMoviePath() {
+    return "DebugSetCamera";
 }
 
 void UIScene_DebugSetCamera::handleInput(int iPad, int key, bool repeat,
@@ -119,7 +119,7 @@ void UIScene_DebugSetCamera::handlePress(F64 controlId, F64 childId) {
         case eControl_Elevation:
             m_keyboardCallbackControl = (eControls)((int)controlId);
             PlatformInput.RequestKeyboard(
-                L"Enter something", L"", 0, 25,
+                "Enter something", "", 0, 25,
                 [this](bool bRes) -> int {
                     return handleKeyboardComplete(bRes);
                 },
@@ -140,7 +140,7 @@ void UIScene_DebugSetCamera::handleCheckboxToggled(F64 controlId,
 int UIScene_DebugSetCamera::handleKeyboardComplete(bool bRes) {
     const char* text = PlatformInput.GetText();
     if (text[0] != '\0') {
-        std::wstring value = convStringToWstring(text);
+        std::string value = text;
         double val = 0;
         if (!value.empty()) val = fromWString<double>(value);
         switch (m_keyboardCallbackControl) {

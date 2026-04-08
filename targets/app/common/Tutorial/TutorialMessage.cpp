@@ -14,8 +14,8 @@ bool TutorialMessage::canDisplay() {
     return !limitRepeats || (timesShown < numRepeats);
 }
 
-const wchar_t* TutorialMessage::getMessageForDisplay() {
-    if (!canDisplay()) return L"";
+const char* TutorialMessage::getMessageForDisplay() {
+    if (!canDisplay()) return "";
 
     if (limitRepeats) ++timesShown;
 

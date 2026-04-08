@@ -9,14 +9,14 @@
 
 class StringTable;
 
-DLCGameRulesHeader::DLCGameRulesHeader(const std::wstring& path)
+DLCGameRulesHeader::DLCGameRulesHeader(const std::string& path)
     : DLCGameRules(DLCManager::e_DLCType_GameRulesHeader, path) {
     m_pbData = nullptr;
     m_dataBytes = 0;
 
     m_hasData = false;
 
-    m_grfPath = path.substr(0, path.length() - 4) + L".grf";
+    m_grfPath = path.substr(0, path.length() - 4) + ".grf";
 
     lgo = nullptr;
 }

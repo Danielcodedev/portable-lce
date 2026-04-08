@@ -25,9 +25,9 @@ bool UIControl_SpaceIndicatorBar::setupControl(UIScene* scene,
     bool success = UIControl_Base::setupControl(scene, parent, controlName);
 
     // Progress specific initialisers
-    m_setSaveSizeFunc = registerFastName(L"setSaveGameSize");
-    m_setTotalSizeFunc = registerFastName(L"setTotalSize");
-    m_setSaveGameOffsetFunc = registerFastName(L"setSaveGameOffset");
+    m_setSaveSizeFunc = registerFastName("setSaveGameSize");
+    m_setTotalSizeFunc = registerFastName("setTotalSize");
+    m_setSaveGameOffsetFunc = registerFastName("setSaveGameOffset");
 
     return success;
 }
@@ -39,16 +39,14 @@ void UIControl_SpaceIndicatorBar::init(UIString label, int id, int64_t min,
     m_min = min;
     m_max = max;
 
-    const std::u16string convLabel = wstring_to_u16string(label.getString());
-
     IggyDataValue result;
     IggyDataValue value[1];
-    value[0].type = IGGY_DATATYPE_string_UTF16;
-    IggyStringUTF16 stringVal;
+    value[0].type = IGGY_DATATYPE_string_UTF8;
+    IggyStringUTF8 stringVal;
 
-    stringVal.string = convLabel.c_str();
-    stringVal.length = convLabel.length();
-    value[0].string16 = stringVal;
+    stringVal.string = const_cast<char*>(label.getString().c_str());
+    stringVal.length = label.getString().length();
+    value[0].string8 = stringVal;
 
     IggyResult out =
         IggyPlayerCallMethodRS(m_parentScene->getMovie(), &result,

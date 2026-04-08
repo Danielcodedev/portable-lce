@@ -60,7 +60,7 @@ public:
     INetworkPlayer* GetPlayerByIndex(int playerIndex);
     INetworkPlayer* GetPlayerByXuid(PlayerUID xuid);
     INetworkPlayer* GetPlayerBySmallId(unsigned char smallId);
-    std::wstring GetDisplayNameByGamertag(std::wstring gamertag);
+    std::string GetDisplayNameByGamertag(std::string gamertag);
     INetworkPlayer* GetHostPlayer();
     void RegisterPlayerChangedCallback(
         int iPad,
@@ -149,9 +149,9 @@ public:
 
     // Debug output
 
-    std::wstring GatherStats();
+    std::string GatherStats();
     void renderQueueMeter();
-    std::wstring GatherRTTStats();
+    std::string GatherRTTStats();
 
     // GUI debug output
 

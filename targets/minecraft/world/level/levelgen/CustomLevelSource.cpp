@@ -568,7 +568,7 @@ bool CustomLevelSource::tick() { return false; }
 
 bool CustomLevelSource::shouldSave() { return true; }
 
-std::wstring CustomLevelSource::gatherStats() { return L"CustomLevelSource"; }
+std::string CustomLevelSource::gatherStats() { return "CustomLevelSource"; }
 
 std::vector<Biome::MobSpawnerData*>* CustomLevelSource::getMobsAt(
     MobCategory* mobCategory, int x, int y, int z) {
@@ -588,7 +588,7 @@ std::vector<Biome::MobSpawnerData*>* CustomLevelSource::getMobsAt(
 }
 
 TilePos* CustomLevelSource::findNearestMapFeature(
-    Level* level, const std::wstring& featureName, int x, int y, int z) {
+    Level* level, const std::string& featureName, int x, int y, int z) {
 #if defined(_OVERRIDE_HEIGHTMAP)
     if (LargeFeature::STRONGHOLD == featureName &&
         strongholdFeature != nullptr) {

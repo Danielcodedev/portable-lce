@@ -18,7 +18,7 @@ typedef std::vector<PXCONTENT_DATA> XContentDataArray;
 class StubStorage : public IPlatformStorage {
 public:
     struct CACHEINFOSTRUCT {
-        wchar_t wchDisplayName[XCONTENT_MAX_DISPLAYNAME_LENGTH];
+        char wchDisplayName[XCONTENT_MAX_DISPLAYNAME_LENGTH];
         char szFileName[XCONTENT_MAX_FILENAME_LENGTH];
         std::uint32_t dwImageOffset;
         std::uint32_t dwImageBytes;
@@ -72,7 +72,7 @@ public:
         std::function<int(int, const StubStorage::EMessageResult)> callback =
             nullptr,
         C4JStringTable* pStringTable = nullptr,
-        wchar_t* pwchFormatString = nullptr, unsigned int focusButton = 0);
+        char* pwchFormatString = nullptr, unsigned int focusButton = 0);
 
     StubStorage::EMessageResult GetMessageBoxResult();
 
@@ -81,15 +81,15 @@ public:
                        bool bForceResetOfSaveDevice = false);
 
     // savegame
-    void Init(unsigned int uiSaveVersion, const wchar_t* pwchDefaultSaveName,
+    void Init(unsigned int uiSaveVersion, const char* pwchDefaultSaveName,
               char* pszSavePackName, int iMinimumSaveSize,
               std::function<int(const ESavingMessage, int)> callback,
               const char* szGroupID);
     void ResetSaveData();  // Call before a new save to clear out stored save
                            // file name
     void SetDefaultSaveNameForKeyboardDisplay(
-        const wchar_t* pwchDefaultSaveName);
-    void SetSaveTitle(const wchar_t* pwchDefaultSaveName);
+        const char* pwchDefaultSaveName);
+    void SetSaveTitle(const char* pwchDefaultSaveName);
     bool GetSaveUniqueNumber(int* piVal);
     bool GetSaveUniqueFilename(char* pszName);
     void SetSaveUniqueFilename(char* szFilename);
@@ -110,7 +110,7 @@ public:
     StubStorage::ESaveGameState SaveSaveData(
         std::function<int(const bool)> callback);
     void CopySaveDataToNewSave(std::uint8_t* pbThumbnail,
-                               unsigned int cbThumbnail, wchar_t* wchNewName,
+                               unsigned int cbThumbnail, char* wchNewName,
                                std::function<int(bool)> callback);
     void SetSaveDeviceSelected(unsigned int uiPad, bool bSelected);
     bool GetSaveDeviceSelected(unsigned int iPad);
@@ -179,16 +179,16 @@ public:
     // Global title storage
     StubStorage::ETMSStatus ReadTMSFile(
         int iQuadrant, eGlobalStorage eStorageFacility,
-        StubStorage::eTMS_FileType eFileType, wchar_t* pwchFilename,
+        StubStorage::eTMS_FileType eFileType, char* pwchFilename,
         std::uint8_t** ppBuffer, unsigned int* pBufferSize,
-        std::function<int(wchar_t*, int, bool, int)> callback = nullptr,
+        std::function<int(char*, int, bool, int)> callback = nullptr,
         int iAction = 0);
     bool WriteTMSFile(int iQuadrant, eGlobalStorage eStorageFacility,
-                      wchar_t* pwchFilename, std::uint8_t* pBuffer,
+                      char* pwchFilename, std::uint8_t* pBuffer,
                       unsigned int bufferSize);
     bool DeleteTMSFile(int iQuadrant, eGlobalStorage eStorageFacility,
-                       wchar_t* pwchFilename);
-    void StoreTMSPathName(wchar_t* pwchName = nullptr);
+                       char* pwchFilename);
+    void StoreTMSPathName(char* pwchName = nullptr);
 
     // TMS++
 #ifdef _XBOX

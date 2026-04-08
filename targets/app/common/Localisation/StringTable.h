@@ -11,8 +11,8 @@ class StringTable {
 private:
     bool isStatic;
 
-    std::unordered_map<std::wstring, std::wstring> m_stringsMap;
-    std::vector<std::wstring> m_stringsVec;
+    std::unordered_map<std::string, std::string> m_stringsMap;
+    std::vector<std::string> m_stringsVec;
 
     std::vector<uint8_t> src;
 
@@ -60,12 +60,12 @@ public:
 
     void getData(std::uint8_t** ppData, unsigned int* pSize);
 
-    const wchar_t* getString(const std::wstring& id);
-    const wchar_t* getString(int id);
+    const char* getString(const std::string& id);
+    const char* getString(int id);
 
-    // static const wchar_t* m_wchLocaleCode[LOCALE_COUNT];
+    // static const char* m_wchLocaleCode[LOCALE_COUNT];
 
 private:
-    // std::wstring getLangId(uint32_t dwLanguage=0);
+    // std::string getLangId(uint32_t dwLanguage=0);
     void ProcessStringTableData(void);
 };

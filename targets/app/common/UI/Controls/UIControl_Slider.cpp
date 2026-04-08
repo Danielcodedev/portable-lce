@@ -26,8 +26,8 @@ bool UIControl_Slider::setupControl(UIScene* scene, IggyValuePath* parent,
     bool success = UIControl_Base::setupControl(scene, parent, controlName);
 
     // Slider specific initialisers
-    m_funcSetRelativeSliderPos = registerFastName(L"SetRelativeSliderPos");
-    m_funcGetRealWidth = registerFastName(L"GetRealWidth");
+    m_funcSetRelativeSliderPos = registerFastName("SetRelativeSliderPos");
+    m_funcGetRealWidth = registerFastName("GetRealWidth");
 
     return success;
 }
@@ -40,16 +40,14 @@ void UIControl_Slider::init(UIString label, int id, int min, int max,
     m_max = max;
     m_current = current;
 
-    const std::u16string convLabel = wstring_to_u16string(label.getString());
-
     IggyDataValue result;
     IggyDataValue value[5];
-    value[0].type = IGGY_DATATYPE_string_UTF16;
-    IggyStringUTF16 stringVal;
+    value[0].type = IGGY_DATATYPE_string_UTF8;
+    IggyStringUTF8 stringVal;
 
-    stringVal.string = convLabel.c_str();
-    stringVal.length = convLabel.length();
-    value[0].string16 = stringVal;
+    stringVal.string = const_cast<char*>(label.getString().c_str());
+    stringVal.length = label.getString().length();
+    value[0].string8 = stringVal;
 
     value[1].type = IGGY_DATATYPE_number;
     value[1].number = (int)id;
@@ -102,7 +100,7 @@ S32 UIControl_Slider::GetRealWidth() {
 }
 
 void UIControl_Slider::setAllPossibleLabels(int labelCount,
-                                            wchar_t labels[][256]) {
+                                            char labels[][256]) {
     m_allPossibleLabels.clear();
     for (unsigned int i = 0; i < labelCount; ++i) {
         m_allPossibleLabels.push_back(labels[i]);

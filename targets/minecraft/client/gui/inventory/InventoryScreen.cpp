@@ -31,7 +31,7 @@ InventoryScreen::InventoryScreen(std::shared_ptr<Player> player)
 void InventoryScreen::init() { buttons.clear(); }
 
 void InventoryScreen::renderLabels() {
-    font->draw(L"Crafting", 84 + 2, 8 * 2, 0x404040);
+    font->draw("Crafting", 84 + 2, 8 * 2, 0x404040);
 }
 
 void InventoryScreen::render(int xm, int ym, float a) {

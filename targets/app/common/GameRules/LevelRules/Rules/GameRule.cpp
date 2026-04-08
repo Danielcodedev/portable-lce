@@ -29,10 +29,10 @@ GameRule::~GameRule() {
     }
 }
 
-GameRule::ValueType GameRule::getParameter(const std::wstring& parameterName) {
+GameRule::ValueType GameRule::getParameter(const std::string& parameterName) {
     if (m_parameters.find(parameterName) == m_parameters.end()) {
 #ifndef _CONTENT_PACKAGE
-        wprintf(L"WARNING: Parameter %ls was not set before being fetched\n",
+        printf("WARNING: Parameter %s was not set before being fetched\n",
                 parameterName.c_str());
         assert(0);
 #endif
@@ -40,15 +40,15 @@ GameRule::ValueType GameRule::getParameter(const std::wstring& parameterName) {
     return m_parameters[parameterName];
 }
 
-void GameRule::setParameter(const std::wstring& parameterName,
+void GameRule::setParameter(const std::string& parameterName,
                             ValueType value) {
     if (m_parameters.find(parameterName) == m_parameters.end()) {
 #ifndef _CONTENT_PACKAGE
-        wprintf(L"Adding parameter %ls to GameRule\n", parameterName.c_str());
+        printf("Adding parameter %s to GameRule\n", parameterName.c_str());
 #endif
     } else {
 #ifndef _CONTENT_PACKAGE
-        wprintf(L"Setting parameter %ls for GameRule\n", parameterName.c_str());
+        printf("Setting parameter %s for GameRule\n", parameterName.c_str());
 #endif
     }
     m_parameters[parameterName] = value;
@@ -67,7 +67,7 @@ void GameRule::write(DataOutputStream* dos) {
     // Find required parameters.
     dos->writeInt(m_parameters.size());
     for (auto it = m_parameters.begin(); it != m_parameters.end(); it++) {
-        std::wstring pName = (*it).first;
+        std::string pName = (*it).first;
         ValueType vType = (*it).second;
 
         dos->writeUTF((*it).first);
@@ -83,7 +83,7 @@ void GameRule::write(DataOutputStream* dos) {
 void GameRule::read(DataInputStream* dis) {
     int savedParams = dis->readInt();
     for (int i = 0; i < savedParams; i++) {
-        std::wstring pNames = dis->readUTF();
+        std::string pNames = dis->readUTF();
 
         ValueType vType = getParameter(pNames);
 

@@ -39,7 +39,7 @@ int SheepRenderer::prepareArmor(std::shared_ptr<LivingEntity> _sheep, int layer,
         bindTexture(&SHEEP_FUR_LOCATION);
 
         if (sheep->hasCustomName() &&
-            sheep->getCustomName().compare(L"jeb_") == 0) {
+            sheep->getCustomName().compare("jeb_") == 0) {
             // easter egg...
             int colorDuration = 25;
             int value = (sheep->tickCount / colorDuration) + sheep->entityId;

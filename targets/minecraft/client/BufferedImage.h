@@ -16,10 +16,10 @@ public:
     static const int TYPE_INT_ARGB = 0;
     static const int TYPE_INT_RGB = 1;
     BufferedImage(int width, int height, int type);
-    BufferedImage(const std::wstring& File, bool filenameHasExtension = false,
+    BufferedImage(const std::string& File, bool filenameHasExtension = false,
                   bool bTitleUpdateTexture = false,
-                  const std::wstring& drive = L"");  // 4J added
-    BufferedImage(DLCPack* dlcPack, const std::wstring& File,
+                  const std::string& drive = "");  // 4J added
+    BufferedImage(DLCPack* dlcPack, const std::string& File,
                   bool filenameHasExtension = false);              // 4J Added
     BufferedImage(std::uint8_t* pbData, std::uint32_t dataBytes);  // 4J added
     ~BufferedImage();

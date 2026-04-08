@@ -19,7 +19,7 @@ class GRFObject;
 class ApplySchematicRuleDefinition : public GameRuleDefinition {
 private:
     LevelGenerationOptions* m_levelGenOptions;
-    std::wstring m_schematicName;
+    std::string m_schematicName;
     ConsoleSchematicFile* m_schematic;
     Vec3 m_location;
     std::optional<AABB> m_locationBox;
@@ -41,8 +41,8 @@ public:
     }
 
     virtual void writeAttributes(DataOutputStream* dos, unsigned int numAttrs);
-    virtual void addAttribute(const std::wstring& attributeName,
-                              const std::wstring& attributeValue);
+    virtual void addAttribute(const std::string& attributeName,
+                              const std::string& attributeValue);
 
     void processSchematic(AABB* chunkBox, LevelChunk* chunk);
     void processSchematicLighting(AABB* chunkBox, LevelChunk* chunk);
@@ -52,7 +52,7 @@ public:
 
     bool isComplete() { return m_completed; }
 
-    std::wstring getSchematicName() { return m_schematicName; }
+    std::string getSchematicName() { return m_schematicName; }
 
     /** 4J-JEV:
      *  This GameRuleDefinition contains limited game state.

@@ -16,7 +16,7 @@
 #include "minecraft/world/level/levelgen/structure/StructurePiece.h"
 #include "minecraft/world/level/levelgen/structure/StructureStart.h"
 
-const std::wstring RandomScatteredLargeFeature::OPTION_SPACING = L"distance";
+const std::string RandomScatteredLargeFeature::OPTION_SPACING = "distance";
 std::vector<Biome*> RandomScatteredLargeFeature::allowedBiomes;
 
 void RandomScatteredLargeFeature::staticCtor() {
@@ -37,7 +37,7 @@ void RandomScatteredLargeFeature::_init() {
 RandomScatteredLargeFeature::RandomScatteredLargeFeature() { _init(); }
 
 RandomScatteredLargeFeature::RandomScatteredLargeFeature(
-    std::unordered_map<std::wstring, std::wstring> options) {
+    std::unordered_map<std::string, std::string> options) {
     _init();
 
     for (auto it = options.begin(); it != options.end(); ++it) {
@@ -47,7 +47,7 @@ RandomScatteredLargeFeature::RandomScatteredLargeFeature(
     }
 }
 
-std::wstring RandomScatteredLargeFeature::getFeatureName() { return L"Temple"; }
+std::string RandomScatteredLargeFeature::getFeatureName() { return "Temple"; }
 
 bool RandomScatteredLargeFeature::isFeatureChunk(int x, int z,
                                                  bool bIsSuperflat) {

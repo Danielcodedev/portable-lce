@@ -72,7 +72,7 @@ public:
     virtual void containerTick();
     virtual void tick() override;
     virtual void updateEvents() override;
-    virtual void keyPressed(wchar_t eventCharacter, int eventKey) override;
+    virtual void keyPressed(char eventCharacter, int eventKey) override;
     virtual void mouseClicked(int x, int y, int buttonNum) override;
     virtual void mouseReleased(int x, int y, int buttonNum) override;
     virtual void render(int xm, int ym, float a) override;

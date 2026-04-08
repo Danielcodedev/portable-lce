@@ -87,7 +87,7 @@ private:
 
 protected:
     // TODO: This should be pure virtual in this class
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
 
 public:
     int loadSaveDataThumbnailReturned(std::uint8_t* pbThumbnail,

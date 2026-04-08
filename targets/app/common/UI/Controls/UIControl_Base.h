@@ -31,12 +31,13 @@ public:
 
     virtual void setLabel(UIString label, bool instant = false,
                           bool force = false);
-    // virtual void setLabel(std::wstring label, bool instant = false, bool
-    // force = false) { this->setLabel(UIString::CONSTANT(label), instant,
-    // force); }
+    // virtual void setLabel(std::string label, bool instant = false,
+    //                       bool force = false) {
+    //     this->setLabel(UIString(label), instant, force);
+    // }
 
-    const wchar_t* getLabel();
-    virtual void setAllPossibleLabels(int labelCount, wchar_t labels[][256]);
+    const char* getLabel();
+    virtual void setAllPossibleLabels(int labelCount, char labels[][256]);
     int getId() { return m_id; }
 
     virtual bool hasFocus();

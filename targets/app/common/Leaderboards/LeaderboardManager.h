@@ -6,7 +6,7 @@
 
 class LeaderboardManager : public IPlatformLeaderboard {
 public:
-    static const std::wstring filterNames[eNumFilterModes];
+    static const std::string filterNames[eNumFilterModes];
 
     LeaderboardManager();
     virtual ~LeaderboardManager() {}

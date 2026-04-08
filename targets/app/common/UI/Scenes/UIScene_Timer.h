@@ -30,5 +30,5 @@ public:
     virtual bool needsReloaded();
 
 protected:
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
 };

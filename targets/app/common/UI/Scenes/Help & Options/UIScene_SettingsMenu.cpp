@@ -43,11 +43,11 @@ UIScene_SettingsMenu::UIScene_SettingsMenu(int iPad, void* initData,
 
 UIScene_SettingsMenu::~UIScene_SettingsMenu() {}
 
-std::wstring UIScene_SettingsMenu::getMoviePath() {
+std::string UIScene_SettingsMenu::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1) {
-        return L"SettingsMenuSplit";
+        return "SettingsMenuSplit";
     } else {
-        return L"SettingsMenu";
+        return "SettingsMenu";
     }
 }
 

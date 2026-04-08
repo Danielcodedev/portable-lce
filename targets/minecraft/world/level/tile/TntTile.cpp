@@ -127,9 +127,9 @@ void TntTile::entityInside(Level* level, int x, int y, int z,
 }
 
 void TntTile::registerIcons(IconRegister* iconRegister) {
-    icon = iconRegister->registerIcon(L"tnt_side");
-    iconTop = iconRegister->registerIcon(L"tnt_top");
-    iconBottom = iconRegister->registerIcon(L"tnt_bottom");
+    icon = iconRegister->registerIcon("tnt_side");
+    iconTop = iconRegister->registerIcon("tnt_top");
+    iconBottom = iconRegister->registerIcon("tnt_bottom");
 }
 
 bool TntTile::dropFromExplosion(Explosion* explosion) { return false; }

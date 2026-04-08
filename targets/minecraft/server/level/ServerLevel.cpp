@@ -131,7 +131,7 @@ void ServerLevel::staticCtor() {
 
 ServerLevel::ServerLevel(MinecraftServer* server,
                          std::shared_ptr<LevelStorage> levelStorage,
-                         const std::wstring& levelName, int dimension,
+                         const std::string& levelName, int dimension,
                          LevelSettings* levelSettings)
     : Level(levelStorage, levelName, levelSettings,
             Dimension::getNew(dimension), false) {
@@ -993,7 +993,7 @@ void ServerLevel::saveToDisc(ProgressListener* progressListener,
 
         DLCPack* pDLCPack = pDLCTexPack->getDLCInfoParentPack();
 
-        if (!pDLCPack->hasPurchasedFile(DLCManager::e_DLCType_Texture, L"")) {
+        if (!pDLCPack->hasPurchasedFile(DLCManager::e_DLCType_Texture, "")) {
             return;
         }
     }
@@ -1207,13 +1207,13 @@ PlayerChunkMap* ServerLevel::getChunkMap() { return chunkMap; }
 
 PortalForcer* ServerLevel::getPortalForcer() { return portalForcer; }
 
-void ServerLevel::sendParticles(const std::wstring& name, double x, double y,
+void ServerLevel::sendParticles(const std::string& name, double x, double y,
                                 double z, int count) {
     sendParticles(name, x + 0.5f, y + 0.5f, z + 0.5f, count, 0.5f, 0.5f, 0.5f,
                   0.02f);
 }
 
-void ServerLevel::sendParticles(const std::wstring& name, double x, double y,
+void ServerLevel::sendParticles(const std::string& name, double x, double y,
                                 double z, int count, double xDist, double yDist,
                                 double zDist, double speed) {
     std::shared_ptr<Packet> packet = std::make_shared<LevelParticlesPacket>(

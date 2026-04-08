@@ -16,18 +16,18 @@ ArchiveManager::ArchiveManager()
     : m_mediaArchive(nullptr), m_dwRequiredTexturePackID(0) {}
 
 void ArchiveManager::loadMediaArchive() {
-    std::wstring mediapath = L"";
+    std::string mediapath = "";
 
 #if _WINDOWS64
-    mediapath = L"Common\\Media\\MediaWindows64.arc";
+    mediapath = "Common\\Media\\MediaWindows64.arc";
 #elif __linux__
-    mediapath = L"app/common/Media/MediaLinux.arc";
+    mediapath = "app/common/Media/MediaLinux.arc";
 #endif
 
     if (!mediapath.empty()) {
 #if defined(__linux__)
-        std::wstring exeDirW = PlatformFilesystem.getBasePath().wstring();
-        std::wstring candidate = exeDirW + File::pathSeparator + mediapath;
+        std::string exeDirW = PlatformFilesystem.getBasePath().string();
+        std::string candidate = exeDirW + File::pathSeparator + mediapath;
         if (File(candidate).exists()) {
             m_mediaArchive = new ArchiveFile(File(candidate));
         } else {
@@ -39,7 +39,7 @@ void ArchiveManager::loadMediaArchive() {
     }
 }
 
-int ArchiveManager::getArchiveFileSize(const std::wstring& filename) {
+int ArchiveManager::getArchiveFileSize(const std::string& filename) {
     TexturePack* tPack = nullptr;
     Minecraft* pMinecraft = Minecraft::GetInstance();
     if (pMinecraft && pMinecraft->skins)
@@ -51,7 +51,7 @@ int ArchiveManager::getArchiveFileSize(const std::wstring& filename) {
         return m_mediaArchive->getFileSize(filename);
 }
 
-bool ArchiveManager::hasArchiveFile(const std::wstring& filename) {
+bool ArchiveManager::hasArchiveFile(const std::string& filename) {
     TexturePack* tPack = nullptr;
     Minecraft* pMinecraft = Minecraft::GetInstance();
     if (pMinecraft && pMinecraft->skins)
@@ -64,7 +64,7 @@ bool ArchiveManager::hasArchiveFile(const std::wstring& filename) {
 }
 
 std::vector<uint8_t> ArchiveManager::getArchiveFile(
-    const std::wstring& filename) {
+    const std::string& filename) {
     TexturePack* tPack = nullptr;
     Minecraft* pMinecraft = Minecraft::GetInstance();
     if (pMinecraft && pMinecraft->skins)
@@ -102,7 +102,7 @@ void ArchiveManager::removeMemoryTPDFile(int iConfig) {
     }
 }
 
-int ArchiveManager::getTPConfigVal(wchar_t* pwchDataFile) { return -1; }
+int ArchiveManager::getTPConfigVal(char* pwchDataFile) { return -1; }
 
 bool ArchiveManager::isFileInTPD(int iConfig) {
     bool val = false;

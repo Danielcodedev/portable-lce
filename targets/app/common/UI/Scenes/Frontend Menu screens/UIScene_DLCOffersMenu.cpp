@@ -38,14 +38,14 @@ UIScene_DLCOffersMenu::UIScene_DLCOffersMenu(int iPad, void* initData,
 
     m_labelOffers.init(app.GetString(IDS_DOWNLOADABLE_CONTENT_OFFERS));
     m_buttonListOffers.init(eControl_OffersList);
-    m_labelHTMLSellText.init(L" ");
-    m_labelPriceTag.init(L" ");
+    m_labelHTMLSellText.init(" ");
+    m_labelPriceTag.init(" ");
 
     m_bHasPurchased = false;
     m_bIsSelected = false;
 
     if (m_loadedResolution == eSceneResolution_1080) {
-        m_labelXboxStore.init(L"");
+        m_labelXboxStore.init("");
     }
 }
 
@@ -66,7 +66,7 @@ int UIScene_DLCOffersMenu::ExitDLCOffersMenu(
     return 0;
 }
 
-std::wstring UIScene_DLCOffersMenu::getMoviePath() { return L"DLCOffersMenu"; }
+std::string UIScene_DLCOffersMenu::getMoviePath() { return "DLCOffersMenu"; }
 
 void UIScene_DLCOffersMenu::updateTooltips() {
     int iA = -1;

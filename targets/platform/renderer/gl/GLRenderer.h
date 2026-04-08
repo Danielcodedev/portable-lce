@@ -139,7 +139,7 @@ public:
     void StateSetActiveTexture(int tex);
 
     // Event tracking
-    void BeginEvent(const wchar_t* eventName);
+    void BeginEvent(const char* eventName);
     void EndEvent();
 
     // PLM event handling

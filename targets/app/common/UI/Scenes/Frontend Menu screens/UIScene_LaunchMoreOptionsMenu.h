@@ -131,8 +131,8 @@ private:
                    "CheckboxResizeType")
     UI_END_MAP_CHILD_ELEMENTS()
 
-    UI_MAP_NAME(m_funcChangeTab, L"ChangeTab")
-    UI_MAP_NAME(m_funcSetMenuType, L"SetMenuType")
+    UI_MAP_NAME(m_funcChangeTab, "ChangeTab")
+    UI_MAP_NAME(m_funcSetMenuType, "SetMenuType")
     UI_END_MAP_ELEMENTS_AND_NAMES()
 
     LaunchMoreOptionsMenuInitData* m_params;
@@ -151,7 +151,7 @@ public:
 
 protected:
     // TODO: This should be pure virtual in this class
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
 
 public:
     virtual void tick();

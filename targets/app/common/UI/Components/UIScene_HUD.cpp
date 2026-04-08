@@ -32,17 +32,17 @@ UIScene_HUD::UIScene_HUD(int iPad, void* initData, UILayer* parentLayer)
     initialiseMovie();
 
     SetDragonLabel(app.GetString(IDS_BOSS_ENDERDRAGON_HEALTH));
-    SetSelectedLabel(L"");
+    SetSelectedLabel("");
 
     for (unsigned int i = 0; i < CHAT_LINES_COUNT; ++i) {
-        m_labelChatText[i].init(L"");
+        m_labelChatText[i].init("");
     }
-    m_labelJukebox.init(L"");
+    m_labelJukebox.init("");
 
     addTimer(0, 100);
 }
 
-std::wstring UIScene_HUD::getMoviePath() {
+std::string UIScene_HUD::getMoviePath() {
     switch (m_parentLayer->getViewport()) {
         case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_TOP:
         case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_BOTTOM:
@@ -53,12 +53,12 @@ std::wstring UIScene_HUD::getMoviePath() {
         case IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_BOTTOM_LEFT:
         case IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_BOTTOM_RIGHT:
             m_bSplitscreen = true;
-            return L"HUDSplit";
+            return "HUDSplit";
             break;
         case IPlatformRenderer::VIEWPORT_TYPE_FULLSCREEN:
         default:
             m_bSplitscreen = false;
-            return L"HUD";
+            return "HUD";
             break;
     }
 }
@@ -225,7 +225,7 @@ void UIScene_HUD::handleReload() {
     m_showDragonHealth = false;
     m_ticksWithNoBoss = 0;
     m_uiSelectedItemOpacityCountDown = 0;
-    m_displayName = L"";
+    m_displayName = "";
     m_lastShowDisplayName = true;
     m_bRidingHorse = true;
     m_horseHealth = 1;
@@ -239,12 +239,12 @@ void UIScene_HUD::handleReload() {
     m_labelDisplayName.setVisible(m_lastShowDisplayName);
 
     SetDragonLabel(BossMobGuiInfo::name);
-    SetSelectedLabel(L"");
+    SetSelectedLabel("");
 
     for (unsigned int i = 0; i < CHAT_LINES_COUNT; ++i) {
-        m_labelChatText[i].init(L"");
+        m_labelChatText[i].init("");
     }
-    m_labelJukebox.init(L"");
+    m_labelJukebox.init("");
 
     int iGuiScale;
     Minecraft* pMinecraft = Minecraft::GetInstance();
@@ -539,15 +539,14 @@ void UIScene_HUD::SetDragonHealth(float health) {
     }
 }
 
-void UIScene_HUD::SetDragonLabel(const std::wstring& label) {
+void UIScene_HUD::SetDragonLabel(const std::string& label) {
     IggyDataValue result;
     IggyDataValue value[1];
-    const std::u16string convLabel = wstring_to_u16string(label);
-    IggyStringUTF16 stringVal;
-    stringVal.string = convLabel.c_str();
-    stringVal.length = convLabel.length();
-    value[0].type = IGGY_DATATYPE_string_UTF16;
-    value[0].string16 = stringVal;
+    IggyStringUTF8 stringVal;
+    stringVal.string = const_cast<char*>(label.c_str());
+    stringVal.length = label.length();
+    value[0].type = IGGY_DATATYPE_string_UTF8;
+    value[0].string8 = stringVal;
     IggyResult out = IggyPlayerCallMethodRS(getMovie(), &result,
                                             IggyPlayerRootPath(getMovie()),
                                             m_funcSetDragonLabel, 1, value);
@@ -568,7 +567,7 @@ void UIScene_HUD::ShowDragonHealth(bool show) {
     }
 }
 
-void UIScene_HUD::SetSelectedLabel(const std::wstring& label) {
+void UIScene_HUD::SetSelectedLabel(const std::string& label) {
     // 4J Stu - Timing here is kept the same as on Xbox360, even though we do it
     // differently now and do the fade out in Flash rather than directly setting
     // opacity
@@ -578,12 +577,11 @@ void UIScene_HUD::SetSelectedLabel(const std::wstring& label) {
 
     IggyDataValue result;
     IggyDataValue value[1];
-    const std::u16string convLabel = wstring_to_u16string(label);
-    IggyStringUTF16 stringVal;
-    stringVal.string = convLabel.c_str();
-    stringVal.length = convLabel.length();
-    value[0].type = IGGY_DATATYPE_string_UTF16;
-    value[0].string16 = stringVal;
+    IggyStringUTF8 stringVal;
+    stringVal.string = const_cast<char*>(label.c_str());
+    stringVal.length = label.length();
+    value[0].type = IGGY_DATATYPE_string_UTF8;
+    value[0].string8 = stringVal;
     IggyResult out = IggyPlayerCallMethodRS(getMovie(), &result,
                                             IggyPlayerRootPath(getMovie()),
                                             m_funcSetSelectedLabel, 1, value);
@@ -748,13 +746,13 @@ void UIScene_HUD::handleTimerComplete(int id) {
                 m_labelChatText[i].setOpacity(opacity);
                 m_labelChatText[i].setLabel(pGui->getMessagesCount(m_iPad)
                                                 ? pGui->getMessage(m_iPad, i)
-                                                : L"");
+                                                : "");
 
                 anyVisible = true;
             } else {
                 m_controlLabelBackground[i].setOpacity(0);
                 m_labelChatText[i].setOpacity(0);
-                m_labelChatText[i].setLabel(L"");
+                m_labelChatText[i].setLabel("");
             }
         }
         if (pGui->getJukeboxOpacity(m_iPad) > 0) anyVisible = true;
@@ -764,7 +762,7 @@ void UIScene_HUD::handleTimerComplete(int id) {
         for (unsigned int i = 0; i < CHAT_LINES_COUNT; ++i) {
             m_controlLabelBackground[i].setOpacity(0);
             m_labelChatText[i].setOpacity(0);
-            m_labelChatText[i].setLabel(L"");
+            m_labelChatText[i].setLabel("");
         }
         m_labelJukebox.setOpacity(0);
     }
@@ -811,18 +809,17 @@ void UIScene_HUD::ShowDisplayName(bool show) {
     m_labelDisplayName.setVisible(show);
 }
 
-void UIScene_HUD::SetDisplayName(const std::wstring& displayName) {
+void UIScene_HUD::SetDisplayName(const std::string& displayName) {
     if (displayName.compare(m_displayName) != 0) {
         m_displayName = displayName;
 
         IggyDataValue result;
         IggyDataValue value[1];
-        IggyStringUTF16 stringVal;
-        const std::u16string convName = wstring_to_u16string(displayName);
-        stringVal.string = convName.c_str();
-        stringVal.length = convName.length();
-        value[0].type = IGGY_DATATYPE_string_UTF16;
-        value[0].string16 = stringVal;
+        IggyStringUTF8 stringVal;
+        stringVal.string = const_cast<char*>(displayName.c_str());
+        stringVal.length = displayName.length();
+        value[0].type = IGGY_DATATYPE_string_UTF8;
+        value[0].string8 = stringVal;
         IggyResult out = IggyPlayerCallMethodRS(getMovie(), &result,
                                                 IggyPlayerRootPath(getMovie()),
                                                 m_funcSetDisplayName, 1, value);

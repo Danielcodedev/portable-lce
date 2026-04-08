@@ -29,7 +29,7 @@ UIComponent_Panorama::UIComponent_Panorama(int iPad, void* initData,
     while (!m_hasTickedOnce) tick();
 }
 
-std::wstring UIComponent_Panorama::getMoviePath() {
+std::string UIComponent_Panorama::getMoviePath() {
     switch (m_parentLayer->getViewport()) {
         case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_TOP:
         case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_BOTTOM:
@@ -40,12 +40,12 @@ std::wstring UIComponent_Panorama::getMoviePath() {
         case IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_BOTTOM_LEFT:
         case IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_BOTTOM_RIGHT:
             m_bSplitscreen = true;
-            return L"PanoramaSplit";
+            return "PanoramaSplit";
             break;
         case IPlatformRenderer::VIEWPORT_TYPE_FULLSCREEN:
         default:
             m_bSplitscreen = false;
-            return L"Panorama";
+            return "Panorama";
             break;
     }
 }

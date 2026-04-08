@@ -29,9 +29,9 @@
 #include "minecraft/world/level/levelgen/structure/StructurePiece.h"
 #include "minecraft/world/level/levelgen/structure/StructureStart.h"
 
-const std::wstring StrongholdFeature::OPTION_DISTANCE = L"distance";
-const std::wstring StrongholdFeature::OPTION_COUNT = L"count";
-const std::wstring StrongholdFeature::OPTION_SPREAD = L"spread";
+const std::string StrongholdFeature::OPTION_DISTANCE = "distance";
+const std::string StrongholdFeature::OPTION_COUNT = "count";
+const std::string StrongholdFeature::OPTION_SPREAD = "spread";
 
 std::vector<Biome*> StrongholdFeature::allowedBiomes;
 
@@ -65,7 +65,7 @@ void StrongholdFeature::_init() {
 StrongholdFeature::StrongholdFeature() : StructureFeature() { _init(); }
 
 StrongholdFeature::StrongholdFeature(
-    std::unordered_map<std::wstring, std::wstring> options) {
+    std::unordered_map<std::string, std::string> options) {
     _init();
 
     for (auto it = options.begin(); it != options.end(); ++it) {
@@ -88,7 +88,7 @@ StrongholdFeature::~StrongholdFeature() {
     }
 }
 
-std::wstring StrongholdFeature::getFeatureName() {
+std::string StrongholdFeature::getFeatureName() {
     return LargeFeature::STRONGHOLD;
 }
 

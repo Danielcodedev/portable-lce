@@ -19,7 +19,7 @@ public:
                               const std::string& controlName);
 
     using UIControl_ButtonList::addItem;
-    void addItem(const std::wstring& label, int iPlayerIcon, int iVOIPIcon);
+    void addItem(const std::string& label, int iPlayerIcon, int iVOIPIcon);
     void setPlayerIcon(int iId, int iPlayerIcon);
     void setVOIPIcon(int iId, int iVOIPIcon);
 };

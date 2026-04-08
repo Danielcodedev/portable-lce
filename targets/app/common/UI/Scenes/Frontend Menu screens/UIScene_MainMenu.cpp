@@ -74,16 +74,16 @@ UIScene_MainMenu::UIScene_MainMenu(int iPad, void* initData,
 
     doHorizontalResizeCheck();
 
-    m_splash = L"";
+    m_splash = "";
 
-    std::wstring filename = L"splashes.txt";
+    std::string filename = "splashes.txt";
     if (app.hasArchiveFile(filename)) {
         std::vector<uint8_t> splashesArray = app.getArchiveFile(filename);
         ByteArrayInputStream bais(splashesArray);
         InputStreamReader isr(&bais);
         BufferedReader br(&isr);
 
-        std::wstring line = L"";
+        std::string line = "";
         while (!(line = br.readLine()).empty()) {
             line = trimString(line);
             if (line.length() > 0) {
@@ -196,7 +196,7 @@ void UIScene_MainMenu::handleGainFocus(bool navBack) {
     m_splash = m_splashes.at(splashIndex);
 }
 
-std::wstring UIScene_MainMenu::getMoviePath() { return L"MainMenu"; }
+std::string UIScene_MainMenu::getMoviePath() { return "MainMenu"; }
 
 void UIScene_MainMenu::handleReload() {}
 
@@ -532,8 +532,8 @@ int UIScene_MainMenu::CreateLoad_SignInReturned(void* pParam, bool bContinue,
             PlatformProfile.SetLockedProfile(PlatformProfile.GetPrimaryPad());
 
             // change the minecraft player name
-            Minecraft::GetInstance()->user->name = convStringToWstring(
-                PlatformProfile.GetGamertag(PlatformProfile.GetPrimaryPad()));
+            Minecraft::GetInstance()->user->name = 
+                PlatformProfile.GetGamertag(PlatformProfile.GetPrimaryPad());
 
             {
                 bool bSignedInLive = PlatformProfile.IsSignedInLive(iPad);
@@ -594,8 +594,8 @@ int UIScene_MainMenu::CreateLoad_SignInReturned(void* pParam, bool bContinue,
 #else
                         Minecraft* pMinecraft = Minecraft::GetInstance();
                         pMinecraft->user->name =
-                            convStringToWstring(PlatformProfile.GetGamertag(
-                                PlatformProfile.GetPrimaryPad()));
+                            PlatformProfile.GetGamertag(
+                                PlatformProfile.GetPrimaryPad());
 
                         // ensure we've applied this player's settings
                         app.ApplyGameSettingsChanged(iPad);
@@ -808,8 +808,8 @@ void UIScene_MainMenu::RunPlayGame(int iPad) {
                             &CScene_Main::DeviceSelectReturned, this) == true) {
                         // change the minecraft player name
                         pMinecraft->user->name =
-                            convStringToWstring(PlatformProfile.GetGamertag(
-                                PlatformProfile.GetPrimaryPad()));
+                            PlatformProfile.GetGamertag(
+                                PlatformProfile.GetPrimaryPad());
                         // save device already selected
 
                         // ensure we've applied this player's settings
@@ -839,8 +839,8 @@ void UIScene_MainMenu::RunPlayGame(int iPad) {
                     m_Timer.SetShow(true);
                 }
 #else
-                pMinecraft->user->name = convStringToWstring(
-                    PlatformProfile.GetGamertag(PlatformProfile.GetPrimaryPad()));
+                pMinecraft->user->name = 
+                    PlatformProfile.GetGamertag(PlatformProfile.GetPrimaryPad());
 
                 // ensure we've applied this player's settings
                 app.ApplyGameSettingsChanged(iPad);
@@ -1058,7 +1058,7 @@ void UIScene_MainMenu::LoadTrial(void) {
     // is complete
     app.SetGameHostOption(eGameHostOption_DisableSaving, 1);
 
-    PlatformStorage.SetSaveTitle(L"Tutorial");
+    PlatformStorage.SetSaveTitle("Tutorial");
 
     // Reset the autosave time
     app.SetAutosaveTimerTime();

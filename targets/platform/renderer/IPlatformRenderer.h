@@ -203,6 +203,6 @@ public:
                                XSOCIAL_PREVIEWIMAGE* previewOut) = 0;
 
     // Events
-    virtual void BeginEvent(const wchar_t* eventName) = 0;
+    virtual void BeginEvent(const char* eventName) = 0;
     virtual void EndEvent() = 0;
 };

@@ -20,6 +20,6 @@ public:
 
     using UIControl_ButtonList::addItem;
     void addItem(const std::string& label, bool showTick, int iId);
-    void addItem(const std::wstring& label, bool showTick, int iId);
+    // void addItem(const std::wstring& label, bool showTick, int iId);
     void showTick(int iId, bool showTick);
 };

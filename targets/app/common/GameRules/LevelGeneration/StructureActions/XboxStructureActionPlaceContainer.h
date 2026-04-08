@@ -31,8 +31,8 @@ public:
     // virtual void writeAttributes(DataOutputStream *dos, uint32_t
     // numAttributes);
 
-    virtual void addAttribute(const std::wstring& attributeName,
-                              const std::wstring& attributeValue);
+    virtual void addAttribute(const std::string& attributeName,
+                              const std::string& attributeValue);
 
     bool placeContainerInLevel(StructurePiece* structure, Level* level,
                                BoundingBox* chunkBB);

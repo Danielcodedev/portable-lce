@@ -821,8 +821,8 @@ bool ServerChunkCache::tick() {
 
 bool ServerChunkCache::shouldSave() { return !level->noSave; }
 
-std::wstring ServerChunkCache::gatherStats() {
-    return L"ServerChunkCache: ";  // + toWString<int>(loadedChunks.size()) + L"
+std::string ServerChunkCache::gatherStats() {
+    return "ServerChunkCache: ";  // + toWString<int>(loadedChunks.size()) + "
                                    // Drop: " + toWString<int>(toDrop.size());
 }
 
@@ -832,7 +832,7 @@ std::vector<Biome::MobSpawnerData*>* ServerChunkCache::getMobsAt(
 }
 
 TilePos* ServerChunkCache::findNearestMapFeature(
-    Level* level, const std::wstring& featureName, int x, int y, int z) {
+    Level* level, const std::string& featureName, int x, int y, int z) {
     return source->findNearestMapFeature(level, featureName, x, y, z);
 }
 

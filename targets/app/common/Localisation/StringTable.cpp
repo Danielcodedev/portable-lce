@@ -32,17 +32,17 @@ void StringTable::ProcessStringTableData(void) {
     int versionNumber = dis.readInt();
     int languagesCount = dis.readInt();
 
-    std::vector<std::pair<std::wstring, int> > langSizeMap;
+    std::vector<std::pair<std::string, int> > langSizeMap;
     for (int i = 0; i < languagesCount; ++i) {
-        std::wstring langId = dis.readUTF();
+        std::string langId = dis.readUTF();
         int langSize = dis.readInt();
 
         langSizeMap.push_back(
-            std::vector<std::pair<std::wstring, int> >::value_type(langId,
+            std::vector<std::pair<std::string, int> >::value_type(langId,
                                                                    langSize));
     }
 
-    std::vector<std::wstring> locales;
+    std::vector<std::string> locales;
     app.getLocale(locales);
 
     bool foundLang = false;
@@ -56,7 +56,7 @@ void StringTable::ProcessStringTableData(void) {
 
         for (auto it = langSizeMap.begin(); it != langSizeMap.end(); ++it) {
             if (it->first.compare(*it_locales) == 0) {
-                app.DebugPrintf("StringTable:: Found language '%ls'.\n",
+                app.DebugPrintf("StringTable:: Found language '%s'.\n",
                                 it_locales->c_str());
                 dataSize = it->second;
                 foundLang = true;
@@ -67,7 +67,7 @@ void StringTable::ProcessStringTableData(void) {
         }
 
         if (!foundLang)
-            app.DebugPrintf("StringTable:: Can't find language '%ls'.\n",
+            app.DebugPrintf("StringTable:: Can't find language '%s'.\n",
                             it_locales->c_str());
     }
 
@@ -89,7 +89,7 @@ void StringTable::ProcessStringTableData(void) {
         if (langVersion > 0)  // integers rather than std::wstrings as keys.
             isStatic = dis2.readBoolean();
 
-        std::wstring langId = dis2.readUTF();
+        std::string langId = dis2.readUTF();
         int totalStrings = dis2.readInt();
 
         app.DebugPrintf("IsStatic=%d totalStrings = %d\n", isStatic ? 1 : 0,
@@ -97,11 +97,11 @@ void StringTable::ProcessStringTableData(void) {
 
         if (!isStatic) {
             for (int i = 0; i < totalStrings; ++i) {
-                std::wstring stringId = dis2.readUTF();
-                std::wstring stringValue = dis2.readUTF();
+                std::string stringId = dis2.readUTF();
+                std::string stringValue = dis2.readUTF();
 
                 m_stringsMap.insert(
-                    std::unordered_map<std::wstring, std::wstring>::value_type(
+                    std::unordered_map<std::string, std::string>::value_type(
                         stringId, stringValue));
             }
         } else {
@@ -134,11 +134,11 @@ void StringTable::getData(std::uint8_t** ppData, unsigned int* pSize) {
     *pSize = src.size();
 }
 
-const wchar_t* StringTable::getString(const std::wstring& id) {
+const char* StringTable::getString(const std::string& id) {
 #ifndef _CONTENT_PACKAGE
     if (isStatic) {
         assert(0);
-        return L"";
+        return "";
     }
 #endif
 
@@ -147,21 +147,21 @@ const wchar_t* StringTable::getString(const std::wstring& id) {
     if (it != m_stringsMap.end()) {
         return it->second.c_str();
     } else {
-        return L"";
+        return "";
     }
 }
 
-const wchar_t* StringTable::getString(int id) {
+const char* StringTable::getString(int id) {
 #ifndef _CONTENT_PACKAGE
     if (!isStatic) {
         assert(0);
-        return L"";
+        return "";
     }
 #endif
 
     if (id < m_stringsVec.size()) {
-        const wchar_t* pwchString = m_stringsVec.at(id).c_str();
+        const char* pwchString = m_stringsVec.at(id).c_str();
         return pwchString;
     } else
-        return L"";
+        return "";
 }

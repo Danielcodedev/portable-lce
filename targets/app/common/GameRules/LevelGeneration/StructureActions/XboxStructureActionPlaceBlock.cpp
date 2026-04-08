@@ -30,29 +30,29 @@ void XboxStructureActionPlaceBlock::writeAttributes(DataOutputStream* dos,
 }
 
 void XboxStructureActionPlaceBlock::addAttribute(
-    const std::wstring& attributeName, const std::wstring& attributeValue) {
-    if (attributeName.compare(L"x") == 0) {
+    const std::string& attributeName, const std::string& attributeValue) {
+    if (attributeName.compare("x") == 0) {
         int value = fromWString<int>(attributeValue);
         m_x = value;
         app.DebugPrintf(
             "XboxStructureActionPlaceBlock: Adding parameter x=%d\n", m_x);
-    } else if (attributeName.compare(L"y") == 0) {
+    } else if (attributeName.compare("y") == 0) {
         int value = fromWString<int>(attributeValue);
         m_y = value;
         app.DebugPrintf(
             "XboxStructureActionPlaceBlock: Adding parameter y=%d\n", m_y);
-    } else if (attributeName.compare(L"z") == 0) {
+    } else if (attributeName.compare("z") == 0) {
         int value = fromWString<int>(attributeValue);
         m_z = value;
         app.DebugPrintf(
             "XboxStructureActionPlaceBlock: Adding parameter z=%d\n", m_z);
-    } else if (attributeName.compare(L"block") == 0) {
+    } else if (attributeName.compare("block") == 0) {
         int value = fromWString<int>(attributeValue);
         m_tile = value;
         app.DebugPrintf(
             "XboxStructureActionPlaceBlock: Adding parameter block=%d\n",
             m_tile);
-    } else if (attributeName.compare(L"data") == 0) {
+    } else if (attributeName.compare("data") == 0) {
         int value = fromWString<int>(attributeValue);
         m_data = value;
         app.DebugPrintf(

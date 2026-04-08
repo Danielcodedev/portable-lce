@@ -55,7 +55,7 @@ CraftTask::~CraftTask() {
 
 void CraftTask::onCrafted(std::shared_ptr<ItemInstance> item) {
 #ifndef _CONTENT_PACKAGE
-    wprintf(L"CraftTask::onCrafted - %ls\n", item->toString().c_str());
+    printf("CraftTask::onCrafted - %s\n", item->toString().c_str());
 #endif
     bool itemFound = false;
     for (int i = 0; i < m_numItems; ++i) {

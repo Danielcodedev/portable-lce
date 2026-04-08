@@ -578,7 +578,7 @@ void ItemInHandRenderer::render(float a) {
         glScalef(s, s, s);
 
         minecraft->textures->bindTexture(
-            &MAP_BACKGROUND_LOCATION);  // 4J was L"/misc/mapbg.png"
+            &MAP_BACKGROUND_LOCATION);  // 4J was "/misc/mapbg.png"
         Tesselator* t = Tesselator::getInstance();
 
         //        glNormal3f(0, 0, -1);	// 4J - changed to use tesselator
@@ -815,7 +815,7 @@ void ItemInHandRenderer::renderScreenEffect(float a) {
 
     if (minecraft->player->isUnderLiquid(Material::water)) {
         minecraft->textures->bindTexture(
-            &UNDERWATER_LOCATION);  // 4J was L"/misc/water.png"
+            &UNDERWATER_LOCATION);  // 4J was "/misc/water.png"
         renderWater(a);
     }
     glEnable(GL_ALPHA_TEST);

@@ -36,13 +36,13 @@ class Packet;
 Random* PendingConnection::random = new Random();
 
 PendingConnection::PendingConnection(MinecraftServer* server, Socket* socket,
-                                     const std::wstring& id) {
+                                     const std::string& id) {
     // 4J - added initialisers
     done = false;
     _tick = 0;
-    name = L"";
+    name = "";
     acceptedLogin = nullptr;
-    loginKey = L"";
+    loginKey = "";
 
     this->server = server;
     connection = new Connection(socket, id, this);
@@ -137,7 +137,7 @@ void PendingConnection::sendPreLoginResponse() {
 
     {
         connection->send(std::shared_ptr<PreLoginPacket>(
-            new PreLoginPacket(L"-", ugcXuids, ugcXuidCount, ugcFriendsOnlyBits,
+            new PreLoginPacket("-", ugcXuids, ugcXuidCount, ugcFriendsOnlyBits,
                                server->m_ugcPlayersVersion, szUniqueMapName,
                                gameServices().getGameHostOption(eGameHostOption_All),
                                hostIndex, server->m_texturePackId)));
@@ -234,8 +234,8 @@ void PendingConnection::send(std::shared_ptr<Packet> packet) {
     connection->send(packet);
 }
 
-std::wstring PendingConnection::getName() {
-    return L"Unimplemented";
+std::string PendingConnection::getName() {
+    return "Unimplemented";
     //        if (name != null) return name + " [" +
     //        connection.getRemoteAddress().toString() + "]"; return
     //        connection.getRemoteAddress().toString();

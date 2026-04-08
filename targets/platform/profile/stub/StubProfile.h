@@ -33,7 +33,7 @@ public:
     bool GetChatAndContentRestrictions(int iPad, bool* pbChatRestricted,
                                        bool* pbContentRestricted, int* piAge);
     char* GetGamertag(int iPad);
-    std::wstring GetDisplayName(int iPad);
+    std::string GetDisplayName(int iPad);
     int SetDefaultOptionsCallback(
         std::function<int(PROFILESETTINGS*, int)> callback);
     PROFILESETTINGS* GetDashboardProfileSettings(int iPad);

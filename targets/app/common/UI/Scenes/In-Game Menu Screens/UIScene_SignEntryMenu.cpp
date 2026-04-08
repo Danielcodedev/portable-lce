@@ -71,11 +71,11 @@ UIScene_SignEntryMenu::~UIScene_SignEntryMenu() {
     m_parentLayer->removeComponent(eUIComponent_MenuBackground);
 }
 
-std::wstring UIScene_SignEntryMenu::getMoviePath() {
+std::string UIScene_SignEntryMenu::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1) {
-        return L"SignEntryMenuSplit";
+        return "SignEntryMenuSplit";
     } else {
-        return L"SignEntryMenu";
+        return "SignEntryMenu";
     }
 }
 
@@ -92,7 +92,7 @@ void UIScene_SignEntryMenu::tick() {
         // Set the sign text here so we on;y call the verify once it has been
         // set, not while we're typing in to it
         for (int i = 0; i < 4; i++) {
-            std::wstring temp = m_textInputLines[i].getLabel();
+            std::string temp = m_textInputLines[i].getLabel();
             m_sign->SetMessage(i, temp);
         }
 
@@ -126,7 +126,7 @@ void UIScene_SignEntryMenu::handleInput(int iPad, int key, bool repeat,
         case ACTION_MENU_CANCEL:
             if (pressed) {
                 // user backed out, so wipe the sign
-                std::wstring temp = L"";
+                std::string temp = "";
 
                 for (int i = 0; i < 4; i++) {
                     m_sign->SetMessage(i, temp);
@@ -164,8 +164,8 @@ void UIScene_SignEntryMenu::handlePress(F64 controlId, F64 childId) {
                     // 4J HEG - No reason to set value if keyboard was cancelled
                     m_bIgnoreInput = false;
                     if (bRes && m_iEditingLine >= 0 && m_iEditingLine < 4) {
-                        std::wstring str =
-                            convStringToWstring(PlatformInput.GetText());
+                        std::string str =
+                            PlatformInput.GetText();
                         if (str.size() > 15) str.resize(15);
                         m_textInputLines[m_iEditingLine].setLabel(str);
                     }

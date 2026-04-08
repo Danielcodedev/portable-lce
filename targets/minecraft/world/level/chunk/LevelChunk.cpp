@@ -1350,7 +1350,7 @@ void LevelChunk::load() {
         if (m_bUnloaded && m_unloadedEntitiesTag) {
             ListTag<CompoundTag>* entityTags =
                 (ListTag<CompoundTag>*)m_unloadedEntitiesTag->getList(
-                    L"Entities");
+                    "Entities");
             if (entityTags != nullptr) {
                 for (int i = 0; i < entityTags->size(); i++) {
                     CompoundTag* teTag = entityTags->get(i);
@@ -1365,7 +1365,7 @@ void LevelChunk::load() {
 
             ListTag<CompoundTag>* tileEntityTags =
                 (ListTag<CompoundTag>*)m_unloadedEntitiesTag->getList(
-                    L"TileEntities");
+                    "TileEntities");
             if (tileEntityTags != nullptr) {
                 for (int i = 0; i < tileEntityTags->size(); i++) {
                     CompoundTag* teTag = tileEntityTags->get(i);
@@ -1464,7 +1464,7 @@ void LevelChunk::unload(bool unloadTileEntities)  // 4J - added parameter
                 }
             }
 
-            m_unloadedEntitiesTag->put(L"Entities", entityTags);
+            m_unloadedEntitiesTag->put("Entities", entityTags);
 
             ListTag<CompoundTag>* tileEntityTags = new ListTag<CompoundTag>();
 
@@ -1481,7 +1481,7 @@ void LevelChunk::unload(bool unloadTileEntities)  // 4J - added parameter
             // Clear out the tileEntities list
             tileEntities.clear();
 
-            m_unloadedEntitiesTag->put(L"TileEntities", tileEntityTags);
+            m_unloadedEntitiesTag->put("TileEntities", tileEntityTags);
         }
     }
 #endif

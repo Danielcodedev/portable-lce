@@ -73,8 +73,8 @@ private:
     IggyName m_funcSetAlpha;
 
     ItemRenderer* m_pItemRenderer;
-    std::unordered_map<std::wstring, IggyName> m_fastNames;
-    std::unordered_map<std::wstring, bool> m_registeredTextures;
+    std::unordered_map<std::string, IggyName> m_fastNames;
+    std::unordered_map<std::string, bool> m_registeredTextures;
 
     typedef struct _TimerInfo {
         int duration;
@@ -134,14 +134,14 @@ protected:
     virtual F64 getSafeZoneHalfWidth();
     void setSafeZone(S32 top, S32 bottom, S32 left, S32 right);
     void doHorizontalResizeCheck();
-    virtual std::wstring getMoviePath() = 0;
+    virtual std::string getMoviePath() = 0;
 
     virtual bool mapElementsAndNames();
     void initialiseMovie();
     void loadMovie();
 
 private:
-    void getDebugMemoryUseRecursive(const std::wstring& moviePath,
+    void getDebugMemoryUseRecursive(const std::string& moviePath,
                                     IggyMemoryUseInfo& memoryInfo);
 
 public:
@@ -156,7 +156,7 @@ public:
 
     virtual void tick();
 
-    IggyName registerFastName(const std::wstring& name);
+    IggyName registerFastName(const std::string& name);
 
 protected:
     void addTimer(int id, int ms);
@@ -282,11 +282,11 @@ public:
 
     virtual void HandleMessage(EUIMessage message, void* data);
 
-    void registerSubstitutionTexture(const std::wstring& textureName,
+    void registerSubstitutionTexture(const std::string& textureName,
                                      std::uint8_t* pbData,
                                      unsigned int dwLength,
                                      bool deleteData = false);
-    bool hasRegisteredSubstitutionTexture(const std::wstring& textureName);
+    bool hasRegisteredSubstitutionTexture(const std::string& textureName);
 
     virtual void handleUnlockFullVersion() {}
 

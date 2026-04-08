@@ -54,9 +54,9 @@ ResourceLocation* ItemRenderer::getTextureLocation(
 
 ResourceLocation* ItemRenderer::getTextureLocation(int iconType) {
     if (iconType == Icon::TYPE_TERRAIN) {
-        return &TextureAtlas::LOCATION_BLOCKS;  // L"/terrain.png"));
+        return &TextureAtlas::LOCATION_BLOCKS;  // "/terrain.png"));
     } else {
-        return &TextureAtlas::LOCATION_ITEMS;  // L"/gui/items.png"));
+        return &TextureAtlas::LOCATION_ITEMS;  // "/gui/items.png"));
     }
 }
 
@@ -412,10 +412,10 @@ void ItemRenderer::renderGuiItem(Font* font, Textures* textures,
         glDisable(GL_LIGHTING);
         if (item->getIconType() == Icon::TYPE_TERRAIN) {
             textures->bindTexture(
-                &TextureAtlas::LOCATION_BLOCKS);  // L"/terrain.png"));
+                &TextureAtlas::LOCATION_BLOCKS);  // "/terrain.png"));
         } else {
             textures->bindTexture(
-                &TextureAtlas::LOCATION_ITEMS);  // L"/gui/items.png"));
+                &TextureAtlas::LOCATION_ITEMS);  // "/gui/items.png"));
         }
 
         if (itemIcon == nullptr) {
@@ -579,13 +579,13 @@ void ItemRenderer::blitGlint(int id, float x, float y, float w, float h) {
 void ItemRenderer::renderGuiItemDecorations(Font* font, Textures* textures,
                                             std::shared_ptr<ItemInstance> item,
                                             int x, int y, float fAlpha) {
-    renderGuiItemDecorations(font, textures, item, x, y, L"", fAlpha);
+    renderGuiItemDecorations(font, textures, item, x, y, "", fAlpha);
 }
 
 void ItemRenderer::renderGuiItemDecorations(Font* font, Textures* textures,
                                             std::shared_ptr<ItemInstance> item,
                                             int x, int y,
-                                            const std::wstring& countText,
+                                            const std::string& countText,
                                             float fAlpha) {
     if (item == nullptr) {
         return;
@@ -593,11 +593,11 @@ void ItemRenderer::renderGuiItemDecorations(Font* font, Textures* textures,
 
     if (item->count > 1 || !countText.empty() ||
         item->GetForceNumberDisplay()) {
-        std::wstring amount = countText;
+        std::string amount = countText;
         if (amount.empty()) {
             int count = item->count;
             if (count > 64) {
-                amount = toWString<int>(64) + L"+";
+                amount = toWString<int>(64) + "+";
             } else {
                 amount = toWString<int>(item->count);
             }

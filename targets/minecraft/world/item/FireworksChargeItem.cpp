@@ -56,7 +56,7 @@ int FireworksChargeItem::getColor(std::shared_ptr<ItemInstance> item,
 bool FireworksChargeItem::hasMultipleSpriteLayers() { return true; }
 
 Tag* FireworksChargeItem::getExplosionTagField(
-    std::shared_ptr<ItemInstance> instance, const std::wstring& field) {
+    std::shared_ptr<ItemInstance> instance, const std::string& field) {
     if (instance->hasTag()) {
         CompoundTag* explosion =
             instance->getTag()->getCompound(FireworksItem::TAG_EXPLOSION);
@@ -110,12 +110,12 @@ void FireworksChargeItem::appendHoverText(CompoundTag* expTag,
         expTag->getIntArray(FireworksItem::TAG_E_COLORS);
     if (colorList.size() > 0) {
         bool first = true;
-        std::wstring output = L"";
+        std::string output = "";
         for (unsigned int i = 0; i < colorList.size(); ++i) {
             int c = colorList[i];
             if (!first) {
                 output +=
-                    L",\n";  // 4J-PB  - without the newline, they tend to go
+                    ",\n";  // 4J-PB  - without the newline, they tend to go
                              // offscreen in split-screen or localised languages
             }
             first = false;
@@ -141,13 +141,13 @@ void FireworksChargeItem::appendHoverText(CompoundTag* expTag,
         expTag->getIntArray(FireworksItem::TAG_E_FADECOLORS);
     if (fadeList.size() > 0) {
         bool first = true;
-        std::wstring output =
-            std::wstring(gameServices().getString(IDS_FIREWORKS_CHARGE_FADE_TO)) + L" ";
+        std::string output =
+            std::string(gameServices().getString(IDS_FIREWORKS_CHARGE_FADE_TO)) + " ";
         for (unsigned int i = 0; i < fadeList.size(); ++i) {
             int c = fadeList[i];
             if (!first) {
                 output +=
-                    L",\n";  // 4J-PB  - without the newline, they tend to go
+                    ",\n";  // 4J-PB  - without the newline, they tend to go
                              // offscreen in split-screen or localised languages
             }
             first = false;
@@ -184,5 +184,5 @@ void FireworksChargeItem::appendHoverText(CompoundTag* expTag,
 
 void FireworksChargeItem::registerIcons(IconRegister* iconRegister) {
     Item::registerIcons(iconRegister);
-    overlay = iconRegister->registerIcon(getIconName() + L"_overlay");
+    overlay = iconRegister->registerIcon(getIconName() + "_overlay");
 }

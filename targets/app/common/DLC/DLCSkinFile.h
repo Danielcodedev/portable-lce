@@ -11,21 +11,21 @@
 
 class DLCSkinFile : public DLCFile {
 private:
-    std::wstring m_displayName;
-    std::wstring m_themeName;
-    std::wstring m_cape;
+    std::string m_displayName;
+    std::string m_themeName;
+    std::string m_cape;
     unsigned int m_uiAnimOverrideBitmask;
     bool m_bIsFree;
     std::vector<SKIN_BOX*> m_AdditionalBoxes;
 
 public:
-    DLCSkinFile(const std::wstring& path);
+    DLCSkinFile(const std::string& path);
 
     virtual void addData(std::uint8_t* pbData, std::uint32_t dataBytes);
     virtual void addParameter(DLCManager::EDLCParameterType type,
-                              const std::wstring& value);
+                              const std::string& value);
 
-    virtual std::wstring getParameterAsString(
+    virtual std::string getParameterAsString(
         DLCManager::EDLCParameterType type);
     virtual bool getParameterAsBool(DLCManager::EDLCParameterType type);
     std::vector<SKIN_BOX*>* getAdditionalBoxes();

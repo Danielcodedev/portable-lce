@@ -40,7 +40,7 @@ private:
     Connection* m_connection;
 
 public:
-    typedef std::unordered_map<std::wstring, ValueType> stringValueMapType;
+    typedef std::unordered_map<std::string, ValueType> stringValueMapType;
     stringValueMapType m_parameters;  // These are the members of this rule that
                                       // maintain it's state
 
@@ -50,8 +50,8 @@ public:
 
     Connection* getConnection() { return m_connection; }
 
-    ValueType getParameter(const std::wstring& parameterName);
-    void setParameter(const std::wstring& parameterName, ValueType value);
+    ValueType getParameter(const std::string& parameterName);
+    void setParameter(const std::string& parameterName, ValueType value);
     GameRuleDefinition* getGameRuleDefinition();
 
     // All the hooks go here

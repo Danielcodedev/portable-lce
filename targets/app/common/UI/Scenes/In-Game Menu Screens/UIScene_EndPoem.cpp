@@ -36,8 +36,8 @@ UIScene_EndPoem::UIScene_EndPoem(int iPad, void* initData, UILayer* parentLayer)
     // 4J Stu - Don't need these, the AS handles the scrolling and makes it look
     // nice
 
-    // wchar_t startTags[64];
-    // swprintf(startTags,64,L"<font
+    // char startTags[64];
+    // snprintf(startTags,64,"<font
     // size=\"%d\">",app.GetHTMLFontSize(eHTMLSize_EndPoem));
     // noNoiseString.append(halfScreenLineBreaks);
     // noNoiseString.append(halfScreenLineBreaks);
@@ -49,13 +49,13 @@ UIScene_EndPoem::UIScene_EndPoem(int iPad, void* initData, UILayer* parentLayer)
 
     // 4J Stu - Iggy seems to strip our trailing linebreaks, so added a space to
     // made sure it scrolls this far
-    noNoiseString.append(L" ");
+    noNoiseString.append(" ");
 
     noNoiseString = app.FormatHTMLString(m_iPad, noNoiseString, 0xff000000);
 
     Minecraft* pMinecraft = Minecraft::GetInstance();
 
-    std::wstring playerName = L"";
+    std::string playerName = "";
     if (pMinecraft->localplayers[ui.GetWinUserIndex()] != nullptr) {
         playerName = escapeXML(
             pMinecraft->localplayers[ui.GetWinUserIndex()]->getDisplayName());
@@ -64,24 +64,24 @@ UIScene_EndPoem::UIScene_EndPoem(int iPad, void* initData, UILayer* parentLayer)
             escapeXML(pMinecraft->localplayers[PlatformProfile.GetPrimaryPad()]
                           ->getDisplayName());
     }
-    noNoiseString = replaceAll(noNoiseString, L"{*PLAYER*}", playerName);
+    noNoiseString = replaceAll(noNoiseString, "{*PLAYER*}", playerName);
 
     Random random(8124371);
-    int found = (int)noNoiseString.find(L"{*NOISE*}");
+    int found = (int)noNoiseString.find("{*NOISE*}");
     int length;
     while (found != std::string::npos) {
         length = random.nextInt(4) + 3;
         m_noiseLengths.push_back(length);
-        found = (int)noNoiseString.find(L"{*NOISE*}", found + 1);
+        found = (int)noNoiseString.find("{*NOISE*}", found + 1);
     }
 
     updateNoise();
 
     // 4J-JEV: Find paragraph start and end points.
-    m_paragraphs = std::vector<std::wstring>();
+    m_paragraphs = std::vector<std::string>();
     int lastIndex = 0;
-    for (int index = 0; index != std::wstring::npos;
-         index = noiseString.find(L"<br /><br />", index + 12, 12)) {
+    for (int index = 0; index != std::string::npos;
+         index = noiseString.find("<br /><br />", index + 12, 12)) {
         m_paragraphs.push_back(
             noiseString.substr(lastIndex, index - lastIndex));
         lastIndex = index;
@@ -93,9 +93,9 @@ UIScene_EndPoem::UIScene_EndPoem(int iPad, void* initData, UILayer* parentLayer)
     // m_htmlPoem.init(noiseString.c_str());
     // m_htmlPoem.startAutoScroll();
 
-    // std::wstring result = m_htmlControl.GetText();
+    // std::string result = m_htmlControl.GetText();
 
-    // wcout << result.c_str();
+    // cout << result.c_str();
 
 #if TO_BE_IMPLEMENTED
     m_scrollDir = 1;
@@ -110,7 +110,7 @@ UIScene_EndPoem::UIScene_EndPoem(int iPad, void* initData, UILayer* parentLayer)
     m_requestedLabel = 0;
 }
 
-std::wstring UIScene_EndPoem::getMoviePath() { return L"EndPoem"; }
+std::string UIScene_EndPoem::getMoviePath() { return "EndPoem"; }
 
 void UIScene_EndPoem::updateTooltips() {
     ui.SetTooltips(XUSER_INDEX_ANY, -1,
@@ -121,18 +121,16 @@ void UIScene_EndPoem::tick() {
     UIScene::tick();
 
     if (m_requestedLabel >= 0 && m_requestedLabel < m_paragraphs.size()) {
-        std::wstring label = m_paragraphs[m_requestedLabel];
+        std::string label = m_paragraphs[m_requestedLabel];
 
         IggyDataValue result;
         IggyDataValue value[3];
 
-        const std::u16string convLabel = wstring_to_u16string(label);
-
-        IggyStringUTF16 stringVal;
-        stringVal.string = convLabel.c_str();
-        stringVal.length = convLabel.length();
-        value[0].type = IGGY_DATATYPE_string_UTF16;
-        value[0].string16 = stringVal;
+        IggyStringUTF8 stringVal;
+        stringVal.string = const_cast<char*>(label.c_str());
+        stringVal.length = label.length();
+        value[0].type = IGGY_DATATYPE_string_UTF8;
+        value[0].string8 = stringVal;
 
         value[1].type = IGGY_DATATYPE_number;
         value[1].number = m_requestedLabel;
@@ -201,14 +199,14 @@ void UIScene_EndPoem::updateNoise() {
     noiseString = noNoiseString;
 
     int length = 0;
-    wchar_t replacements[64];
-    std::wstring replaceString = L"";
-    wchar_t randomChar = L'a';
+    char replacements[64];
+    std::string replaceString = "";
+    char randomChar = 'a';
     Random* random = pMinecraft->font->random;
 
     bool darken = false;
 
-    std::wstring tag = L"{*NOISE*}";
+    std::string tag = "{*NOISE*}";
 
     auto it = m_noiseLengths.begin();
     int found = (int)noiseString.find(tag);
@@ -216,7 +214,7 @@ void UIScene_EndPoem::updateNoise() {
         length = *it;
         ++it;
 
-        replaceString = L"";
+        replaceString = "";
         for (int i = 0; i < length; ++i) {
             if (ui.UsingBitmapFont()) {
                 randomChar = SharedConstants::acceptableLetters[random->nextInt(
@@ -224,26 +222,26 @@ void UIScene_EndPoem::updateNoise() {
             } else {
                 // 4J-JEV: It'd be nice to avoid null characters when using
                 // asian languages.
-                static std::wstring acceptableLetters =
-                    L"!\"#$%&'()*+,-./0123456789:;<=>?@[\\]^_'|}~";
+                static std::string acceptableLetters =
+                    "!\"#$%&'()*+,-./0123456789:;<=>?@[\\]^_'|}~";
                 randomChar = acceptableLetters[random->nextInt(
                     (int)acceptableLetters.length())];
             }
 
-            std::wstring randomCharStr = L"";
+            std::string randomCharStr = "";
             randomCharStr.push_back(randomChar);
-            if (randomChar == L'<') {
-                randomCharStr = L"&lt;";
-            } else if (randomChar == L'>') {
-                randomCharStr = L"&gt;";
-            } else if (randomChar == L'"') {
-                randomCharStr = L"&quot;";
-            } else if (randomChar == L'&') {
-                randomCharStr = L"&amp;";
-            } else if (randomChar == L'\\') {
-                randomCharStr = L"\\\\";
-            } else if (randomChar == L'{') {
-                randomCharStr = L"}";
+            if (randomChar == '<') {
+                randomCharStr = "&lt;";
+            } else if (randomChar == '>') {
+                randomCharStr = "&gt;";
+            } else if (randomChar == '"') {
+                randomCharStr = "&quot;";
+            } else if (randomChar == '&') {
+                randomCharStr = "&amp;";
+            } else if (randomChar == '\\') {
+                randomCharStr = "\\\\";
+            } else if (randomChar == '{') {
+                randomCharStr = "}";
             }
 
             int randomVal = random->nextInt(2);
@@ -252,10 +250,10 @@ void UIScene_EndPoem::updateNoise() {
                 colour = eHTMLColor_9;
             else if (randomVal == 2)
                 colour = eHTMLColor_a;
-            memset(replacements, 0, 64 * sizeof(wchar_t));
-            swprintf(
+            memset(replacements, 0, 64 * sizeof(char));
+            snprintf(
                 replacements, 64,
-                L"<font color=\"#%08x\" shadowcolor=\"#80000000\">%ls</font>",
+                "<font color=\"#%08x\" shadowcolor=\"#80000000\">%s</font>",
                 app.GetHTMLColour(colour), randomCharStr.c_str());
             replaceString.append(replacements);
         }

@@ -27,8 +27,8 @@ public:
     }
 
     virtual void writeAttributes(DataOutputStream*, unsigned int numAttributes);
-    virtual void addAttribute(const std::wstring& attributeName,
-                              const std::wstring& attributeValue);
+    virtual void addAttribute(const std::string& attributeName,
+                              const std::string& attributeValue);
 
     virtual int getGoal();
     virtual int getProgress(GameRule* rule);
@@ -41,8 +41,8 @@ public:
 
     bool onCollectItem(GameRule* rule, std::shared_ptr<ItemInstance> item);
 
-    static std::wstring generateXml(std::shared_ptr<ItemInstance> item);
+    static std::string generateXml(std::shared_ptr<ItemInstance> item);
 
 private:
-    // static std::wstring generateXml(CollectItemRuleDefinition *ruleDef);
+    // static std::string generateXml(CollectItemRuleDefinition *ruleDef);
 };

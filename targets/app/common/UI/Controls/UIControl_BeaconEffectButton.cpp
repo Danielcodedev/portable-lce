@@ -19,8 +19,8 @@ bool UIControl_BeaconEffectButton::setupControl(
     UIScene* scene, IggyValuePath* parent, const std::string& controlName) {
     bool success = UIControl::setupControl(scene, parent, controlName);
 
-    m_funcChangeState = registerFastName(L"ChangeState");
-    m_funcSetIcon = registerFastName(L"SetIcon");
+    m_funcChangeState = registerFastName("ChangeState");
+    m_funcSetIcon = registerFastName("SetIcon");
 
     return success;
 }

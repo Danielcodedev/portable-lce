@@ -10,11 +10,11 @@
 #include "minecraft/client/model/SkinBox.h"
 #include "platform/XboxStubs.h"
 
-DLCSkinFile::DLCSkinFile(const std::wstring& path)
+DLCSkinFile::DLCSkinFile(const std::string& path)
     : DLCFile(DLCManager::e_DLCType_Skin, path) {
-    m_displayName = L"";
-    m_themeName = L"";
-    m_cape = L"";
+    m_displayName = "";
+    m_themeName = "";
+    m_cape = "";
     m_bIsFree = false;
     m_uiAnimOverrideBitmask = 0L;
 }
@@ -24,13 +24,13 @@ void DLCSkinFile::addData(std::uint8_t* pbData, std::uint32_t dataBytes) {
 }
 
 void DLCSkinFile::addParameter(DLCManager::EDLCParameterType type,
-                               const std::wstring& value) {
+                               const std::string& value) {
     switch (type) {
         case DLCManager::e_DLCParamType_DisplayName: {
             // 4J Stu - In skin pack 2, the name for Zap is mis-spelt with two
             // p's as Zapp dlcskin00000109.png
-            if (m_path.compare(L"dlcskin00000109.png") == 0) {
-                m_displayName = L"Zap";
+            if (m_path.compare("dlcskin00000109.png") == 0) {
+                m_displayName = "Zap";
             } else {
                 m_displayName = value;
             }
@@ -52,7 +52,7 @@ void DLCSkinFile::addParameter(DLCManager::EDLCParameterType type,
             {
                 if (app.AlreadySeenCreditText(value)) break;
                 // first add a blank string for spacing
-                app.AddCreditText(L"");
+                app.AddCreditText("");
 
                 int maximumChars = 55;
 
@@ -72,14 +72,14 @@ void DLCSkinFile::addParameter(DLCManager::EDLCParameterType type,
                     default:
                         break;
                 }
-                std::wstring creditValue = value;
+                std::string creditValue = value;
                 while (creditValue.length() > maximumChars) {
                     unsigned int i = 1;
                     while (i < creditValue.length() &&
                            (i + 1) <= maximumChars) {
                         i++;
                     }
-                    int iLast = (int)creditValue.find_last_of(L" ", i);
+                    int iLast = (int)creditValue.find_last_of(" ", i);
                     switch (XGetLanguage()) {
                         case XC_LANGUAGE_JAPANESE:
                         case XC_LANGUAGE_TCHINESE:
@@ -87,7 +87,7 @@ void DLCSkinFile::addParameter(DLCManager::EDLCParameterType type,
                             iLast = maximumChars;
                             break;
                         default:
-                            iLast = (int)creditValue.find_last_of(L" ", i);
+                            iLast = (int)creditValue.find_last_of(" ", i);
                             break;
                     }
 
@@ -106,25 +106,25 @@ void DLCSkinFile::addParameter(DLCManager::EDLCParameterType type,
             m_cape = value;
             break;
         case DLCManager::e_DLCParamType_Box: {
-            wchar_t wchBodyPart[10];
+            char wchBodyPart[10];
             SKIN_BOX* pSkinBox = new SKIN_BOX;
             memset(pSkinBox, 0, sizeof(SKIN_BOX));
 
-            swscanf(value.c_str(), L"%9ls%f%f%f%f%f%f%f%f", wchBodyPart, 10,
+            sscanf(value.c_str(), "%9ls%f%f%f%f%f%f%f%f", wchBodyPart, 10,
                     &pSkinBox->fX, &pSkinBox->fY, &pSkinBox->fZ, &pSkinBox->fW,
                     &pSkinBox->fH, &pSkinBox->fD, &pSkinBox->fU, &pSkinBox->fV);
 
-            if (wcscmp(wchBodyPart, L"HEAD") == 0) {
+            if (strcmp(wchBodyPart, "HEAD") == 0) {
                 pSkinBox->ePart = eBodyPart_Head;
-            } else if (wcscmp(wchBodyPart, L"BODY") == 0) {
+            } else if (strcmp(wchBodyPart, "BODY") == 0) {
                 pSkinBox->ePart = eBodyPart_Body;
-            } else if (wcscmp(wchBodyPart, L"ARM0") == 0) {
+            } else if (strcmp(wchBodyPart, "ARM0") == 0) {
                 pSkinBox->ePart = eBodyPart_Arm0;
-            } else if (wcscmp(wchBodyPart, L"ARM1") == 0) {
+            } else if (strcmp(wchBodyPart, "ARM1") == 0) {
                 pSkinBox->ePart = eBodyPart_Arm1;
-            } else if (wcscmp(wchBodyPart, L"LEG0") == 0) {
+            } else if (strcmp(wchBodyPart, "LEG0") == 0) {
                 pSkinBox->ePart = eBodyPart_Leg0;
-            } else if (wcscmp(wchBodyPart, L"LEG1") == 0) {
+            } else if (strcmp(wchBodyPart, "LEG1") == 0) {
                 pSkinBox->ePart = eBodyPart_Leg1;
             }
 
@@ -132,7 +132,7 @@ void DLCSkinFile::addParameter(DLCManager::EDLCParameterType type,
             m_AdditionalBoxes.push_back(pSkinBox);
         } break;
         case DLCManager::e_DLCParamType_Anim: {
-            swscanf(value.c_str(), L"%X", &m_uiAnimOverrideBitmask,
+            sscanf(value.c_str(), "%X", &m_uiAnimOverrideBitmask,
                     sizeof(unsigned int));
             uint32_t skinId = app.getSkinIdFromPath(m_path);
             app.SetAnimOverrideBitmask(skinId, m_uiAnimOverrideBitmask);
@@ -155,7 +155,7 @@ std::vector<SKIN_BOX*>* DLCSkinFile::getAdditionalBoxes() {
     return &m_AdditionalBoxes;
 }
 
-std::wstring DLCSkinFile::getParameterAsString(
+std::string DLCSkinFile::getParameterAsString(
     DLCManager::EDLCParameterType type) {
     switch (type) {
         case DLCManager::e_DLCParamType_DisplayName:
@@ -165,7 +165,7 @@ std::wstring DLCSkinFile::getParameterAsString(
         case DLCManager::e_DLCParamType_Cape:
             return m_cape;
         default:
-            return L"";
+            return "";
     }
 }
 

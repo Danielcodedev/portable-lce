@@ -110,5 +110,5 @@ int TheEndPortal::cloneTileId(Level* level, int x, int y, int z) { return 0; }
 
 void TheEndPortal::registerIcons(IconRegister* iconRegister) {
     // don't register null, because of particles
-    icon = iconRegister->registerIcon(L"portal");
+    icon = iconRegister->registerIcon("portal");
 }

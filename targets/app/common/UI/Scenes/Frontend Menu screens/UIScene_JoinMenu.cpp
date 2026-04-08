@@ -4,10 +4,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "platform/PlatformTypes.h"
-#include "platform/profile/profile.h"
 #include "app/common/App_Defines.h"
-#include "minecraft/GameEnums.h"
 #include "app/common/Network/GameNetworkManager.h"
 #include "app/common/Network/SessionInfo.h"
 #include "app/common/UI/All Platforms/UIStructs.h"
@@ -18,9 +15,12 @@
 #include "app/common/UI/UIScene.h"
 #include "app/linux/LinuxGame.h"
 #include "app/linux/Linux_UIController.h"
+#include "minecraft/GameEnums.h"
 #include "minecraft/sounds/SoundTypes.h"
 #include "minecraft/world/Difficulty.h"
 #include "minecraft/world/level/LevelSettings.h"
+#include "platform/PlatformTypes.h"
+#include "platform/profile/profile.h"
 #include "strings.h"
 
 #define UPDATE_PLAYERS_TIMER_ID 0
@@ -54,9 +54,8 @@ void UIScene_JoinMenu::tick() {
     if (!m_friendInfoRequestIssued) {
         ui.NavigateToScene(m_iPad, eUIScene_Timer);
         g_NetworkManager.GetFullFriendSessionInfo(
-            m_selectedSession, [this](bool success) {
-                friendSessionUpdated(success, this);
-            });
+            m_selectedSession,
+            [this](bool success) { friendSessionUpdated(success, this); });
         m_friendInfoRequestIssued = true;
     }
 
@@ -221,8 +220,8 @@ void UIScene_JoinMenu::friendSessionUpdated(bool success, void* pParam) {
     }
 }
 
-int UIScene_JoinMenu::ErrorDialogReturned(void* pParam, int iPad,
-                                          const IPlatformStorage::EMessageResult) {
+int UIScene_JoinMenu::ErrorDialogReturned(
+    void* pParam, int iPad, const IPlatformStorage::EMessageResult) {
     UIScene_JoinMenu* scene = (UIScene_JoinMenu*)pParam;
     ui.NavigateBack(scene->m_iPad);
 
@@ -234,7 +233,7 @@ void UIScene_JoinMenu::updateComponents() {
     m_parentLayer->showComponent(m_iPad, eUIComponent_Logo, true);
 }
 
-std::wstring UIScene_JoinMenu::getMoviePath() { return L"JoinMenu"; }
+std::string UIScene_JoinMenu::getMoviePath() { return "JoinMenu"; }
 
 void UIScene_JoinMenu::handleInput(int iPad, int key, bool repeat, bool pressed,
                                    bool released, bool& handled) {
@@ -387,8 +386,9 @@ void UIScene_JoinMenu::JoinGame(UIScene_JoinMenu* pClass) {
     bool pccAllowed = true;
     bool pccFriendsAllowed = true;
 
-    PlatformProfile.AllowedPlayerCreatedContent(
-        PlatformProfile.GetPrimaryPad(), false, &pccAllowed, &pccFriendsAllowed);
+    PlatformProfile.AllowedPlayerCreatedContent(PlatformProfile.GetPrimaryPad(),
+                                                false, &pccAllowed,
+                                                &pccFriendsAllowed);
     if (!pccAllowed && !pccFriendsAllowed) noUGC = true;
 
     if (noUGC) {
@@ -465,14 +465,14 @@ void UIScene_JoinMenu::handleTimerComplete(int id) {
                         if (app.DebugSettingsOn() &&
                             (app.GetGameSettingsDebugMask() &
                              (1L << eDebugSetting_DebugLeaderboards))) {
-                            playersList.SetText(i, L"WWWWWWWWWWWWWWWW");
+                            playersList.SetText(i, "WWWWWWWWWWWWWWWW");
                         } else
 #endif
                         {
-                            playersList.SetText(
-                                i, convStringToWstring(
-                                       m_selectedSession->data.szPlayers[i])
-                                       .c_str());
+                            playersList
+                                .SetText(i,
+                                         m_selectedSession->data.szPlayers[i])
+                                .c_str();
                         }
                     } else {
                         // Leave the loop when we hit the first nullptr player

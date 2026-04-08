@@ -17,7 +17,7 @@ private:
     IggyName m_funcSetPlatform;
 
     UI_BEGIN_MAP_ELEMENTS_AND_NAMES(UIScene)
-    UI_MAP_NAME(m_funcSetPlatform, L"SetPlatform")
+    UI_MAP_NAME(m_funcSetPlatform, "SetPlatform")
     UI_END_MAP_ELEMENTS_AND_NAMES()
 
 public:
@@ -26,7 +26,7 @@ public:
 
 protected:
     // TODO: This should be pure virtual in this class
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
 
 public:
     virtual EUIScene getSceneType() {

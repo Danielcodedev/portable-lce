@@ -165,8 +165,8 @@ void PlayerChunkMap::PlayerChunk::remove(std::shared_ptr<ServerPlayer> player) {
                 }
             }
             if (noOtherPlayersFound) {
-                // wprintf(L"Sending ChunkVisiblity packet false for chunk
-                // (%d,%d) to player %ls\n", x, z, player->name.c_str() );
+                // printf("Sending ChunkVisiblity packet false for chunk
+                // (%d,%d) to player %s\n", x, z, player->name.c_str() );
                 player->connection->send(std::shared_ptr<ChunkVisibilityPacket>(
                     new ChunkVisibilityPacket(pos.x, pos.z, false)));
             }

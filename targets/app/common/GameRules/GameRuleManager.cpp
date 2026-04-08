@@ -29,73 +29,73 @@
 #include "minecraft/world/level/storage/ConsoleSaveFileIO/FileHeader.h"
 #include "strings.h"
 
-const wchar_t* GameRuleManager::wchTagNameA[] = {
-    L"",                   // eGameRuleType_Root
-    L"MapOptions",         // eGameRuleType_LevelGenerationOptions
-    L"ApplySchematic",     // eGameRuleType_ApplySchematic
-    L"GenerateStructure",  // eGameRuleType_GenerateStructure
-    L"GenerateBox",        // eGameRuleType_GenerateBox
-    L"PlaceBlock",         // eGameRuleType_PlaceBlock
-    L"PlaceContainer",     // eGameRuleType_PlaceContainer
-    L"PlaceSpawner",       // eGameRuleType_PlaceSpawner
-    L"BiomeOverride",      // eGameRuleType_BiomeOverride
-    L"StartFeature",       // eGameRuleType_StartFeature
-    L"AddItem",            // eGameRuleType_AddItem
-    L"AddEnchantment",     // eGameRuleType_AddEnchantment
-    L"LevelRules",         // eGameRuleType_LevelRules
-    L"NamedArea",          // eGameRuleType_NamedArea
-    L"UseTile",            // eGameRuleType_UseTileRule
-    L"CollectItem",        // eGameRuleType_CollectItemRule
-    L"CompleteAll",        // eGameRuleType_CompleteAllRule
-    L"UpdatePlayer",       // eGameRuleType_UpdatePlayerRule
+const char* GameRuleManager::wchTagNameA[] = {
+    "",                   // eGameRuleType_Root
+    "MapOptions",         // eGameRuleType_LevelGenerationOptions
+    "ApplySchematic",     // eGameRuleType_ApplySchematic
+    "GenerateStructure",  // eGameRuleType_GenerateStructure
+    "GenerateBox",        // eGameRuleType_GenerateBox
+    "PlaceBlock",         // eGameRuleType_PlaceBlock
+    "PlaceContainer",     // eGameRuleType_PlaceContainer
+    "PlaceSpawner",       // eGameRuleType_PlaceSpawner
+    "BiomeOverride",      // eGameRuleType_BiomeOverride
+    "StartFeature",       // eGameRuleType_StartFeature
+    "AddItem",            // eGameRuleType_AddItem
+    "AddEnchantment",     // eGameRuleType_AddEnchantment
+    "LevelRules",         // eGameRuleType_LevelRules
+    "NamedArea",          // eGameRuleType_NamedArea
+    "UseTile",            // eGameRuleType_UseTileRule
+    "CollectItem",        // eGameRuleType_CollectItemRule
+    "CompleteAll",        // eGameRuleType_CompleteAllRule
+    "UpdatePlayer",       // eGameRuleType_UpdatePlayerRule
 };
 
-const wchar_t* GameRuleManager::wchAttrNameA[] = {
-    L"descriptionName",   // eGameRuleAttr_descriptionName
-    L"promptName",        // eGameRuleAttr_promptName
-    L"dataTag",           // eGameRuleAttr_dataTag
-    L"enchantmentId",     // eGameRuleAttr_enchantmentId
-    L"enchantmentLevel",  // eGameRuleAttr_enchantmentLevel
-    L"itemId",            // eGameRuleAttr_itemId
-    L"quantity",          // eGameRuleAttr_quantity
-    L"auxValue",          // eGameRuleAttr_auxValue
-    L"slot",              // eGameRuleAttr_slot
-    L"name",              // eGameRuleAttr_name
-    L"food",              // eGameRuleAttr_food
-    L"health",            // eGameRuleAttr_health
-    L"tileId",            // eGameRuleAttr_tileId
-    L"useCoords",         // eGameRuleAttr_useCoords
-    L"seed",              // eGameRuleAttr_seed
-    L"flatworld",         // eGameRuleAttr_flatworld
-    L"filename",          // eGameRuleAttr_filename
-    L"rot",               // eGameRuleAttr_rot
-    L"data",              // eGameRuleAttr_data
-    L"block",             // eGameRuleAttr_block
-    L"entity",            // eGameRuleAttr_entity
-    L"facing",            // eGameRuleAttr_facing
-    L"edgeTile",          // eGameRuleAttr_edgeTile
-    L"fillTile",          // eGameRuleAttr_fillTile
-    L"skipAir",           // eGameRuleAttr_skipAir
-    L"x",                 // eGameRuleAttr_x
-    L"x0",                // eGameRuleAttr_x0
-    L"x1",                // eGameRuleAttr_x1
-    L"y",                 // eGameRuleAttr_y
-    L"y0",                // eGameRuleAttr_y0
-    L"y1",                // eGameRuleAttr_y1
-    L"z",                 // eGameRuleAttr_z
-    L"z0",                // eGameRuleAttr_z0
-    L"z1",                // eGameRuleAttr_z1
-    L"chunkX",            // eGameRuleAttr_chunkX
-    L"chunkZ",            // eGameRuleAttr_chunkZ
-    L"yRot",              // eGameRuleAttr_yRot
-    L"spawnX",            // eGameRuleAttr_spawnX
-    L"spawnY",            // eGameRuleAttr_spawnY
-    L"spawnZ",            // eGameRuleAttr_spawnZ
-    L"orientation",
-    L"dimension",
-    L"topTileId",  // eGameRuleAttr_topTileId
-    L"biomeId",    // eGameRuleAttr_biomeId
-    L"feature",    // eGameRuleAttr_feature
+const char* GameRuleManager::wchAttrNameA[] = {
+    "descriptionName",   // eGameRuleAttr_descriptionName
+    "promptName",        // eGameRuleAttr_promptName
+    "dataTag",           // eGameRuleAttr_dataTag
+    "enchantmentId",     // eGameRuleAttr_enchantmentId
+    "enchantmentLevel",  // eGameRuleAttr_enchantmentLevel
+    "itemId",            // eGameRuleAttr_itemId
+    "quantity",          // eGameRuleAttr_quantity
+    "auxValue",          // eGameRuleAttr_auxValue
+    "slot",              // eGameRuleAttr_slot
+    "name",              // eGameRuleAttr_name
+    "food",              // eGameRuleAttr_food
+    "health",            // eGameRuleAttr_health
+    "tileId",            // eGameRuleAttr_tileId
+    "useCoords",         // eGameRuleAttr_useCoords
+    "seed",              // eGameRuleAttr_seed
+    "flatworld",         // eGameRuleAttr_flatworld
+    "filename",          // eGameRuleAttr_filename
+    "rot",               // eGameRuleAttr_rot
+    "data",              // eGameRuleAttr_data
+    "block",             // eGameRuleAttr_block
+    "entity",            // eGameRuleAttr_entity
+    "facing",            // eGameRuleAttr_facing
+    "edgeTile",          // eGameRuleAttr_edgeTile
+    "fillTile",          // eGameRuleAttr_fillTile
+    "skipAir",           // eGameRuleAttr_skipAir
+    "x",                 // eGameRuleAttr_x
+    "x0",                // eGameRuleAttr_x0
+    "x1",                // eGameRuleAttr_x1
+    "y",                 // eGameRuleAttr_y
+    "y0",                // eGameRuleAttr_y0
+    "y1",                // eGameRuleAttr_y1
+    "z",                 // eGameRuleAttr_z
+    "z0",                // eGameRuleAttr_z0
+    "z1",                // eGameRuleAttr_z1
+    "chunkX",            // eGameRuleAttr_chunkX
+    "chunkZ",            // eGameRuleAttr_chunkZ
+    "yRot",              // eGameRuleAttr_yRot
+    "spawnX",            // eGameRuleAttr_spawnX
+    "spawnY",            // eGameRuleAttr_spawnY
+    "spawnZ",            // eGameRuleAttr_spawnZ
+    "orientation",
+    "dimension",
+    "topTileId",  // eGameRuleAttr_topTileId
+    "biomeId",    // eGameRuleAttr_biomeId
+    "feature",    // eGameRuleAttr_feature
 };
 
 GameRuleManager::GameRuleManager() {
@@ -107,10 +107,10 @@ void GameRuleManager::loadGameRules(DLCPack* pack) {
     StringTable* strings = nullptr;
 
     if (pack->doesPackContainFile(DLCManager::e_DLCType_LocalisationData,
-                                  L"languages.loc")) {
+                                  "languages.loc")) {
         DLCLocalisationFile* localisationFile =
             (DLCLocalisationFile*)pack->getFile(
-                DLCManager::e_DLCType_LocalisationData, L"languages.loc");
+                DLCManager::e_DLCType_LocalisationData, "languages.loc");
         strings = localisationFile->getStringTable();
     }
 
@@ -231,7 +231,7 @@ void GameRuleManager::loadGameRules(LevelGenerationOptions* lgo, uint8_t* dIn,
     dis2.read(bRuleFile);
 
     // 4J-JEV: I don't believe that the path-name is ever used.
-    // DLCGameRulesFile *dlcgr = new DLCGameRulesFile(L"__PLACEHOLDER__");
+    // DLCGameRulesFile *dlcgr = new DLCGameRulesFile("__PLACEHOLDER__");
     // dlcgr->addData(bRuleFile.data(),bRuleFile.size());
 
     if (readRuleFile(lgo, bRuleFile.data(), bRuleFile.size(), strings)) {
@@ -358,11 +358,11 @@ void GameRuleManager::writeRuleFile(DataOutputStream* dos) {
         dos->writeUTF(wchAttrNameA[i]);
 
     // Write schematic files.
-    std::unordered_map<std::wstring, ConsoleSchematicFile*>* files;
+    std::unordered_map<std::string, ConsoleSchematicFile*>* files;
     files = getLevelGenerationOptions()->getUnfinishedSchematicFiles();
     dos->writeInt(files->size());
     for (auto it = files->begin(); it != files->end(); it++) {
-        std::wstring filename = it->first;
+        std::string filename = it->first;
         ConsoleSchematicFile* file = it->second;
 
         ByteArrayOutputStream fileBaos;
@@ -488,7 +488,7 @@ bool GameRuleManager::readRuleFile(
 
     // string lookup.
     unsigned int numStrings = contentDis->readInt();
-    std::vector<std::wstring> tagsAndAtts;
+    std::vector<std::string> tagsAndAtts;
     for (unsigned int i = 0; i < numStrings; i++)
         tagsAndAtts.push_back(contentDis->readUTF());
 
@@ -525,7 +525,7 @@ bool GameRuleManager::readRuleFile(
     // subfile
     unsigned int numFiles = contentDis->readInt();
     for (unsigned int i = 0; i < numFiles; i++) {
-        std::wstring sFilename = contentDis->readUTF();
+        std::string sFilename = contentDis->readUTF();
         int length = contentDis->readInt();
         std::vector<uint8_t> ba(length);
 
@@ -550,13 +550,13 @@ bool GameRuleManager::readRuleFile(
         if (tagVal == ConsoleGameRules::eGameRuleType_LevelGenerationOptions) {
             rule = levelGenerator;
             levelGenAdded = true;
-            // m_levelGenerators.addLevelGenerator(L"",levelGenerator);
+            // m_levelGenerators.addLevelGenerator("",levelGenerator);
             lgoID = addLevelGenerationOptions(levelGenerator);
             levelGenerator->loadStringTable(strings);
         } else if (tagVal == ConsoleGameRules::eGameRuleType_LevelRules) {
             rule = gameRules;
             gameRulesAdded = true;
-            m_levelRules.addLevelRule(L"", gameRules);
+            m_levelRules.addLevelRule("", gameRules);
             levelGenerator->setRequiredGameRules(gameRules);
             gameRules->loadStringTable(strings);
         }
@@ -593,20 +593,20 @@ LevelGenerationOptions* GameRuleManager::readHeader(DLCGameRulesHeader* grh) {
 }
 
 void GameRuleManager::readAttributes(DataInputStream* dis,
-                                     std::vector<std::wstring>* tagsAndAtts,
+                                     std::vector<std::string>* tagsAndAtts,
                                      GameRuleDefinition* rule) {
     int numAttrs = dis->readInt();
     for (unsigned int att = 0; att < static_cast<unsigned int>(numAttrs);
          ++att) {
         int attID = dis->readInt();
-        std::wstring value = dis->readUTF();
+        std::string value = dis->readUTF();
 
         if (rule != nullptr) rule->addAttribute(tagsAndAtts->at(attID), value);
     }
 }
 
 void GameRuleManager::readChildren(
-    DataInputStream* dis, std::vector<std::wstring>* tagsAndAtts,
+    DataInputStream* dis, std::vector<std::string>* tagsAndAtts,
     std::unordered_map<int, ConsoleGameRules::EGameRuleType>* tagIdMap,
     GameRuleDefinition* rule) {
     int numChildren = dis->readInt();
@@ -643,23 +643,23 @@ void GameRuleManager::processSchematicsLighting(LevelChunk* levelChunk) {
 void GameRuleManager::loadDefaultGameRules() {
 #if !defined(__linux__)
 #if defined(_WINDOWS64)
-    File packedTutorialFile(L"Windows64Media\\Tutorial\\Tutorial.pck");
+    File packedTutorialFile("Windows64Media\\Tutorial\\Tutorial.pck");
     if (!packedTutorialFile.exists())
-        packedTutorialFile = File(L"Windows64\\Tutorial\\Tutorial.pck");
+        packedTutorialFile = File("Windows64\\Tutorial\\Tutorial.pck");
 #else
-    File packedTutorialFile(L"Tutorial\\Tutorial.pck");
+    File packedTutorialFile("Tutorial\\Tutorial.pck");
 #endif
     if (loadGameRulesPack(&packedTutorialFile)) {
         m_levelGenerators.getLevelGenerators()->at(0)->setWorldName(
             app.GetString(IDS_PLAY_TUTORIAL));
-        // m_levelGenerators.getLevelGenerators()->at(0)->setDefaultSaveName(L"Tutorial");
+        // m_levelGenerators.getLevelGenerators()->at(0)->setDefaultSaveName("Tutorial");
         m_levelGenerators.getLevelGenerators()->at(0)->setDefaultSaveName(
             app.GetString(IDS_TUTORIALSAVENAME));
     }
 #else
-    std::wstring fpTutorial = L"Tutorial.pck";
+    std::string fpTutorial = "Tutorial.pck";
     if (app.getArchiveFileSize(fpTutorial) >= 0) {
-        DLCPack* pack = new DLCPack(L"", 0xffffffff);
+        DLCPack* pack = new DLCPack("", 0xffffffff);
         uint32_t dwFilesProcessed = 0;
         if (app.m_dlcManager.readDLCDataFile(dwFilesProcessed, fpTutorial, pack,
                                              true)) {
@@ -677,7 +677,7 @@ void GameRuleManager::loadDefaultGameRules() {
 bool GameRuleManager::loadGameRulesPack(File* path) {
     bool success = false;
     if (path->exists()) {
-        DLCPack* pack = new DLCPack(L"", 0xffffffff);
+        DLCPack* pack = new DLCPack("", 0xffffffff);
         unsigned int dwFilesProcessed = 0;
         if (app.m_dlcManager.readDLCDataFile(dwFilesProcessed, path->getPath(),
                                              pack)) {
@@ -707,11 +707,11 @@ void GameRuleManager::setLevelGenerationOptions(
         m_currentLevelGenerationOptions->reset_start();
 }
 
-const wchar_t* GameRuleManager::GetGameRulesString(const std::wstring& key) {
+const char* GameRuleManager::GetGameRulesString(const std::string& key) {
     if (m_currentGameRuleDefinitions != nullptr && !key.empty()) {
         return m_currentGameRuleDefinitions->getString(key);
     } else {
-        return L"";
+        return "";
     }
 }
 

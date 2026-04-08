@@ -25,8 +25,8 @@
 
 class Icon;
 
-const std::wstring FireTile::TEXTURE_FIRST = L"fire_0";
-const std::wstring FireTile::TEXTURE_SECOND = L"fire_1";
+const std::string FireTile::TEXTURE_FIRST = "fire_0";
+const std::string FireTile::TEXTURE_SECOND = "fire_1";
 
 FireTile::FireTile(int id) : Tile(id, Material::fire, false) {
     flameOdds = new int[256];

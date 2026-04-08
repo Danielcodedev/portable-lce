@@ -41,10 +41,10 @@ Icon* GrassTile::getTexture(LevelSource* level, int x, int y, int z, int face) {
 }
 
 void GrassTile::registerIcons(IconRegister* iconRegister) {
-    icon = iconRegister->registerIcon(L"grass_side");
-    iconTop = iconRegister->registerIcon(L"grass_top");
-    iconSnowSide = iconRegister->registerIcon(L"snow_side");
-    iconSideOverlay = iconRegister->registerIcon(L"grass_side_overlay");
+    icon = iconRegister->registerIcon("grass_side");
+    iconTop = iconRegister->registerIcon("grass_top");
+    iconSnowSide = iconRegister->registerIcon("snow_side");
+    iconSideOverlay = iconRegister->registerIcon("grass_side_overlay");
 }
 
 int GrassTile::getColor() const {

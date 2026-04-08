@@ -44,7 +44,7 @@ public:
     bool shouldDelete() { return m_refCount <= 0; }
 
     typedef struct _XboxSchematicInitParam {
-        wchar_t name[64];
+        char name[64];
         int startX;
         int startY;
         int startZ;
@@ -56,7 +56,7 @@ public:
         Compression::ECompressionTypes compressionType;
 
         _XboxSchematicInitParam() {
-            memset(name, 0, 64 * (sizeof(wchar_t)));
+            memset(name, 0, 64 * (sizeof(char)));
             startX = startY = startZ = endX = endY = endZ = 0;
             bSaveMobs = false;
             compressionType = Compression::eCompressionType_None;

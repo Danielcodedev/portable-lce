@@ -21,8 +21,8 @@ public:
     }
 
     virtual void writeAttributes(DataOutputStream* dos, unsigned int numAttrs);
-    virtual void addAttribute(const std::wstring& attributeName,
-                              const std::wstring& attributeValue);
+    virtual void addAttribute(const std::string& attributeName,
+                              const std::string& attributeValue);
 
     bool isBiome(int id);
     void getTileValues(std::uint8_t& tile, std::uint8_t& topTile);

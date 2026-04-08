@@ -8,7 +8,7 @@ AppGameServices::AppGameServices(Game& game, IMenuService& menus)
 
 // -- Strings --
 
-const wchar_t* AppGameServices::getString(int id) {
+const char* AppGameServices::getString(int id) {
     return Game::GetString(id);
 }
 
@@ -61,23 +61,23 @@ LevelRuleset* AppGameServices::getGameRuleDefinitions() {
 
 // -- Texture cache --
 
-void AppGameServices::addMemoryTextureFile(const std::wstring& name,
+void AppGameServices::addMemoryTextureFile(const std::string& name,
                                            std::uint8_t* data,
                                            unsigned int size) {
     game_.AddMemoryTextureFile(name, data, size);
 }
 
-void AppGameServices::removeMemoryTextureFile(const std::wstring& name) {
+void AppGameServices::removeMemoryTextureFile(const std::string& name) {
     game_.RemoveMemoryTextureFile(name);
 }
 
-void AppGameServices::getMemFileDetails(const std::wstring& name,
+void AppGameServices::getMemFileDetails(const std::string& name,
                                         std::uint8_t** data,
                                         unsigned int* size) {
     game_.GetMemFileDetails(name, data, size);
 }
 
-bool AppGameServices::isFileInMemoryTextures(const std::wstring& name) {
+bool AppGameServices::isFileInMemoryTextures(const std::string& name) {
     return game_.IsFileInMemoryTextures(name);
 }
 
@@ -208,7 +208,7 @@ void AppGameServices::setTMSAction(int iPad, eTMSAction action) {
 
 // -- Skin / cape / animation --
 
-std::wstring AppGameServices::getPlayerSkinName(int iPad) {
+std::string AppGameServices::getPlayerSkinName(int iPad) {
     return game_.GetPlayerSkinName(iPad);
 }
 
@@ -216,7 +216,7 @@ std::uint32_t AppGameServices::getPlayerSkinId(int iPad) {
     return game_.GetPlayerSkinId(iPad);
 }
 
-std::wstring AppGameServices::getPlayerCapeName(int iPad) {
+std::string AppGameServices::getPlayerCapeName(int iPad) {
     return game_.GetPlayerCapeName(iPad);
 }
 
@@ -259,11 +259,11 @@ unsigned int AppGameServices::getAnimOverrideBitmask(
     return game_.GetAnimOverrideBitmask(dwSkinID);
 }
 
-std::uint32_t AppGameServices::getSkinIdFromPath(const std::wstring& skin) {
+std::uint32_t AppGameServices::getSkinIdFromPath(const std::string& skin) {
     return Game::getSkinIdFromPath(skin);
 }
 
-std::wstring AppGameServices::getSkinPathFromId(std::uint32_t skinId) {
+std::string AppGameServices::getSkinPathFromId(std::uint32_t skinId) {
     return Game::getSkinPathFromId(skinId);
 }
 
@@ -340,12 +340,12 @@ void AppGameServices::loadDefaultGameRules() {
 
 // -- Archive / resources --
 
-bool AppGameServices::hasArchiveFile(const std::wstring& filename) {
+bool AppGameServices::hasArchiveFile(const std::string& filename) {
     return game_.hasArchiveFile(filename);
 }
 
 std::vector<std::uint8_t> AppGameServices::getArchiveFile(
-    const std::wstring& filename) {
+    const std::string& filename) {
     return game_.getArchiveFile(filename);
 }
 
@@ -355,11 +355,11 @@ int AppGameServices::getHTMLColour(eMinecraftColour colour) {
     return game_.GetHTMLColour(colour);
 }
 
-std::wstring AppGameServices::getEntityName(EntityTypeId type) {
+std::string AppGameServices::getEntityName(EntityTypeId type) {
     return game_.getEntityName(static_cast<eINSTANCEOF>(type));
 }
 
-const wchar_t* AppGameServices::getGameRulesString(const std::wstring& key) {
+const char* AppGameServices::getGameRulesString(const std::string& key) {
     return game_.GetGameRulesString(key);
 }
 
@@ -371,10 +371,10 @@ unsigned int AppGameServices::createImageTextData(std::uint8_t* textMetadata,
                                      uiHostOptions, uiTexturePackId);
 }
 
-std::wstring AppGameServices::getFilePath(std::uint32_t packId,
-                                          std::wstring filename,
+std::string AppGameServices::getFilePath(std::uint32_t packId,
+                                          std::string filename,
                                           bool bAddDataFolder,
-                                          std::wstring mountPoint) {
+                                          std::string mountPoint) {
     return game_.getFilePath(packId, filename, bAddDataFolder, mountPoint);
 }
 
@@ -413,7 +413,7 @@ void AppGameServices::debugPrintf(const char* msg) {
 
 // -- DLC --
 
-DLCSkinFile* AppGameServices::getDLCSkinFile(const std::wstring& name) {
+DLCSkinFile* AppGameServices::getDLCSkinFile(const std::string& name) {
     return game_.m_dlcManager.getSkinFile(name);
 }
 bool AppGameServices::dlcNeedsCorruptCheck() {
@@ -423,7 +423,7 @@ unsigned int AppGameServices::dlcCheckForCorrupt(bool showMessage) {
     return game_.m_dlcManager.checkForCorruptDLCAndAlert(showMessage);
 }
 bool AppGameServices::dlcReadDataFile(unsigned int& filesProcessed,
-                                       const std::wstring& path,
+                                       const std::string& path,
                                        DLCPack* pack, bool fromArchive) {
     return game_.m_dlcManager.readDLCDataFile(filesProcessed, path, pack,
                                               fromArchive);
@@ -450,7 +450,7 @@ void AppGameServices::setLevelGenerationOptions(LevelGenerationOptions* levelGen
 
 // -- Shared data --
 
-std::vector<std::wstring>& AppGameServices::getSkinNames() {
+std::vector<std::string>& AppGameServices::getSkinNames() {
     return game_.vSkinNames;
 }
 

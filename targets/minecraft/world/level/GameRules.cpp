@@ -20,15 +20,15 @@ const int GameRules::RULE_NATURAL_REGENERATION = 7;
 const int GameRules::RULE_DAYLIGHT = 8;
 
 GameRules::GameRules() {
-    /*registerRule(RULE_DOFIRETICK, L"1");
-    registerRule(RULE_MOBGRIEFING, L"1");
-    registerRule(RULE_KEEPINVENTORY, L"0");
-    registerRule(RULE_DOMOBSPAWNING, L"1");
-    registerRule(RULE_DOMOBLOOT, L"1");
-    registerRule(RULE_DOTILEDROPS, L"1");
-    registerRule(RULE_COMMANDBLOCKOUTPUT, L"1");
-    registerRule(RULE_NATURAL_REGENERATION, L"1");
-    registerRule(RULE_DAYLIGHT, L"1");*/
+    /*registerRule(RULE_DOFIRETICK, "1");
+    registerRule(RULE_MOBGRIEFING, "1");
+    registerRule(RULE_KEEPINVENTORY, "0");
+    registerRule(RULE_DOMOBSPAWNING, "1");
+    registerRule(RULE_DOMOBLOOT, "1");
+    registerRule(RULE_DOTILEDROPS, "1");
+    registerRule(RULE_COMMANDBLOCKOUTPUT, "1");
+    registerRule(RULE_NATURAL_REGENERATION, "1");
+    registerRule(RULE_DAYLIGHT, "1");*/
 }
 
 GameRules::~GameRules() {
@@ -63,13 +63,13 @@ bool GameRules::getBoolean(const int rule) {
 }
 
 /*
-void GameRules::registerRule(const std::wstring &name, const std::wstring
+void GameRules::registerRule(const std::string &name, const std::string
 &startValue)
 {
         rules[name] = new GameRule(startValue);
 }
 
-void GameRules::set(const std::wstring &ruleName, const std::wstring &newValue)
+void GameRules::set(const std::string &ruleName, const std::string &newValue)
 {
         auto it = rules.find(ruleName);
         if(it != rules.end() )
@@ -83,7 +83,7 @@ void GameRules::set(const std::wstring &ruleName, const std::wstring &newValue)
         }
 }
 
-std::wstring GameRules::get(const std::wstring &ruleName)
+std::string GameRules::get(const std::string &ruleName)
 {
         auto it = rules.find(ruleName);
         if(it != rules.end() )
@@ -91,10 +91,10 @@ std::wstring GameRules::get(const std::wstring &ruleName)
                 GameRule *gameRule = it->second;
                 return gameRule->get();
         }
-        return L"";
+        return "";
 }
 
-int GameRules::getInt(const std::wstring &ruleName)
+int GameRules::getInt(const std::string &ruleName)
 {
         auto it = rules.find(ruleName);
         if(it != rules.end() )
@@ -105,7 +105,7 @@ int GameRules::getInt(const std::wstring &ruleName)
         return 0;
 }
 
-double GameRules::getDouble(const std::wstring &ruleName)
+double GameRules::getDouble(const std::string &ruleName)
 {
         auto it = rules.find(ruleName);
         if(it != rules.end() )
@@ -118,7 +118,7 @@ double GameRules::getDouble(const std::wstring &ruleName)
 
 CompoundTag *GameRules::createTag()
 {
-        CompoundTag *result = new CompoundTag(L"GameRules");
+        CompoundTag *result = new CompoundTag("GameRules");
 
         for(auto it = rules.begin(); it != rules.end(); ++it)
         {
@@ -135,37 +135,37 @@ void GameRules::loadFromTag(CompoundTag *tag)
         for (auto it = allTags.begin(); it != allTags.end(); ++it)
         {
                 Tag *ruleTag = *it;
-                std::wstring ruleName = ruleTag->getName();
-                std::wstring value = tag->getString(ruleTag->getName());
+                std::string ruleName = ruleTag->getName();
+                std::string value = tag->getString(ruleTag->getName());
 
                 set(ruleName, value);
         }
 }
 
 // Need to delete returned vector.
-vector<std::wstring> *GameRules::getRuleNames()
+vector<std::string> *GameRules::getRuleNames()
 {
-        vector<std::wstring> *out = new vector<std::wstring>();
+        vector<std::string> *out = new vector<std::string>();
         for (auto it = rules.begin(); it != rules.end(); it++)
 out->push_back(it->first); return out;
 }
 
-bool GameRules::contains(const std::wstring &rule)
+bool GameRules::contains(const std::string &rule)
 {
         auto it = rules.find(rule);
         return it != rules.end();
 }
 
-GameRules::GameRule::GameRule(const std::wstring &startValue)
+GameRules::GameRule::GameRule(const std::string &startValue)
 {
-        value = L"";
+        value = "";
         booleanValue = false;
         intValue = 0;
         doubleValue = 0.0;
         set(startValue);
 }
 
-void GameRules::GameRule::set(const std::wstring &newValue)
+void GameRules::GameRule::set(const std::string &newValue)
 {
         value = newValue;
         booleanValue = fromWString<bool>(newValue);
@@ -173,7 +173,7 @@ void GameRules::GameRule::set(const std::wstring &newValue)
         doubleValue = fromWString<double>(newValue);
 }
 
-std::wstring GameRules::GameRule::get()
+std::string GameRules::GameRule::get()
 {
         return value;
 }

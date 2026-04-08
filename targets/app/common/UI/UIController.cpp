@@ -500,22 +500,22 @@ void UIController::tick() {
 }
 
 void UIController::loadSkins() {
-    std::wstring platformSkinPath = L"";
+    std::string platformSkinPath = "";
 
 #if defined(_WINDOWS64) || defined(__linux__)
     if (m_fScreenHeight == 1080.0f) {
-        platformSkinPath = L"skinHDWin.swf";
+        platformSkinPath = "skinHDWin.swf";
     } else {
-        platformSkinPath = L"skinWin.swf";
+        platformSkinPath = "skinWin.swf";
     }
 #endif
     // Every platform has one of these, so nothing shared
     if (m_fScreenHeight == 1080.0f) {
         m_iggyLibraries[eLibrary_Platform] =
-            loadSkin(platformSkinPath, L"platformskinHD.swf");
+            loadSkin(platformSkinPath, "platformskinHD.swf");
     } else {
         m_iggyLibraries[eLibrary_Platform] =
-            loadSkin(platformSkinPath, L"platformskin.swf");
+            loadSkin(platformSkinPath, "platformskin.swf");
     }
 
 #if defined(_WINDOWS64) || defined(__linux__)
@@ -525,59 +525,61 @@ void UIController::loadSkins() {
     // during development
 #if !defined(_FINAL_BUILD)
     m_iggyLibraries[eLibraryFallback_GraphicsDefault] =
-        loadSkin(L"skinGraphics.swf", L"skinGraphics.swf");
+        loadSkin("skinGraphics.swf", "skinGraphics.swf");
     m_iggyLibraries[eLibraryFallback_GraphicsHUD] =
-        loadSkin(L"skinGraphicsHud.swf", L"skinGraphicsHud.swf");
+        loadSkin("skinGraphicsHud.swf", "skinGraphicsHud.swf");
     m_iggyLibraries[eLibraryFallback_GraphicsInGame] =
-        loadSkin(L"skinGraphicsInGame.swf", L"skinGraphicsInGame.swf");
+        loadSkin("skinGraphicsInGame.swf", "skinGraphicsInGame.swf");
     m_iggyLibraries[eLibraryFallback_GraphicsTooltips] =
-        loadSkin(L"skinGraphicsTooltips.swf", L"skinGraphicsTooltips.swf");
+        loadSkin("skinGraphicsTooltips.swf", "skinGraphicsTooltips.swf");
     m_iggyLibraries[eLibraryFallback_GraphicsLabels] =
-        loadSkin(L"skinGraphicsLabels.swf", L"skinGraphicsLabels.swf");
+        loadSkin("skinGraphicsLabels.swf", "skinGraphicsLabels.swf");
     m_iggyLibraries[eLibraryFallback_Labels] =
-        loadSkin(L"skinLabels.swf", L"skinLabels.swf");
+        loadSkin("skinLabels.swf", "skinLabels.swf");
     m_iggyLibraries[eLibraryFallback_InGame] =
-        loadSkin(L"skinInGame.swf", L"skinInGame.swf");
+        loadSkin("skinInGame.swf", "skinInGame.swf");
     m_iggyLibraries[eLibraryFallback_HUD] =
-        loadSkin(L"skinHud.swf", L"skinHud.swf");
+        loadSkin("skinHud.swf", "skinHud.swf");
     m_iggyLibraries[eLibraryFallback_Tooltips] =
-        loadSkin(L"skinTooltips.swf", L"skinTooltips.swf");
+        loadSkin("skinTooltips.swf", "skinTooltips.swf");
     m_iggyLibraries[eLibraryFallback_Default] =
-        loadSkin(L"skin.swf", L"skin.swf");
+        loadSkin("skin.swf", "skin.swf");
 #endif
 #endif
 
     m_iggyLibraries[eLibrary_GraphicsDefault] =
-        loadSkin(L"skinHDGraphics.swf", L"skinHDGraphics.swf");
+        loadSkin("skinHDGraphics.swf", "skinHDGraphics.swf");
     m_iggyLibraries[eLibrary_GraphicsHUD] =
-        loadSkin(L"skinHDGraphicsHud.swf", L"skinHDGraphicsHud.swf");
+        loadSkin("skinHDGraphicsHud.swf", "skinHDGraphicsHud.swf");
     m_iggyLibraries[eLibrary_GraphicsInGame] =
-        loadSkin(L"skinHDGraphicsInGame.swf", L"skinHDGraphicsInGame.swf");
+        loadSkin("skinHDGraphicsInGame.swf", "skinHDGraphicsInGame.swf");
     m_iggyLibraries[eLibrary_GraphicsTooltips] =
-        loadSkin(L"skinHDGraphicsTooltips.swf", L"skinHDGraphicsTooltips.swf");
+        loadSkin("skinHDGraphicsTooltips.swf", "skinHDGraphicsTooltips.swf");
     m_iggyLibraries[eLibrary_GraphicsLabels] =
-        loadSkin(L"skinHDGraphicsLabels.swf", L"skinHDGraphicsLabels.swf");
+        loadSkin("skinHDGraphicsLabels.swf", "skinHDGraphicsLabels.swf");
     m_iggyLibraries[eLibrary_Labels] =
-        loadSkin(L"skinHDLabels.swf", L"skinHDLabels.swf");
+        loadSkin("skinHDLabels.swf", "skinHDLabels.swf");
     m_iggyLibraries[eLibrary_InGame] =
-        loadSkin(L"skinHDInGame.swf", L"skinHDInGame.swf");
+        loadSkin("skinHDInGame.swf", "skinHDInGame.swf");
     m_iggyLibraries[eLibrary_HUD] =
-        loadSkin(L"skinHDHud.swf", L"skinHDHud.swf");
+        loadSkin("skinHDHud.swf", "skinHDHud.swf");
     m_iggyLibraries[eLibrary_Tooltips] =
-        loadSkin(L"skinHDTooltips.swf", L"skinHDTooltips.swf");
-    m_iggyLibraries[eLibrary_Default] = loadSkin(L"skinHD.swf", L"skinHD.swf");
+        loadSkin("skinHDTooltips.swf", "skinHDTooltips.swf");
+    m_iggyLibraries[eLibrary_Default] = loadSkin("skinHD.swf", "skinHD.swf");
 #endif
 }
 
-IggyLibrary UIController::loadSkin(const std::wstring& skinPath,
-                                   const std::wstring& skinName) {
+IggyLibrary UIController::loadSkin(const std::string& skinPath,
+                                   const std::string& skinName) {
     IggyLibrary lib = IGGY_INVALID_LIBRARY;
     // 4J Stu - We need to load the platformskin before the normal skin, as the
     // normal skin requires some elements from the platform skin
     if (!skinPath.empty() && app.hasArchiveFile(skinPath)) {
         std::vector<uint8_t> baFile = app.getArchiveFile(skinPath);
-        const std::u16string convSkinName = wstring_to_u16string(skinName);
 
+        const std::u16string convSkinName = string_to_u16string(skinName);
+
+        // 4jcraft: shiggy has no IggyLibraryCreateFromMemory unfortunately
         lib = IggyLibraryCreateFromMemoryUTF16(
             convSkinName.data(), (void*)baFile.data(), baFile.size(), nullptr);
 
@@ -590,14 +592,14 @@ IggyLibrary UIController::loadSkin(const std::wstring& skinPath,
                                                 &memoryInfo))) {
             totalStatic += memoryInfo.static_allocation_bytes;
             app.DebugPrintf(
-                app.USER_SR, "%ls - %.*s, static: %dB, dynamic: %dB\n",
+                app.USER_SR, "%s - %.*s, static: %dB, dynamic: %dB\n",
                 skinPath.c_str(), memoryInfo.subcategory_stringlen,
                 memoryInfo.subcategory, memoryInfo.static_allocation_bytes,
                 memoryInfo.dynamic_allocation_bytes);
             ++iteration;
         }
 
-        app.DebugPrintf(app.USER_SR, "%ls - Total static: %dB (%dKB)\n",
+        app.DebugPrintf(app.USER_SR, "%s - Total static: %dB (%dKB)\n",
                         skinPath.c_str(), totalStatic, totalStatic / 1024);
 #endif
     }
@@ -713,7 +715,7 @@ void UIController::CleanUpSkinReload() {
     m_queuedMessageBoxData.clear();
 }
 
-std::vector<uint8_t> UIController::getMovieData(const std::wstring& filename) {
+std::vector<uint8_t> UIController::getMovieData(const std::string& filename) {
     // Cache everything we load in the current tick
     int64_t targetTime = System::currentTimeMillis() + (1000LL * 60);
     auto it = m_cachedMovieData.find(filename);
@@ -1116,11 +1118,11 @@ GDrawTexture* RADLINK UIController::TextureSubstitutionCreateCallback(
     void* user_callback_data, IggyUTF16* texture_name, S32* width, S32* height,
     void** destroy_callback_data) {
     UIController* uiController = (UIController*)user_callback_data;
-    auto it = uiController->m_substitutionTextures.find((wchar_t*)texture_name);
+    auto it = uiController->m_substitutionTextures.find((char*)texture_name);
 
     if (it != uiController->m_substitutionTextures.end()) {
-        app.DebugPrintf("Found substitution texture %ls, with %d bytes\n",
-                        (wchar_t*)texture_name, it->second.size());
+        app.DebugPrintf("Found substitution texture %s, with %d bytes\n",
+                        (char*)texture_name, it->second.size());
 
         BufferedImage image(it->second.data(), it->second.size());
         if (image.getData() != nullptr) {
@@ -1137,16 +1139,16 @@ GDrawTexture* RADLINK UIController::TextureSubstitutionCreateCallback(
 
             *destroy_callback_data = (void*)(intptr_t)id;
 
-            app.DebugPrintf("Found substitution texture %ls (%d) - %dx%d\n",
-                            (wchar_t*)texture_name, id, image.getWidth(),
+            app.DebugPrintf("Found substitution texture %s (%d) - %dx%d\n",
+                            (char*)texture_name, id, image.getWidth(),
                             image.getHeight());
             return ui.getSubstitutionTexture(id);
         } else {
             return nullptr;
         }
     } else {
-        app.DebugPrintf("Could not find substitution texture %ls\n",
-                        (wchar_t*)texture_name);
+        app.DebugPrintf("Could not find substitution texture %s\n",
+                        (char*)texture_name);
         return nullptr;
     }
 }
@@ -1167,7 +1169,7 @@ void RADLINK UIController::TextureSubstitutionDestroyCallback(
     t->releaseTexture(id);
 }
 
-void UIController::registerSubstitutionTexture(const std::wstring& textureName,
+void UIController::registerSubstitutionTexture(const std::string& textureName,
                                                std::uint8_t* pbData,
                                                unsigned int dwLength) {
     // Remove it if it already exists
@@ -1178,7 +1180,7 @@ void UIController::registerSubstitutionTexture(const std::wstring& textureName,
 }
 
 void UIController::unregisterSubstitutionTexture(
-    const std::wstring& textureName, bool deleteData) {
+    const std::string& textureName, bool deleteData) {
     auto it = m_substitutionTextures.find(textureName);
 
     if (it != m_substitutionTextures.end()) {
@@ -1358,7 +1360,7 @@ void UIController::NavigateToHomeMenu() {
         pMinecraft->soundEngine->SetStreamingSounds(
             eStream_Overworld_Calm1, eStream_Overworld_piano3, eStream_Nether1,
             eStream_Nether4, eStream_end_dragon, eStream_end_end, eStream_CD_1);
-        pMinecraft->soundEngine->playStreaming(L"", 0, 0, 0, 1, 1);
+        pMinecraft->soundEngine->playStreaming("", 0, 0, 0, 1, 1);
 
         // 		if(pDLCTexPack->m_pStreamedWaveBank!=nullptr)
         // 		{
@@ -1795,7 +1797,7 @@ void UIController::DisplayGamertag(unsigned int iPad, bool show) {
 }
 
 void UIController::SetSelectedItem(unsigned int iPad,
-                                   const std::wstring& name) {
+                                   const std::string& name) {
     EUIGroup group;
 
     if (app.GetGameStarted()) {
@@ -1997,7 +1999,7 @@ void UIController::SetTrialTimerLimitSecs(unsigned int uiSeconds) {
 }
 
 void UIController::UpdateTrialTimer(unsigned int iPad) {
-    wchar_t wcTime[20];
+    char wcTime[20];
 
     std::uint32_t timeTicks = (std::uint32_t)app.getTrialTimer();
 
@@ -2016,7 +2018,7 @@ void UIController::UpdateTrialTimer(unsigned int iPad) {
     {
         int iMins = timeTicks / 60;
         int iSeconds = timeTicks % 60;
-        swprintf(wcTime, 20, L"%d:%02d", iMins, iSeconds);
+        snprintf(wcTime, 20, "%d:%02d", iMins, iSeconds);
         if (m_groups[(int)eUIGroup_Fullscreen]->getPressStartToPlay())
             m_groups[(int)eUIGroup_Fullscreen]
                 ->getPressStartToPlay()
@@ -2025,7 +2027,7 @@ void UIController::UpdateTrialTimer(unsigned int iPad) {
         if (m_groups[(int)eUIGroup_Fullscreen]->getPressStartToPlay())
             m_groups[(int)eUIGroup_Fullscreen]
                 ->getPressStartToPlay()
-                ->setTrialTimer(L"");
+                ->setTrialTimer("");
     }
 
     // are we out of time?
@@ -2060,8 +2062,8 @@ void UIController::ShowAutosaveCountdownTimer(bool show) {
 }
 
 void UIController::UpdateAutosaveCountdownTimer(unsigned int uiSeconds) {
-    wchar_t wcAutosaveCountdown[100];
-    swprintf(wcAutosaveCountdown, 100, app.GetString(IDS_AUTOSAVE_COUNTDOWN),
+    char wcAutosaveCountdown[100];
+    snprintf(wcAutosaveCountdown, 100, app.GetString(IDS_AUTOSAVE_COUNTDOWN),
              uiSeconds);
     if (m_groups[(int)eUIGroup_Fullscreen]->getPressStartToPlay())
         m_groups[(int)eUIGroup_Fullscreen]
@@ -2158,7 +2160,7 @@ IPlatformStorage::EMessageResult UIController::RequestAlertMessage(
     unsigned int uiTitle, unsigned int uiText, unsigned int* uiOptionA,
     unsigned int uiOptionC, unsigned int dwPad,
     int (*Func)(void*, int, const IPlatformStorage::EMessageResult), void* lpParam,
-    wchar_t* pwchFormatString) {
+    char* pwchFormatString) {
     return RequestMessageBox(uiTitle, uiText, uiOptionA, uiOptionC, dwPad, Func,
                              lpParam, pwchFormatString, 0, false);
 }
@@ -2167,7 +2169,7 @@ IPlatformStorage::EMessageResult UIController::RequestErrorMessage(
     unsigned int uiTitle, unsigned int uiText, unsigned int* uiOptionA,
     unsigned int uiOptionC, unsigned int dwPad,
     int (*Func)(void*, int, const IPlatformStorage::EMessageResult), void* lpParam,
-    wchar_t* pwchFormatString) {
+    char* pwchFormatString) {
     return RequestMessageBox(uiTitle, uiText, uiOptionA, uiOptionC, dwPad, Func,
                              lpParam, pwchFormatString, 0, true);
 }
@@ -2176,7 +2178,7 @@ IPlatformStorage::EMessageResult UIController::RequestMessageBox(
     unsigned int uiTitle, unsigned int uiText, unsigned int* uiOptionA,
     unsigned int uiOptionC, unsigned int dwPad,
     int (*Func)(void*, int, const IPlatformStorage::EMessageResult), void* lpParam,
-    wchar_t* pwchFormatString, unsigned int dwFocusButton, bool bIsError)
+    char* pwchFormatString, unsigned int dwFocusButton, bool bIsError)
 
 {
     MessageBoxInfo param;

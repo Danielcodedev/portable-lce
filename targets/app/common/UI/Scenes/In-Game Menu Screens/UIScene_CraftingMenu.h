@@ -141,16 +141,16 @@ protected:
     UI_MAP_ELEMENT(m_labelItemName, "ItemName")
     UI_MAP_ELEMENT(m_labelInventory, "InventoryLabel")
 
-    UI_MAP_NAME(m_funcMoveSelector, L"MoveSelector")
-    UI_MAP_NAME(m_funcSelectVerticalItem, L"SelectVerticalItem")
-    UI_MAP_NAME(m_funcSetActiveTab, L"SetActiveTab")
-    UI_MAP_NAME(m_funcShowPanelDisplay, L"showPanelDisplay")
-    UI_MAP_NAME(m_funcShowIngredientSlot, L"ShowIngredient")
+    UI_MAP_NAME(m_funcMoveSelector, "MoveSelector")
+    UI_MAP_NAME(m_funcSelectVerticalItem, "SelectVerticalItem")
+    UI_MAP_NAME(m_funcSetActiveTab, "SetActiveTab")
+    UI_MAP_NAME(m_funcShowPanelDisplay, "showPanelDisplay")
+    UI_MAP_NAME(m_funcShowIngredientSlot, "ShowIngredient")
 
     UI_END_MAP_CHILD_ELEMENTS()
     UI_END_MAP_ELEMENTS_AND_NAMES()
 
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
     virtual void handleReload();
 
     virtual bool allowRepeat(int key);
@@ -177,12 +177,12 @@ protected:
     virtual void setIngredientDescriptionItem(
         int iPad, int index, std::shared_ptr<ItemInstance> item);
     virtual void setIngredientDescriptionRedBox(int index, bool show);
-    virtual void setIngredientDescriptionText(int index, const wchar_t* text);
+    virtual void setIngredientDescriptionText(int index, const char* text);
     virtual void setShowCraftHSlot(int iIndex, bool show);
     virtual void showTabHighlight(int iIndex, bool show);
-    virtual void setGroupText(const wchar_t* text);
-    virtual void setDescriptionText(const wchar_t* text);
-    virtual void setItemText(const wchar_t* text);
+    virtual void setGroupText(const char* text);
+    virtual void setDescriptionText(const char* text);
+    virtual void setItemText(const char* text);
     virtual void scrollDescriptionUp();
     virtual void scrollDescriptionDown();
     virtual void updateHighlightAndScrollPositions();

@@ -40,51 +40,51 @@ void XboxStructureActionGenerateBox::writeAttributes(DataOutputStream* dos,
 }
 
 void XboxStructureActionGenerateBox::addAttribute(
-    const std::wstring& attributeName, const std::wstring& attributeValue) {
-    if (attributeName.compare(L"x0") == 0) {
+    const std::string& attributeName, const std::string& attributeValue) {
+    if (attributeName.compare("x0") == 0) {
         int value = fromWString<int>(attributeValue);
         m_x0 = value;
         app.DebugPrintf(
             "XboxStructureActionGenerateBox: Adding parameter x0=%d\n", m_x0);
-    } else if (attributeName.compare(L"y0") == 0) {
+    } else if (attributeName.compare("y0") == 0) {
         int value = fromWString<int>(attributeValue);
         m_y0 = value;
         app.DebugPrintf(
             "XboxStructureActionGenerateBox: Adding parameter y0=%d\n", m_y0);
-    } else if (attributeName.compare(L"z0") == 0) {
+    } else if (attributeName.compare("z0") == 0) {
         int value = fromWString<int>(attributeValue);
         m_z0 = value;
         app.DebugPrintf(
             "XboxStructureActionGenerateBox: Adding parameter z0=%d\n", m_z0);
-    } else if (attributeName.compare(L"x1") == 0) {
+    } else if (attributeName.compare("x1") == 0) {
         int value = fromWString<int>(attributeValue);
         m_x1 = value;
         app.DebugPrintf(
             "XboxStructureActionGenerateBox: Adding parameter x1=%d\n", m_x1);
-    } else if (attributeName.compare(L"y1") == 0) {
+    } else if (attributeName.compare("y1") == 0) {
         int value = fromWString<int>(attributeValue);
         m_y1 = value;
         app.DebugPrintf(
             "XboxStructureActionGenerateBox: Adding parameter y1=%d\n", m_y1);
-    } else if (attributeName.compare(L"z1") == 0) {
+    } else if (attributeName.compare("z1") == 0) {
         int value = fromWString<int>(attributeValue);
         m_z1 = value;
         app.DebugPrintf(
             "XboxStructureActionGenerateBox: Adding parameter z1=%d\n", m_z1);
-    } else if (attributeName.compare(L"edgeTile") == 0) {
+    } else if (attributeName.compare("edgeTile") == 0) {
         int value = fromWString<int>(attributeValue);
         m_edgeTile = value;
         app.DebugPrintf(
             "XboxStructureActionGenerateBox: Adding parameter edgeTile=%d\n",
             m_edgeTile);
-    } else if (attributeName.compare(L"fillTile") == 0) {
+    } else if (attributeName.compare("fillTile") == 0) {
         int value = fromWString<int>(attributeValue);
         m_fillTile = value;
         app.DebugPrintf(
             "XboxStructureActionGenerateBox: Adding parameter fillTile=%d\n",
             m_fillTile);
-    } else if (attributeName.compare(L"skipAir") == 0) {
-        if (attributeValue.compare(L"true") == 0) m_skipAir = true;
+    } else if (attributeName.compare("skipAir") == 0) {
+        if (attributeValue.compare("true") == 0) m_skipAir = true;
         app.DebugPrintf(
             "XboxStructureActionGenerateBox: Adding parameter skipAir=%s\n",
             m_skipAir ? "true" : "false");

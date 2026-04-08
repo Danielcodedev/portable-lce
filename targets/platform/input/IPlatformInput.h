@@ -80,8 +80,8 @@ public:
     [[nodiscard]] virtual int GetScrollDelta() = 0;
 
     // Keyboard
-    virtual EKeyboardResult RequestKeyboard(const wchar_t* Title,
-                                            const wchar_t* Text, int iPad,
+    virtual EKeyboardResult RequestKeyboard(const char* Title,
+                                            const char* Text, int iPad,
                                             unsigned int uiMaxChars,
                                             std::function<int(bool)> callback,
                                             EKeyboardMode eMode) = 0;
@@ -89,7 +89,7 @@ public:
 
     // String verification (TCR 92)
     virtual bool VerifyStrings(
-        wchar_t** pwStringA, int iStringC,
+        char** pwStringA, int iStringC,
         std::function<int(STRING_VERIFY_RESPONSE*)> callback) = 0;
     virtual void CancelQueuedVerifyStrings(
         std::function<int(STRING_VERIFY_RESPONSE*)> callback) = 0;

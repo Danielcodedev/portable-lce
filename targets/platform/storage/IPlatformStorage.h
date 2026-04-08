@@ -140,14 +140,14 @@ public:
         unsigned int uiFileSize;
         std::uint32_t dwType;
         std::uint32_t dwWchCount;
-        wchar_t wchFile[1];
+        char wchFile[1];
     };
     using PDLC_FILE_DETAILS = DLC_FILE_DETAILS*;
 
     struct DLC_FILE_PARAM {
         std::uint32_t dwType;
         std::uint32_t dwWchCount;
-        wchar_t wchData[1];
+        char wchData[1];
     };
     using PDLC_FILE_PARAM = DLC_FILE_PARAM*;
 
@@ -156,7 +156,7 @@ public:
     // Lifecycle
     virtual void Tick() = 0;
     virtual void Init(unsigned int uiSaveVersion,
-                      const wchar_t* pwchDefaultSaveName, char* pszSavePackName,
+                      const char* pwchDefaultSaveName, char* pszSavePackName,
                       int iMinimumSaveSize,
                       std::function<int(const ESavingMessage, int)> callback,
                       const char* szGroupID) = 0;
@@ -168,7 +168,7 @@ public:
         unsigned int uiOptionC, unsigned int pad = XUSER_INDEX_ANY,
         std::function<int(int, const EMessageResult)> callback = nullptr,
         C4JStringTable* pStringTable = nullptr,
-        wchar_t* pwchFormatString = nullptr, unsigned int focusButton = 0) = 0;
+        char* pwchFormatString = nullptr, unsigned int focusButton = 0) = 0;
     virtual EMessageResult GetMessageBoxResult() = 0;
 
     // Save device
@@ -179,8 +179,8 @@ public:
 
     // Save game
     virtual void SetDefaultSaveNameForKeyboardDisplay(
-        const wchar_t* pwchDefaultSaveName) = 0;
-    virtual void SetSaveTitle(const wchar_t* pwchDefaultSaveName) = 0;
+        const char* pwchDefaultSaveName) = 0;
+    virtual void SetSaveTitle(const char* pwchDefaultSaveName) = 0;
     virtual bool GetSaveUniqueNumber(int* piVal) = 0;
     virtual bool GetSaveUniqueFilename(char* pszName) = 0;
     virtual void SetSaveUniqueFilename(char* szFilename) = 0;
@@ -200,7 +200,7 @@ public:
         std::function<int(const bool)> callback) = 0;
     virtual void CopySaveDataToNewSave(
         std::uint8_t* pbThumbnail, unsigned int cbThumbnail,
-        wchar_t* wchNewName, std::function<int(bool)> callback) = 0;
+        char* wchNewName, std::function<int(bool)> callback) = 0;
     virtual ESaveGameState DoesSaveExist(bool* pbExists) = 0;
     virtual bool EnoughSpaceForAMinSaveGame() = 0;
     virtual void SetSaveMessageVPosition(float fY) = 0;
@@ -260,16 +260,16 @@ public:
     // Title storage
     virtual ETMSStatus ReadTMSFile(
         int iQuadrant, eGlobalStorage eStorageFacility, eTMS_FileType eFileType,
-        wchar_t* pwchFilename, std::uint8_t** ppBuffer,
+        char* pwchFilename, std::uint8_t** ppBuffer,
         unsigned int* pBufferSize,
-        std::function<int(wchar_t*, int, bool, int)> callback = nullptr,
+        std::function<int(char*, int, bool, int)> callback = nullptr,
         int iAction = 0) = 0;
     virtual bool WriteTMSFile(int iQuadrant, eGlobalStorage eStorageFacility,
-                              wchar_t* pwchFilename, std::uint8_t* pBuffer,
+                              char* pwchFilename, std::uint8_t* pBuffer,
                               unsigned int bufferSize) = 0;
     virtual bool DeleteTMSFile(int iQuadrant, eGlobalStorage eStorageFacility,
-                               wchar_t* pwchFilename) = 0;
-    virtual void StoreTMSPathName(wchar_t* pwchName = nullptr) = 0;
+                               char* pwchFilename) = 0;
+    virtual void StoreTMSPathName(char* pwchName = nullptr) = 0;
     virtual ETMSStatus TMSPP_ReadFile(
         int iPad, eGlobalStorage eStorageFacility,
         eTMS_FILETYPEVAL eFileTypeVal, const char* szFilename,

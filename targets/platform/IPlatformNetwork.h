@@ -115,8 +115,8 @@ public:
                                               int index) = 0;
 
     // Stats
-    [[nodiscard]] virtual std::wstring GatherStats() = 0;
-    [[nodiscard]] virtual std::wstring GatherRTTStats() = 0;
+    [[nodiscard]] virtual std::string GatherStats() = 0;
+    [[nodiscard]] virtual std::string GatherRTTStats() = 0;
 
     // Session internals
     virtual void SetSessionTexturePackParentId(int id) = 0;

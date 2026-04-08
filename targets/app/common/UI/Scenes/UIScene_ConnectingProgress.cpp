@@ -36,9 +36,9 @@ UIScene_ConnectingProgress::UIScene_ConnectingProgress(int iPad,
     if (param->stringId >= 0) {
         m_labelTitle.init(app.GetString(param->stringId));
     } else {
-        m_labelTitle.init(L"");
+        m_labelTitle.init("");
     }
-    m_progressBar.init(L"", 0, 0, 100, 0);
+    m_progressBar.init("", 0, 0, 100, 0);
     m_buttonConfirm.init(app.GetString(IDS_CONFIRM_OK), eControl_Confirm);
     m_buttonConfirm.setVisible(false);
 
@@ -73,11 +73,11 @@ void UIScene_ConnectingProgress::tick() {
     }
 }
 
-std::wstring UIScene_ConnectingProgress::getMoviePath() {
+std::string UIScene_ConnectingProgress::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1 && !m_parentLayer->IsFullscreenGroup()) {
-        return L"FullscreenProgressSplit";
+        return "FullscreenProgressSplit";
     } else {
-        return L"FullscreenProgress";
+        return "FullscreenProgress";
     }
 }
 

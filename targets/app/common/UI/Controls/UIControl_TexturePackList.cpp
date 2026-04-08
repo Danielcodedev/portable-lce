@@ -20,31 +20,29 @@ bool UIControl_TexturePackList::setupControl(UIScene* scene,
     bool success = UIControl_Base::setupControl(scene, parent, controlName);
 
     // SlotList specific initialisers
-    m_addPackFunc = registerFastName(L"addPack");
-    m_clearSlotsFunc = registerFastName(L"removeAllItems");
-    m_funcSelectSlot = registerFastName(L"SelectSlot");
-    m_funcEnableSelector = registerFastName(L"EnableSelector");
-    m_funcSetTouchFocus = registerFastName(L"SetTouchFocus");
-    m_funcCanTouchTrigger = registerFastName(L"CanTouchTrigger");
-    m_funcGetRealHeight = registerFastName(L"GetRealHeight");
+    m_addPackFunc = registerFastName("addPack");
+    m_clearSlotsFunc = registerFastName("removeAllItems");
+    m_funcSelectSlot = registerFastName("SelectSlot");
+    m_funcEnableSelector = registerFastName("EnableSelector");
+    m_funcSetTouchFocus = registerFastName("SetTouchFocus");
+    m_funcCanTouchTrigger = registerFastName("CanTouchTrigger");
+    m_funcGetRealHeight = registerFastName("GetRealHeight");
 
     return success;
 }
 
-void UIControl_TexturePackList::init(const std::wstring& label, int id) {
+void UIControl_TexturePackList::init(const std::string& label, int id) {
     m_label = label;
     m_id = id;
 
-    const std::u16string convLabel = wstring_to_u16string(label);
-
     IggyDataValue result;
     IggyDataValue value[2];
-    value[0].type = IGGY_DATATYPE_string_UTF16;
-    IggyStringUTF16 stringVal;
+    value[0].type = IGGY_DATATYPE_string_UTF8;
+    IggyStringUTF8 stringVal;
 
-    stringVal.string = convLabel.c_str();
-    stringVal.length = convLabel.length();
-    value[0].string16 = stringVal;
+    stringVal.string = const_cast<char*>(label.c_str());
+    stringVal.length = label.length();
+    value[0].string8 = stringVal;
 
     value[1].type = IGGY_DATATYPE_number;
     value[1].number = id;
@@ -54,20 +52,18 @@ void UIControl_TexturePackList::init(const std::wstring& label, int id) {
 }
 
 void UIControl_TexturePackList::addPack(int id,
-                                        const std::wstring& textureName) {
-    const std::u16string convName = wstring_to_u16string(textureName);
-
+                                        const std::string& textureName) {
     IggyDataValue result;
     IggyDataValue value[2];
     value[0].type = IGGY_DATATYPE_number;
     value[0].number = id;
 
-    value[1].type = IGGY_DATATYPE_string_UTF16;
-    IggyStringUTF16 stringVal;
+    value[1].type = IGGY_DATATYPE_string_UTF8;
+    IggyStringUTF8 stringVal;
 
-    stringVal.string = convName.c_str();
-    stringVal.length = convName.length();
-    value[1].string16 = stringVal;
+    stringVal.string = const_cast<char*>(textureName.c_str());
+    stringVal.length = textureName.length();
+    value[1].string8 = stringVal;
     IggyResult out =
         IggyPlayerCallMethodRS(m_parentScene->getMovie(), &result,
                                getIggyValuePath(), m_addPackFunc, 2, value);

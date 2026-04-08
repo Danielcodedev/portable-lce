@@ -34,7 +34,7 @@ void FishingHookRenderer::render(std::shared_ptr<Entity> _hook, double x,
     glScalef(1 / 2.0f, 1 / 2.0f, 1 / 2.0f);
     int xi = 1;
     int yi = 2;
-    bindTexture(hook);  // 4J was L"/particles.png"
+    bindTexture(hook);  // 4J was "/particles.png"
     Tesselator* t = Tesselator::getInstance();
 
     float u0 = (xi * 8 + 0) / 128.0f;

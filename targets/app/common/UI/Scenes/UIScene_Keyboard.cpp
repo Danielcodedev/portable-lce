@@ -20,32 +20,31 @@ UIScene_Keyboard::UIScene_Keyboard(int iPad, void* initData,
     // Setup all the Iggy references we need for this scene
     initialiseMovie();
 
-    m_EnterTextLabel.init(L"Enter Sign Text");
+    m_EnterTextLabel.init("Enter Sign Text");
 
-    m_KeyboardTextInput.init(L"", -1);
+    m_KeyboardTextInput.init("", -1);
     m_KeyboardTextInput.SetCharLimit(15);
 
-    m_ButtonSpace.init(L"Space", -1);
-    m_ButtonCursorLeft.init(L"Cursor Left", -1);
-    m_ButtonCursorRight.init(L"Cursor Right", -1);
-    m_ButtonCaps.init(L"Caps", -1);
-    m_ButtonDone.init(L"Done", 0);  // only the done button needs an id, the
+    m_ButtonSpace.init("Space", -1);
+    m_ButtonCursorLeft.init("Cursor Left", -1);
+    m_ButtonCursorRight.init("Cursor Right", -1);
+    m_ButtonCaps.init("Caps", -1);
+    m_ButtonDone.init("Done", 0);  // only the done button needs an id, the
                                     // others will never call back!
-    m_ButtonSymbols.init(L"Symbols", -1);
-    m_ButtonBackspace.init(L"Backspace", -1);
+    m_ButtonSymbols.init("Symbols", -1);
+    m_ButtonBackspace.init("Backspace", -1);
 
     // Initialise function keyboard Buttons and set alternative symbol button
     // string
-    std::wstring label = L"Abc";
-    IggyStringUTF16 stringVal;
-    const std::u16string convLabel = wstring_to_u16string(label);
-    stringVal.string = convLabel.c_str();
-    stringVal.length = convLabel.length();
+    std::string label = "Abc";
+    IggyStringUTF8 stringVal;
+    stringVal.string = const_cast<char*>(label.c_str());
+    stringVal.length = label.length();
 
     IggyDataValue result;
     IggyDataValue value[1];
-    value[0].type = IGGY_DATATYPE_string_UTF16;
-    value[0].string16 = stringVal;
+    value[0].type = IGGY_DATATYPE_string_UTF8;
+    value[0].string8 = stringVal;
 
     IggyResult out = IggyPlayerCallMethodRS(
         getMovie(), &result, IggyPlayerRootPath(getMovie()),
@@ -60,11 +59,11 @@ UIScene_Keyboard::~UIScene_Keyboard() {
     m_parentLayer->removeComponent(eUIComponent_MenuBackground);
 }
 
-std::wstring UIScene_Keyboard::getMoviePath() {
+std::string UIScene_Keyboard::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1 && !m_parentLayer->IsFullscreenGroup()) {
-        return L"KeyboardSplit";
+        return "KeyboardSplit";
     } else {
-        return L"Keyboard";
+        return "Keyboard";
     }
 }
 
@@ -188,7 +187,7 @@ void UIScene_Keyboard::handleTimerComplete(int id) {
 
 void UIScene_Keyboard::KeyboardDonePressed() {
     // Debug
-    app.DebugPrintf("UI Keyboard - DONE - [%ls]\n",
+    app.DebugPrintf("UI Keyboard - DONE - [%s]\n",
                     m_KeyboardTextInput.getLabel());
 
     // ToDo: Keyboard can now pass on its final string value and close itself

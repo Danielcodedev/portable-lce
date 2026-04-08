@@ -32,7 +32,7 @@ public:
                                  int x, int y, int z) = 0;
     virtual bool openEnchanting(int iPad, std::shared_ptr<Inventory> inventory,
                                 int x, int y, int z, Level* level,
-                                const std::wstring& name) = 0;
+                                const std::string& name) = 0;
     virtual bool openFurnace(int iPad, std::shared_ptr<Inventory> inventory,
                              std::shared_ptr<FurnaceTileEntity> furnace) = 0;
     virtual bool openBrewingStand(
@@ -50,7 +50,7 @@ public:
                                Level* level, int x, int y, int z) = 0;
     virtual bool openTrading(int iPad, std::shared_ptr<Inventory> inventory,
                              std::shared_ptr<Merchant> trader, Level* level,
-                             const std::wstring& name) = 0;
+                             const std::string& name) = 0;
     virtual bool openCommandBlock(
         int iPad, std::shared_ptr<CommandBlockEntity> commandBlock) = 0;
     virtual bool openHopper(int iPad, std::shared_ptr<Inventory> inventory,

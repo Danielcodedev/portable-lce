@@ -200,21 +200,21 @@ UIScene_LaunchMoreOptionsMenu::UIScene_LaunchMoreOptionsMenu(
 
     // set the default text
 #if defined(_LARGE_WORLDS)
-    std::wstring wsText = L"";
+    std::string wsText = "";
     if (m_params->bGenerateOptions) {
         wsText = app.GetString(IDS_GAMEOPTION_SEED);
     } else {
         wsText = app.GetString(IDS_GAMEOPTION_ONLINE);
     }
 #else
-    std::wstring wsText = app.GetString(IDS_GAMEOPTION_ONLINE);
+    std::string wsText = app.GetString(IDS_GAMEOPTION_ONLINE);
 #endif
     EHTMLFontSize size = eHTMLSize_Normal;
     if (!PlatformRenderer.IsHiDef() && !PlatformRenderer.IsWidescreen()) {
         size = eHTMLSize_Splitscreen;
     }
-    wchar_t startTags[64];
-    swprintf(startTags, 64, L"<font color=\"#%08x\">",
+    char startTags[64];
+    snprintf(startTags, 64, "<font color=\"#%08x\">",
              app.GetHTMLColour(eHTMLColor_White));
     wsText = startTags + wsText;
     if (m_tabIndex == TAB_WORLD_OPTIONS)
@@ -254,8 +254,8 @@ void UIScene_LaunchMoreOptionsMenu::updateComponents() {
     // #endif
 }
 
-std::wstring UIScene_LaunchMoreOptionsMenu::getMoviePath() {
-    return L"LaunchMoreOptionsMenu";
+std::string UIScene_LaunchMoreOptionsMenu::getMoviePath() {
+    return "LaunchMoreOptionsMenu";
 }
 
 void UIScene_LaunchMoreOptionsMenu::tick() {
@@ -497,13 +497,13 @@ void UIScene_LaunchMoreOptionsMenu::handleFocusChange(F64 controlId,
 #endif
     };
 
-    std::wstring wsText = app.GetString(stringId);
+    std::string wsText = app.GetString(stringId);
     EHTMLFontSize size = eHTMLSize_Normal;
     if (!PlatformRenderer.IsHiDef() && !PlatformRenderer.IsWidescreen()) {
         size = eHTMLSize_Splitscreen;
     }
-    wchar_t startTags[64];
-    swprintf(startTags, 64, L"<font color=\"#%08x\">",
+    char startTags[64];
+    snprintf(startTags, 64, "<font color=\"#%08x\">",
              app.GetHTMLColour(eHTMLColor_White));
     wsText = startTags + wsText;
 
@@ -552,8 +552,7 @@ void UIScene_LaunchMoreOptionsMenu::handlePress(F64 controlId, F64 childId) {
                 [this](bool bRes) -> int {
                     // 4J HEG - No reason to set value if keyboard was cancelled
                     if (bRes) {
-                        std::wstring str =
-                            convStringToWstring(PlatformInput.GetText());
+                        std::string str = PlatformInput.GetText();
                         m_editSeed.setLabel(str);
                         m_params->seed = std::move(str);
                     }

@@ -20,7 +20,7 @@ StubStorage::EMessageResult StubStorage::RequestMessageBox(
     unsigned int uiTitle, unsigned int uiText, unsigned int* uiOptionA,
     unsigned int uiOptionC, unsigned int pad,
     std::function<int(int, const StubStorage::EMessageResult)> callback,
-    C4JStringTable* pStringTable, wchar_t* pwchFormatString,
+    C4JStringTable* pStringTable, char* pwchFormatString,
     unsigned int focusButton) {
     return EMessage_ResultAccept;
 }
@@ -35,14 +35,14 @@ bool StubStorage::SetSaveDevice(std::function<int(const bool)> callback,
 }
 
 void StubStorage::Init(unsigned int uiSaveVersion,
-                      const wchar_t* pwchDefaultSaveName, char* pszSavePackName,
+                      const char* pwchDefaultSaveName, char* pszSavePackName,
                       int iMinimumSaveSize,
                       std::function<int(const ESavingMessage, int)> callback,
                       const char* szGroupID) {}
 void StubStorage::ResetSaveData() {}
 void StubStorage::SetDefaultSaveNameForKeyboardDisplay(
-    const wchar_t* pwchDefaultSaveName) {}
-void StubStorage::SetSaveTitle(const wchar_t* pwchDefaultSaveName) {}
+    const char* pwchDefaultSaveName) {}
+void StubStorage::SetSaveTitle(const char* pwchDefaultSaveName) {}
 bool StubStorage::GetSaveUniqueNumber(int* piVal) {
     if (piVal) *piVal = 0;
     return true;
@@ -74,7 +74,7 @@ StubStorage::ESaveGameState StubStorage::SaveSaveData(
 }
 void StubStorage::CopySaveDataToNewSave(std::uint8_t* pbThumbnail,
                                        unsigned int cbThumbnail,
-                                       wchar_t* wchNewName,
+                                       char* wchNewName,
                                        std::function<int(bool)> callback) {}
 void StubStorage::SetSaveDeviceSelected(unsigned int uiPad, bool bSelected) {}
 bool StubStorage::GetSaveDeviceSelected(unsigned int iPad) { return true; }
@@ -165,21 +165,21 @@ void StubStorage::GetMountedDLCFileList(const char* szMountDrive,
 std::string StubStorage::GetMountedPath(std::string szMount) { return ""; }
 StubStorage::ETMSStatus StubStorage::ReadTMSFile(
     int iQuadrant, eGlobalStorage eStorageFacility,
-    StubStorage::eTMS_FileType eFileType, wchar_t* pwchFilename,
+    StubStorage::eTMS_FileType eFileType, char* pwchFilename,
     std::uint8_t** ppBuffer, unsigned int* pBufferSize,
-    std::function<int(wchar_t*, int, bool, int)> callback, int iAction) {
+    std::function<int(char*, int, bool, int)> callback, int iAction) {
     return ETMSStatus_Fail;
 }
 bool StubStorage::WriteTMSFile(int iQuadrant, eGlobalStorage eStorageFacility,
-                              wchar_t* pwchFilename, std::uint8_t* pBuffer,
+                              char* pwchFilename, std::uint8_t* pBuffer,
                               unsigned int bufferSize) {
     return false;
 }
 bool StubStorage::DeleteTMSFile(int iQuadrant, eGlobalStorage eStorageFacility,
-                               wchar_t* pwchFilename) {
+                               char* pwchFilename) {
     return false;
 }
-void StubStorage::StoreTMSPathName(wchar_t* pwchName) {}
+void StubStorage::StoreTMSPathName(char* pwchName) {}
 StubStorage::ETMSStatus StubStorage::TMSPP_ReadFile(
     int iPad, StubStorage::eGlobalStorage eStorageFacility,
     StubStorage::eTMS_FILETYPEVAL eFileTypeVal, const char* szFilename,

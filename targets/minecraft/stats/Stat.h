@@ -18,7 +18,7 @@ class LocalPlayer;
 class Stat {
 public:
     const int id;
-    const std::wstring name;
+    const std::string name;
     bool awardLocallyOnly;
 
 private:
@@ -26,13 +26,13 @@ private:
     void _init();
 
 public:
-    Stat(int id, const std::wstring& name, StatFormatter* formatter);
-    Stat(int id, const std::wstring& name);
+    Stat(int id, const std::string& name, StatFormatter* formatter);
+    Stat(int id, const std::string& name);
     Stat* setAwardLocallyOnly();
 
     virtual Stat* postConstruct();
     virtual bool isAchievement();
-    std::wstring format(int value);
+    std::string format(int value);
 
 private:
     // static NumberFormat *numberFormat;
@@ -40,7 +40,7 @@ private:
 public:
     class DefaultFormat : public StatFormatter {
     public:
-        std::wstring format(int value);
+        std::string format(int value);
     } static* defaultFormatter;
 
 private:
@@ -49,15 +49,15 @@ private:
 public:
     class TimeFormatter : public StatFormatter {
     public:
-        std::wstring format(int value);
+        std::string format(int value);
     } static* timeFormatter;
 
     class DistanceFormatter : public StatFormatter {
     public:
-        std::wstring format(int cm);
+        std::string format(int cm);
     } static* distanceFormatter;
 
-    std::wstring toString();
+    std::string toString();
 
 public:
     // 4J-JEV, for Durango stats

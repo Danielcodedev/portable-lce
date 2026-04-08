@@ -45,14 +45,14 @@ UIScene_SettingsUIMenu::UIScene_SettingsUIMenu(int iPad, void* initData,
         (app.GetGameSettings(m_iPad,
                              eGameSetting_DisplaySplitscreenGamertags) != 0));
 
-    wchar_t TempString[256];
+    char TempString[256];
 
-    swprintf(TempString, 256, L"%ls: %d", app.GetString(IDS_SLIDER_UISIZE),
+    snprintf(TempString, 256, "%s: %d", app.GetString(IDS_SLIDER_UISIZE),
              app.GetGameSettings(m_iPad, eGameSetting_UISize) + 1);
     m_sliderUISize.init(TempString, eControl_UISize, 1, 3,
                         app.GetGameSettings(m_iPad, eGameSetting_UISize) + 1);
 
-    swprintf(TempString, 256, L"%ls: %d",
+    snprintf(TempString, 256, "%s: %d",
              app.GetString(IDS_SLIDER_UISIZESPLITSCREEN),
              app.GetGameSettings(m_iPad, eGameSetting_UISizeSplitscreen) + 1);
     m_sliderUISizeSplitscreen.init(
@@ -103,11 +103,11 @@ void UIScene_SettingsUIMenu::updateComponents() {
 
 UIScene_SettingsUIMenu::~UIScene_SettingsUIMenu() {}
 
-std::wstring UIScene_SettingsUIMenu::getMoviePath() {
+std::string UIScene_SettingsUIMenu::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1) {
-        return L"SettingsUIMenuSplit";
+        return "SettingsUIMenuSplit";
     } else {
-        return L"SettingsUIMenu";
+        return "SettingsUIMenu";
     }
 }
 
@@ -170,13 +170,13 @@ void UIScene_SettingsUIMenu::handleInput(int iPad, int key, bool repeat,
 }
 
 void UIScene_SettingsUIMenu::handleSliderMove(F64 sliderId, F64 currentValue) {
-    wchar_t TempString[256];
+    char TempString[256];
     int value = (int)currentValue;
     switch ((int)sliderId) {
         case eControl_UISize:
             m_sliderUISize.handleSliderMove(value);
 
-            swprintf(TempString, 256, L"%ls: %d",
+            snprintf(TempString, 256, "%s: %d",
                      app.GetString(IDS_SLIDER_UISIZE), value);
             m_sliderUISize.setLabel(TempString);
 
@@ -191,7 +191,7 @@ void UIScene_SettingsUIMenu::handleSliderMove(F64 sliderId, F64 currentValue) {
         case eControl_UISizeSplitscreen:
             m_sliderUISizeSplitscreen.handleSliderMove(value);
 
-            swprintf(TempString, 256, L"%ls: %d",
+            snprintf(TempString, 256, "%s: %d",
                      app.GetString(IDS_SLIDER_UISIZESPLITSCREEN), value);
             m_sliderUISizeSplitscreen.setLabel(TempString);
 

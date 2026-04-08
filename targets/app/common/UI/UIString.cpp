@@ -29,11 +29,11 @@ UIString::UIStringCore::UIStringCore(StringBuilder wstrBuilder) {
 
     m_fStringBuilder = wstrBuilder;
 
-    m_wstrCache = L"";
+    m_wstrCache = "";
     update(true);
 }
 
-UIString::UIStringCore::UIStringCore(const std::wstring& str) {
+UIString::UIStringCore::UIStringCore(const std::string& str) {
     m_bIsConstant = true;
 
     m_lastSetLanguage = m_lastSetLocale = -1;
@@ -42,7 +42,7 @@ UIString::UIStringCore::UIStringCore(const std::wstring& str) {
     m_wstrCache = str;
 }
 
-std::wstring& UIString::UIStringCore::getString() {
+std::string& UIString::UIStringCore::getString() {
     if (hasNewString()) update(true);
     return m_wstrCache;
 }
@@ -92,19 +92,19 @@ UIString::UIString(StringBuilder wstrBuilder) {
     m_core = std::shared_ptr<UIStringCore>(core);
 }
 
-UIString::UIString(const std::string& constant) {
-    std::wstring wstr = convStringToWstring(constant);
-    UIStringCore* core = new UIStringCore(wstr);
-    m_core = std::shared_ptr<UIStringCore>(core);
-}
+// UIString::UIString(const std::wstring& constant) {
+//     std::wstring wstr = convStringToWstring(constant);
+//     UIStringCore* core = new UIStringCore(wstr);
+//     m_core = std::shared_ptr<UIStringCore>(core);
+// }
 
-UIString::UIString(const std::wstring& constant) {
+UIString::UIString(const std::string& constant) {
     UIStringCore* core = new UIStringCore(constant);
     m_core = std::shared_ptr<UIStringCore>(core);
 }
 
-UIString::UIString(const wchar_t* constant) {
-    std::wstring str = std::wstring(constant);
+UIString::UIString(const char* constant) {
+    std::string str = std::string(constant);
     UIStringCore* core = new UIStringCore(str);
     m_core = std::shared_ptr<UIStringCore>(core);
 }
@@ -128,14 +128,14 @@ void UIString::setUpdated() {
     if (m_core != nullptr) m_core->setUpdated();
 }
 
-std::wstring& UIString::getString() {
-    static std::wstring blank(L"");
+std::string& UIString::getString() {
+    static std::string blank("");
     if (m_core != nullptr)
         return m_core->getString();
     else
         return blank;
 }
 
-const wchar_t* UIString::c_str() { return getString().c_str(); }
+const char* UIString::c_str() { return getString().c_str(); }
 
 unsigned int UIString::length() { return getString().length(); }

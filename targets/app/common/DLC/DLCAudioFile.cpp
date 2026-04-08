@@ -5,12 +5,14 @@
 #include <cstring>
 #include <unordered_map>
 
-#include "platform/renderer/renderer.h"
-#include "platform/storage/storage.h"
 #include "DLCManager.h"
 #include "app/common/DLC/DLCFile.h"
 #include "app/linux/LinuxGame.h"
 #include "platform/XboxStubs.h"
+#include "platform/renderer/renderer.h"
+#include "platform/storage/storage.h"
+#include "util/StringHelpers.h"
+
 #if defined(_WINDOWS64)
 #include "app/windows/XML/ATGXmlParser.h"
 #include "app/windows/XML/xmlFilesCallback.h"
@@ -18,26 +20,6 @@
 
 namespace {
 constexpr std::size_t AUDIO_DLC_WCHAR_BIN_SIZE = 2;
-
-#if WCHAR_MAX > 0xFFFF
-static std::wstring ReadAudioDlcWString(const void* data) {
-    const std::uint16_t* chars = static_cast<const std::uint16_t*>(data);
-    const std::uint16_t* end = chars;
-    while (*end != 0) {
-        ++end;
-    }
-
-    std::wstring out(static_cast<std::size_t>(end - chars), 0);
-    for (std::size_t i = 0; i < out.size(); ++i) {
-        out[i] = static_cast<wchar_t>(chars[i]);
-    }
-    return out;
-}
-#else
-static std::wstring ReadAudioDlcWString(const void* data) {
-    return std::wstring(static_cast<const wchar_t*>(data));
-}
-#endif
 
 template <typename T>
 T ReadAudioDlcValue(const std::uint8_t* data, unsigned int offset = 0) {
@@ -58,18 +40,19 @@ inline unsigned int AudioParamAdvance(unsigned int wcharCount) {
 }
 
 inline unsigned int AudioDetailAdvance(unsigned int wcharCount) {
-    return static_cast<unsigned int>(sizeof(IPlatformStorage::DLC_FILE_DETAILS) +
-                                     wcharCount * AUDIO_DLC_WCHAR_BIN_SIZE);
+    return static_cast<unsigned int>(
+        sizeof(IPlatformStorage::DLC_FILE_DETAILS) +
+        wcharCount * AUDIO_DLC_WCHAR_BIN_SIZE);
 }
 
-inline std::wstring ReadAudioParamString(const std::uint8_t* data,
-                                         unsigned int offset) {
-    return ReadAudioDlcWString(data + offset +
-                               offsetof(IPlatformStorage::DLC_FILE_PARAM, wchData));
+inline std::string ReadAudioParamString(const std::uint8_t* data,
+                                        unsigned int offset) {
+    return dlc_read_wstring(
+        data + offset + offsetof(IPlatformStorage::DLC_FILE_PARAM, wchData));
 }
 }  // namespace
 
-DLCAudioFile::DLCAudioFile(const std::wstring& path)
+DLCAudioFile::DLCAudioFile(const std::string& path)
     : DLCFile(DLCManager::e_DLCType_Audio, path) {
     m_pbData = nullptr;
     m_dataBytes = 0;
@@ -87,13 +70,13 @@ std::uint8_t* DLCAudioFile::getData(std::uint32_t& dataBytes) {
     return m_pbData;
 }
 
-const wchar_t* DLCAudioFile::wchTypeNamesA[] = {
-    L"CUENAME",
-    L"CREDIT",
+const char* DLCAudioFile::wchTypeNamesA[] = {
+    "CUENAME",
+    "CREDIT",
 };
 
 DLCAudioFile::EAudioParameterType DLCAudioFile::getParameterType(
-    const std::wstring& paramName) {
+    const std::string& paramName) {
     EAudioParameterType type = e_AudioParamType_Invalid;
 
     for (int i = 0; i < e_AudioParamType_Max; ++i) {
@@ -107,7 +90,7 @@ DLCAudioFile::EAudioParameterType DLCAudioFile::getParameterType(
 }
 
 void DLCAudioFile::addParameter(EAudioType type, EAudioParameterType ptype,
-                                const std::wstring& value) {
+                                const std::string& value) {
     switch (ptype) {
         case e_AudioParamType_Credit:  // If this parameter exists, then mark
                                        // this as free
@@ -122,8 +105,8 @@ void DLCAudioFile::addParameter(EAudioType type, EAudioParameterType ptype,
 
                 int maximumChars = 55;
 
-                bool bIsSDMode =
-                    !PlatformRenderer.IsHiDef() && !PlatformRenderer.IsWidescreen();
+                bool bIsSDMode = !PlatformRenderer.IsHiDef() &&
+                                 !PlatformRenderer.IsWidescreen();
 
                 if (bIsSDMode) {
                     maximumChars = 45;
@@ -136,14 +119,14 @@ void DLCAudioFile::addParameter(EAudioType type, EAudioParameterType ptype,
                         maximumChars = 35;
                         break;
                 }
-                std::wstring creditValue = value;
+                std::string creditValue = value;
                 while (creditValue.length() > maximumChars) {
                     unsigned int i = 1;
                     while (i < creditValue.length() &&
                            (i + 1) <= maximumChars) {
                         i++;
                     }
-                    int iLast = (int)creditValue.find_last_of(L" ", i);
+                    int iLast = (int)creditValue.find_last_of(" ", i);
                     switch (XGetLanguage()) {
                         case XC_LANGUAGE_JAPANESE:
                         case XC_LANGUAGE_TCHINESE:
@@ -151,7 +134,7 @@ void DLCAudioFile::addParameter(EAudioType type, EAudioParameterType ptype,
                             iLast = maximumChars;
                             break;
                         default:
-                            iLast = (int)creditValue.find_last_of(L" ", i);
+                            iLast = (int)creditValue.find_last_of(" ", i);
                             break;
                     }
 
@@ -202,8 +185,7 @@ bool DLCAudioFile::processDLCDataFile(std::uint8_t* pbData,
     for (unsigned int i = 0; i < uiParameterTypeCount; i++) {
         // Map DLC strings to application strings, then store the DLC index
         // mapping to application index
-        std::wstring parameterName =
-            ReadAudioParamString(pbData, uiCurrentByte);
+        std::string parameterName = ReadAudioParamString(pbData, uiCurrentByte);
         EAudioParameterType type = getParameterType(parameterName);
         if (type != e_AudioParamType_Invalid) {
             parameterMapping[paramBuf.dwType] = type;
@@ -257,7 +239,7 @@ int DLCAudioFile::GetCountofType(DLCAudioFile::EAudioType eType) {
     return m_parameters[eType].size();
 }
 
-std::wstring& DLCAudioFile::GetSoundName(int iIndex) {
+std::string& DLCAudioFile::GetSoundName(int iIndex) {
     int iWorldType = e_AudioType_Overworld;
     while (iIndex >= m_parameters[iWorldType].size()) {
         iIndex -= m_parameters[iWorldType].size();

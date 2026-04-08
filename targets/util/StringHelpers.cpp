@@ -1,16 +1,24 @@
 #include <algorithm>
 #include <cassert>
-#include <cwctype>
 #include <cstddef>
+#include <cwctype>
 #include <sstream>
 #include <string>
 #include <vector>
 
 #include "simdutf.h"
 
-std::wstring toLower(const std::wstring& a) {
-    std::wstring out = std::wstring(a);
-    std::transform(out.begin(), out.end(), out.begin(), std::towlower);
+// fuck you, MSVC.
+static_assert((unsigned char)"ඞ"[0] == 0xE0 && (unsigned char)"ඞ"[1] == 0xB6 &&
+                  (unsigned char)"ඞ"[2] == 0x9E,
+              "Execution charset is not UTF-8. Compile with "
+              "-fexec-charset=UTF-8 or /utf-8, or use a compiler written by a "
+              "human being with a functional brain.");
+
+std::string toLower(const std::string& a) {
+    std::string out = std::string(a);
+    std::transform(out.begin(), out.end(), out.begin(),
+                   [](unsigned char c) { return std::tolower(c); });
     return out;
 }
 
@@ -18,31 +26,31 @@ std::wstring toLower(const std::wstring& a) {
 // for whitespace-only input. Callers in animation file parsing
 // (AbstractTexturePack::getAnimationString) depend on this behavior -
 // returning empty here breaks clock/compass texture frame loading.
-std::wstring trimString(const std::wstring& a) {
-    std::wstring b;
-    int start = (int)a.find_first_not_of(L" \t\n\r");
-    int end = (int)a.find_last_not_of(L" \t\n\r");
-    if (start == std::wstring::npos) start = 0;
-    if (end == std::wstring::npos) end = (int)a.size() - 1;
+std::string trimString(const std::string& a) {
+    std::string b;
+    int start = (int)a.find_first_not_of(" \t\n\r");
+    int end = (int)a.find_last_not_of(" \t\n\r");
+    if (start == std::string::npos) start = 0;
+    if (end == std::string::npos) end = (int)a.size() - 1;
     b = a.substr(start, (end - start) + 1);
     return b;
 }
 
-std::wstring replaceAll(const std::wstring& in, const std::wstring& replace,
-                        const std::wstring& with) {
-    std::wstring out = in;
+std::string replaceAll(const std::string& in, const std::string& replace,
+                       const std::string& with) {
+    std::string out = in;
     size_t pos = 0;
-    while ((pos = out.find(replace, pos)) != std::wstring::npos) {
+    while ((pos = out.find(replace, pos)) != std::string::npos) {
         out.replace(pos, replace.length(), with);
         pos++;
     }
     return out;
 }
 
-bool equalsIgnoreCase(const std::wstring& a, const std::wstring& b) {
+bool equalsIgnoreCase(const std::string& a, const std::string& b) {
     bool out;
-    std::wstring c = toLower(a);
-    std::wstring d = toLower(b);
+    std::string c = toLower(a);
+    std::string d = toLower(b);
     out = c.compare(d) == 0;
     return out;
 }
@@ -113,8 +121,8 @@ std::u8string wstring_to_u8string(const std::wstring& converting) {
 
         std::u8string result(simdutf::utf8_length_from_utf16le(data16, len16),
                              u'\0');
-        auto len =
-            simdutf::convert_utf16_to_utf8(data16, len16, reinterpret_cast<char*>(result.data()));
+        auto len = simdutf::convert_utf16_to_utf8(
+            data16, len16, reinterpret_cast<char*>(result.data()));
         result.resize(len);
 
         return result;
@@ -124,8 +132,8 @@ std::u8string wstring_to_u8string(const std::wstring& converting) {
 
         std::u8string result(simdutf::utf8_length_from_utf32(data32, len32),
                              u'\0');
-        auto len =
-            simdutf::convert_utf32_to_utf8(data32, len32, reinterpret_cast<char*>(result.data()));
+        auto len = simdutf::convert_utf32_to_utf8(
+            data32, len32, reinterpret_cast<char*>(result.data()));
         result.resize(len);
 
         return result;
@@ -133,6 +141,19 @@ std::u8string wstring_to_u8string(const std::wstring& converting) {
         static_assert(sizeof(wchar_t) == 2 || sizeof(wchar_t) == 4,
                       "Here's a nickel, Kid. Go buy yourself a real computer.");
     }
+}
+
+std::u16string string_to_u16string(const std::string& converting) {
+    if (converting.empty()) return {};
+
+    std::u16string result(
+        simdutf::utf16_length_from_utf8(converting.data(), converting.size()),
+        u'\0');
+    std::size_t convertedLength = simdutf::convert_utf8_to_utf16(
+        converting.data(), converting.size(), result.data());
+    result.resize(convertedLength);
+
+    return result;
 }
 
 std::string wstringtofilename(const std::wstring& name) {
@@ -153,26 +174,24 @@ std::wstring filenametowstring(const char* name) {
     return convStringToWstring(name);
 }
 
-std::vector<std::wstring>& stringSplit(const std::wstring& s, wchar_t delim,
-                                       std::vector<std::wstring>& elems) {
-    std::wstringstream ss(s);
-    std::wstring item;
+std::vector<std::string>& stringSplit(const std::string& s, char delim,
+                                      std::vector<std::string>& elems) {
+    std::stringstream ss(s);
+    std::string item;
     while (std::getline(ss, item, delim)) {
         elems.push_back(item);
     }
     return elems;
 }
 
-std::vector<std::wstring> stringSplit(const std::wstring& s, wchar_t delim) {
-    std::vector<std::wstring> elems;
+std::vector<std::string> stringSplit(const std::string& s, char delim) {
+    std::vector<std::string> elems;
     return stringSplit(s, delim, elems);
 }
 
-bool BothAreSpaces(wchar_t lhs, wchar_t rhs) {
-    return (lhs == rhs) && (lhs == L' ');
-}
+bool BothAreSpaces(char lhs, char rhs) { return (lhs == rhs) && (lhs == ' '); }
 
-void stripWhitespaceForHtml(std::wstring& string, bool bRemoveNewline) {
+void stripWhitespaceForHtml(std::string& string, bool bRemoveNewline) {
     // Strip newline chars
     if (bRemoveNewline) {
         string.erase(std::remove(string.begin(), string.end(), '\n'),
@@ -190,22 +209,22 @@ void stripWhitespaceForHtml(std::wstring& string, bool bRemoveNewline) {
     string = trimString(string);
 }
 
-std::wstring escapeXML(const std::wstring& in) {
-    std::wstring out = in;
-    out = replaceAll(out, L"&", L"&amp;");
-    // out = replaceAll(out, L"\"", L"&quot;");
-    // out = replaceAll(out, L"'", L"&apos;");
-    out = replaceAll(out, L"<", L"&lt;");
-    out = replaceAll(out, L">", L"&gt;");
+std::string escapeXML(const std::string& in) {
+    std::string out = in;
+    out = replaceAll(out, "&", "&amp;");
+    // out = replaceAll(out, "\"", "&quot;");
+    // out = replaceAll(out, "'", "&apos;");
+    out = replaceAll(out, "<", "&lt;");
+    out = replaceAll(out, ">", "&gt;");
     return out;
 }
 
-std::wstring parseXMLSpecials(const std::wstring& in) {
-    std::wstring out = in;
-    out = replaceAll(out, L"&amp;", L"&");
-    // out = replaceAll(out, L"\"", L"&quot;");
-    // out = replaceAll(out, L"'", L"&apos;");
-    out = replaceAll(out, L"&lt;", L"<");
-    out = replaceAll(out, L"&gt;", L">");
+std::string parseXMLSpecials(const std::string& in) {
+    std::string out = in;
+    out = replaceAll(out, "&amp;", "&");
+    // out = replaceAll(out, "\"", "&quot;");
+    // out = replaceAll(out, "'", "&apos;");
+    out = replaceAll(out, "&lt;", "<");
+    out = replaceAll(out, "&gt;", ">");
     return out;
 }

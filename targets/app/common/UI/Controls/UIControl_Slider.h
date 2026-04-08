@@ -22,7 +22,7 @@ private:
     int m_max;
     int m_current;
 
-    std::vector<std::wstring> m_allPossibleLabels;
+    std::vector<std::string> m_allPossibleLabels;
 
     // 4J-TomK - function for setting slider position on touch
     IggyName m_funcSetRelativeSliderPos;
@@ -38,7 +38,7 @@ public:
 
     void handleSliderMove(int newValue);
     void SetSliderTouchPos(float fTouchPos);
-    virtual void setAllPossibleLabels(int labelCount, wchar_t labels[][256]);
+    virtual void setAllPossibleLabels(int labelCount, char labels[][256]);
 
     S32 GetRealWidth();
     virtual void ReInit();

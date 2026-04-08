@@ -25,7 +25,7 @@ SkinManager::SkinManager() : m_xuidNotch(INVALID_XUID) {
     }
 }
 
-void SkinManager::setPlayerSkin(int iPad, const std::wstring& name,
+void SkinManager::setPlayerSkin(int iPad, const std::string& name,
                                 GAME_SETTINGS** gameSettingsA) {
     std::uint32_t skinId = getSkinIdFromPath(name);
     setPlayerSkin(iPad, skinId, gameSettingsA);
@@ -43,7 +43,7 @@ void SkinManager::setPlayerSkin(int iPad, std::uint32_t dwSkinId,
             dwSkinId);
 }
 
-std::wstring SkinManager::getPlayerSkinName(int iPad,
+std::string SkinManager::getPlayerSkinName(int iPad,
                                             GAME_SETTINGS** gameSettingsA) {
     return getSkinPathFromId(gameSettingsA[iPad]->dwSelectedSkin);
 }
@@ -54,10 +54,10 @@ std::uint32_t SkinManager::getPlayerSkinId(int iPad,
     DLCPack* Pack = nullptr;
     DLCSkinFile* skinFile = nullptr;
     std::uint32_t dwSkin = gameSettingsA[iPad]->dwSelectedSkin;
-    wchar_t chars[256];
+    char chars[256];
 
     if (GET_IS_DLC_SKIN_FROM_BITMASK(dwSkin)) {
-        swprintf(chars, 256, L"dlcskin%08d.png",
+        snprintf(chars, 256, "dlcskin%08d.png",
                  GET_DLC_SKIN_ID_FROM_BITMASK(dwSkin));
 
         Pack = dlcManager.getPackContainingSkin(chars);
@@ -85,7 +85,7 @@ std::uint32_t SkinManager::getAdditionalModelParts(int iPad) {
     return m_dwAdditionalModelParts[iPad];
 }
 
-void SkinManager::setPlayerCape(int iPad, const std::wstring& name,
+void SkinManager::setPlayerCape(int iPad, const std::string& name,
                                 GAME_SETTINGS** gameSettingsA) {
     std::uint32_t capeId = Player::getCapeIdFromPath(name);
     setPlayerCape(iPad, capeId, gameSettingsA);
@@ -103,7 +103,7 @@ void SkinManager::setPlayerCape(int iPad, std::uint32_t dwCapeId,
             dwCapeId);
 }
 
-std::wstring SkinManager::getPlayerCapeName(int iPad,
+std::string SkinManager::getPlayerCapeName(int iPad,
                                             GAME_SETTINGS** gameSettingsA) {
     return Player::getCapePathFromId(gameSettingsA[iPad]->dwSelectedCape);
 }
@@ -157,10 +157,10 @@ void SkinManager::validateFavoriteSkins(int iPad,
     unsigned int uiCount = getPlayerFavoriteSkinsCount(iPad, gameSettingsA);
 
     unsigned int uiValidSkin = 0;
-    wchar_t chars[256];
+    char chars[256];
 
     for (unsigned int i = 0; i < uiCount; i++) {
-        swprintf(chars, 256, L"dlcskin%08d.png",
+        snprintf(chars, 256, "dlcskin%08d.png",
                  getPlayerFavoriteSkin(iPad, i, gameSettingsA));
 
         DLCPack* pDLCPack = dlcManager.getPackContainingSkin(chars);
@@ -168,7 +168,7 @@ void SkinManager::validateFavoriteSkins(int iPad,
         if (pDLCPack != nullptr) {
             DLCSkinFile* pSkinFile = pDLCPack->getSkinFile(chars);
 
-            if (pDLCPack->hasPurchasedFile(DLCManager::e_DLCType_Skin, L"") ||
+            if (pDLCPack->hasPurchasedFile(DLCManager::e_DLCType_Skin, "") ||
                 (pSkinFile && pSkinFile->isFree())) {
                 gameSettingsA[iPad]->uiFavoriteSkinA[uiValidSkin++] =
                     gameSettingsA[iPad]->uiFavoriteSkinA[i];
@@ -194,7 +194,7 @@ bool SkinManager::isXuidDeadmau5(PlayerUID xuid) {
     return app.isXuidDeadmau5(xuid);
 }
 
-void SkinManager::addMemoryTextureFile(const std::wstring& wName,
+void SkinManager::addMemoryTextureFile(const std::string& wName,
                                        std::uint8_t* pbData,
                                        unsigned int byteCount) {
     std::lock_guard<std::mutex> lock(csMemFilesLock);
@@ -202,7 +202,7 @@ void SkinManager::addMemoryTextureFile(const std::wstring& wName,
     auto it = m_MEM_Files.find(wName);
     if (it != m_MEM_Files.end()) {
 #if !defined(_CONTENT_PACKAGE)
-        wprintf(L"Incrementing the memory texture file count for %ls\n",
+        printf("Incrementing the memory texture file count for %s\n",
                 wName.c_str());
 #endif
         pData = (*it).second;
@@ -226,20 +226,20 @@ void SkinManager::addMemoryTextureFile(const std::wstring& wName,
     m_MEM_Files[wName] = pData;
 }
 
-void SkinManager::removeMemoryTextureFile(const std::wstring& wName) {
+void SkinManager::removeMemoryTextureFile(const std::string& wName) {
     std::lock_guard<std::mutex> lock(csMemFilesLock);
 
     auto it = m_MEM_Files.find(wName);
     if (it != m_MEM_Files.end()) {
 #if !defined(_CONTENT_PACKAGE)
-        wprintf(L"Decrementing the memory texture file count for %ls\n",
+        printf("Decrementing the memory texture file count for %s\n",
                 wName.c_str());
 #endif
         PMEMDATA pData = (*it).second;
         --pData->ucRefCount;
         if (pData->ucRefCount <= 0) {
 #if !defined(_CONTENT_PACKAGE)
-            wprintf(L"Erasing the memory texture file data for %ls\n",
+            printf("Erasing the memory texture file data for %s\n",
                     wName.c_str());
 #endif
             delete pData;
@@ -249,7 +249,7 @@ void SkinManager::removeMemoryTextureFile(const std::wstring& wName) {
 }
 
 bool SkinManager::defaultCapeExists() {
-    std::wstring wTex = L"Special_Cape.png";
+    std::string wTex = "Special_Cape.png";
     bool val = false;
 
     {
@@ -261,7 +261,7 @@ bool SkinManager::defaultCapeExists() {
     return val;
 }
 
-bool SkinManager::isFileInMemoryTextures(const std::wstring& wName) {
+bool SkinManager::isFileInMemoryTextures(const std::string& wName) {
     bool val = false;
 
     {
@@ -273,7 +273,7 @@ bool SkinManager::isFileInMemoryTextures(const std::wstring& wName) {
     return val;
 }
 
-void SkinManager::getMemFileDetails(const std::wstring& wName,
+void SkinManager::getMemFileDetails(const std::string& wName,
                                     std::uint8_t** ppbData,
                                     unsigned int* pByteCount) {
     std::lock_guard<std::mutex> lock(csMemFilesLock);
@@ -410,17 +410,17 @@ void SkinManager::setAnimOverrideBitmask(std::uint32_t dwSkinID,
         dwSkinID, uiAnimOverrideBitmask));
 }
 
-std::uint32_t SkinManager::getSkinIdFromPath(const std::wstring& skin) {
+std::uint32_t SkinManager::getSkinIdFromPath(const std::string& skin) {
     bool dlcSkin = false;
     unsigned int skinId = 0;
 
     if (skin.size() >= 14) {
-        dlcSkin = skin.substr(0, 3).compare(L"dlc") == 0;
+        dlcSkin = skin.substr(0, 3).compare("dlc") == 0;
 
-        std::wstring skinValue = skin.substr(7, skin.size());
-        skinValue = skinValue.substr(0, skinValue.find_first_of(L'.'));
+        std::string skinValue = skin.substr(7, skin.size());
+        skinValue = skinValue.substr(0, skinValue.find_first_of('.'));
 
-        std::wstringstream ss;
+        std::stringstream ss;
         if (dlcSkin)
             ss << std::dec << skinValue.c_str();
         else
@@ -432,19 +432,19 @@ std::uint32_t SkinManager::getSkinIdFromPath(const std::wstring& skin) {
     return skinId;
 }
 
-std::wstring SkinManager::getSkinPathFromId(std::uint32_t skinId) {
-    wchar_t chars[256];
+std::string SkinManager::getSkinPathFromId(std::uint32_t skinId) {
+    char chars[256];
     if (GET_IS_DLC_SKIN_FROM_BITMASK(skinId)) {
-        swprintf(chars, 256, L"dlcskin%08d.png",
+        snprintf(chars, 256, "dlcskin%08d.png",
                  GET_DLC_SKIN_ID_FROM_BITMASK(skinId));
     } else {
         std::uint32_t ugcSkinIndex = GET_UGC_SKIN_ID_FROM_BITMASK(skinId);
         std::uint32_t defaultSkinIndex =
             GET_DEFAULT_SKIN_ID_FROM_BITMASK(skinId);
         if (ugcSkinIndex == 0) {
-            swprintf(chars, 256, L"defskin%08X.png", defaultSkinIndex);
+            snprintf(chars, 256, "defskin%08X.png", defaultSkinIndex);
         } else {
-            swprintf(chars, 256, L"ugcskin%08X.png", ugcSkinIndex);
+            snprintf(chars, 256, "ugcskin%08X.png", ugcSkinIndex);
         }
     }
     return chars;

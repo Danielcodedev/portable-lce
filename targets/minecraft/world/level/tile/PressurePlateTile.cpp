@@ -15,7 +15,7 @@
 
 class Material;
 
-PressurePlateTile::PressurePlateTile(int id, const std::wstring& tex,
+PressurePlateTile::PressurePlateTile(int id, const std::string& tex,
                                      Material* material,
                                      Sensitivity sensitivity)
     : BasePressurePlateTile(id, tex, material) {

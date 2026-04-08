@@ -76,11 +76,11 @@ UIScene_HelpAndOptionsMenu::UIScene_HelpAndOptionsMenu(int iPad, void* initData,
 
 UIScene_HelpAndOptionsMenu::~UIScene_HelpAndOptionsMenu() {}
 
-std::wstring UIScene_HelpAndOptionsMenu::getMoviePath() {
+std::string UIScene_HelpAndOptionsMenu::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1) {
-        return L"HelpAndOptionsMenuSplit";
+        return "HelpAndOptionsMenuSplit";
     } else {
-        return L"HelpAndOptionsMenu";
+        return "HelpAndOptionsMenu";
     }
 }
 

@@ -28,7 +28,7 @@ UIComponent_Tooltips::UIComponent_Tooltips(int iPad, void* initData,
     initialiseMovie();
 }
 
-std::wstring UIComponent_Tooltips::getMoviePath() {
+std::string UIComponent_Tooltips::getMoviePath() {
     switch (m_parentLayer->getViewport()) {
         case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_TOP:
         case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_BOTTOM:
@@ -39,12 +39,12 @@ std::wstring UIComponent_Tooltips::getMoviePath() {
         case IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_BOTTOM_LEFT:
         case IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_BOTTOM_RIGHT:
             m_bSplitscreen = true;
-            return L"ToolTipsSplit";
+            return "ToolTipsSplit";
             break;
         case IPlatformRenderer::VIEWPORT_TYPE_FULLSCREEN:
         default:
             m_bSplitscreen = false;
-            return L"ToolTips";
+            return "ToolTips";
             break;
     }
 }
@@ -245,7 +245,7 @@ void UIComponent_Tooltips::SetEnableTooltips(bool bVal) {}
 
 void UIComponent_Tooltips::ShowTooltip(unsigned int tooltip, bool show) {
     if (show != m_tooltipValues[tooltip].show) {
-        _SetTooltip(tooltip, L"", show);
+        _SetTooltip(tooltip, "", show);
         _Relayout();
     }
 }
@@ -280,9 +280,9 @@ bool UIComponent_Tooltips::_SetTooltip(unsigned int iToolTip, int iTextID) {
         if (iTextID > -1)
             _SetTooltip(iToolTip, iTextID, true);
         else if (iTextID == -2)
-            _SetTooltip(iToolTip, L"", true);
+            _SetTooltip(iToolTip, "", true);
         else
-            _SetTooltip(iToolTip, L"", false);
+            _SetTooltip(iToolTip, "", false);
     }
     return changed;
 }
@@ -300,14 +300,12 @@ void UIComponent_Tooltips::_SetTooltip(unsigned int iToolTipId, UIString label,
     value[0].type = IGGY_DATATYPE_number;
     value[0].number = iToolTipId;
 
-    const std::u16string convLabel = wstring_to_u16string(label.getString());
+    value[1].type = IGGY_DATATYPE_string_UTF8;
+    IggyStringUTF8 stringVal;
 
-    value[1].type = IGGY_DATATYPE_string_UTF16;
-    IggyStringUTF16 stringVal;
-
-    stringVal.string = convLabel.c_str();
-    stringVal.length = convLabel.length();
-    value[1].string16 = stringVal;
+    stringVal.string = const_cast<char*>(label.getString().c_str());
+    stringVal.length = label.getString().length();
+    value[1].string8 = stringVal;
 
     value[2].type = IGGY_DATATYPE_boolean;
     value[2].boolval = show;

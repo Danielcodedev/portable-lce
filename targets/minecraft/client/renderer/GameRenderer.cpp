@@ -1337,7 +1337,7 @@ void GameRenderer::renderLevel(float a, int64_t until) {
         setupFog(0, a);
         glEnable(GL_FOG);
         mc->textures->bindTexture(
-            &TextureAtlas::LOCATION_BLOCKS);  // 4J was L"/terrain.png"
+            &TextureAtlas::LOCATION_BLOCKS);  // 4J was "/terrain.png"
         Lighting::turnOff();
         levelRenderer->render(cameraEntity, 0, a, updateChunks);
 
@@ -1403,7 +1403,7 @@ void GameRenderer::renderLevel(float a, int64_t until) {
         glEnable(GL_BLEND);
         glDisable(GL_CULL_FACE);
         mc->textures->bindTexture(
-            &TextureAtlas::LOCATION_BLOCKS);  // 4J was L"/terrain.png"
+            &TextureAtlas::LOCATION_BLOCKS);  // 4J was "/terrain.png"
         // 4J - have changed this fancy rendering option to work with our
         // command buffers. The original used to use frame buffer flags to
         // disable writing to colour when doing the z-only pass, but that value
@@ -1645,7 +1645,7 @@ void GameRenderer::renderSnowAndRain(float a) {
     glAlphaFunc(GL_GREATER, 0.01f);
 
     mc->textures->bindTexture(
-        &SNOW_LOCATION);  // 4J was L"/environment/snow.png"
+        &SNOW_LOCATION);  // 4J was "/environment/snow.png"
 
     double xo = player->xOld + (player->x - player->xOld) * a;
     double yo = player->yOld + (player->y - player->yOld) * a;

@@ -27,10 +27,10 @@ UIScene_BrewingStandMenu::UIScene_BrewingStandMenu(int iPad, void* _initData,
     initialiseMovie();
 
     m_progressBrewingArrow.init(
-        L"", 0, 0,
+        "", 0, 0,
         PotionBrewing::BREWING_TIME_SECONDS * SharedConstants::TICKS_PER_SECOND,
         0);
-    m_progressBrewingBubbles.init(L"", 0, 0, 30, 0);
+    m_progressBrewingBubbles.init("", 0, 0, 30, 0);
 
     BrewingScreenInput* initData = (BrewingScreenInput*)_initData;
     m_brewingStand = initData->brewingStand;
@@ -64,11 +64,11 @@ UIScene_BrewingStandMenu::UIScene_BrewingStandMenu(int iPad, void* _initData,
     app.SetRichPresenceContext(iPad, CONTEXT_GAME_STATE_BREWING);
 }
 
-std::wstring UIScene_BrewingStandMenu::getMoviePath() {
+std::string UIScene_BrewingStandMenu::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1) {
-        return L"BrewingStandMenuSplit";
+        return "BrewingStandMenuSplit";
     } else {
-        return L"BrewingStandMenu";
+        return "BrewingStandMenu";
     }
 }
 

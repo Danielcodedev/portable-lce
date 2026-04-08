@@ -34,16 +34,16 @@ void CollectItemRuleDefinition::writeAttributes(DataOutputStream* dos,
 }
 
 void CollectItemRuleDefinition::addAttribute(
-    const std::wstring& attributeName, const std::wstring& attributeValue) {
-    if (attributeName.compare(L"itemId") == 0) {
+    const std::string& attributeName, const std::string& attributeValue) {
+    if (attributeName.compare("itemId") == 0) {
         m_itemId = fromWString<int>(attributeValue);
         app.DebugPrintf("CollectItemRule: Adding parameter itemId=%d\n",
                         m_itemId);
-    } else if (attributeName.compare(L"auxValue") == 0) {
+    } else if (attributeName.compare("auxValue") == 0) {
         m_auxValue = fromWString<int>(attributeValue);
         app.DebugPrintf("CollectItemRule: Adding parameter m_auxValue=%d\n",
                         m_auxValue);
-    } else if (attributeName.compare(L"quantity") == 0) {
+    } else if (attributeName.compare("quantity") == 0) {
         m_quantity = fromWString<int>(attributeValue);
         app.DebugPrintf("CollectItemRule: Adding parameter m_quantity=%d\n",
                         m_quantity);
@@ -55,7 +55,7 @@ void CollectItemRuleDefinition::addAttribute(
 int CollectItemRuleDefinition::getGoal() { return m_quantity; }
 
 int CollectItemRuleDefinition::getProgress(GameRule* rule) {
-    GameRule::ValueType value = rule->getParameter(L"iQuantity");
+    GameRule::ValueType value = rule->getParameter("iQuantity");
     return value.i;
 }
 
@@ -63,7 +63,7 @@ void CollectItemRuleDefinition::populateGameRule(
     GameRulesInstance::EGameRulesInstanceType type, GameRule* rule) {
     GameRule::ValueType value;
     value.i = 0;
-    rule->setParameter(L"iQuantity", value);
+    rule->setParameter("iQuantity", value);
 
     GameRuleDefinition::populateGameRule(type, rule);
 }
@@ -75,9 +75,9 @@ bool CollectItemRuleDefinition::onCollectItem(
         item->getAuxValue() == m_auxValue &&
         item->get4JData() == m_4JDataValue) {
         if (!getComplete(rule)) {
-            GameRule::ValueType value = rule->getParameter(L"iQuantity");
+            GameRule::ValueType value = rule->getParameter("iQuantity");
             int quantityCollected = (value.i += item->count);
-            rule->setParameter(L"iQuantity", value);
+            rule->setParameter("iQuantity", value);
 
             statusChanged = true;
 
@@ -102,20 +102,20 @@ bool CollectItemRuleDefinition::onCollectItem(
     return statusChanged;
 }
 
-std::wstring CollectItemRuleDefinition::generateXml(
+std::string CollectItemRuleDefinition::generateXml(
     std::shared_ptr<ItemInstance> item) {
     // 4J Stu - This should be kept in sync with the GameRulesDefinition.xsd
-    std::wstring xml = L"";
+    std::string xml = "";
     if (item != nullptr) {
-        xml = L"<CollectItemRule itemId=\"" + toWString<int>(item->id) +
-              L"\" quantity=\"SET\" descriptionName=\"OPTIONAL\" "
-              L"promptName=\"OPTIONAL\"";
+        xml = "<CollectItemRule itemId=\"" + toWString<int>(item->id) +
+              "\" quantity=\"SET\" descriptionName=\"OPTIONAL\" "
+              "promptName=\"OPTIONAL\"";
         if (item->getAuxValue() != 0)
             xml +=
-                L" auxValue=\"" + toWString<int>(item->getAuxValue()) + L"\"";
+                " auxValue=\"" + toWString<int>(item->getAuxValue()) + "\"";
         if (item->get4JData() != 0)
-            xml += L" dataTag=\"" + toWString<int>(item->get4JData()) + L"\"";
-        xml += L"/>\n";
+            xml += " dataTag=\"" + toWString<int>(item->get4JData()) + "\"";
+        xml += "/>\n";
     }
     return xml;
 }

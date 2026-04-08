@@ -22,10 +22,10 @@ bool UIControl_Base::setupControl(UIScene* scene, IggyValuePath* parent,
                                   const std::string& controlName) {
     bool success = UIControl::setupControl(scene, parent, controlName);
 
-    m_setLabelFunc = registerFastName(L"SetLabel");
-    m_initFunc = registerFastName(L"Init");
-    m_funcGetLabel = registerFastName(L"GetLabel");
-    m_funcCheckLabelWidths = registerFastName(L"CheckLabelWidths");
+    m_setLabelFunc = registerFastName("SetLabel");
+    m_initFunc = registerFastName("Init");
+    m_funcGetLabel = registerFastName("GetLabel");
+    m_funcCheckLabelWidths = registerFastName("CheckLabelWidths");
 
     return success;
 }
@@ -34,20 +34,17 @@ void UIControl_Base::tick() {
     UIControl::tick();
 
     if (m_label.needsUpdating() || m_bLabelChanged) {
-        // app.DebugPrintf("Calling SetLabel - '%ls'\n", m_label.c_str());
+        // app.DebugPrintf("Calling SetLabel - '%s'\n", m_label.c_str());
         m_bLabelChanged = false;
-
-        const std::u16string convLabel =
-            wstring_to_u16string(m_label.getString());
 
         IggyDataValue result;
         IggyDataValue value[1];
-        value[0].type = IGGY_DATATYPE_string_UTF16;
-        IggyStringUTF16 stringVal;
+        value[0].type = IGGY_DATATYPE_string_UTF8;
+        IggyStringUTF8 stringVal;
 
-        stringVal.string = convLabel.c_str();
-        stringVal.length = convLabel.length();
-        value[0].string16 = stringVal;
+        stringVal.string = const_cast<char*>(m_label.getString().c_str());
+        stringVal.length = m_label.getString().length();
+        value[0].string8 = stringVal;
 
         IggyResult out = IggyPlayerCallMethodRS(m_parentScene->getMovie(),
                                                 &result, getIggyValuePath(),
@@ -66,17 +63,14 @@ void UIControl_Base::setLabel(UIString label, bool instant, bool force) {
     if (m_bLabelChanged && instant) {
         m_bLabelChanged = false;
 
-        const std::u16string convLabel =
-            wstring_to_u16string(m_label.getString());
-
         IggyDataValue result;
         IggyDataValue value[1];
-        value[0].type = IGGY_DATATYPE_string_UTF16;
-        IggyStringUTF16 stringVal;
+        value[0].type = IGGY_DATATYPE_string_UTF8;
+        IggyStringUTF8 stringVal;
 
-        stringVal.string = convLabel.c_str();
-        stringVal.length = convLabel.length();
-        value[0].string16 = stringVal;
+        stringVal.string = const_cast<char*>(m_label.getString().c_str());
+        stringVal.length = m_label.getString().length();
+        value[0].string8 = stringVal;
 
         IggyResult out = IggyPlayerCallMethodRS(m_parentScene->getMovie(),
                                                 &result, getIggyValuePath(),
@@ -84,34 +78,30 @@ void UIControl_Base::setLabel(UIString label, bool instant, bool force) {
     }
 }
 
-const wchar_t* UIControl_Base::getLabel() {
+const char* UIControl_Base::getLabel() {
     IggyDataValue result;
     IggyResult out =
         IggyPlayerCallMethodRS(m_parentScene->getMovie(), &result,
                                getIggyValuePath(), m_funcGetLabel, 0, nullptr);
 
-    if (result.type == IGGY_DATATYPE_string_UTF16) {
-        m_label = u16string_to_wstring(result.string16.string);
+    if (result.type == IGGY_DATATYPE_string_UTF8) {
+        m_label = result.string8.string;
     }
 
     return m_label.c_str();
 }
 
 void UIControl_Base::setAllPossibleLabels(int labelCount,
-                                          wchar_t labels[][256]) {
+                                          char labels[][256]) {
     IggyDataValue result;
     IggyDataValue* value = new IggyDataValue[labelCount];
-    IggyStringUTF16* stringVal = new IggyStringUTF16[labelCount];
-
-    std::vector<std::u16string> conv;
-    conv.reserve(labelCount);
+    IggyStringUTF8* stringVal = new IggyStringUTF8[labelCount];
 
     for (int i = 0; i < labelCount; ++i) {
-        conv.push_back(wstring_to_u16string(labels[i]));
-        stringVal[i].string = conv[i].c_str();
-        stringVal[i].length = (S32)conv[i].length();
-        value[i].type = IGGY_DATATYPE_string_UTF16;
-        value[i].string16 = stringVal[i];
+        stringVal[i].string = const_cast<char*>(labels[i]);
+        stringVal[i].length = strlen(labels[i]);
+        value[i].type = IGGY_DATATYPE_string_UTF8;
+        value[i].string8 = stringVal[i];
     }
 
     IggyResult out = IggyPlayerCallMethodRS(

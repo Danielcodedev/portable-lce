@@ -33,7 +33,7 @@ void FallingTileRenderer::render(std::shared_ptr<Entity> _tile, double x,
         glPushMatrix();
         glTranslatef((float)x, (float)y, (float)z);
 
-        bindTexture(tile);  // 4J was L"/terrain.png"
+        bindTexture(tile);  // 4J was "/terrain.png"
         Tile* tt = Tile::tiles[tile->tile];
 
         Level* level = tile->getLevel();

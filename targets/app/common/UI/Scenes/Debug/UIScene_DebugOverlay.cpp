@@ -48,26 +48,26 @@ UIScene_DebugOverlay::UIScene_DebugOverlay(int iPad, void* initData,
     initialiseMovie();
 
     Minecraft* pMinecraft = Minecraft::GetInstance();
-    wchar_t TempString[256];
-    swprintf(TempString, 256, L"Set fov (%d)",
+    char TempString[256];
+    snprintf(TempString, 256, "Set fov (%d)",
              (int)pMinecraft->gameRenderer->GetFovVal());
     m_sliderFov.init(TempString, eControl_FOV, 0, 100,
                      (int)pMinecraft->gameRenderer->GetFovVal());
 
     float currentTime =
         pMinecraft->level->getLevelData()->getGameTime() % 24000;
-    swprintf((wchar_t*)TempString, 256, L"Set time (unsafe) (%d)",
+    snprintf((char*)TempString, 256, "Set time (unsafe) (%d)",
              (int)currentTime);
     m_sliderTime.init(TempString, eControl_Time, 0, 240, currentTime / 100);
 
-    m_buttonRain.init(L"Toggle Rain", eControl_Rain);
-    m_buttonThunder.init(L"Toggle Thunder", eControl_Thunder);
-    m_buttonSchematic.init(L"Create Schematic", eControl_Schematic);
-    m_buttonResetTutorial.init(L"Reset profile tutorial progress",
+    m_buttonRain.init("Toggle Rain", eControl_Rain);
+    m_buttonThunder.init("Toggle Thunder", eControl_Thunder);
+    m_buttonSchematic.init("Create Schematic", eControl_Schematic);
+    m_buttonResetTutorial.init("Reset profile tutorial progress",
                                eControl_ResetTutorial);
-    m_buttonSetCamera.init(L"Set camera", eControl_SetCamera);
-    m_buttonSetDay.init(L"Set Day", eControl_SetDay);
-    m_buttonSetNight.init(L"Set Night", eControl_SetNight);
+    m_buttonSetCamera.init("Set camera", eControl_SetCamera);
+    m_buttonSetDay.init("Set Day", eControl_SetDay);
+    m_buttonSetNight.init("Set Night", eControl_SetNight);
 
     m_buttonListItems.init(eControl_Items);
 
@@ -97,51 +97,51 @@ UIScene_DebugOverlay::UIScene_DebugOverlay(int iPad, void* initData,
     }
 
     m_buttonListMobs.init(eControl_Mobs);
-    m_buttonListMobs.addItem(L"Chicken");
+    m_buttonListMobs.addItem("Chicken");
     m_mobFactories.push_back(eTYPE_CHICKEN);
-    m_buttonListMobs.addItem(L"Cow");
+    m_buttonListMobs.addItem("Cow");
     m_mobFactories.push_back(eTYPE_COW);
-    m_buttonListMobs.addItem(L"Pig");
+    m_buttonListMobs.addItem("Pig");
     m_mobFactories.push_back(eTYPE_PIG);
-    m_buttonListMobs.addItem(L"Sheep");
+    m_buttonListMobs.addItem("Sheep");
     m_mobFactories.push_back(eTYPE_SHEEP);
-    m_buttonListMobs.addItem(L"Squid");
+    m_buttonListMobs.addItem("Squid");
     m_mobFactories.push_back(eTYPE_SQUID);
-    m_buttonListMobs.addItem(L"Wolf");
+    m_buttonListMobs.addItem("Wolf");
     m_mobFactories.push_back(eTYPE_WOLF);
-    m_buttonListMobs.addItem(L"Creeper");
+    m_buttonListMobs.addItem("Creeper");
     m_mobFactories.push_back(eTYPE_CREEPER);
-    m_buttonListMobs.addItem(L"Ghast");
+    m_buttonListMobs.addItem("Ghast");
     m_mobFactories.push_back(eTYPE_GHAST);
-    m_buttonListMobs.addItem(L"Pig Zombie");
+    m_buttonListMobs.addItem("Pig Zombie");
     m_mobFactories.push_back(eTYPE_PIGZOMBIE);
-    m_buttonListMobs.addItem(L"Skeleton");
+    m_buttonListMobs.addItem("Skeleton");
     m_mobFactories.push_back(eTYPE_SKELETON);
-    m_buttonListMobs.addItem(L"Slime");
+    m_buttonListMobs.addItem("Slime");
     m_mobFactories.push_back(eTYPE_SLIME);
-    m_buttonListMobs.addItem(L"Spider");
+    m_buttonListMobs.addItem("Spider");
     m_mobFactories.push_back(eTYPE_SPIDER);
-    m_buttonListMobs.addItem(L"Zombie");
+    m_buttonListMobs.addItem("Zombie");
     m_mobFactories.push_back(eTYPE_ZOMBIE);
-    m_buttonListMobs.addItem(L"Enderman");
+    m_buttonListMobs.addItem("Enderman");
     m_mobFactories.push_back(eTYPE_ENDERMAN);
-    m_buttonListMobs.addItem(L"Silverfish");
+    m_buttonListMobs.addItem("Silverfish");
     m_mobFactories.push_back(eTYPE_SILVERFISH);
-    m_buttonListMobs.addItem(L"Cave Spider");
+    m_buttonListMobs.addItem("Cave Spider");
     m_mobFactories.push_back(eTYPE_CAVESPIDER);
-    m_buttonListMobs.addItem(L"Mooshroom");
+    m_buttonListMobs.addItem("Mooshroom");
     m_mobFactories.push_back(eTYPE_MUSHROOMCOW);
-    m_buttonListMobs.addItem(L"Snow Golem");
+    m_buttonListMobs.addItem("Snow Golem");
     m_mobFactories.push_back(eTYPE_SNOWMAN);
-    m_buttonListMobs.addItem(L"Ender Dragon");
+    m_buttonListMobs.addItem("Ender Dragon");
     m_mobFactories.push_back(eTYPE_ENDERDRAGON);
-    m_buttonListMobs.addItem(L"Blaze");
+    m_buttonListMobs.addItem("Blaze");
     m_mobFactories.push_back(eTYPE_BLAZE);
-    m_buttonListMobs.addItem(L"Magma Cube");
+    m_buttonListMobs.addItem("Magma Cube");
     m_mobFactories.push_back(eTYPE_LAVASLIME);
 }
 
-std::wstring UIScene_DebugOverlay::getMoviePath() { return L"DebugMenu"; }
+std::string UIScene_DebugOverlay::getMoviePath() { return "DebugMenu"; }
 
 void UIScene_DebugOverlay::customDraw(IggyCustomDrawCallbackRegion* region) {
     Minecraft* pMinecraft = Minecraft::GetInstance();
@@ -150,8 +150,8 @@ void UIScene_DebugOverlay::customDraw(IggyCustomDrawCallbackRegion* region) {
         return;
 
     int itemId = -1;
-    // 4jcraft TODO: UB on our platform since this casts char16_t* to wchar_t*
-    swscanf((wchar_t*)region->name, L"item_%d", &itemId);
+    // 4jcraft TODO: UB on our platform since this casts char16_t* to char*
+    sscanf((char*)region->name, "item_%d", &itemId);
     if (itemId == -1 || itemId > Item::ITEM_NUM_COUNT ||
         Item::items[itemId] == nullptr) {
         app.DebugPrintf("This is not the control we are looking for\n");
@@ -276,9 +276,9 @@ void UIScene_DebugOverlay::handleSliderMove(F64 sliderId, F64 currentValue) {
             MinecraftServer::SetTime(currentValue * 100);
             pMinecraft->level->getLevelData()->setGameTime(currentValue * 100);
 
-            wchar_t TempString[256];
+            char TempString[256];
             float currentTime = currentValue * 100;
-            swprintf(TempString, 256, L"Set time (unsafe) (%d)",
+            snprintf(TempString, 256, "Set time (unsafe) (%d)",
                      (int)currentTime);
             m_sliderTime.setLabel(TempString);
         } break;
@@ -286,8 +286,8 @@ void UIScene_DebugOverlay::handleSliderMove(F64 sliderId, F64 currentValue) {
             Minecraft* pMinecraft = Minecraft::GetInstance();
             pMinecraft->gameRenderer->SetFovVal((float)currentValue);
 
-            wchar_t TempString[256];
-            swprintf(TempString, 256, L"Set fov (%d)", (int)currentValue);
+            char TempString[256];
+            snprintf(TempString, 256, "Set fov (%d)", (int)currentValue);
             m_sliderFov.setLabel(TempString);
         } break;
     };

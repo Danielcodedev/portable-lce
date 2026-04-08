@@ -131,7 +131,7 @@ void ConsoleSchematicFile::load(DataInputStream* dis) {
         // 4jcraft, fixed cast of templated List to get the tag list
         // and cast it to CompoundTag inside the loop
         CompoundTag* tag = NbtIo::read(dis);
-        ListTag<Tag>* tileEntityTags = tag->getList(L"TileEntities");
+        ListTag<Tag>* tileEntityTags = tag->getList("TileEntities");
         if (tileEntityTags != nullptr) {
             for (int i = 0; i < tileEntityTags->size(); i++) {
                 CompoundTag* teTag = (CompoundTag*)tileEntityTags->get(i);
@@ -152,23 +152,23 @@ void ConsoleSchematicFile::load(DataInputStream* dis) {
 
         // 4jcraft, fixed cast of templated List to get the tag list
         // and cast it to CompoundTag inside the loop
-        ListTag<Tag>* entityTags = tag->getList(L"Entities");
+        ListTag<Tag>* entityTags = tag->getList("Entities");
         if (entityTags != nullptr) {
             for (int i = 0; i < entityTags->size(); i++) {
                 CompoundTag* eTag = (CompoundTag*)entityTags->get(i);
-                eINSTANCEOF type = EntityIO::getType(eTag->getString(L"id"));
+                eINSTANCEOF type = EntityIO::getType(eTag->getString("id"));
 
                 // 4jcraft, same here
-                ListTag<Tag>* pos = eTag->getList(L"Pos");
+                ListTag<Tag>* pos = eTag->getList("Pos");
 
                 double x = ((DoubleTag*)pos->get(0))->data;
                 double y = ((DoubleTag*)pos->get(1))->data;
                 double z = ((DoubleTag*)pos->get(2))->data;
 
                 if (type == eTYPE_PAINTING || type == eTYPE_ITEM_FRAME) {
-                    x = ((IntTag*)eTag->get(L"TileX"))->data;
-                    y = ((IntTag*)eTag->get(L"TileY"))->data;
-                    z = ((IntTag*)eTag->get(L"TileZ"))->data;
+                    x = ((IntTag*)eTag->get("TileX"))->data;
+                    y = ((IntTag*)eTag->get("TileY"))->data;
+                    z = ((IntTag*)eTag->get("TileZ"))->data;
                 }
                 m_entities.push_back(std::pair<Vec3, CompoundTag*>(
                     Vec3(x, y, z), (CompoundTag*)eTag->copy()));
@@ -182,7 +182,7 @@ void ConsoleSchematicFile::save_tags(DataOutputStream* dos) {
     CompoundTag* tag = new CompoundTag();
 
     ListTag<CompoundTag>* tileEntityTags = new ListTag<CompoundTag>();
-    tag->put(L"TileEntities", tileEntityTags);
+    tag->put("TileEntities", tileEntityTags);
 
     for (auto it = m_tileEntities.begin(); it != m_tileEntities.end(); it++) {
         CompoundTag* cTag = new CompoundTag();
@@ -191,7 +191,7 @@ void ConsoleSchematicFile::save_tags(DataOutputStream* dos) {
     }
 
     ListTag<CompoundTag>* entityTags = new ListTag<CompoundTag>();
-    tag->put(L"Entities", entityTags);
+    tag->put("Entities", entityTags);
 
     for (auto it = m_entities.begin(); it != m_entities.end(); it++)
         entityTags->add((CompoundTag*)(*it).second->copy());
@@ -708,7 +708,7 @@ void ConsoleSchematicFile::generateSchematicFile(
 
     CompoundTag tag;
     ListTag<CompoundTag>* tileEntitiesTag =
-        new ListTag<CompoundTag>(L"tileEntities");
+        new ListTag<CompoundTag>("tileEntities");
 
     int xc0 = xStart >> 4;
     int zc0 = zStart >> 4;
@@ -738,12 +738,12 @@ void ConsoleSchematicFile::generateSchematicFile(
             delete tileEntities;
         }
     }
-    tag.put(L"TileEntities", tileEntitiesTag);
+    tag.put("TileEntities", tileEntitiesTag);
 
     AABB bb(xStart, yStart, zStart, xEnd, yEnd, zEnd);
     std::vector<std::shared_ptr<Entity> >* entities =
         level->getEntities(nullptr, &bb);
-    ListTag<CompoundTag>* entitiesTag = new ListTag<CompoundTag>(L"entities");
+    ListTag<CompoundTag>* entitiesTag = new ListTag<CompoundTag>("entities");
 
     for (auto it = entities->begin(); it != entities->end(); ++it) {
         std::shared_ptr<Entity> e = *it;
@@ -771,16 +771,16 @@ void ConsoleSchematicFile::generateSchematicFile(
             CompoundTag* eTag = new CompoundTag();
             if (e->save(eTag)) {
                 ListTag<DoubleTag>* pos =
-                    (ListTag<DoubleTag>*)eTag->getList(L"Pos");
+                    (ListTag<DoubleTag>*)eTag->getList("Pos");
 
                 pos->get(0)->data -= xStart;
                 pos->get(1)->data -= yStart;
                 pos->get(2)->data -= zStart;
 
                 if (e->instanceof(eTYPE_HANGING_ENTITY)) {
-                    ((IntTag*)eTag->get(L"TileX"))->data -= xStart;
-                    ((IntTag*)eTag->get(L"TileY"))->data -= yStart;
-                    ((IntTag*)eTag->get(L"TileZ"))->data -= zStart;
+                    ((IntTag*)eTag->get("TileX"))->data -= xStart;
+                    ((IntTag*)eTag->get("TileY"))->data -= yStart;
+                    ((IntTag*)eTag->get("TileZ"))->data -= zStart;
                 }
 
                 entitiesTag->add(eTag);
@@ -788,7 +788,7 @@ void ConsoleSchematicFile::generateSchematicFile(
         }
     }
 
-    tag.put(L"Entities", entitiesTag);
+    tag.put("Entities", entitiesTag);
 
     if (dos != nullptr) NbtIo::write(&tag, dos);
 }

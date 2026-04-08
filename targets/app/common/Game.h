@@ -73,7 +73,7 @@ public:
     typedef std::vector<PNOTIFICATION> VNOTIFICATIONS;
 
     // storing skin files - delegated to SkinManager
-    std::vector<std::wstring>& vSkinNames = m_skinManager.vSkinNames;
+    std::vector<std::string>& vSkinNames = m_skinManager.vSkinNames;
     DLCManager m_dlcManager;
     SaveManager m_saveManager;
     BannedListManager m_bannedListManager;
@@ -88,7 +88,7 @@ public:
     MenuController m_menuController;
 
     // storing credits text from the DLC - delegated to DLCController
-    std::vector<std::wstring>& m_vCreditText = m_dlcController.m_vCreditText;
+    std::vector<std::string>& m_vCreditText = m_dlcController.m_vCreditText;
 
     // In builds prior to TU5, the size of the GAME_SETTINGS struct was 204
     // bytes. We added a few new values to the internal struct in TU5, and even
@@ -168,7 +168,7 @@ public:
     }
     bool LoadEnchantingMenu(int iPad, std::shared_ptr<Inventory> inventory,
                             int x, int y, int z, Level* level,
-                            const std::wstring& name) {
+                            const std::string& name) {
         return m_menuController.loadEnchantingMenu(iPad, inventory, x, y, z, level, name);
     }
     bool LoadFurnaceMenu(int iPad, std::shared_ptr<Inventory> inventory,
@@ -208,7 +208,7 @@ public:
     }
     bool LoadTradingMenu(int iPad, std::shared_ptr<Inventory> inventory,
                          std::shared_ptr<Merchant> trader, Level* level,
-                         const std::wstring& name) {
+                         const std::string& name) {
         return m_menuController.loadTradingMenu(iPad, inventory, trader, level, name);
     }
 
@@ -241,7 +241,7 @@ public:
         m_gameSettingsManager.setSpecialTutorialCompletionFlag(iPad, index);
     }
 
-    static const wchar_t* GetString(int iID);
+    static const char* GetString(int iID);
     StringTable* getStringTable() const { return m_localizationManager.getStringTable(); }
 
     eGameMode GetGameMode() { return m_eGameMode; }
@@ -363,13 +363,13 @@ public:
     unsigned char GetGameSettings(eGameSetting eVal) {
         return m_gameSettingsManager.getGameSettings(eVal);
     }
-    void SetPlayerSkin(int iPad, const std::wstring& name) {
+    void SetPlayerSkin(int iPad, const std::string& name) {
         m_skinManager.setPlayerSkin(iPad, name, GameSettingsA);
     }
     void SetPlayerSkin(int iPad, std::uint32_t dwSkinId) {
         m_skinManager.setPlayerSkin(iPad, dwSkinId, GameSettingsA);
     }
-    void SetPlayerCape(int iPad, const std::wstring& name) {
+    void SetPlayerCape(int iPad, const std::string& name) {
         m_skinManager.setPlayerCape(iPad, name, GameSettingsA);
     }
     void SetPlayerCape(int iPad, std::uint32_t dwCapeId) {
@@ -432,13 +432,13 @@ public:
     }
 
 public:
-    std::wstring GetPlayerSkinName(int iPad) {
+    std::string GetPlayerSkinName(int iPad) {
         return m_skinManager.getPlayerSkinName(iPad, GameSettingsA);
     }
     std::uint32_t GetPlayerSkinId(int iPad) {
         return m_skinManager.getPlayerSkinId(iPad, GameSettingsA, m_dlcManager);
     }
-    std::wstring GetPlayerCapeName(int iPad) {
+    std::string GetPlayerCapeName(int iPad) {
         return m_skinManager.getPlayerCapeName(iPad, GameSettingsA);
     }
     std::uint32_t GetPlayerCapeId(int iPad) {
@@ -523,7 +523,7 @@ public:
 #endif
     void SetDebugSequence(const char* pchSeq);
     // bool			UploadFileToGlobalStorage(int iQuadrant,
-    // IPlatformStorage::eGlobalStorage eStorageFacility, std::wstring *wsFile  );
+    // IPlatformStorage::eGlobalStorage eStorageFacility, std::string *wsFile  );
 
     // Installed DLC - delegated to DLCController
     bool StartInstallDLCProcess(int iPad) { return m_dlcController.startInstallDLCProcess(iPad); }
@@ -544,7 +544,7 @@ public:
         return DLCController::marketplaceCountsCallback(pParam, details, iPad);
     }
 
-    bool AlreadySeenCreditText(const std::wstring& wstemp) {
+    bool AlreadySeenCreditText(const std::string& wstemp) {
         return m_dlcController.alreadySeenCreditText(wstemp);
     }
 
@@ -563,18 +563,18 @@ public:
     }
     bool isXuidDeadmau5(PlayerUID xuid);
 
-    void AddMemoryTextureFile(const std::wstring& wName, std::uint8_t* pbData,
+    void AddMemoryTextureFile(const std::string& wName, std::uint8_t* pbData,
                               unsigned int byteCount) {
         m_skinManager.addMemoryTextureFile(wName, pbData, byteCount);
     }
-    void RemoveMemoryTextureFile(const std::wstring& wName) {
+    void RemoveMemoryTextureFile(const std::string& wName) {
         m_skinManager.removeMemoryTextureFile(wName);
     }
-    void GetMemFileDetails(const std::wstring& wName, std::uint8_t** ppbData,
+    void GetMemFileDetails(const std::string& wName, std::uint8_t** ppbData,
                            unsigned int* pByteCount) {
         m_skinManager.getMemFileDetails(wName, ppbData, pByteCount);
     }
-    bool IsFileInMemoryTextures(const std::wstring& wName) {
+    bool IsFileInMemoryTextures(const std::string& wName) {
         return m_skinManager.isFileInMemoryTextures(wName);
     }
 
@@ -593,7 +593,7 @@ public:
         m_archiveManager.getTPD(iConfig, ppbData, pByteCount);
     }
     int GetTPDSize() { return m_archiveManager.getTPDSize(); }
-    int GetTPConfigVal(wchar_t* pwchDataFile) {
+    int GetTPConfigVal(char* pwchDataFile) {
         return m_archiveManager.getTPConfigVal(pwchDataFile);
     }
 
@@ -611,7 +611,7 @@ public:
     }
 
     // Add credits for DLC installed - delegated to DLCController
-    void AddCreditText(const wchar_t* lpStr) { m_dlcController.addCreditText(lpStr); }
+    void AddCreditText(const char* lpStr) { m_dlcController.addCreditText(lpStr); }
 
 private:
     std::unordered_map<PlayerUID, std::uint8_t*> m_GTS_Files;
@@ -665,13 +665,13 @@ public:
     }
 
 public:
-    int getArchiveFileSize(const std::wstring& filename) {
+    int getArchiveFileSize(const std::string& filename) {
         return m_archiveManager.getArchiveFileSize(filename);
     }
-    bool hasArchiveFile(const std::wstring& filename) {
+    bool hasArchiveFile(const std::string& filename) {
         return m_archiveManager.hasArchiveFile(filename);
     }
-    std::vector<uint8_t> getArchiveFile(const std::wstring& filename) {
+    std::vector<uint8_t> getArchiveFile(const std::string& filename) {
         return m_archiveManager.getArchiveFile(filename);
     }
 
@@ -793,17 +793,17 @@ public:
     int GetHTMLFontSize(EHTMLFontSize size) {
         return m_localizationManager.getHTMLFontSize(size);
     }
-    std::wstring FormatHTMLString(int iPad, const std::wstring& desc,
+    std::string FormatHTMLString(int iPad, const std::string& desc,
                                   int shadowColour = 0xFFFFFFFF) {
         return m_localizationManager.formatHTMLString(iPad, desc, shadowColour);
     }
-    std::wstring GetActionReplacement(int iPad, unsigned char ucAction) {
+    std::string GetActionReplacement(int iPad, unsigned char ucAction) {
         return m_localizationManager.getActionReplacement(iPad, ucAction);
     }
-    std::wstring GetVKReplacement(unsigned int uiVKey) {
+    std::string GetVKReplacement(unsigned int uiVKey) {
         return m_localizationManager.getVKReplacement(uiVKey);
     }
-    std::wstring GetIconReplacement(unsigned int uiIcon) {
+    std::string GetIconReplacement(unsigned int uiIcon) {
         return m_localizationManager.getIconReplacement(uiIcon);
     }
 
@@ -836,16 +836,16 @@ public:
         return m_terrainFeatureManager.getPosition(eType, pX, pZ);
     }
 
-    static int32_t RegisterMojangData(wchar_t*, PlayerUID, wchar_t*, wchar_t*);
+    static int32_t RegisterMojangData(char*, PlayerUID, char*, char*);
     MOJANG_DATA* GetMojangDataForXuid(PlayerUID xuid);
-    static int32_t RegisterConfigValues(wchar_t* pType, int iValue);
+    static int32_t RegisterConfigValues(char* pType, int iValue);
 
-    static int32_t RegisterDLCData(wchar_t* a, wchar_t* b, int c, uint64_t d, uint64_t e,
-                                   wchar_t* f, unsigned int g, int h,
-                                   wchar_t* pDataFile) {
+    static int32_t RegisterDLCData(char* a, char* b, int c, uint64_t d, uint64_t e,
+                                   char* f, unsigned int g, int h,
+                                   char* pDataFile) {
         return DLCController::registerDLCData(a, b, c, d, e, f, g, h, pDataFile);
     }
-    bool GetDLCFullOfferIDForSkinID(const std::wstring& FirstSkin,
+    bool GetDLCFullOfferIDForSkinID(const std::string& FirstSkin,
                                     uint64_t* pullVal) {
         return m_dlcController.getDLCFullOfferIDForSkinID(FirstSkin, pullVal);
     }
@@ -971,7 +971,7 @@ public:
     LevelGenerationOptions* getLevelGenerationOptions() {
         return m_gameRules.getLevelGenerationOptions();
     }
-    const wchar_t* GetGameRulesString(const std::wstring& key);
+    const char* GetGameRulesString(const std::string& key);
 
     // m_playerColours and m_playerGamePrivileges moved to NetworkController
 
@@ -988,7 +988,7 @@ public:
         return m_networkController.getPlayerPrivileges(networkSmallId);
     }
 
-    std::wstring getEntityName(eINSTANCEOF type);
+    std::string getEntityName(eINSTANCEOF type);
 
     unsigned int AddDLCRequest(eDLCMarketplaceType eContentType,
                                bool bPromote = false) {
@@ -1053,11 +1053,11 @@ public:
     unsigned int& m_dwDLCFileSize = m_dlcController.m_dwDLCFileSize;
     std::uint8_t*& m_pDLCFileBuffer = m_dlcController.m_pDLCFileBuffer;
 
-    // 	static int CallbackReadXuidsFileFromTMS(void* lpParam, wchar_t
+    // 	static int CallbackReadXuidsFileFromTMS(void* lpParam, char
     // *wchFilename, int iPad, bool bResult, int iAction); 	static int
-    // CallbackDLCFileFromTMS(void* lpParam, wchar_t *wchFilename, int iPad,
+    // CallbackDLCFileFromTMS(void* lpParam, char *wchFilename, int iPad,
     // bool bResult, int iAction); 	static int
-    // CallbackBannedListFileFromTMS(void* lpParam, wchar_t *wchFilename, int
+    // CallbackBannedListFileFromTMS(void* lpParam, char *wchFilename, int
     // iPad, bool bResult, int iAction);
 
     // Storing additional model parts per skin texture
@@ -1083,18 +1083,18 @@ public:
         return m_skinManager.getAnimOverrideBitmask(dwSkinID);
     }
 
-    static std::uint32_t getSkinIdFromPath(const std::wstring& skin) {
+    static std::uint32_t getSkinIdFromPath(const std::string& skin) {
         return SkinManager::getSkinIdFromPath(skin);
     }
-    static std::wstring getSkinPathFromId(std::uint32_t skinId) {
+    static std::string getSkinPathFromId(std::uint32_t skinId) {
         return SkinManager::getSkinPathFromId(skinId);
     }
 
-    int LoadLocalTMSFile(wchar_t* wchTMSFile) override = 0;
-    int LoadLocalTMSFile(wchar_t* wchTMSFile,
+    int LoadLocalTMSFile(char* wchTMSFile) override = 0;
+    int LoadLocalTMSFile(char* wchTMSFile,
                          eFileExtensionType eExt) override = 0;
     void FreeLocalTMSFiles(eTMSFileType eType) override = 0;
-    int GetLocalTMSFileIndex(wchar_t* wchTMSFile,
+    int GetLocalTMSFileIndex(char* wchTMSFile,
                              bool bFilenameIncludesExtension,
                              eFileExtensionType eEXT) override = 0;
 
@@ -1133,25 +1133,25 @@ private:
     // 4J-PB - language and locale functions
 public:
     void LocaleAndLanguageInit() { m_localizationManager.localeAndLanguageInit(); }
-    void getLocale(std::vector<std::wstring>& vecWstrLocales) {
+    void getLocale(std::vector<std::string>& vecWstrLocales) {
         m_localizationManager.getLocale(vecWstrLocales);
     }
-    int get_eMCLang(wchar_t* pwchLocale) {
+    int get_eMCLang(char* pwchLocale) {
         return m_localizationManager.get_eMCLang(pwchLocale);
     }
-    int get_xcLang(wchar_t* pwchLocale) {
+    int get_xcLang(char* pwchLocale) {
         return m_localizationManager.get_xcLang(pwchLocale);
     }
 
     void SetTickTMSDLCFiles(bool bVal) { m_dlcController.setTickTMSDLCFiles(bVal); }
 
-    std::wstring getFilePath(std::uint32_t packId, std::wstring filename,
+    std::string getFilePath(std::uint32_t packId, std::string filename,
                              bool bAddDataFolder,
-                             std::wstring mountPoint = L"TPACK:");
+                             std::string mountPoint = "TPACK:");
 
 private:
-    std::wstring getRootPath(std::uint32_t packId, bool allowOverride,
-                             bool bAddDataFolder, std::wstring mountPoint);
+    std::string getRootPath(std::uint32_t packId, bool allowOverride,
+                             bool bAddDataFolder, std::string mountPoint);
 
 public:
 #if defined(_WINDOWS64)

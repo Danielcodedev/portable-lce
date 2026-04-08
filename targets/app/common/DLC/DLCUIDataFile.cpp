@@ -4,7 +4,7 @@
 #include "app/common/DLC/DLCFile.h"
 #include "app/linux/LinuxGame.h"
 
-DLCUIDataFile::DLCUIDataFile(const std::wstring& path)
+DLCUIDataFile::DLCUIDataFile(const std::string& path)
     : DLCFile(DLCManager::e_DLCType_UIData, path) {
     m_pbData = nullptr;
     m_dataBytes = 0;

@@ -30,7 +30,7 @@ void ServerConnection::NewIncomingSocket(Socket* socket) {
     std::shared_ptr<PendingConnection> unconnectedClient =
         std::make_shared<PendingConnection>(
             server, socket,
-            L"Connection #" + toWString<int>(connectionCounter++));
+            "Connection #" + toWString<int>(connectionCounter++));
     handleConnection(unconnectedClient);
 }
 
@@ -111,7 +111,7 @@ void ServerConnection::tick() {
 }
 
 bool ServerConnection::addPendingTextureRequest(
-    const std::wstring& textureName) {
+    const std::string& textureName) {
     auto it = find(m_pendingTextureRequests.begin(),
                    m_pendingTextureRequests.end(), textureName);
     if (it == m_pendingTextureRequests.end()) {
@@ -128,7 +128,7 @@ bool ServerConnection::addPendingTextureRequest(
     return true;
 }
 
-void ServerConnection::handleTextureReceived(const std::wstring& textureName) {
+void ServerConnection::handleTextureReceived(const std::string& textureName) {
     auto it = find(m_pendingTextureRequests.begin(),
                    m_pendingTextureRequests.end(), textureName);
     if (it != m_pendingTextureRequests.end()) {
@@ -143,7 +143,7 @@ void ServerConnection::handleTextureReceived(const std::wstring& textureName) {
 }
 
 void ServerConnection::handleTextureAndGeometryReceived(
-    const std::wstring& textureName) {
+    const std::string& textureName) {
     auto it = find(m_pendingTextureRequests.begin(),
                    m_pendingTextureRequests.end(), textureName);
     if (it != m_pendingTextureRequests.end()) {

@@ -36,8 +36,8 @@ private:
 
     static int m_iDifficultyTitleSettingA[4];
 
-    std::wstring m_worldName;
-    std::wstring m_seed;
+    std::string m_worldName;
+    std::string m_seed;
 
     UIControl m_controlMainPanel;
     UIControl_Label m_labelWorldName;
@@ -86,7 +86,7 @@ public:
 
 protected:
     // TODO: This should be pure virtual in this class
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
 
     virtual void handleTimerComplete(int id);
     virtual void handleGainFocus(bool navBack);

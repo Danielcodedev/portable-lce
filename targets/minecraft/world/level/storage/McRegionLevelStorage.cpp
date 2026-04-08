@@ -21,7 +21,7 @@
 #include "minecraft/world/level/storage/LevelStorage.h"
 
 McRegionLevelStorage::McRegionLevelStorage(ConsoleSaveFile* saveFile, File dir,
-                                           const std::wstring& levelName,
+                                           const std::string& levelName,
                                            bool createPlayerDir)
     : DirectoryLevelStorage(saveFile, dir, levelName, createPlayerDir) {
     RegionFileCache::clear();
@@ -100,7 +100,7 @@ ChunkStorage* McRegionLevelStorage::createChunkStorage(Dimension* dimension) {
         return new McRegionChunkStorage(m_saveFile, LevelStorage::ENDER_FOLDER);
     }
 
-    return new McRegionChunkStorage(m_saveFile, L"");
+    return new McRegionChunkStorage(m_saveFile, "");
 }
 
 void McRegionLevelStorage::saveLevelData(

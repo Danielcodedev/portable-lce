@@ -10,7 +10,7 @@
 #include "minecraft/world/level/chunk/ChunkSource.h"
 
 LoginPacket::LoginPacket() {
-    this->userName = L"";
+    this->userName = "";
     this->clientVersion = 0;
     this->seed = 0;
     this->dimension = 0;
@@ -37,7 +37,7 @@ LoginPacket::LoginPacket() {
 }
 
 // Client -> Server
-LoginPacket::LoginPacket(const std::wstring& userName, int clientVersion,
+LoginPacket::LoginPacket(const std::string& userName, int clientVersion,
                          PlayerUID offlineXuid, PlayerUID onlineXuid,
                          bool friendsOnlyUGC, std::uint32_t ugcPlayersVersion,
                          std::uint32_t skinId, std::uint32_t capeId,
@@ -69,7 +69,7 @@ LoginPacket::LoginPacket(const std::wstring& userName, int clientVersion,
 }
 
 // Server -> Client
-LoginPacket::LoginPacket(const std::wstring& userName, int clientVersion,
+LoginPacket::LoginPacket(const std::string& userName, int clientVersion,
                          LevelType* pLevelType, int64_t seed, int gameType,
                          char dimension, std::uint8_t mapHeight,
                          std::uint8_t maxPlayers, char difficulty,
@@ -106,7 +106,7 @@ void LoginPacket::read(DataInputStream* dis)  // throws IOException
 {
     clientVersion = dis->readInt();
     userName = readUtf(dis, Player::MAX_NAME_LENGTH);
-    std::wstring typeName = readUtf(dis, 16);
+    std::string typeName = readUtf(dis, 16);
     m_pLevelType = LevelType::getLevelType(typeName);
     if (m_pLevelType == nullptr) {
         m_pLevelType = LevelType::lvl_normal;
@@ -140,7 +140,7 @@ void LoginPacket::write(DataOutputStream* dos)  // throws IOException
     dos->writeInt(clientVersion);
     writeUtf(userName, dos);
     if (m_pLevelType == nullptr) {
-        writeUtf(L"", dos);
+        writeUtf("", dos);
     } else {
         writeUtf(m_pLevelType->getGeneratorName(), dos);
     }

@@ -45,9 +45,9 @@ UIControl_PlayerSkinPreview::UIControl_PlayerSkinPreview() {
     m_fScreenHeight = (float)pMinecraft->height_phys;
     m_fRawHeight = (float)ssc.rawHeight;
 
-    m_customTextureUrl = L"default";
+    m_customTextureUrl = "default";
     m_backupTexture = TN_MOB_CHAR;
-    m_capeTextureUrl = L"";
+    m_capeTextureUrl = "";
 
     m_yRot = 0;
     m_xRot = 0;
@@ -114,7 +114,7 @@ void UIControl_PlayerSkinPreview::tick() {
     }
 }
 
-void UIControl_PlayerSkinPreview::SetTexture(const std::wstring& url,
+void UIControl_PlayerSkinPreview::SetTexture(const std::string& url,
                                              TEXTURE_NAME backupTexture) {
     m_customTextureUrl = url;
     m_backupTexture = backupTexture;
@@ -375,7 +375,7 @@ void UIControl_PlayerSkinPreview::render(EntityRenderer* renderer, double x,
     }*/
 
     // additionalRendering(mob, a);
-    if (bindTexture(m_capeTextureUrl, L"")) {
+    if (bindTexture(m_capeTextureUrl, "")) {
         glPushMatrix();
         glTranslatef(0, 0, 2 / 16.0f);
 
@@ -483,7 +483,7 @@ void UIControl_PlayerSkinPreview::render(EntityRenderer* renderer, double x,
     model->holdingLeftHand = false;
 }
 
-bool UIControl_PlayerSkinPreview::bindTexture(const std::wstring& urlTexture,
+bool UIControl_PlayerSkinPreview::bindTexture(const std::string& urlTexture,
                                               int backupTexture) {
     Textures* t = Minecraft::GetInstance()->textures;
 
@@ -501,7 +501,7 @@ bool UIControl_PlayerSkinPreview::bindTexture(const std::wstring& urlTexture,
 }
 
 bool UIControl_PlayerSkinPreview::bindTexture(
-    const std::wstring& urlTexture, const std::wstring& backupTexture) {
+    const std::string& urlTexture, const std::string& backupTexture) {
     Textures* t = Minecraft::GetInstance()->textures;
 
     // 4J-PB - no http textures on the xbox, mem textures instead

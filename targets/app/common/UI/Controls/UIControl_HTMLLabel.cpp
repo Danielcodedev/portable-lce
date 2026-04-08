@@ -17,10 +17,10 @@ bool UIControl_HTMLLabel::setupControl(UIScene* scene, IggyValuePath* parent,
     bool success = UIControl_Base::setupControl(scene, parent, controlName);
 
     // Label specific initialisers
-    m_funcStartAutoScroll = registerFastName(L"StartAutoScroll");
-    m_funcTouchScroll = registerFastName(L"TouchScroll");
-    m_funcGetRealWidth = registerFastName(L"GetRealWidth");
-    m_funcGetRealHeight = registerFastName(L"GetRealHeight");
+    m_funcStartAutoScroll = registerFastName("StartAutoScroll");
+    m_funcTouchScroll = registerFastName("TouchScroll");
+    m_funcGetRealWidth = registerFastName("GetRealWidth");
+    m_funcGetRealHeight = registerFastName("GetRealHeight");
 
     return success;
 }
@@ -36,23 +36,23 @@ void UIControl_HTMLLabel::ReInit() {
     UIControl_Base::ReInit();
     // Don't set the label, HTML sizes will have changed. Let the scene update
     // us.
-    init(L"");
+    init("");
 }
 
-void UIControl_HTMLLabel::setLabel(const std::string& label) {
-    IggyDataValue result;
-    IggyDataValue value[1];
-    value[0].type = IGGY_DATATYPE_string_UTF8;
-    IggyStringUTF8 stringVal;
+// void UIControl_HTMLLabel::setLabel(const std::string& label) {
+//     IggyDataValue result;
+//     IggyDataValue value[1];
+//     value[0].type = IGGY_DATATYPE_string_UTF8;
+//     IggyStringUTF8 stringVal;
 
-    stringVal.string = (char*)label.c_str();
-    stringVal.length = label.length();
-    value[0].string8 = stringVal;
+//     stringVal.string = const_cast<char*>((char*)label.c_str());
+//     stringVal.length = label.length();
+//     value[0].string8 = stringVal;
 
-    IggyResult out =
-        IggyPlayerCallMethodRS(m_parentScene->getMovie(), &result,
-                               getIggyValuePath(), m_setLabelFunc, 1, value);
-}
+//     IggyResult out =
+//         IggyPlayerCallMethodRS(m_parentScene->getMovie(), &result,
+//                                getIggyValuePath(), m_setLabelFunc, 1, value);
+// }
 
 void UIControl_HTMLLabel::SetupTouch() {}
 

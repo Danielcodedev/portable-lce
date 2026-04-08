@@ -41,7 +41,7 @@ UIScene_TeleportMenu::UIScene_TeleportMenu(int iPad, void* initData,
     m_playerList.init(eControl_GamePlayers);
 
     for (unsigned int i = 0; i < MINECRAFT_NET_MAX_PLAYERS; ++i) {
-        m_playerNames[i] = L"";
+        m_playerNames[i] = "";
     }
 
     int playerCount = g_NetworkManager.GetPlayerCount();
@@ -55,12 +55,12 @@ UIScene_TeleportMenu::UIScene_TeleportMenu(int iPad, void* initData,
             m_players[m_playersCount] = player->GetSmallId();
             ++m_playersCount;
 
-            std::wstring playerName = L"";
+            std::string playerName = "";
 #if !defined(_CONTENT_PACKAGE)
             if (app.DebugSettingsOn() &&
                 (app.GetGameSettingsDebugMask() &
                  (1L << eDebugSetting_DebugLeaderboards))) {
-                playerName = L"WWWWWWWWWWWWWWWW";
+                playerName = "WWWWWWWWWWWWWWWW";
             } else
 #endif
             {
@@ -102,11 +102,11 @@ UIScene_TeleportMenu::UIScene_TeleportMenu(int iPad, void* initData,
     ui.HidePressStart();
 }
 
-std::wstring UIScene_TeleportMenu::getMoviePath() {
+std::string UIScene_TeleportMenu::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1) {
-        return L"InGameTeleportMenuSplit";
+        return "InGameTeleportMenuSplit";
     } else {
-        return L"InGameTeleportMenu";
+        return "InGameTeleportMenu";
     }
 }
 
@@ -140,12 +140,12 @@ void UIScene_TeleportMenu::handleReload() {
             m_players[m_playersCount] = player->GetSmallId();
             ++m_playersCount;
 
-            std::wstring playerName = L"";
+            std::string playerName = "";
 #if !defined(_CONTENT_PACKAGE)
             if (app.DebugSettingsOn() &&
                 (app.GetGameSettingsDebugMask() &
                  (1L << eDebugSetting_DebugLeaderboards))) {
-                playerName = L"WWWWWWWWWWWWWWWW";
+                playerName = "WWWWWWWWWWWWWWWW";
             } else
 #endif
             {
@@ -199,12 +199,12 @@ void UIScene_TeleportMenu::tick() {
                     i, (int)app.GetPlayerColour(m_players[i]));
             }
 
-            std::wstring playerName = L"";
+            std::string playerName = "";
 #if !defined(_CONTENT_PACKAGE)
             if (app.DebugSettingsOn() &&
                 (app.GetGameSettingsDebugMask() &
                  (1L << eDebugSetting_DebugLeaderboards))) {
-                playerName = L"WWWWWWWWWWWWWWWW";
+                playerName = "WWWWWWWWWWWWWWWW";
             } else
 #endif
             {
@@ -292,7 +292,7 @@ void UIScene_TeleportMenu::OnPlayerChanged(void* callbackParam,
         --scene->m_playersCount;
         scene->m_playersVoiceState[scene->m_playersCount] = 0;
         scene->m_playersColourState[scene->m_playersCount] = 0;
-        scene->m_playerNames[scene->m_playersCount] = L"";
+        scene->m_playerNames[scene->m_playersCount] = "";
         scene->m_playerList.removeItem(scene->m_playersCount);
     }
 
@@ -301,12 +301,12 @@ void UIScene_TeleportMenu::OnPlayerChanged(void* callbackParam,
         scene->m_players[scene->m_playersCount] = pPlayer->GetSmallId();
         ++scene->m_playersCount;
 
-        std::wstring playerName = L"";
+        std::string playerName = "";
 #if !defined(_CONTENT_PACKAGE)
         if (app.DebugSettingsOn() &&
             (app.GetGameSettingsDebugMask() &
              (1L << eDebugSetting_DebugLeaderboards))) {
-            playerName = L"WWWWWWWWWWWWWWWW";
+            playerName = "WWWWWWWWWWWWWWWW";
         } else
 #endif
         {

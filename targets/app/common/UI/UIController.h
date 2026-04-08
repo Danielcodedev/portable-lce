@@ -173,14 +173,14 @@ private:
 
     static std::uint32_t m_dwTrialTimerLimitSecs;
 
-    std::unordered_map<std::wstring, std::vector<uint8_t>>
+    std::unordered_map<std::string, std::vector<uint8_t>>
         m_substitutionTextures;
 
     typedef struct _CachedMovieData {
         std::vector<uint8_t> m_ba;
         int64_t m_expiry;
     } CachedMovieData;
-    std::unordered_map<std::wstring, CachedMovieData> m_cachedMovieData;
+    std::unordered_map<std::string, CachedMovieData> m_cachedMovieData;
 
     typedef struct _QueuedMessageBoxData {
         MessageBoxInfo info;
@@ -240,8 +240,8 @@ public:
 
 private:
     void loadSkins();
-    IggyLibrary loadSkin(const std::wstring& skinPath,
-                         const std::wstring& skinName);
+    IggyLibrary loadSkin(const std::string& skinPath,
+                         const std::string& skinName);
 
 public:
     void ReloadSkin();
@@ -254,7 +254,7 @@ private:
     static int reloadSkinThreadProc(void* lpParam);
 
 public:
-    std::vector<uint8_t> getMovieData(const std::wstring& filename);
+    std::vector<uint8_t> getMovieData(const std::string& filename);
 
     // INPUT
 private:
@@ -329,10 +329,10 @@ protected:
                                             GDrawTexture* handle) {}
 
 public:
-    void registerSubstitutionTexture(const std::wstring& textureName,
+    void registerSubstitutionTexture(const std::string& textureName,
                                      std::uint8_t* pbData,
                                      unsigned int dwLength);
-    void unregisterSubstitutionTexture(const std::wstring& textureName,
+    void unregisterSubstitutionTexture(const std::string& textureName,
                                        bool deleteData);
 
 public:
@@ -391,7 +391,7 @@ public:
     virtual void PlayUISFX(ESoundEffect eSound);
 
     virtual void DisplayGamertag(unsigned int iPad, bool show);
-    virtual void SetSelectedItem(unsigned int iPad, const std::wstring& name);
+    virtual void SetSelectedItem(unsigned int iPad, const std::string& name);
     virtual void UpdateSelectedItemPos(unsigned int iPad);
 
     virtual void HandleDLCMountingComplete();
@@ -432,19 +432,19 @@ public:
         uint32_t uiTitle, uint32_t uiText, uint32_t* uiOptionA,
         uint32_t uiOptionC, uint32_t dwPad = XUSER_INDEX_ANY,
         int (*Func)(void*, int, const IPlatformStorage::EMessageResult) = nullptr,
-        void* lpParam = nullptr, wchar_t* pwchFormatString = nullptr);
+        void* lpParam = nullptr, char* pwchFormatString = nullptr);
     virtual IPlatformStorage::EMessageResult RequestErrorMessage(
         uint32_t uiTitle, uint32_t uiText, uint32_t* uiOptionA,
         uint32_t uiOptionC, uint32_t dwPad = XUSER_INDEX_ANY,
         int (*Func)(void*, int, const IPlatformStorage::EMessageResult) = nullptr,
-        void* lpParam = nullptr, wchar_t* pwchFormatString = nullptr);
+        void* lpParam = nullptr, char* pwchFormatString = nullptr);
 
 private:
     virtual IPlatformStorage::EMessageResult RequestMessageBox(
         uint32_t uiTitle, uint32_t uiText, uint32_t* uiOptionA,
         uint32_t uiOptionC, uint32_t dwPad,
         int (*Func)(void*, int, const IPlatformStorage::EMessageResult),
-        void* lpParam, wchar_t* pwchFormatString, uint32_t dwFocusButton,
+        void* lpParam, char* pwchFormatString, uint32_t dwFocusButton,
         bool bIsError);
 
 public:

@@ -133,7 +133,7 @@ private:
 
 protected:
     // TODO: This should be pure virtual in this class
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
 
 public:
     int loadSaveDataThumbnailReturned(std::uint8_t* pbThumbnail,
@@ -191,7 +191,7 @@ private:
     };
     eSaveTransferState m_eSaveTransferState;
     static unsigned long m_ulFileSize;
-    static std::wstring m_wstrStageText;
+    static std::string m_wstrStageText;
     static bool m_bSaveTransferRunning;
     int m_iProgress;
     char

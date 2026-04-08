@@ -90,9 +90,9 @@ private:
     UI_MAP_ELEMENT(m_labelConnectController[3], "ConnectControllerLabel")
     UI_END_MAP_CHILD_ELEMENTS()
 
-    UI_MAP_NAME(m_funcJoinButtonPressed, L"JoinButtonPressed")
-    UI_MAP_NAME(m_funcSetControllerStatus, L"SetControllerStatus")
-    UI_MAP_NAME(m_funcSetABSwap, L"SetABSwap")
+    UI_MAP_NAME(m_funcJoinButtonPressed, "JoinButtonPressed")
+    UI_MAP_NAME(m_funcSetControllerStatus, "SetControllerStatus")
+    UI_MAP_NAME(m_funcSetABSwap, "SetABSwap")
     UI_END_MAP_ELEMENTS_AND_NAMES()
 public:
     UIScene_QuadrantSignin(int iPad, void* initData, UILayer* parentLayer);
@@ -108,7 +108,7 @@ public:
 
 protected:
     // TODO: This should be pure virtual in this class
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
 
 public:
     // INPUT

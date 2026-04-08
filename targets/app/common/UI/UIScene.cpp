@@ -4,8 +4,6 @@
 #include <mutex>
 #include <utility>
 
-#include "platform/PlatformTypes.h"
-#include "platform/renderer/renderer.h"
 #include "app/common/UI/All Platforms/UIEnums.h"
 #include "app/common/UI/All Platforms/UIStructs.h"
 #include "app/common/UI/Controls/UIControl.h"
@@ -14,6 +12,8 @@
 #include "app/common/UI/UIGroup.h"
 #include "app/common/UI/UILayer.h"
 #include "app/linux/Iggy/include/iggy.h"
+#include "platform/PlatformTypes.h"
+#include "platform/renderer/renderer.h"
 #ifndef _ENABLEIGGY
 #include "app/linux/Stubs/iggy_stubs.h"
 #endif
@@ -21,7 +21,6 @@
 #include "app/linux/LinuxGame.h"
 #include "app/linux/Linux_UIController.h"
 #include "app/linux/Stubs/winapi_stubs.h"
-#include "util/StringHelpers.h"
 #include "java/System.h"
 #include "minecraft/client/Lighting.h"
 #include "minecraft/client/Minecraft.h"
@@ -29,6 +28,7 @@
 #include "minecraft/sounds/SoundTypes.h"
 #include "minecraft/world/entity/player/Inventory.h"
 #include "minecraft/world/item/ItemInstance.h"
+#include "util/StringHelpers.h"
 
 class MultiplayerLocalPlayer;
 
@@ -252,13 +252,13 @@ void UIScene::initialiseMovie() {
 bool UIScene::mapElementsAndNames() {
     m_rootPath = IggyPlayerRootPath(swf);
 
-    m_funcRemoveObject = registerFastName(L"RemoveObject");
-    m_funcSlideLeft = registerFastName(L"SlideLeft");
-    m_funcSlideRight = registerFastName(L"SlideRight");
-    m_funcSetSafeZone = registerFastName(L"SetSafeZone");
-    m_funcSetAlpha = registerFastName(L"SetAlpha");
-    m_funcSetFocus = registerFastName(L"SetFocus");
-    m_funcHorizontalResizeCheck = registerFastName(L"DoHorizontalResizeCheck");
+    m_funcRemoveObject = registerFastName("RemoveObject");
+    m_funcSlideLeft = registerFastName("SlideLeft");
+    m_funcSlideRight = registerFastName("SlideRight");
+    m_funcSetSafeZone = registerFastName("SetSafeZone");
+    m_funcSetAlpha = registerFastName("SetAlpha");
+    m_funcSetFocus = registerFastName("SetFocus");
+    m_funcHorizontalResizeCheck = registerFastName("DoHorizontalResizeCheck");
 
     IggyDatatype safeZoneType = IGGY_DATATYPE__invalid_request;
     IggyResult safeZoneResult = IggyValueGetTypeRS(
@@ -273,38 +273,38 @@ void UIScene::loadMovie() {
     UIController::ms_reloadSkinCS.lock();  // MGH - added to prevent crash
                                            // loading Iggy movies while the
                                            // skins were being reloaded
-    std::wstring moviePath = getMoviePath();
+    std::string moviePath = getMoviePath();
 
 #if defined(_WINDOWS64)
     if (ui.getScreenHeight() == 720) {
-        moviePath.append(L"720.swf");
+        moviePath.append("720.swf");
         m_loadedResolution = eSceneResolution_720;
     } else if (ui.getScreenHeight() == 480) {
-        moviePath.append(L"480.swf");
+        moviePath.append("480.swf");
         m_loadedResolution = eSceneResolution_480;
     } else if (ui.getScreenHeight() < 720) {
-        moviePath.append(L"Vita.swf");
+        moviePath.append("Vita.swf");
         m_loadedResolution = eSceneResolution_Vita;
     } else {
-        moviePath.append(L"1080.swf");
+        moviePath.append("1080.swf");
         m_loadedResolution = eSceneResolution_1080;
     }
 #else
-    moviePath.append(L"1080.swf");
+    moviePath.append("1080.swf");
     m_loadedResolution = eSceneResolution_1080;
 #endif
 
     if (!app.hasArchiveFile(moviePath)) {
         app.DebugPrintf(
-            "WARNING: Could not find iggy movie %ls, falling back on 720\n",
+            "WARNING: Could not find iggy movie %s, falling back on 720\n",
             moviePath.c_str());
 
         moviePath = getMoviePath();
-        moviePath.append(L"720.swf");
+        moviePath.append("720.swf");
         m_loadedResolution = eSceneResolution_720;
 
         if (!app.hasArchiveFile(moviePath)) {
-            app.DebugPrintf("ERROR: Could not find any iggy movie for %ls!\n",
+            app.DebugPrintf("ERROR: Could not find any iggy movie for %s!\n",
                             moviePath.c_str());
 #if !defined(_CONTENT_PACKAGE)
             assert(0);
@@ -327,7 +327,7 @@ void UIScene::loadMovie() {
 #endif
         app.FatalLoadError();
     }
-    app.DebugPrintf(app.USER_SR, "Loaded iggy movie %ls\n", moviePath.c_str());
+    app.DebugPrintf(app.USER_SR, "Loaded iggy movie %s\n", moviePath.c_str());
     IggyProperties* properties = IggyPlayerProperties(swf);
     m_movieHeight = properties->movie_height_in_pixels;
     m_movieWidth = properties->movie_width_in_pixels;
@@ -345,7 +345,7 @@ void UIScene::loadMovie() {
     UIController::ms_reloadSkinCS.unlock();
 }
 
-void UIScene::getDebugMemoryUseRecursive(const std::wstring& moviePath,
+void UIScene::getDebugMemoryUseRecursive(const std::string& moviePath,
                                          IggyMemoryUseInfo& memoryInfo) {
     rrbool res;
     IggyMemoryUseInfo internalMemoryInfo;
@@ -355,7 +355,7 @@ void UIScene::getDebugMemoryUseRecursive(const std::wstring& moviePath,
                                             internalIteration,
                                             &internalMemoryInfo))) {
         app.DebugPrintf(
-            app.USER_SR, "%ls - %.*s static: %d ( %d ) dynamic: %d ( %d )\n",
+            app.USER_SR, "%s - %.*s static: %d ( %d ) dynamic: %d ( %d )\n",
             moviePath.c_str(), internalMemoryInfo.subcategory_stringlen,
             internalMemoryInfo.subcategory,
             internalMemoryInfo.static_allocation_bytes,
@@ -389,7 +389,7 @@ void UIScene::PrintTotalMemoryUsage(int64_t& totalStatic,
 
     app.DebugPrintf(
         app.USER_SR,
-        "    \\- Scene static: %d , Scene dynamic: %d , Total: %d - %ls\n",
+        "    \\- Scene static: %d , Scene dynamic: %d , Total: %d - %s\n",
         sceneStatic, sceneDynamic, sceneStatic + sceneDynamic,
         getMoviePath().c_str());
 }
@@ -443,15 +443,15 @@ void UIScene::tickTimers() {
     }
 }
 
-IggyName UIScene::registerFastName(const std::wstring& name) {
+IggyName UIScene::registerFastName(const std::string& name) {
     IggyName var;
     auto it = m_fastNames.find(name);
     if (it != m_fastNames.end()) {
         var = it->second;
     } else {
-        const std::u16string convName = wstring_to_u16string(name);
-        var = IggyPlayerCreateFastName(getMovie(), (IggyUTF16*)convName.c_str(),
-                                       -1);
+        // 4jcraft: shiggy has no IggyPlayerCreateFastNameUTF8 unfortunately
+        var = IggyPlayerCreateFastName(getMovie(),
+                                       string_to_u16string(name).c_str(), -1);
 
         m_fastNames[name] = var;
     }
@@ -464,7 +464,7 @@ void UIScene::removeControl(UIControl_Base* control, bool centreScene) {
 
     std::string name = control->getControlName();
     IggyStringUTF8 stringVal;
-    stringVal.string = (char*)name.c_str();
+    stringVal.string = const_cast<char*>((char*)name.c_str());
     stringVal.length = name.length();
     value[0].type = IGGY_DATATYPE_string_UTF8;
     value[0].string8 = stringVal;
@@ -497,7 +497,8 @@ void UIScene::doHorizontalResizeCheck() {
         m_funcHorizontalResizeCheck, 0, nullptr);
 }
 
-void UIScene::render(S32 width, S32 height, IPlatformRenderer::eViewportType viewport) {
+void UIScene::render(S32 width, S32 height,
+                     IPlatformRenderer::eViewportType viewport) {
     if (m_bIsReloading) return;
     if (!m_hasTickedOnce || !swf) return;
     ui.setupRenderPosition(viewport);
@@ -560,7 +561,8 @@ void UIScene::customDrawSlotControl(IggyCustomDrawCallbackRegion* region,
                 bool useCommandBuffers = false;
 
                 if (!useCommandBuffers || m_needsCacheRendered) {
-                    if (useCommandBuffers) PlatformRenderer.CBuffStart(list, true);
+                    if (useCommandBuffers)
+                        PlatformRenderer.CBuffStart(list, true);
                     ui.setupCustomDrawMatrices(this, customDrawRegion);
                     _customDrawSlotControl(customDrawRegion, iPad, item, fAlpha,
                                            isFoil, bDecorations,
@@ -1087,7 +1089,7 @@ void UIScene::externalCallback(IggyExternalFunctionCallUTF16* call) {
     }
 }
 
-void UIScene::registerSubstitutionTexture(const std::wstring& textureName,
+void UIScene::registerSubstitutionTexture(const std::string& textureName,
                                           std::uint8_t* pbData,
                                           unsigned int dwLength,
                                           bool deleteData) {
@@ -1096,8 +1098,7 @@ void UIScene::registerSubstitutionTexture(const std::wstring& textureName,
     ui.registerSubstitutionTexture(textureName, pbData, dwLength);
 }
 
-bool UIScene::hasRegisteredSubstitutionTexture(
-    const std::wstring& textureName) {
+bool UIScene::hasRegisteredSubstitutionTexture(const std::string& textureName) {
     auto it = m_registeredTextures.find(textureName);
 
     return it != m_registeredTextures.end();

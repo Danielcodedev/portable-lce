@@ -8,7 +8,7 @@
 
 class NamedAreaRuleDefinition : public GameRuleDefinition {
 private:
-    std::wstring m_name;
+    std::string m_name;
     AABB m_area;
 
 public:
@@ -21,9 +21,9 @@ public:
         return ConsoleGameRules::eGameRuleType_NamedArea;
     }
 
-    virtual void addAttribute(const std::wstring& attributeName,
-                              const std::wstring& attributeValue);
+    virtual void addAttribute(const std::string& attributeName,
+                              const std::string& attributeValue);
 
     AABB* getArea() { return &m_area; }
-    std::wstring getName() { return m_name; }
+    std::string getName() { return m_name; }
 };

@@ -425,7 +425,7 @@ int NetworkController::exitAndJoinFromInviteSaveDialogReturned(
                     Minecraft::GetInstance()->skins->getSelected();
                 DLCPack* pDLCPack = tPack->getDLCPack();
                 if (!pDLCPack->hasPurchasedFile(DLCManager::e_DLCType_Texture,
-                                                L"")) {
+                                                "")) {
                     unsigned int uiIDA[2];
                     uiIDA[0] = IDS_CONFIRM_OK;
                     uiIDA[1] = IDS_CONFIRM_CANCEL;
@@ -484,7 +484,7 @@ int NetworkController::exitAndJoinFromInviteAndSaveReturned(
             TexturePack* tPack = Minecraft::GetInstance()->skins->getSelected();
             DLCPack* pDLCPack = tPack->getDLCPack();
             if (!pDLCPack->hasPurchasedFile(DLCManager::e_DLCType_Texture,
-                                            L"")) {
+                                            "")) {
                 unsigned int uiIDA[2];
                 uiIDA[0] = IDS_CONFIRM_OK;
                 uiIDA[1] = IDS_CONFIRM_CANCEL;

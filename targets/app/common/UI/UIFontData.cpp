@@ -14,7 +14,7 @@ SFontData SFontData::Mojangles_7 = {
 
     /* Font Name */ "Mojangles7",
 
-    /* Filename */ L"/TitleUpdate/res/font/Mojangles_7.png",
+    /* Filename */ "/TitleUpdate/res/font/Mojangles_7.png",
 
     /* Glyph count */ FONTSIZE,
     /* Codepoints */ SFontData::Codepoints,
@@ -40,7 +40,7 @@ SFontData SFontData::Mojangles_11 = {
 
     /* Font Name */ "Mojangles11",
 
-    /* Filename */ L"/TitleUpdate/res/font/Mojangles_11.png",
+    /* Filename */ "/TitleUpdate/res/font/Mojangles_11.png",
 
     /* Glyph count */ FONTSIZE,
     /* Codepoints */ SFontData::Codepoints,

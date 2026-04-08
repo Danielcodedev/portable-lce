@@ -28,7 +28,7 @@ public:
     virtual void ReInit();
 
     using UIControl_Base::setLabel;
-    void setLabel(const std::string& label);
+    // void setLabel(const std::string& label);
 
     virtual void SetupTouch();
 

@@ -38,7 +38,7 @@ private:
     Connection* connection;
 
 public:
-    std::wstring message;
+    std::string message;
     bool createdOk;  // 4J added
 private:
     Minecraft* minecraft;
@@ -63,7 +63,7 @@ private:
     int m_userIndex;  // 4J Added
 public:
     SavedDataStorage* savedDataStorage;
-    ClientConnection(Minecraft* minecraft, const std::wstring& ip, int port);
+    ClientConnection(Minecraft* minecraft, const std::string& ip, int port);
     ClientConnection(Minecraft* minecraft, Socket* socket, int iUserIndex = -1);
     ~ClientConnection();
     void tick();
@@ -127,7 +127,7 @@ public:
 
 private:
     std::shared_ptr<Entity> getEntity(int entityId);
-    std::wstring GetDisplayNameByGamertag(std::wstring gamertag);
+    std::string GetDisplayNameByGamertag(std::string gamertag);
 
 public:
     virtual void handleSetHealth(std::shared_ptr<SetHealthPacket> packet);

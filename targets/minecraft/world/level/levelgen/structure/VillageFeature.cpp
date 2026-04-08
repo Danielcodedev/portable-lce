@@ -21,8 +21,8 @@
 #include "minecraft/world/level/levelgen/structure/StructureStart.h"
 #include "nbt/CompoundTag.h"
 
-const std::wstring VillageFeature::OPTION_SIZE_MODIFIER = L"size";
-const std::wstring VillageFeature::OPTION_SPACING = L"distance";
+const std::string VillageFeature::OPTION_SIZE_MODIFIER = "size";
+const std::string VillageFeature::OPTION_SPACING = "distance";
 
 std::vector<Biome*> VillageFeature::allowedBiomes;
 
@@ -42,7 +42,7 @@ void VillageFeature::_init(int iXZSize) {
 VillageFeature::VillageFeature(int iXZSize) { _init(iXZSize); }
 
 VillageFeature::VillageFeature(
-    std::unordered_map<std::wstring, std::wstring> options, int iXZSize) {
+    std::unordered_map<std::string, std::string> options, int iXZSize) {
     _init(iXZSize);
 
     for (auto it = options.begin(); it != options.end(); ++it) {
@@ -56,7 +56,7 @@ VillageFeature::VillageFeature(
     }
 }
 
-std::wstring VillageFeature::getFeatureName() { return L"Village"; }
+std::string VillageFeature::getFeatureName() { return "Village"; }
 
 bool VillageFeature::isFeatureChunk(int x, int z, bool bIsSuperflat) {
     int townSpacing = this->townSpacing;
@@ -182,10 +182,10 @@ bool VillageFeature::VillageStart::isValid() {
 void VillageFeature::VillageStart::addAdditonalSaveData(CompoundTag* tag) {
     StructureStart::addAdditonalSaveData(tag);
 
-    tag->putBoolean(L"Valid", valid);
+    tag->putBoolean("Valid", valid);
 }
 
 void VillageFeature::VillageStart::readAdditonalSaveData(CompoundTag* tag) {
     StructureStart::readAdditonalSaveData(tag);
-    valid = tag->getBoolean(L"Valid");
+    valid = tag->getBoolean("Valid");
 }

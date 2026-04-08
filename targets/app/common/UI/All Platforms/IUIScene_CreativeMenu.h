@@ -68,7 +68,7 @@ public:
         static const int MAX_SIZE = rows * columns;
 
         // 4J JEV - Images
-        const wchar_t* m_icon;
+        const char* m_icon;
         const int m_descriptionId;
         const int m_staticGroupsCount;
         ECreative_Inventory_Groups* m_staticGroupsA;
@@ -84,7 +84,7 @@ public:
         unsigned int m_debugItems;
 
     public:
-        TabSpec(const wchar_t* icon, int descriptionId, int staticGroupsCount,
+        TabSpec(const char* icon, int descriptionId, int staticGroupsCount,
                 ECreative_Inventory_Groups* staticGroups,
                 int dynamicGroupsCount = 0,
                 ECreative_Inventory_Groups* dynamicGroups = nullptr,

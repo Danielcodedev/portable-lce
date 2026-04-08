@@ -134,13 +134,13 @@ void Ocelot::causeFallDamage(float distance) {
 
 void Ocelot::addAdditonalSaveData(CompoundTag* tag) {
     TamableAnimal::addAdditonalSaveData(tag);
-    tag->putInt(L"CatType", getCatType());
+    tag->putInt("CatType", getCatType());
 }
 
 void Ocelot::readAdditionalSaveData(CompoundTag* tag) {
     TamableAnimal::readAdditionalSaveData(tag);
     if (isTame()) {
-        setCatType(tag->getInt(L"CatType"));
+        setCatType(tag->getInt("CatType"));
     } else {
         setCatType(TYPE_OCELOT);
     }
@@ -288,15 +288,15 @@ bool Ocelot::canSpawn() {
     return false;
 }
 
-std::wstring Ocelot::getAName() {
+std::string Ocelot::getAName() {
     if (hasCustomName()) return getCustomName();
 #ifdef _DEBUG
     if (isTame()) {
-        return L"entity.Cat.name";
+        return "entity.Cat.name";
     }
     return TamableAnimal::getAName();
 #else
-    return L"";
+    return "";
 #endif
 }
 

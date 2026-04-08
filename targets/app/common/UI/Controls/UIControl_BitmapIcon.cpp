@@ -14,22 +14,20 @@ bool UIControl_BitmapIcon::setupControl(UIScene* scene, IggyValuePath* parent,
     bool success = UIControl::setupControl(scene, parent, controlName);
 
     // SlotList specific initialisers
-    m_funcSetTextureName = registerFastName(L"SetTextureName");
+    m_funcSetTextureName = registerFastName("SetTextureName");
 
     return success;
 }
 
-void UIControl_BitmapIcon::setTextureName(const std::wstring& iconName) {
+void UIControl_BitmapIcon::setTextureName(const std::string& iconName) {
     IggyDataValue result;
     IggyDataValue value[1];
 
-    const std::u16string convName = wstring_to_u16string(iconName);
-
-    IggyStringUTF16 stringVal;
-    stringVal.string = convName.c_str();
-    stringVal.length = convName.length();
-    value[0].type = IGGY_DATATYPE_string_UTF16;
-    value[0].string16 = stringVal;
+    IggyStringUTF8 stringVal;
+    stringVal.string = const_cast<char*>(iconName.c_str());
+    stringVal.length = iconName.length();
+    value[0].type = IGGY_DATATYPE_string_UTF8;
+    value[0].string8 = stringVal;
     IggyResult out = IggyPlayerCallMethodRS(m_parentScene->getMovie(), &result,
                                             getIggyValuePath(),
                                             m_funcSetTextureName, 1, value);

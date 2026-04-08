@@ -34,9 +34,9 @@ private:
     bool m_bDirty;
     float m_fScale, m_fAlpha;
 
-    std::wstring m_customTextureUrl;
+    std::string m_customTextureUrl;
     TEXTURE_NAME m_backupTexture;
-    std::wstring m_capeTextureUrl;
+    std::string m_capeTextureUrl;
     unsigned int m_uiAnimOverrideBitmask;
 
     float m_fScreenWidth, m_fScreenHeight;
@@ -75,9 +75,9 @@ public:
 
     void render(IggyCustomDrawCallbackRegion* region);
 
-    void SetTexture(const std::wstring& url,
+    void SetTexture(const std::string& url,
                     TEXTURE_NAME backupTexture = TN_MOB_CHAR);
-    void SetCapeTexture(const std::wstring& url) { m_capeTextureUrl = url; }
+    void SetCapeTexture(const std::string& url) { m_capeTextureUrl = url; }
     void ResetRotation() {
         m_xRot = 0;
         m_yRot = 0;
@@ -110,7 +110,7 @@ public:
 private:
     void render(EntityRenderer* renderer, double x, double y, double z,
                 float rot, float a);
-    bool bindTexture(const std::wstring& urlTexture, int backupTexture);
-    bool bindTexture(const std::wstring& urlTexture,
-                     const std::wstring& backupTexture);
+    bool bindTexture(const std::string& urlTexture, int backupTexture);
+    bool bindTexture(const std::string& urlTexture,
+                     const std::string& backupTexture);
 };

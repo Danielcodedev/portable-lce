@@ -30,7 +30,7 @@ void ArchiveFile::_readHeader(DataInputStream* dis) {
             meta->isCompressed = false;
 
         m_index.insert(
-            std::pair<std::wstring, PMetaData>(meta->filename, meta));
+            std::pair<std::string, PMetaData>(meta->filename, meta));
     }
 }
 
@@ -39,9 +39,7 @@ ArchiveFile::ArchiveFile(File file) {
     m_sourcefile = file;
     app.DebugPrintf("Loading archive file...\n");
 #if !defined(_CONTENT_PACKAGE)
-    char buf[256];
-    wcstombs(buf, file.getPath().c_str(), 256);
-    app.DebugPrintf("archive file - %s\n", buf);
+    app.DebugPrintf("archive file - %s\n", file.getPath().c_str());
 #endif
 
     if (!file.exists()) {
@@ -75,8 +73,8 @@ ArchiveFile::ArchiveFile(File file) {
 
 ArchiveFile::~ArchiveFile() { delete m_cachedData; }
 
-std::vector<std::wstring>* ArchiveFile::getFileList() {
-    std::vector<std::wstring>* out = new std::vector<std::wstring>();
+std::vector<std::string>* ArchiveFile::getFileList() {
+    std::vector<std::string>* out = new std::vector<std::string>();
 
     for (auto it = m_index.begin(); it != m_index.end(); it++)
 
@@ -85,21 +83,21 @@ std::vector<std::wstring>* ArchiveFile::getFileList() {
     return out;
 }
 
-bool ArchiveFile::hasFile(const std::wstring& filename) {
+bool ArchiveFile::hasFile(const std::string& filename) {
     return m_index.find(filename) != m_index.end();
 }
 
-int ArchiveFile::getFileSize(const std::wstring& filename) {
+int ArchiveFile::getFileSize(const std::string& filename) {
     return hasFile(filename) ? m_index.at(filename)->filesize : -1;
 }
 
-std::vector<uint8_t> ArchiveFile::getFile(const std::wstring& filename) {
+std::vector<uint8_t> ArchiveFile::getFile(const std::string& filename) {
     std::vector<uint8_t> out;
     auto it = m_index.find(filename);
 
     if (it == m_index.end()) {
         app.DebugPrintf("Couldn't find file in archive\n");
-        app.DebugPrintf("Failed to find file '%ls' in archive\n",
+        app.DebugPrintf("Failed to find file '%s' in archive\n",
                         filename.c_str());
 #if !defined(_CONTENT_PACKAGE)
         assert(0);

@@ -111,14 +111,14 @@ void HangingEntityItem::appendHoverText(
         itemInstance->getAuxValue() > 0) {
         int motive = itemInstance->getAuxValue() - 1;
 
-        wchar_t formatted[256];
-        memset(formatted, 0, 256 * sizeof(wchar_t));
-        swprintf(formatted, 256, L"** %ls %dx%d",
+        char formatted[256];
+        memset(formatted, 0, 256 * sizeof(char));
+        snprintf(formatted, 256, "** %s %dx%d",
                  Painting::Motive::values[motive]->name.c_str(),
                  Painting::Motive::values[motive]->w / 16,
                  Painting::Motive::values[motive]->h / 16);
 
-        std::wstring motiveName = formatted;
+        std::string motiveName = formatted;
 
         lines->push_back(HtmlString(motiveName.c_str(), eHTMLColor_c));
     } else

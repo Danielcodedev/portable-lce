@@ -44,9 +44,9 @@ protected:
     virtual void showScrollRightArrow(bool show) = 0;
     virtual void showScrollLeftArrow(bool show) = 0;
     virtual void moveSelector(bool right) = 0;
-    virtual void setRequest1Name(const std::wstring& name) = 0;
-    virtual void setRequest2Name(const std::wstring& name) = 0;
-    virtual void setTitle(const std::wstring& name) = 0;
+    virtual void setRequest1Name(const std::string& name) = 0;
+    virtual void setRequest2Name(const std::string& name) = 0;
+    virtual void setTitle(const std::string& name) = 0;
 
     virtual void setRequest1RedBox(bool show) = 0;
     virtual void setRequest2RedBox(bool show) = 0;

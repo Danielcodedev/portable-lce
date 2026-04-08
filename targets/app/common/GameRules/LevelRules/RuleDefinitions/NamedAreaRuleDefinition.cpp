@@ -9,7 +9,7 @@
 #include "java/InputOutputStream/DataOutputStream.h"
 
 NamedAreaRuleDefinition::NamedAreaRuleDefinition() {
-    m_name = L"";
+    m_name = "";
     m_area = AABB(0, 0, 0, 0, 0, 0);
 }
 
@@ -35,37 +35,37 @@ void NamedAreaRuleDefinition::writeAttributes(DataOutputStream* dos,
     dos->writeUTF(toWString(m_area.z1));
 }
 
-void NamedAreaRuleDefinition::addAttribute(const std::wstring& attributeName,
-                                           const std::wstring& attributeValue) {
-    if (attributeName.compare(L"name") == 0) {
+void NamedAreaRuleDefinition::addAttribute(const std::string& attributeName,
+                                           const std::string& attributeValue) {
+    if (attributeName.compare("name") == 0) {
         m_name = attributeValue;
 #ifndef _CONTENT_PACKAGE
-        wprintf(L"NamedAreaRuleDefinition: Adding parameter name=%ls\n",
+        printf("NamedAreaRuleDefinition: Adding parameter name=%s\n",
                 m_name.c_str());
 #endif
-    } else if (attributeName.compare(L"x0") == 0) {
+    } else if (attributeName.compare("x0") == 0) {
         m_area.x0 = fromWString<int>(attributeValue);
         app.DebugPrintf("NamedAreaRuleDefinition: Adding parameter x0=%f\n",
                         m_area.x0);
-    } else if (attributeName.compare(L"y0") == 0) {
+    } else if (attributeName.compare("y0") == 0) {
         m_area.y0 = fromWString<int>(attributeValue);
         if (m_area.y0 < 0) m_area.y0 = 0;
         app.DebugPrintf("NamedAreaRuleDefinition: Adding parameter y0=%f\n",
                         m_area.y0);
-    } else if (attributeName.compare(L"z0") == 0) {
+    } else if (attributeName.compare("z0") == 0) {
         m_area.z0 = fromWString<int>(attributeValue);
         app.DebugPrintf("NamedAreaRuleDefinition: Adding parameter z0=%f\n",
                         m_area.z0);
-    } else if (attributeName.compare(L"x1") == 0) {
+    } else if (attributeName.compare("x1") == 0) {
         m_area.x1 = fromWString<int>(attributeValue);
         app.DebugPrintf("NamedAreaRuleDefinition: Adding parameter x1=%f\n",
                         m_area.x1);
-    } else if (attributeName.compare(L"y1") == 0) {
+    } else if (attributeName.compare("y1") == 0) {
         m_area.y1 = fromWString<int>(attributeValue);
         if (m_area.y1 < 0) m_area.y1 = 0;
         app.DebugPrintf("NamedAreaRuleDefinition: Adding parameter y1=%f\n",
                         m_area.y1);
-    } else if (attributeName.compare(L"z1") == 0) {
+    } else if (attributeName.compare("z1") == 0) {
         m_area.z1 = fromWString<int>(attributeValue);
         app.DebugPrintf("NamedAreaRuleDefinition: Adding parameter z1=%f\n",
                         m_area.z1);

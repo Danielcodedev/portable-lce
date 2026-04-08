@@ -2442,27 +2442,27 @@ bool Tutorial::setMessage(PopupMessageDetails* message) {
         if (!message->m_replaceCurrent)
             lastMessageTime = time_util::clock::now();
 
-        std::wstring text;
+        std::string text;
         if (!message->m_messageString.empty()) {
             text = message->m_messageString;
         } else {
             auto it = messages.find(message->m_messageId);
             if (it != messages.end() && it->second != nullptr) {
                 TutorialMessage* messageString = it->second;
-                text = std::wstring(messageString->getMessageForDisplay());
+                text = std::string(messageString->getMessageForDisplay());
 
                 // 4J Stu - Quick fix for boat tutorial being incorrect
                 if (message->m_messageId == IDS_TUTORIAL_TASK_BOAT_OVERVIEW) {
-                    text = replaceAll(text, L"{*CONTROLLER_ACTION_USE*}",
-                                      L"{*CONTROLLER_ACTION_DISMOUNT*}");
+                    text = replaceAll(text, "{*CONTROLLER_ACTION_USE*}",
+                                      "{*CONTROLLER_ACTION_DISMOUNT*}");
                 }
             } else {
-                text = std::wstring(app.GetString(message->m_messageId));
+                text = std::string(app.GetString(message->m_messageId));
 
                 // 4J Stu - Quick fix for boat tutorial being incorrect
                 if (message->m_messageId == IDS_TUTORIAL_TASK_BOAT_OVERVIEW) {
-                    text = replaceAll(text, L"{*CONTROLLER_ACTION_USE*}",
-                                      L"{*CONTROLLER_ACTION_DISMOUNT*}");
+                    text = replaceAll(text, "{*CONTROLLER_ACTION_USE*}",
+                                      "{*CONTROLLER_ACTION_DISMOUNT*}");
                 }
             }
         }
@@ -2477,7 +2477,7 @@ bool Tutorial::setMessage(PopupMessageDetails* message) {
             }
         }
 
-        std::wstring title;
+        std::string title;
         TutorialPopupInfo popupInfo;
         popupInfo.interactScene = m_UIScene;
         popupInfo.desc = text.c_str();
@@ -2488,7 +2488,7 @@ bool Tutorial::setMessage(PopupMessageDetails* message) {
         popupInfo.tutorial = this;
         if (!message->m_titleString.empty() || message->m_titleId > 0) {
             if (message->m_titleString.empty())
-                title = std::wstring(app.GetString(message->m_titleId));
+                title = std::string(app.GetString(message->m_titleId));
             else
                 title = message->m_titleString;
 
@@ -2541,7 +2541,7 @@ bool Tutorial::setMessage(TutorialHint* hint, PopupMessageDetails* message) {
     return messageShown;
 }
 
-bool Tutorial::setMessage(const std::wstring& messageString, int icon,
+bool Tutorial::setMessage(const std::string& messageString, int icon,
                           int auxValue) {
     PopupMessageDetails* message = new PopupMessageDetails();
     message->m_messageString = messageString;

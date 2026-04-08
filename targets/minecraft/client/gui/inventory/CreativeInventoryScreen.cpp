@@ -66,7 +66,7 @@ const int CreativeInventoryScreen::tabIconIds
         Item::bucket_lava_Id};
 
 std::shared_ptr<SimpleContainer> CreativeInventoryScreen::basicInventory =
-    std::make_shared<SimpleContainer>(0, L"", false, ITEMS_PER_PAGE);
+    std::make_shared<SimpleContainer>(0, "", false, ITEMS_PER_PAGE);
 ItemRenderer* CreativeInventoryScreen::itemRenderer = new ItemRenderer();
 std::shared_ptr<ItemInstance> CreativeInventoryScreen::tabIcons
     [IUIScene_CreativeMenu::eCreativeInventoryTab_COUNT];
@@ -274,7 +274,7 @@ void CreativeInventoryScreen::containerTick() {}
 
 void CreativeInventoryScreen::tick() { Screen::tick(); }
 
-void CreativeInventoryScreen::keyPressed(wchar_t eventCharacter, int eventKey) {
+void CreativeInventoryScreen::keyPressed(char eventCharacter, int eventKey) {
     AbstractContainerScreen::keyPressed(eventCharacter, eventKey);
 }
 
@@ -411,7 +411,7 @@ void CreativeInventoryScreen::renderLabels() {
         IUIScene_CreativeMenu::TabSpec* spec =
             IUIScene_CreativeMenu::specs[selectedTabIndex];
         if (spec) {
-            std::wstring tabName = gameServices().getString(spec->m_descriptionId);
+            std::string tabName = gameServices().getString(spec->m_descriptionId);
             font->draw(tabName, 8, 6, 0x404040);
         }
     }

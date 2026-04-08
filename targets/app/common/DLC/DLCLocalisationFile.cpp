@@ -4,7 +4,7 @@
 #include "app/common/DLC/DLCFile.h"
 #include "app/common/Localisation/StringTable.h"
 
-DLCLocalisationFile::DLCLocalisationFile(const std::wstring& path)
+DLCLocalisationFile::DLCLocalisationFile(const std::string& path)
     : DLCFile(DLCManager::e_DLCType_LocalisationData, path) {
     m_strings = nullptr;
 }

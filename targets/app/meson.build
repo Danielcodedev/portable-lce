@@ -40,6 +40,7 @@ client_dependencies = [
   dependency('zlib'),
   miniaudio_dep,
   stb_dep,
+  simdutf_dep,
   util_dep,
 ]
 

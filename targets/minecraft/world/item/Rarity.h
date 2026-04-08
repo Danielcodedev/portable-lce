@@ -12,7 +12,7 @@ public:
     static const Rarity* epic;
 
     const eMinecraftColour color;
-    const std::wstring name;
+    const std::string name;
 
-    Rarity(eMinecraftColour color, const std::wstring& name);
+    Rarity(eMinecraftColour color, const std::string& name);
 };

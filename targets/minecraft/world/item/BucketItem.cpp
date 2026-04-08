@@ -120,7 +120,7 @@ std::shared_ptr<ItemInstance> BucketItem::use(
                 Log::info(
                     "Sending ChatPacket::e_ChatCannotPlaceLava to player\n");
                 servPlayer->connection->send(std::shared_ptr<ChatPacket>(
-                    new ChatPacket(L"", ChatPacket::e_ChatCannotPlaceLava)));
+                    new ChatPacket("", ChatPacket::e_ChatCannotPlaceLava)));
             }
 
             delete hr;

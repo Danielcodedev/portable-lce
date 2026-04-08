@@ -71,11 +71,11 @@ UIScene_MessageBox::~UIScene_MessageBox() {
     m_parentLayer->removeComponent(eUIComponent_MenuBackground);
 }
 
-std::wstring UIScene_MessageBox::getMoviePath() {
+std::string UIScene_MessageBox::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1 && !m_parentLayer->IsFullscreenGroup()) {
-        return L"MessageBoxSplit";
+        return "MessageBoxSplit";
     } else {
-        return L"MessageBox";
+        return "MessageBox";
     }
 }
 

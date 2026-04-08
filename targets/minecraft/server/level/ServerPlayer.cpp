@@ -114,7 +114,7 @@
 class Objective;
 
 ServerPlayer::ServerPlayer(MinecraftServer* server, Level* level,
-                           const std::wstring& name,
+                           const std::string& name,
                            ServerPlayerGameMode* gameMode)
     : Player(level, name) {
     // 4J - added initialisers
@@ -248,7 +248,7 @@ void ServerPlayer::flagEntitiesToBeRemoved(unsigned int* flags,
 void ServerPlayer::readAdditionalSaveData(CompoundTag* entityTag) {
     Player::readAdditionalSaveData(entityTag);
 
-    if (entityTag->contains(L"playerGameType")) {
+    if (entityTag->contains("playerGameType")) {
         // 4J Stu - We do not want to change the game mode for the player,
         // instead we let the server override it globally
         // if (MinecraftServer::getInstance()->getForceGameType())
@@ -257,13 +257,13 @@ void ServerPlayer::readAdditionalSaveData(CompoundTag* entityTag) {
         //}
         // else
         //{
-        //	gameMode->setGameModeForPlayer(GameType::byId(entityTag->getInt(L"playerGameType")));
+        //	gameMode->setGameModeForPlayer(GameType::byId(entityTag->getInt("playerGameType")));
         //}
     }
 
     GameRulesInstance* grs = gameMode->getGameRules();
-    if (entityTag->contains(L"GameRules") && grs != nullptr) {
-        std::vector<uint8_t> ba = entityTag->getByteArray(L"GameRules");
+    if (entityTag->contains("GameRules") && grs != nullptr) {
+        std::vector<uint8_t> ba = entityTag->getByteArray("GameRules");
         ByteArrayInputStream bais(ba);
         DataInputStream dis(&bais);
         grs->read(&dis);
@@ -280,7 +280,7 @@ void ServerPlayer::addAdditonalSaveData(CompoundTag* entityTag) {
         ByteArrayOutputStream baos;
         DataOutputStream dos(&baos);
         grs->write(&dos);
-        entityTag->putByteArray(L"GameRules", baos.buf);
+        entityTag->putByteArray("GameRules", baos.buf);
         baos.buf.clear();
         dos.close();
         baos.close();
@@ -288,7 +288,7 @@ void ServerPlayer::addAdditonalSaveData(CompoundTag* entityTag) {
 
     // 4J Stu - We do not want to change the game mode for the player, instead
     // we let the server override it globally
-    // entityTag->putInt(L"playerGameType",
+    // entityTag->putInt("playerGameType",
     // gameMode->getGameModeForPlayer()->getId());
 }
 
@@ -462,7 +462,7 @@ void ServerPlayer::doChunkSendingTick(bool dontDelayChunks) {
                         connection->getNetworkPlayer());
 
                     //					static
-                    // unordered_map<wstring,int64_t> mapLastTime;
+                    // unordered_map<string,int64_t> mapLastTime;
                     //					int64_t thisTime =
                     // System::currentTimeMillis();
                     //					int64_t lastTime =
@@ -705,7 +705,7 @@ bool ServerPlayer::hurt(DamageSource* dmgSource, float dmg) {
     // way out of 'fall traps'
     // bool allowFallDamage = server->isPvpAllowed() &&
     // server->isDedicatedServer() && server->isPvpAllowed() &&
-    // (dmgSource->msgId.compare(L"fall") == 0);
+    // (dmgSource->msgId.compare("fall") == 0);
     if (!server->isPvpAllowed() && invulnerableTime > 0 &&
         dmgSource != DamageSource::outOfWorld)
         return false;
@@ -746,7 +746,7 @@ bool ServerPlayer::canHarmPlayer(std::shared_ptr<Player> target) {
 
 // 4J: Added for checking when only player name is provided (possible player
 // isn't on server), e.g. can harm owned animals
-bool ServerPlayer::canHarmPlayer(std::wstring targetName) {
+bool ServerPlayer::canHarmPlayer(std::string targetName) {
     bool canHarm = true;
 
     std::shared_ptr<ServerPlayer> owner =
@@ -917,7 +917,7 @@ bool ServerPlayer::startCrafting(int x, int y, int z) {
     if (containerMenu == inventoryMenu) {
         nextContainerCounter();
         connection->send(std::make_shared<ContainerOpenPacket>(
-            containerCounter, ContainerOpenPacket::WORKBENCH, L"", 9, false));
+            containerCounter, ContainerOpenPacket::WORKBENCH, "", 9, false));
         containerMenu = new CraftingMenu(inventory, level, x, y, z);
         containerMenu->containerId = containerCounter;
         containerMenu->addSlotListener(this);
@@ -934,7 +934,7 @@ bool ServerPlayer::openFireworks(int x, int y, int z) {
     if (containerMenu == inventoryMenu) {
         nextContainerCounter();
         connection->send(std::make_shared<ContainerOpenPacket>(
-            containerCounter, ContainerOpenPacket::FIREWORKS, L"", 9, false));
+            containerCounter, ContainerOpenPacket::FIREWORKS, "", 9, false));
         containerMenu = new FireworksMenu(inventory, level, x, y, z);
         containerMenu->containerId = containerCounter;
         containerMenu->addSlotListener(this);
@@ -943,7 +943,7 @@ bool ServerPlayer::openFireworks(int x, int y, int z) {
 
         nextContainerCounter();
         connection->send(std::make_shared<ContainerOpenPacket>(
-            containerCounter, ContainerOpenPacket::FIREWORKS, L"", 9, false));
+            containerCounter, ContainerOpenPacket::FIREWORKS, "", 9, false));
         containerMenu = new FireworksMenu(inventory, level, x, y, z);
         containerMenu->containerId = containerCounter;
         containerMenu->addSlotListener(this);
@@ -957,12 +957,12 @@ bool ServerPlayer::openFireworks(int x, int y, int z) {
 }
 
 bool ServerPlayer::startEnchanting(int x, int y, int z,
-                                   const std::wstring& name) {
+                                   const std::string& name) {
     if (containerMenu == inventoryMenu) {
         nextContainerCounter();
         connection->send(std::make_shared<ContainerOpenPacket>(
             containerCounter, ContainerOpenPacket::ENCHANTMENT,
-            name.empty() ? L"" : name, 9, !name.empty()));
+            name.empty() ? "" : name, 9, !name.empty()));
         containerMenu = new EnchantmentMenu(inventory, level, x, y, z);
         containerMenu->containerId = containerCounter;
         containerMenu->addSlotListener(this);
@@ -979,7 +979,7 @@ bool ServerPlayer::startRepairing(int x, int y, int z) {
     if (containerMenu == inventoryMenu) {
         nextContainerCounter();
         connection->send(std::make_shared<ContainerOpenPacket>(
-            containerCounter, ContainerOpenPacket::REPAIR_TABLE, L"", 9,
+            containerCounter, ContainerOpenPacket::REPAIR_TABLE, "", 9,
             false));
         containerMenu = new AnvilMenu(
             inventory, level, x, y, z,
@@ -1135,7 +1135,7 @@ bool ServerPlayer::openBeacon(std::shared_ptr<BeaconTileEntity> beacon) {
 }
 
 bool ServerPlayer::openTrading(std::shared_ptr<Merchant> traderTarget,
-                               const std::wstring& name) {
+                               const std::string& name) {
     if (containerMenu == inventoryMenu) {
         nextContainerCounter();
         containerMenu = new MerchantMenu(inventory, traderTarget, level);
@@ -1146,7 +1146,7 @@ bool ServerPlayer::openTrading(std::shared_ptr<Merchant> traderTarget,
 
         connection->send(std::make_shared<ContainerOpenPacket>(
             containerCounter, ContainerOpenPacket::TRADER_NPC,
-            name.empty() ? L"" : name, container->getContainerSize(),
+            name.empty() ? "" : name, container->getContainerSize(),
             !name.empty()));
 
         MerchantRecipeList* offers = traderTarget->getOffers(
@@ -1301,19 +1301,19 @@ void ServerPlayer::displayClientMessage(int messageId) {
     switch (messageId) {
         case IDS_TILE_BED_OCCUPIED:
             messageType = ChatPacket::e_ChatBedOccupied;
-            connection->send(std::make_shared<ChatPacket>(L"", messageType));
+            connection->send(std::make_shared<ChatPacket>("", messageType));
             break;
         case IDS_TILE_BED_NO_SLEEP:
             messageType = ChatPacket::e_ChatBedNoSleep;
-            connection->send(std::make_shared<ChatPacket>(L"", messageType));
+            connection->send(std::make_shared<ChatPacket>("", messageType));
             break;
         case IDS_TILE_BED_NOT_VALID:
             messageType = ChatPacket::e_ChatBedNotValid;
-            connection->send(std::make_shared<ChatPacket>(L"", messageType));
+            connection->send(std::make_shared<ChatPacket>("", messageType));
             break;
         case IDS_TILE_BED_NOTSAFE:
             messageType = ChatPacket::e_ChatBedNotSafe;
-            connection->send(std::make_shared<ChatPacket>(L"", messageType));
+            connection->send(std::make_shared<ChatPacket>("", messageType));
             break;
         case IDS_TILE_BED_PLAYERSLEEP:
             messageType = ChatPacket::e_ChatBedPlayerSleep;
@@ -1356,7 +1356,7 @@ void ServerPlayer::displayClientMessage(int messageId) {
             break;
         case IDS_TILE_BED_MESLEEP:
             messageType = ChatPacket::e_ChatBedMeSleep;
-            connection->send(std::make_shared<ChatPacket>(L"", messageType));
+            connection->send(std::make_shared<ChatPacket>("", messageType));
             break;
 
         case IDS_MAX_PIGS_SHEEP_COWS_CATS_SPAWNED:
@@ -1550,9 +1550,9 @@ void ServerPlayer::displayClientMessage(int messageId) {
     }
 
     // Language *language = Language::getInstance();
-    // wstring languageString =
+    // string languageString =
     // gameServices().getString(messageId);//language->getElement(messageId);
-    // connection->send( shared_ptr<ChatPacket>( new ChatPacket(L"",
+    // connection->send( shared_ptr<ChatPacket>( new ChatPacket("",
     // messageType) ) );
 }
 
@@ -1635,9 +1635,9 @@ void ServerPlayer::setGameMode(GameType* mode) {
 }
 
 void ServerPlayer::sendMessage(
-    const std::wstring& message,
+    const std::string& message,
     ChatPacket::EChatPacketMessage type /*= e_ChatCustom*/,
-    int customData /*= -1*/, const std::wstring& additionalMessage /*= L""*/) {
+    int customData /*= -1*/, const std::string& additionalMessage /*= ""*/) {
     connection->send(std::shared_ptr<ChatPacket>(
         new ChatPacket(message, type, customData, additionalMessage)));
 }

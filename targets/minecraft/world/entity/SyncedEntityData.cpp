@@ -53,7 +53,7 @@ void SynchedEntityData::define(int id, float value) {
     m_isEmpty = false;
 }
 
-void SynchedEntityData::define(int id, const std::wstring& value) {
+void SynchedEntityData::define(int id, const std::string& value) {
     checkId(id);
     int type = TYPE_STRING;
     std::shared_ptr<DataItem> dataItem =
@@ -89,7 +89,7 @@ float SynchedEntityData::getFloat(int id) {
     return itemsById[id]->getValue_float();
 }
 
-std::wstring SynchedEntityData::getString(int id) {
+std::string SynchedEntityData::getString(int id) {
     return itemsById[id]->getValue_wstring();
 }
 
@@ -147,7 +147,7 @@ void SynchedEntityData::set(int id, float value) {
     }
 }
 
-void SynchedEntityData::set(int id, const std::wstring& value) {
+void SynchedEntityData::set(int id, const std::string& value) {
     std::shared_ptr<DataItem> dataItem = itemsById[id];
 
     // update the value if it has changed
@@ -463,7 +463,7 @@ SynchedEntityData::DataItem::DataItem(int type, int id, float value)
 }
 
 SynchedEntityData::DataItem::DataItem(int type, int id,
-                                      const std::wstring& value)
+                                      const std::string& value)
     : type(type), id(id) {
     this->value_wstring = value;
     this->dirty = true;
@@ -494,7 +494,7 @@ void SynchedEntityData::DataItem::setValue(float value) {
     this->value_float = value;
 }
 
-void SynchedEntityData::DataItem::setValue(const std::wstring& value) {
+void SynchedEntityData::DataItem::setValue(const std::string& value) {
     this->value_wstring = value;
 }
 
@@ -511,7 +511,7 @@ float SynchedEntityData::DataItem::getValue_float() { return value_float; }
 
 uint8_t SynchedEntityData::DataItem::getValue_byte() { return value_byte; }
 
-std::wstring SynchedEntityData::DataItem::getValue_wstring() {
+std::string SynchedEntityData::DataItem::getValue_wstring() {
     return value_wstring;
 }
 

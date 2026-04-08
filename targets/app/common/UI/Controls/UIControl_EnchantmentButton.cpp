@@ -28,7 +28,7 @@ UIControl_EnchantmentButton::UIControl_EnchantmentButton() {
     m_index = 0;
     m_lastState = eState_Inactive;
     m_lastCost = 0;
-    m_enchantmentString = L"";
+    m_enchantmentString = "";
     m_bHasFocus = false;
 
     m_textColour = app.GetHTMLColour(eTextColor_Enchant);
@@ -43,7 +43,7 @@ bool UIControl_EnchantmentButton::setupControl(UIScene* scene,
     bool success = UIControl_Button::setupControl(scene, parent, controlName);
 
     // Button specific initialisers
-    m_funcChangeState = registerFastName(L"ChangeState");
+    m_funcChangeState = registerFastName("ChangeState");
 
     return success;
 }
@@ -110,7 +110,7 @@ void UIControl_EnchantmentButton::render(IggyCustomDrawCallbackRegion* region) {
         glEnable(GL_ALPHA_TEST);
         glAlphaFunc(GL_GREATER, 0.1f);
         Minecraft* pMinecraft = Minecraft::GetInstance();
-        std::wstring line = toWString<int>(cost);
+        std::string line = toWString<int>(cost);
         Font* font = pMinecraft->altFont;
         // int col = 0x685E4A;
         unsigned int col = m_textColour;
@@ -176,7 +176,7 @@ void UIControl_EnchantmentButton::updateState() {
     if (cost == 0) {
         // Dark background
         state = eState_Inactive;
-        setLabel(L"");
+        setLabel("");
     }
 
     if (state != m_lastState) {
@@ -202,26 +202,26 @@ UIControl_EnchantmentButton::EnchantmentNames
     UIControl_EnchantmentButton::EnchantmentNames::instance;
 
 UIControl_EnchantmentButton::EnchantmentNames::EnchantmentNames() {
-    std::wstring allWords =
-        L"the elder scrolls klaatu berata niktu xyzzy bless curse light "
-        L"darkness fire air earth water hot dry cold wet ignite snuff embiggen "
-        L"twist shorten stretch fiddle destroy imbue galvanize enchant free "
-        L"limited range of towards inside sphere cube self other ball mental "
-        L"physical grow shrink demon elemental spirit animal creature beast "
-        L"humanoid undead fresh stale ";
-    std::wistringstream iss(allWords);
-    std::copy(std::istream_iterator<std::wstring, wchar_t,
-                                    std::char_traits<wchar_t> >(iss),
-              std::istream_iterator<std::wstring, wchar_t,
-                                    std::char_traits<wchar_t> >(),
+    std::string allWords =
+        "the elder scrolls klaatu berata niktu xyzzy bless curse light "
+        "darkness fire air earth water hot dry cold wet ignite snuff embiggen "
+        "twist shorten stretch fiddle destroy imbue galvanize enchant free "
+        "limited range of towards inside sphere cube self other ball mental "
+        "physical grow shrink demon elemental spirit animal creature beast "
+        "humanoid undead fresh stale ";
+    std::istringstream iss(allWords);
+    std::copy(std::istream_iterator<std::string, char,
+                                    std::char_traits<char> >(iss),
+              std::istream_iterator<std::string, char,
+                                    std::char_traits<char> >(),
               std::back_inserter(words));
 }
 
-std::wstring UIControl_EnchantmentButton::EnchantmentNames::getRandomName() {
+std::string UIControl_EnchantmentButton::EnchantmentNames::getRandomName() {
     int wordCount = random.nextInt(2) + 3;
-    std::wstring word = L"";
+    std::string word = "";
     for (int i = 0; i < wordCount; i++) {
-        if (i > 0) word += L" ";
+        if (i > 0) word += " ";
         word += words[random.nextInt(words.size())];
     }
     return word;

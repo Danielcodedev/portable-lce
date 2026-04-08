@@ -21,7 +21,7 @@ private:
 protected:
     IggyName m_funcShowPanoramaDay;
     UI_BEGIN_MAP_ELEMENTS_AND_NAMES(UIScene)
-    UI_MAP_NAME(m_funcShowPanoramaDay, L"ShowPanoramaDay");
+    UI_MAP_NAME(m_funcShowPanoramaDay, "ShowPanoramaDay");
     UI_END_MAP_ELEMENTS_AND_NAMES()
 
 public:
@@ -29,7 +29,7 @@ public:
 
 protected:
     // TODO: This should be pure virtual in this class
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
 
 public:
     virtual EUIScene getSceneType() { return eUIComponent_Panorama; }

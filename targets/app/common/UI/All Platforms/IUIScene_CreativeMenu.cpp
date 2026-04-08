@@ -552,7 +552,7 @@ void IUIScene_CreativeMenu::staticCtor() {
             std::shared_ptr<ItemInstance>(
                 new ItemInstance(Item::sword_diamond_Id, 1, 0));
         debugSword->enchant(Enchantment::damageBonus, 50);
-        debugSword->setHoverName(L"Sword of Debug");
+        debugSword->setHoverName("Sword of Debug");
         list->push_back(debugSword);
     }
 #endif
@@ -827,7 +827,7 @@ void IUIScene_CreativeMenu::staticCtor() {
     ECreative_Inventory_Groups blocksGroup[] = {
         eCreativeInventory_BuildingBlocks};
     specs[eCreativeInventoryTab_BuildingBlocks] = new TabSpec(
-        L"Structures", IDS_GROUPNAME_BUILDING_BLOCKS, 1, blocksGroup);
+        "Structures", IDS_GROUPNAME_BUILDING_BLOCKS, 1, blocksGroup);
 
 #if !defined(_CONTENT_PACKAGE)
     ECreative_Inventory_Groups decorationsGroup[] = {
@@ -835,41 +835,41 @@ void IUIScene_CreativeMenu::staticCtor() {
     ECreative_Inventory_Groups debugDecorationsGroup[] = {
         eCreativeInventory_ArtToolsDecorations};
     specs[eCreativeInventoryTab_Decorations] =
-        new TabSpec(L"Decoration", IDS_GROUPNAME_DECORATIONS, 1,
+        new TabSpec("Decoration", IDS_GROUPNAME_DECORATIONS, 1,
                     decorationsGroup, 0, nullptr, 1, debugDecorationsGroup);
 #else
     ECreative_Inventory_Groups decorationsGroup[] = {
         eCreativeInventory_Decoration};
     specs[eCreativeInventoryTab_Decorations] = new TabSpec(
-        L"Decoration", IDS_GROUPNAME_DECORATIONS, 1, decorationsGroup);
+        "Decoration", IDS_GROUPNAME_DECORATIONS, 1, decorationsGroup);
 #endif
 
     ECreative_Inventory_Groups redAndTranGroup[] = {
         eCreativeInventory_Transport, eCreativeInventory_Redstone};
     specs[eCreativeInventoryTab_RedstoneAndTransport] =
-        new TabSpec(L"RedstoneAndTransport",
+        new TabSpec("RedstoneAndTransport",
                     IDS_GROUPNAME_REDSTONE_AND_TRANSPORT, 2, redAndTranGroup);
 
     ECreative_Inventory_Groups materialsGroup[] = {
         eCreativeInventory_Materials};
     specs[eCreativeInventoryTab_Materials] =
-        new TabSpec(L"Materials", IDS_GROUPNAME_MATERIALS, 1, materialsGroup);
+        new TabSpec("Materials", IDS_GROUPNAME_MATERIALS, 1, materialsGroup);
 
     ECreative_Inventory_Groups foodGroup[] = {eCreativeInventory_Food};
     specs[eCreativeInventoryTab_Food] =
-        new TabSpec(L"Food", IDS_GROUPNAME_FOOD, 1, foodGroup);
+        new TabSpec("Food", IDS_GROUPNAME_FOOD, 1, foodGroup);
 
 // 4jcraft
 #ifdef ENABLE_JAVA_GUIS
     ECreative_Inventory_Groups searchGroup[] = {eCreativeInventory_Search};
     specs[eCreativeInventoryTab_Search] =
-        new TabSpec(L"Search Items", IDS_GROUPNAME_SEARCH, 1, searchGroup);
+        new TabSpec("Search Items", IDS_GROUPNAME_SEARCH, 1, searchGroup);
 #endif
 
     ECreative_Inventory_Groups toolsGroup[] = {
         eCreativeInventory_ToolsArmourWeapons};
     specs[eCreativeInventoryTab_ToolsWeaponsArmor] =
-        new TabSpec(L"Tools", IDS_GROUPNAME_TOOLS_WEAPONS_ARMOR, 1, toolsGroup);
+        new TabSpec("Tools", IDS_GROUPNAME_TOOLS_WEAPONS_ARMOR, 1, toolsGroup);
 
     ECreative_Inventory_Groups brewingGroup[] = {
         eCreativeInventory_Brewing, eCreativeInventory_Potions_Level2_Extended,
@@ -881,12 +881,12 @@ void IUIScene_CreativeMenu::staticCtor() {
     // if(!PlatformRenderer.IsHiDef() && !PlatformRenderer.IsWidescreen())
     {
         specs[eCreativeInventoryTab_Brewing] =
-            new TabSpec(L"Brewing", IDS_GROUPNAME_POTIONS_480, 5, brewingGroup);
+            new TabSpec("Brewing", IDS_GROUPNAME_POTIONS_480, 5, brewingGroup);
     }
     // 	else
     // 	{
     // 		specs[eCreativeInventoryTab_Brewing] = new
-    // TabSpec(L"icon_brewing.png", IDS_GROUPNAME_POTIONS, 1, brewingGroup, 4,
+    // TabSpec("icon_brewing.png", IDS_GROUPNAME_POTIONS, 1, brewingGroup, 4,
     // potionsGroup);
     // 	}
 
@@ -895,12 +895,12 @@ void IUIScene_CreativeMenu::staticCtor() {
     ECreative_Inventory_Groups debugMiscGroup[] = {
         eCreativeInventory_ArtToolsMisc};
     specs[eCreativeInventoryTab_Misc] =
-        new TabSpec(L"Misc", IDS_GROUPNAME_MISCELLANEOUS, 1, miscGroup, 0,
+        new TabSpec("Misc", IDS_GROUPNAME_MISCELLANEOUS, 1, miscGroup, 0,
                     nullptr, 1, debugMiscGroup);
 #else
     ECreative_Inventory_Groups miscGroup[] = {eCreativeInventory_Misc};
     specs[eCreativeInventoryTab_Misc] =
-        new TabSpec(L"Misc", IDS_GROUPNAME_MISCELLANEOUS, 1, miscGroup);
+        new TabSpec("Misc", IDS_GROUPNAME_MISCELLANEOUS, 1, miscGroup);
 #endif
 }
 
@@ -956,7 +956,7 @@ void IUIScene_CreativeMenu::ScrollBar(UIVec2D pointerPos) {
 // 4J JEV - Tab Spec Struct
 
 IUIScene_CreativeMenu::TabSpec::TabSpec(
-    const wchar_t* icon, int descriptionId, int staticGroupsCount,
+    const char* icon, int descriptionId, int staticGroupsCount,
     ECreative_Inventory_Groups* staticGroups, int dynamicGroupsCount,
     ECreative_Inventory_Groups* dynamicGroups, int debugGroupsCount /*= 0*/,
     ECreative_Inventory_Groups* debugGroups /*= nullptr*/)

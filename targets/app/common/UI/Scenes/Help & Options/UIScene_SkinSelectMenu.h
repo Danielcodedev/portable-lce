@@ -24,7 +24,7 @@ class UILayer;
 
 class UIScene_SkinSelectMenu : public UIScene {
 private:
-    static const wchar_t* wchDefaultNamesA[std::to_underlying(EDefaultSkins::Count)];
+    static const char* wchDefaultNamesA[std::to_underlying(EDefaultSkins::Count)];
 
     // 4J Stu - How many to show on each side of the main control
     static const int sidePreviewControls = 4;
@@ -88,18 +88,18 @@ private:
     UI_MAP_ELEMENT(m_characters[eCharacter_Previous4], "iggy_Character8")
     UI_END_MAP_CHILD_ELEMENTS()
 
-    UI_MAP_NAME(m_funcSetPlayerCharacterSelected, L"SetPlayerCharacterSelected")
-    UI_MAP_NAME(m_funcSetCharacterLocked, L"SetCharacterLocked")
+    UI_MAP_NAME(m_funcSetPlayerCharacterSelected, "SetPlayerCharacterSelected")
+    UI_MAP_NAME(m_funcSetCharacterLocked, "SetCharacterLocked")
 
-    UI_MAP_NAME(m_funcSetLeftLabel, L"SetLeftLabel")
-    UI_MAP_NAME(m_funcSetCentreLabel, L"SetCenterLabel")
-    UI_MAP_NAME(m_funcSetRightLabel, L"SetRightLabel")
+    UI_MAP_NAME(m_funcSetLeftLabel, "SetLeftLabel")
+    UI_MAP_NAME(m_funcSetCentreLabel, "SetCenterLabel")
+    UI_MAP_NAME(m_funcSetRightLabel, "SetRightLabel")
     UI_END_MAP_ELEMENTS_AND_NAMES()
 
     DLCPack* m_currentPack;
     int m_packIndex, m_skinIndex;
     std::uint32_t m_originalSkinId;
-    std::wstring m_currentSkinPath, m_selectedSkinPath, m_selectedCapePath;
+    std::string m_currentSkinPath, m_selectedSkinPath, m_selectedCapePath;
     std::vector<SKIN_BOX*>* m_vAdditionalSkinBoxes;
 
     bool m_bSlidingSkins, m_bAnimatingMove;
@@ -109,7 +109,7 @@ private:
     int m_currentPackCount;
     bool m_bIgnoreInput;
     bool m_bSkinIndexChanged;
-    std::wstring m_leftLabel, m_centreLabel, m_rightLabel;
+    std::string m_leftLabel, m_centreLabel, m_rightLabel;
 
     S32 m_iTouchXStart;
     bool m_bTouchScrolled;
@@ -128,7 +128,7 @@ public:
 
 protected:
     // TODO: This should be pure virtual in this class
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
 
 public:
     // INPUT
@@ -152,9 +152,9 @@ private:
     void setCharacterSelected(bool selected);
     void setCharacterLocked(bool locked);
 
-    void setLeftLabel(const std::wstring& label);
-    void setCentreLabel(const std::wstring& label);
-    void setRightLabel(const std::wstring& label);
+    void setLeftLabel(const std::string& label);
+    void setCentreLabel(const std::string& label);
+    void setRightLabel(const std::string& label);
 
     virtual void HandleDLCMountingComplete();
     virtual void HandleDLCInstalled();

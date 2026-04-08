@@ -1,8 +1,3 @@
-simdutf_dep = dependency('simdutf',
-  fallback: ['simdutf', 'simdutf_dep'],
-  default_options: ['utf8=true', 'utf16=true', 'utf32=true']
-)
-
 lib_util = static_library('util',
   files('StringHelpers.cpp', 'FrameProfiler.cpp'),
   dependencies: [simdutf_dep],

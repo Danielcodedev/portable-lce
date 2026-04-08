@@ -3,10 +3,10 @@
 #include "DLCManager.h"
 #include "app/common/DLC/DLCFile.h"
 
-DLCTextureFile::DLCTextureFile(const std::wstring& path)
+DLCTextureFile::DLCTextureFile(const std::string& path)
     : DLCFile(DLCManager::e_DLCType_Texture, path) {
     m_bIsAnim = false;
-    m_animString = L"";
+    m_animString = "";
 
     m_pbData = nullptr;
     m_dataBytes = 0;
@@ -24,7 +24,7 @@ std::uint8_t* DLCTextureFile::getData(std::uint32_t& dataBytes) {
 }
 
 void DLCTextureFile::addParameter(DLCManager::EDLCParameterType type,
-                                  const std::wstring& value) {
+                                  const std::string& value) {
     switch (type) {
         case DLCManager::e_DLCParamType_Anim:
             m_animString = value;
@@ -36,13 +36,13 @@ void DLCTextureFile::addParameter(DLCManager::EDLCParameterType type,
     }
 }
 
-std::wstring DLCTextureFile::getParameterAsString(
+std::string DLCTextureFile::getParameterAsString(
     DLCManager::EDLCParameterType type) {
     switch (type) {
         case DLCManager::e_DLCParamType_Anim:
             return m_animString;
         default:
-            return L"";
+            return "";
     }
 }
 

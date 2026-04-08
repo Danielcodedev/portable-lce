@@ -679,18 +679,18 @@ void LevelRenderer::renderEntities(Vec3* cam, Culler* culler, float a) {
     mc->gameRenderer->turnOffLightLayer(a);  // 4J - brought forward from 1.8.2
 }
 
-std::wstring LevelRenderer::gatherStats1() {
-    return L"C: " + toWString<int>(renderedChunks) + L"/" +
-           toWString<int>(totalChunks) + L". F: " +
-           toWString<int>(offscreenChunks) + L", O: " +
-           toWString<int>(occludedChunks) + L", E: " +
+std::string LevelRenderer::gatherStats1() {
+    return "C: " + toWString<int>(renderedChunks) + "/" +
+           toWString<int>(totalChunks) + ". F: " +
+           toWString<int>(offscreenChunks) + ", O: " +
+           toWString<int>(occludedChunks) + ", E: " +
            toWString<int>(emptyChunks);
 }
 
-std::wstring LevelRenderer::gatherStats2() {
-    return L"E: " + toWString<int>(renderedEntities) + L"/" +
-           toWString<int>(totalEntities) + L". B: " +
-           toWString<int>(culledEntities) + L", I: " +
+std::string LevelRenderer::gatherStats2() {
+    return "E: " + toWString<int>(renderedEntities) + "/" +
+           toWString<int>(totalEntities) + ". B: " +
+           toWString<int>(culledEntities) + ", I: " +
            toWString<int>((totalEntities - culledEntities) - renderedEntities);
 }
 
@@ -916,7 +916,7 @@ void LevelRenderer::renderSky(float alpha) {
 
         glDepthMask(false);
         textures->bindTexture(
-            &END_SKY_LOCATION);  // 4J was L"/1_2_2/misc/tunnel.png"
+            &END_SKY_LOCATION);  // 4J was "/1_2_2/misc/tunnel.png"
         Tesselator* t = Tesselator::getInstance();
         t->setMipmapEnable(false);
         for (int i = 0; i < 6; i++) {
@@ -1053,7 +1053,7 @@ void LevelRenderer::renderSky(float alpha) {
 
         ss = 20;
         textures->bindTexture(
-            &MOON_PHASES_LOCATION);  // 4J was L"/1_2_2/terrain/moon_phases.png"
+            &MOON_PHASES_LOCATION);  // 4J was "/1_2_2/terrain/moon_phases.png"
         int phase = level[playerIndex]->getMoonPhase();
         int u = phase % 4;
         int v = phase / 4 % 2;
@@ -1144,7 +1144,7 @@ void LevelRenderer::renderHaloRing(float alpha) {
 
     glDepthMask(false);
     textures->bindTexture(
-        L"misc/haloRing.png");  // 4J was L"/1_2_2/misc/tunnel.png"
+        "misc/haloRing.png");  // 4J was "/1_2_2/misc/tunnel.png"
     Tesselator* t = Tesselator::getInstance();
     bool prev = t->setMipmapEnable(true);
 
@@ -1490,7 +1490,7 @@ void LevelRenderer::renderAdvancedClouds(float alpha) {
     }
 
     textures->bindTexture(
-        &CLOUDS_LOCATION);  // 4J was L"/environment/clouds.png"
+        &CLOUDS_LOCATION);  // 4J was "/environment/clouds.png"
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -2786,10 +2786,10 @@ void LevelRenderer::cull(Culler* culler, float a) {
     "Unknown occlusion mode, this should NEVER happen, check meson.build for misconfiguration"
 #endif
 }
-void LevelRenderer::playStreamingMusic(const std::wstring& name, int x, int y,
+void LevelRenderer::playStreamingMusic(const std::string& name, int x, int y,
                                        int z) {
-    if (name != L"") {
-        mc->gui->setNowPlaying(L"C418 - " + name);
+    if (name != "") {
+        mc->gui->setNowPlaying("C418 - " + name);
     }
     mc->soundEngine->playStreaming(name, (float)x, (float)y, (float)z, 1, 1);
 }
@@ -2834,7 +2834,7 @@ void LevelRenderer::playSoundExceptPlayer(std::shared_ptr<Player> player,
 // 4J-PB - original function. I've changed to an enum instead of string compares
 // 4J removed -
 /*
-void LevelRenderer::addParticle(const wstring& name, double x, double y, double
+void LevelRenderer::addParticle(const string& name, double x, double y, double
 z, double xa, double ya, double za)
 {
 if (mc == nullptr || mc->cameraTargetPlayer == nullptr || mc->particleEngine ==
@@ -2849,36 +2849,36 @@ if (xd * xd + yd * yd + zd * zd > particleDistance * particleDistance) return;
 
 int playerIndex = mc->player->GetXboxPad();	// 4J added
 
-if (name== L"bubble") mc->particleEngine->add(shared_ptr<BubbleParticle>( new
+if (name== "bubble") mc->particleEngine->add(shared_ptr<BubbleParticle>( new
 BubbleParticle(level[playerIndex], x, y, z, xa, ya, za) ) ); else if (name==
-L"smoke") mc->particleEngine->add(shared_ptr<SmokeParticle>( new
+"smoke") mc->particleEngine->add(shared_ptr<SmokeParticle>( new
 SmokeParticle(level[playerIndex], x, y, z, xa, ya, za) ) ); else if (name==
-L"note") mc->particleEngine->add(shared_ptr<NoteParticle>( new
+"note") mc->particleEngine->add(shared_ptr<NoteParticle>( new
 NoteParticle(level[playerIndex], x, y, z, xa, ya, za) ) ); else if (name==
-L"portal") mc->particleEngine->add(shared_ptr<PortalParticle>( new
+"portal") mc->particleEngine->add(shared_ptr<PortalParticle>( new
 PortalParticle(level[playerIndex], x, y, z, xa, ya, za) ) ); else if (name==
-L"explode") mc->particleEngine->add(shared_ptr<ExplodeParticle>( new
+"explode") mc->particleEngine->add(shared_ptr<ExplodeParticle>( new
 ExplodeParticle(level[playerIndex], x, y, z, xa, ya, za) ) ); else if (name==
-L"flame") mc->particleEngine->add(shared_ptr<FlameParticle>( new
+"flame") mc->particleEngine->add(shared_ptr<FlameParticle>( new
 FlameParticle(level[playerIndex], x, y, z, xa, ya, za) ) ); else if (name==
-L"lava") mc->particleEngine->add(shared_ptr<LavaParticle>( new
-LavaParticle(level[playerIndex], x, y, z) ) ); else if (name== L"footstep")
+"lava") mc->particleEngine->add(shared_ptr<LavaParticle>( new
+LavaParticle(level[playerIndex], x, y, z) ) ); else if (name== "footstep")
 mc->particleEngine->add(shared_ptr<FootstepParticle>( new
 FootstepParticle(textures, level[playerIndex], x, y, z) ) ); else if (name==
-L"splash") mc->particleEngine->add(shared_ptr<SplashParticle>( new
+"splash") mc->particleEngine->add(shared_ptr<SplashParticle>( new
 SplashParticle(level[playerIndex], x, y, z, xa, ya, za) ) ); else if (name==
-L"largesmoke") mc->particleEngine->add(shared_ptr<SmokeParticle>( new
+"largesmoke") mc->particleEngine->add(shared_ptr<SmokeParticle>( new
 SmokeParticle(level[playerIndex], x, y, z, xa, ya, za, 2.5f) ) ); else if
-(name== L"reddust") mc->particleEngine->add(shared_ptr<RedDustParticle>( new
+(name== "reddust") mc->particleEngine->add(shared_ptr<RedDustParticle>( new
 RedDustParticle(level[playerIndex], x, y, z, (float) xa, (float) ya, (float) za)
-) ); else if (name== L"snowballpoof")
+) ); else if (name== "snowballpoof")
 mc->particleEngine->add(shared_ptr<BreakingItemParticle>( new
 BreakingItemParticle(level[playerIndex], x, y, z, Item::snowBall) ) ); else if
-(name== L"snowshovel") mc->particleEngine->add(shared_ptr<SnowShovelParticle>(
+(name== "snowshovel") mc->particleEngine->add(shared_ptr<SnowShovelParticle>(
 new SnowShovelParticle(level[playerIndex], x, y, z, xa, ya, za) ) ); else if
-(name== L"slime") mc->particleEngine->add(shared_ptr<BreakingItemParticle>( new
+(name== "slime") mc->particleEngine->add(shared_ptr<BreakingItemParticle>( new
 BreakingItemParticle(level[playerIndex], x, y, z, Item::slimeBall)) ) ; else if
-(name== L"heart") mc->particleEngine->add(shared_ptr<HeartParticle>( new
+(name== "heart") mc->particleEngine->add(shared_ptr<HeartParticle>( new
 HeartParticle(level[playerIndex], x, y, z, xa, ya, za) ) );
 }
 */
@@ -3210,11 +3210,11 @@ void LevelRenderer::entityAdded(std::shared_ptr<Entity> entity) {
         player->prepareCustomTextures();
 
         // 4J-PB - adding these from global title storage
-        if (player->customTextureUrl != L"") {
+        if (player->customTextureUrl != "") {
             textures->addMemTexture(player->customTextureUrl,
                                     new MobSkinMemTextureProcessor());
         }
-        if (player->customTextureUrl2 != L"") {
+        if (player->customTextureUrl2 != "") {
             textures->addMemTexture(player->customTextureUrl2,
                                     new MobSkinMemTextureProcessor());
         }
@@ -3225,10 +3225,10 @@ void LevelRenderer::entityRemoved(std::shared_ptr<Entity> entity) {
     if (entity->instanceof(eTYPE_PLAYER)) {
         std::shared_ptr<Player> player =
             std::dynamic_pointer_cast<Player>(entity);
-        if (player->customTextureUrl != L"") {
+        if (player->customTextureUrl != "") {
             textures->removeMemTexture(player->customTextureUrl);
         }
-        if (player->customTextureUrl2 != L"") {
+        if (player->customTextureUrl2 != "") {
             textures->removeMemTexture(player->customTextureUrl2);
         }
     }
@@ -3310,7 +3310,7 @@ void LevelRenderer::levelEvent(std::shared_ptr<Player> source, int type, int x,
             break;
         case LevelEvent::SOUND_CLICK_FAIL:
             // level[playerIndex]->playSound(x, y, z,
-            // L"random.click", 1.0f, 1.2f);
+            // "random.click", 1.0f, 1.2f);
             level[playerIndex]->playLocalSound(x, y, z, eSoundType_RANDOM_CLICK,
                                                1.0f, 1.2f, false);
             break;
@@ -3517,7 +3517,7 @@ void LevelRenderer::levelEvent(std::shared_ptr<Player> source, int type, int x,
                 // started playing already
                 if (!mc->soundEngine->GetIsPlayingStreamingGameMusic()) {
                     level[playerIndex]->playStreamingMusic(
-                        L"", x, y, z);  // 4J - used to pass nullptr, but using
+                        "", x, y, z);  // 4J - used to pass nullptr, but using
                                         // empty string here now instead
                 }
             }
@@ -3625,7 +3625,7 @@ void LevelRenderer::registerTextures(IconRegister* iconRegister) {
 
     for (int i = 0; i < 10; i++) {
         breakingTextures[i] =
-            iconRegister->registerIcon(L"destroy_" + toWString(i));
+            iconRegister->registerIcon("destroy_" + toWString(i));
     }
 }
 

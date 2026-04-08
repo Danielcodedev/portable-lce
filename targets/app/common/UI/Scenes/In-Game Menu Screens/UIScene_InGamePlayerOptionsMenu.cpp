@@ -107,7 +107,7 @@ UIScene_InGamePlayerOptionsMenu::UIScene_InGamePlayerOptionsMenu(
         removeControl(&m_checkboxes[eControl_Op], true);
 #else
         m_checkboxes[eControl_Op].init(
-            L"DEBUG: Creative", eControl_Op,
+            "DEBUG: Creative", eControl_Op,
             Player::getPlayerGamePrivilege(
                 m_playerPrivileges, Player::ePlayerGamePrivilege_CreativeMode));
 #endif
@@ -301,11 +301,11 @@ UIScene_InGamePlayerOptionsMenu::UIScene_InGamePlayerOptionsMenu(
         });
 }
 
-std::wstring UIScene_InGamePlayerOptionsMenu::getMoviePath() {
+std::string UIScene_InGamePlayerOptionsMenu::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1) {
-        return L"InGamePlayerOptionsSplit";
+        return "InGamePlayerOptionsSplit";
     } else {
-        return L"InGamePlayerOptions";
+        return "InGamePlayerOptions";
     }
 }
 

@@ -95,14 +95,14 @@ void EnderMan::defineSynchedData() {
 
 void EnderMan::addAdditonalSaveData(CompoundTag* tag) {
     Monster::addAdditonalSaveData(tag);
-    tag->putShort(L"carried", (short)getCarryingTile());
-    tag->putShort(L"carriedData", (short)getCarryingData());
+    tag->putShort("carried", (short)getCarryingTile());
+    tag->putShort("carriedData", (short)getCarryingData());
 }
 
 void EnderMan::readAdditionalSaveData(CompoundTag* tag) {
     Monster::readAdditionalSaveData(tag);
-    setCarryingTile(tag->getShort(L"carried"));
-    setCarryingData(tag->getShort(L"carryingData"));
+    setCarryingTile(tag->getShort("carried"));
+    setCarryingData(tag->getShort("carryingData"));
 }
 
 std::shared_ptr<Entity> EnderMan::findAttackTarget() {

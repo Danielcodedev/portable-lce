@@ -31,24 +31,24 @@ void UseTileRuleDefinition::writeAttributes(DataOutputStream* dos,
     dos->writeUTF(toWString(m_coordinates.z));
 }
 
-void UseTileRuleDefinition::addAttribute(const std::wstring& attributeName,
-                                         const std::wstring& attributeValue) {
-    if (attributeName.compare(L"tileId") == 0) {
+void UseTileRuleDefinition::addAttribute(const std::string& attributeName,
+                                         const std::string& attributeValue) {
+    if (attributeName.compare("tileId") == 0) {
         m_tileId = fromWString<int>(attributeValue);
         app.DebugPrintf("UseTileRule: Adding parameter tileId=%d\n", m_tileId);
-    } else if (attributeName.compare(L"useCoords") == 0) {
+    } else if (attributeName.compare("useCoords") == 0) {
         m_useCoords = fromWString<bool>(attributeValue);
         app.DebugPrintf("UseTileRule: Adding parameter useCoords=%s\n",
                         m_useCoords ? "true" : "false");
-    } else if (attributeName.compare(L"x") == 0) {
+    } else if (attributeName.compare("x") == 0) {
         m_coordinates.x = fromWString<int>(attributeValue);
         app.DebugPrintf("UseTileRule: Adding parameter x=%d\n",
                         m_coordinates.x);
-    } else if (attributeName.compare(L"y") == 0) {
+    } else if (attributeName.compare("y") == 0) {
         m_coordinates.y = fromWString<int>(attributeValue);
         app.DebugPrintf("UseTileRule: Adding parameter y=%d\n",
                         m_coordinates.y);
-    } else if (attributeName.compare(L"z") == 0) {
+    } else if (attributeName.compare("z") == 0) {
         m_coordinates.z = fromWString<int>(attributeValue);
         app.DebugPrintf("UseTileRule: Adding parameter z=%d\n",
                         m_coordinates.z);

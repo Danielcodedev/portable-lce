@@ -47,7 +47,7 @@ public:
         e_DLCParamType_Max,
 
     };
-    const static wchar_t* wchTypeNamesA[e_DLCParamType_Max];
+    const static char* wchTypeNamesA[e_DLCParamType_Max];
 
 private:
     std::vector<DLCPack*> m_packs;
@@ -59,7 +59,7 @@ public:
     DLCManager();
     ~DLCManager();
 
-    static EDLCParameterType getParameterType(const std::wstring& paramName);
+    static EDLCParameterType getParameterType(const std::string& paramName);
 
     unsigned int getPackCount(EDLCType type = e_DLCType_All);
 
@@ -77,23 +77,23 @@ public:
     void removeAllPacks(void);
     void LanguageChanged(void);
 
-    DLCPack* getPack(const std::wstring& name);
+    DLCPack* getPack(const std::string& name);
     DLCPack* getPack(unsigned int index, EDLCType type = e_DLCType_All);
     unsigned int getPackIndex(DLCPack* pack, bool& found,
                               EDLCType type = e_DLCType_All);
     DLCSkinFile* getSkinFile(
-        const std::wstring& path);  // Will hunt all packs of type skin to find
+        const std::string& path);  // Will hunt all packs of type skin to find
                                     // the right skinfile
 
-    DLCPack* getPackContainingSkin(const std::wstring& path);
-    unsigned int getPackIndexContainingSkin(const std::wstring& path,
+    DLCPack* getPackContainingSkin(const std::string& path);
+    unsigned int getPackIndexContainingSkin(const std::string& path,
                                             bool& found);
 
     unsigned int checkForCorruptDLCAndAlert(bool showMessage = true);
 
-    bool readDLCDataFile(unsigned int& dwFilesProcessed,
-                         const std::wstring& path, DLCPack* pack,
-                         bool fromArchive = false);
+    // bool readDLCDataFile(unsigned int& dwFilesProcessed,
+    //                      const std::wstring& path, DLCPack* pack,
+    //                      bool fromArchive = false);
     bool readDLCDataFile(unsigned int& dwFilesProcessed,
                          const std::string& path, DLCPack* pack,
                          bool fromArchive = false);
@@ -108,3 +108,5 @@ private:
     std::uint32_t retrievePackID(std::uint8_t* pbData, unsigned int dwLength,
                                  DLCPack* pack);
 };
+
+std::string dlc_read_wstring(const void* data);

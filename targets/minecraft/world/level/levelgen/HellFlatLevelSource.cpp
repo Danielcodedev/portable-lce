@@ -193,8 +193,8 @@ bool HellFlatLevelSource::tick() { return false; }
 
 bool HellFlatLevelSource::shouldSave() { return true; }
 
-std::wstring HellFlatLevelSource::gatherStats() {
-    return L"HellFlatLevelSource";
+std::string HellFlatLevelSource::gatherStats() {
+    return "HellFlatLevelSource";
 }
 
 std::vector<Biome::MobSpawnerData*>* HellFlatLevelSource::getMobsAt(
@@ -207,7 +207,7 @@ std::vector<Biome::MobSpawnerData*>* HellFlatLevelSource::getMobsAt(
 }
 
 TilePos* HellFlatLevelSource::findNearestMapFeature(
-    Level* level, const std::wstring& featureName, int x, int y, int z) {
+    Level* level, const std::string& featureName, int x, int y, int z) {
     return nullptr;
 }
 

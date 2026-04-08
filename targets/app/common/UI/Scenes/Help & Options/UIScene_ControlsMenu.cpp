@@ -40,23 +40,23 @@ UIScene_ControlsMenu::UIScene_ControlsMenu(int iPad, void* initData,
     bool bNotInGame = (Minecraft::GetInstance()->level == nullptr);
 
     if (bNotInGame) {
-        wchar_t* layoutString = new wchar_t[128];
-        swprintf(layoutString, 128, L"%ls", VER_PRODUCTVERSION_STR_W);
+        char* layoutString = new char[128];
+        snprintf(layoutString, 128, "%s", VER_PRODUCTVERSION_STR_W);
         m_labelVersion.init(layoutString);
         delete[] layoutString;
     }
     // 4J-PB - stop the label showing in the in-game controls menu
     else {
-        m_labelVersion.init(L" ");
+        m_labelVersion.init(" ");
     }
     m_bCreativeMode =
         !bNotInGame && Minecraft::GetInstance()->localplayers[m_iPad] &&
         Minecraft::GetInstance()->localplayers[m_iPad]->abilities.mayfly;
 
     {
-        m_buttonLayouts[0].init(L"1", eControl_Button0);
-        m_buttonLayouts[1].init(L"2", eControl_Button1);
-        m_buttonLayouts[2].init(L"3", eControl_Button2);
+        m_buttonLayouts[0].init("1", eControl_Button0);
+        m_buttonLayouts[1].init("2", eControl_Button1);
+        m_buttonLayouts[2].init("3", eControl_Button2);
     }
 
     m_checkboxInvert.init(
@@ -72,8 +72,8 @@ UIScene_ControlsMenu::UIScene_ControlsMenu(int iPad, void* initData,
 
     int iSelected = app.GetGameSettings(m_iPad, eGameSetting_ControlScheme);
 
-    wchar_t* layoutString = new wchar_t[128];
-    swprintf(layoutString, 128, L"%ls : %ls", app.GetString(IDS_CURRENT_LAYOUT),
+    char* layoutString = new char[128];
+    snprintf(layoutString, 128, "%s : %s", app.GetString(IDS_CURRENT_LAYOUT),
              app.GetString(m_iSchemeTextA[iSelected]));
     {
         m_labelCurrentLayout.init(layoutString);
@@ -92,7 +92,7 @@ UIScene_ControlsMenu::UIScene_ControlsMenu(int iPad, void* initData,
     }
 
     for (unsigned int i = 0; i < e_PadCOUNT; ++i) {
-        m_labelsPad[i].init(L"");
+        m_labelsPad[i].init("");
         m_controlLines[i].setVisible(false);
     }
     m_bLayoutChanged = false;
@@ -100,11 +100,11 @@ UIScene_ControlsMenu::UIScene_ControlsMenu(int iPad, void* initData,
     PositionAllText(m_iPad);
 }
 
-std::wstring UIScene_ControlsMenu::getMoviePath() {
+std::string UIScene_ControlsMenu::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1) {
-        return L"ControlsSplit";
+        return "ControlsSplit";
     } else {
-        return L"Controls";
+        return "Controls";
     }
 }
 
@@ -170,8 +170,8 @@ void UIScene_ControlsMenu::handlePress(F64 controlId, F64 childId) {
         case eControl_Button2:
             app.SetGameSettings(m_iPad, eGameSetting_ControlScheme,
                                 (unsigned char)control);
-            wchar_t* layoutString = new wchar_t[128];
-            swprintf(layoutString, 128, L"%ls : %ls",
+            char* layoutString = new char[128];
+            snprintf(layoutString, 128, "%s : %s",
                      app.GetString(IDS_CURRENT_LAYOUT),
                      app.GetString(m_iSchemeTextA[control]));
             {
@@ -196,7 +196,7 @@ void UIScene_ControlsMenu::handleFocusChange(F64 controlId, F64 childId) {
 
 void UIScene_ControlsMenu::PositionAllText(int iPad) {
     for (unsigned int i = 0; i < e_PadCOUNT; ++i) {
-        m_labelsPad[i].setLabel(L"");
+        m_labelsPad[i].setLabel("");
         m_controlLines[i].setVisible(false);
     }
 
@@ -297,7 +297,7 @@ void UIScene_ControlsMenu::PositionText(int iPad, int iTextID,
 void UIScene_ControlsMenu::PositionTextDirect(int iPad, int iTextID,
                                               int iControlDetailsIndex,
                                               bool bShow) {
-    const wchar_t* text = app.GetString(iTextID);
+    const char* text = app.GetString(iTextID);
 
     m_labelsPad[iControlDetailsIndex].setLabel(text);
     m_controlLines[iControlDetailsIndex].setVisible(bShow);

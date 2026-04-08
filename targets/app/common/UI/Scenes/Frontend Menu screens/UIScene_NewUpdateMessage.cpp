@@ -25,18 +25,18 @@ UIScene_NewUpdateMessage::UIScene_NewUpdateMessage(int iPad, void* initData,
 
     m_buttonConfirm.init(app.GetString(IDS_TOOLTIPS_ACCEPT), eControl_Confirm);
 
-    std::wstring message = app.GetString(IDS_TITLEUPDATE);
-    message.append(L"\r\n");
+    std::string message = app.GetString(IDS_TITLEUPDATE);
+    message.append("\r\n");
 
     message = app.FormatHTMLString(m_iPad, message);
 
-    std::vector<std::wstring> paragraphs;
+    std::vector<std::string> paragraphs;
     int lastIndex = 0;
-    for (int index = message.find(L"\r\n", lastIndex, 2);
-         index != std::wstring::npos;
-         index = message.find(L"\r\n", lastIndex, 2)) {
+    for (int index = message.find("\r\n", lastIndex, 2);
+         index != std::string::npos;
+         index = message.find("\r\n", lastIndex, 2)) {
         paragraphs.push_back(message.substr(lastIndex, index - lastIndex) +
-                             L" ");
+                             " ");
         lastIndex = index + 2;
     }
     paragraphs.push_back(
@@ -54,7 +54,7 @@ UIScene_NewUpdateMessage::~UIScene_NewUpdateMessage() {
     m_parentLayer->removeComponent(eUIComponent_Logo);
 }
 
-std::wstring UIScene_NewUpdateMessage::getMoviePath() { return L"EULA"; }
+std::string UIScene_NewUpdateMessage::getMoviePath() { return "EULA"; }
 
 void UIScene_NewUpdateMessage::updateTooltips() {
     ui.SetTooltips(DEFAULT_XUI_MENU_USER, IDS_TOOLTIPS_SELECT);

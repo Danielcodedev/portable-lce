@@ -66,11 +66,11 @@ UIScene_BeaconMenu::UIScene_BeaconMenu(int iPad, void* _initData,
     delete initData;
 }
 
-std::wstring UIScene_BeaconMenu::getMoviePath() {
+std::string UIScene_BeaconMenu::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1) {
-        return L"BeaconMenuSplit";
+        return "BeaconMenuSplit";
     } else {
-        return L"BeaconMenu";
+        return "BeaconMenu";
     }
 }
 

@@ -22,7 +22,7 @@ class IUIScene_AnvilMenu
 protected:
     std::shared_ptr<Inventory> m_inventory;
     AnvilMenu* m_repairMenu;
-    std::wstring m_itemName;
+    std::string m_itemName;
 
 protected:
     IUIScene_AnvilMenu();
@@ -40,9 +40,9 @@ protected:
 
     // Anvil only
     virtual void handleEditNamePressed() = 0;
-    virtual void setEditNameValue(const std::wstring& name) = 0;
+    virtual void setEditNameValue(const std::string& name) = 0;
     virtual void setEditNameEditable(bool enabled) = 0;
-    virtual void setCostLabel(const std::wstring& label, bool canAfford) = 0;
+    virtual void setCostLabel(const std::string& label, bool canAfford) = 0;
     virtual void showCross(bool show) = 0;
     void updateItemName();
 

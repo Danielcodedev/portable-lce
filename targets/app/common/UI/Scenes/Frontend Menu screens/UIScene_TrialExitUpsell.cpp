@@ -18,8 +18,8 @@ UIScene_TrialExitUpsell::UIScene_TrialExitUpsell(int iPad, void* initData,
     initialiseMovie();
 }
 
-std::wstring UIScene_TrialExitUpsell::getMoviePath() {
-    return L"TrialExitUpsell";
+std::string UIScene_TrialExitUpsell::getMoviePath() {
+    return "TrialExitUpsell";
 }
 
 void UIScene_TrialExitUpsell::updateTooltips() {

@@ -5,7 +5,7 @@
 #include <set>
 #include <string>
 
-typedef std::function<std::wstring(void)> StringBuilder;
+typedef std::function<std::string(void)> StringBuilder;
 
 class UIString {
 protected:
@@ -25,7 +25,7 @@ protected:
         int m_lastUpdatedLanguage;
         int m_lastUpdatedLocale;
 
-        std::wstring m_wstrCache;
+        std::string m_wstrCache;
 
         bool m_bIsConstant;
 
@@ -33,9 +33,9 @@ protected:
 
     public:
         UIStringCore(StringBuilder wstrBuilder);
-        UIStringCore(const std::wstring& str);
+        UIStringCore(const std::string& str);
 
-        std::wstring& getString();
+        std::string& getString();
 
         bool hasNewString();
         bool update(bool force);
@@ -56,9 +56,9 @@ public:
                                           // with a custom update function.
 
     // Create a UIString with a constant value.
+    // UIString(const std::wstring& constant);
     UIString(const std::string& constant);
-    UIString(const std::wstring& constant);
-    UIString(const wchar_t* constant);
+    UIString(const char* constant);
 
     ~UIString();
 
@@ -69,8 +69,8 @@ public:
                            // setUpdated was called.
     void setUpdated();     // The new text has been used.
 
-    std::wstring& getString();
+    std::string& getString();
 
-    const wchar_t* c_str();
+    const char* c_str();
     unsigned int length();
 };

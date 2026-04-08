@@ -76,7 +76,7 @@ Dimension::Dimension() {
     hasCeiling = false;
     brightnessRamp = new float[Level::MAX_BRIGHTNESS + 1];
     id = 0;
-    levelTypeOptions = L"";
+    levelTypeOptions = "";
 }
 
 Dimension::~Dimension() {

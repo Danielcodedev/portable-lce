@@ -138,8 +138,8 @@ private:
     float m_lastPlayerEventTimeStart;
 
 public:
-    std::wstring GatherStats();
-    std::wstring GatherRTTStats();
+    std::string GatherStats();
+    std::string GatherRTTStats();
 
 private:
     std::vector<FriendSessionInfo*> friendsSessions[XUSER_MAX_COUNT];

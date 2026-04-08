@@ -24,8 +24,8 @@ bool UIControl_Progress::setupControl(UIScene* scene, IggyValuePath* parent,
     bool success = UIControl_Base::setupControl(scene, parent, controlName);
 
     // Progress specific initialisers
-    m_setProgressFunc = registerFastName(L"setProgress");
-    m_showBarFunc = registerFastName(L"ShowBar");
+    m_setProgressFunc = registerFastName("setProgress");
+    m_showBarFunc = registerFastName("ShowBar");
 
     return success;
 }
@@ -38,16 +38,14 @@ void UIControl_Progress::init(UIString label, int id, int min, int max,
     m_max = max;
     m_current = current;
 
-    const std::u16string convLabel = wstring_to_u16string(label.getString());
-
     IggyDataValue result;
     IggyDataValue value[1];
-    value[0].type = IGGY_DATATYPE_string_UTF16;
-    IggyStringUTF16 stringVal;
+    value[0].type = IGGY_DATATYPE_string_UTF8;
+    IggyStringUTF8 stringVal;
 
-    stringVal.string = convLabel.c_str();
-    stringVal.length = convLabel.length();
-    value[0].string16 = stringVal;
+    stringVal.string = const_cast<char*>(label.getString().c_str());
+    stringVal.length = label.getString().length();
+    value[0].string8 = stringVal;
 
     IggyResult out =
         IggyPlayerCallMethodRS(m_parentScene->getMovie(), &result,

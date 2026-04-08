@@ -13,8 +13,8 @@ public:
 protected:
     void ConfirmButtonClicked();
 
-    virtual std::wstring GetCommand() = 0;
-    virtual void SetCommand(std::wstring command) = 0;
+    virtual std::string GetCommand() = 0;
+    virtual void SetCommand(std::string command) = 0;
     virtual int GetPad() = 0;
 
 private:

@@ -24,8 +24,8 @@ public:
     virtual int getEndZ() { return m_z; }
 
     virtual void writeAttributes(DataOutputStream* dos, unsigned int numAttrs);
-    virtual void addAttribute(const std::wstring& attributeName,
-                              const std::wstring& attributeValue);
+    virtual void addAttribute(const std::string& attributeName,
+                              const std::string& attributeValue);
 
     bool placeBlockInLevel(StructurePiece* structure, Level* level,
                            BoundingBox* chunkBB);

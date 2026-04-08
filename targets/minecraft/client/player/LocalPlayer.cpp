@@ -110,11 +110,11 @@ LocalPlayer::LocalPlayer(Minecraft* minecraft, Level* level, User* user,
 
     if (user != nullptr && user->name.length() > 0) {
         customTextureUrl =
-            L"http://s3.amazonaws.com/MinecraftSkins/" + user->name + L".png";
+            "http://s3.amazonaws.com/MinecraftSkins/" + user->name + ".png";
     }
     if (user != nullptr) {
         this->name = user->name;
-        // wprintf(L"Created LocalPlayer with name %ls\n", name.c_str() );
+        // printf("Created LocalPlayer with name %s\n", name.c_str() );
         //  check to see if this player's xuid is in the list of special players
         MOJANG_DATA* pMojangData = gameServices().getMojangDataForXuid(getOnlineXuid());
         if (pMojangData) {
@@ -561,12 +561,12 @@ float LocalPlayer::getFieldOfViewModifier() {
 
 void LocalPlayer::addAdditonalSaveData(CompoundTag* entityTag) {
     Player::addAdditonalSaveData(entityTag);
-    // entityTag->putInt(L"Score", score);
+    // entityTag->putInt("Score", score);
 }
 
 void LocalPlayer::readAdditionalSaveData(CompoundTag* entityTag) {
     Player::readAdditionalSaveData(entityTag);
-    // score = entityTag->getInt(L"Score");
+    // score = entityTag->getInt("Score");
 }
 
 void LocalPlayer::closeContainer() {
@@ -674,7 +674,7 @@ bool LocalPlayer::openFireworks(int x, int y, int z) {
 }
 
 bool LocalPlayer::startEnchanting(int x, int y, int z,
-                                  const std::wstring& name) {
+                                  const std::string& name) {
 #ifdef ENABLE_JAVA_GUIS
     minecraft->setScreen(new EnchantmentScreen(inventory, level, x, y, z));
     bool success = true;
@@ -745,7 +745,7 @@ bool LocalPlayer::openTrap(std::shared_ptr<DispenserTileEntity> trap) {
 }
 
 bool LocalPlayer::openTrading(std::shared_ptr<Merchant> traderTarget,
-                              const std::wstring& name) {
+                              const std::string& name) {
 #ifdef ENABLE_JAVA_GUIS
     minecraft->setScreen(new MerchantScreen(inventory, traderTarget, level));
     bool success = true;
@@ -776,7 +776,7 @@ void LocalPlayer::take(std::shared_ptr<Entity> e, int orgCount) {
         (Level*)minecraft->level, e, shared_from_this(), -0.5f));
 }
 
-void LocalPlayer::chat(const std::wstring& message) {}
+void LocalPlayer::chat(const std::string& message) {}
 
 bool LocalPlayer::isSneaking() { return input->sneaking && !m_isSleeping; }
 

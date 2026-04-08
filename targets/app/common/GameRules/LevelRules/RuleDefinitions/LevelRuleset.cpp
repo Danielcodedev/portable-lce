@@ -37,15 +37,15 @@ void LevelRuleset::loadStringTable(StringTable* table) {
     m_stringTable = table;
 }
 
-const wchar_t* LevelRuleset::getString(const std::wstring& key) {
+const char* LevelRuleset::getString(const std::string& key) {
     if (m_stringTable == nullptr) {
-        return L"";
+        return "";
     } else {
         return m_stringTable->getString(key);
     }
 }
 
-AABB* LevelRuleset::getNamedArea(const std::wstring& areaName) {
+AABB* LevelRuleset::getNamedArea(const std::string& areaName) {
     AABB* area = nullptr;
     for (auto it = m_areas.begin(); it != m_areas.end(); ++it) {
         if ((*it)->getName().compare(areaName) == 0) {

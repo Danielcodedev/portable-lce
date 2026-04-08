@@ -35,8 +35,8 @@ UIScene_QuadrantSignin::~UIScene_QuadrantSignin() {
     m_parentLayer->removeComponent(eUIComponent_MenuBackground);
 }
 
-std::wstring UIScene_QuadrantSignin::getMoviePath() {
-    return L"QuadrantSignin";
+std::string UIScene_QuadrantSignin::getMoviePath() {
+    return "QuadrantSignin";
 }
 
 void UIScene_QuadrantSignin::updateTooltips() {
@@ -162,7 +162,7 @@ void UIScene_QuadrantSignin::updateState() {
             // app.DebugPrintf("Index %d is not signed in\n", i);
 
             setControllerState(i, eControllerStatus_PressToJoin);
-            m_labelDisplayName[i].setLabel(L"");
+            m_labelDisplayName[i].setLabel("");
             m_iconRequested[i] = false;
         } else {
             // app.DebugPrintf("Index %d is not connected\n", i);
@@ -201,8 +201,8 @@ int UIScene_QuadrantSignin::AvatarReturned(void* lpParam,
         // 4J-JEV - Added to ensure each new texture gets a unique name.
         static unsigned int quadrantImageCount = 0;
 
-        wchar_t iconName[32];
-        swprintf(iconName, 32, L"quadrantImage%05d", quadrantImageCount++);
+        char iconName[32];
+        snprintf(iconName, 32, "quadrantImage%05d", quadrantImageCount++);
 
         pClass->registerSubstitutionTexture(iconName, pbThumbnail,
                                             dwThumbnailBytes, true);
@@ -220,8 +220,8 @@ void UIScene_QuadrantSignin::_initQuadrants() {
         m_iconRequested[i] = false;
 
         m_labelPressToJoin[i].init(IDS_MUST_SIGN_IN_TITLE);
-        m_labelConnectController[i].init(L"");
-        m_labelAccountType[i].init(L"");
+        m_labelConnectController[i].init("");
+        m_labelAccountType[i].init("");
 
         m_controllerStatus[i] = eControllerStatus_ConnectController;
 
@@ -237,7 +237,7 @@ void UIScene_QuadrantSignin::_initQuadrants() {
             app.DebugPrintf("Index %d is not signed in\n", i);
 
             setControllerState(i, eControllerStatus_PressToJoin);
-            m_labelDisplayName[i].init(L"");
+            m_labelDisplayName[i].init("");
         } else {
             app.DebugPrintf("Index %d is not connected\n", i);
 
