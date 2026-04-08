@@ -33,14 +33,14 @@ UIScene_SettingsGraphicsMenu::UIScene_SettingsGraphicsMenu(int iPad,
         app.GetString(IDS_CHECKBOX_CUSTOM_SKIN_ANIM), eControl_CustomSkinAnim,
         (app.GetGameSettings(m_iPad, eGameSetting_CustomSkinAnim) != 0));
 
-    wchar_t TempString[256];
+    char TempString[256];
 
-    swprintf(TempString, 256, L"%ls: %d%%", app.GetString(IDS_SLIDER_GAMMA),
+    snprintf(TempString, 256, "%s: %d%%", app.GetString(IDS_SLIDER_GAMMA),
              app.GetGameSettings(m_iPad, eGameSetting_Gamma));
     m_sliderGamma.init(TempString, eControl_Gamma, 0, 100,
                        app.GetGameSettings(m_iPad, eGameSetting_Gamma));
 
-    swprintf(TempString, 256, L"%ls: %d%%",
+    snprintf(TempString, 256, "%s: %d%%",
              app.GetString(IDS_SLIDER_INTERFACEOPACITY),
              app.GetGameSettings(m_iPad, eGameSetting_InterfaceOpacity));
     m_sliderInterfaceOpacity.init(
@@ -80,11 +80,11 @@ UIScene_SettingsGraphicsMenu::UIScene_SettingsGraphicsMenu(int iPad,
 
 UIScene_SettingsGraphicsMenu::~UIScene_SettingsGraphicsMenu() {}
 
-std::wstring UIScene_SettingsGraphicsMenu::getMoviePath() {
+std::string UIScene_SettingsGraphicsMenu::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1) {
-        return L"SettingsGraphicsMenuSplit";
+        return "SettingsGraphicsMenuSplit";
     } else {
-        return L"SettingsGraphicsMenu";
+        return "SettingsGraphicsMenu";
     }
 }
 
@@ -141,14 +141,14 @@ void UIScene_SettingsGraphicsMenu::handleInput(int iPad, int key, bool repeat,
 
 void UIScene_SettingsGraphicsMenu::handleSliderMove(F64 sliderId,
                                                     F64 currentValue) {
-    wchar_t TempString[256];
+    char TempString[256];
     int value = (int)currentValue;
     switch ((int)sliderId) {
         case eControl_Gamma:
             m_sliderGamma.handleSliderMove(value);
 
             app.SetGameSettings(m_iPad, eGameSetting_Gamma, value);
-            swprintf(TempString, 256, L"%ls: %d%%",
+            snprintf(TempString, 256, "%s: %d%%",
                      app.GetString(IDS_SLIDER_GAMMA), value);
             m_sliderGamma.setLabel(TempString);
 
@@ -157,7 +157,7 @@ void UIScene_SettingsGraphicsMenu::handleSliderMove(F64 sliderId,
             m_sliderInterfaceOpacity.handleSliderMove(value);
 
             app.SetGameSettings(m_iPad, eGameSetting_InterfaceOpacity, value);
-            swprintf(TempString, 256, L"%ls: %d%%",
+            snprintf(TempString, 256, "%s: %d%%",
                      app.GetString(IDS_SLIDER_INTERFACEOPACITY), value);
             m_sliderInterfaceOpacity.setLabel(TempString);
 

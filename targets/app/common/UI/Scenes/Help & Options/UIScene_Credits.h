@@ -43,8 +43,8 @@ private:
 
     IggyName m_funcSetNextLabel, m_funcAddImage;
     UI_BEGIN_MAP_ELEMENTS_AND_NAMES(UIScene)
-    UI_MAP_NAME(m_funcSetNextLabel, L"SetNextLabel")
-    UI_MAP_NAME(m_funcAddImage, L"AddImage")
+    UI_MAP_NAME(m_funcSetNextLabel, "SetNextLabel")
+    UI_MAP_NAME(m_funcAddImage, "AddImage")
     UI_END_MAP_ELEMENTS_AND_NAMES()
 public:
     UIScene_Credits(int iPad, void* initData, UILayer* parentLayer);
@@ -60,7 +60,7 @@ public:
 
 protected:
     // TODO: This should be pure virtual in this class
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
 
 public:
     // INPUT
@@ -70,6 +70,6 @@ public:
     virtual void handleRequestMoreData(F64 startIndex, bool up);
 
 private:
-    void setNextLabel(const std::wstring& label, ECreditTextTypes size);
+    void setNextLabel(const std::string& label, ECreditTextTypes size);
     void addImage(ECreditIcons icon);
 };

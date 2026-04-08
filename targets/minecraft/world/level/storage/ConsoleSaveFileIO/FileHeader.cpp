@@ -36,19 +36,19 @@ FileHeader::~FileHeader() {
     }
 }
 
-FileEntry* FileHeader::AddFile(const std::wstring& name,
+FileEntry* FileHeader::AddFile(const std::string& name,
                                unsigned int length /* = 0 */) {
     assert(name.length() < 64);
 
-    wchar_t filename[64];
-    memset(&filename, 0, sizeof(wchar_t) * 64);
+    char filename[64];
+    memset(&filename, 0, sizeof(char) * 64);
     memcpy(&filename, name.c_str(),
-           std::min(sizeof(wchar_t) * 64, sizeof(wchar_t) * name.length()));
+           std::min(sizeof(char) * 64, sizeof(char) * name.length()));
 
     // Would a map be more efficient? Our file tables probably won't be very big
     // so better to avoid hashing all the time? Does the file exist?
     for (unsigned int i = 0; i < fileTable.size(); ++i) {
-        if (wcscmp(fileTable[i]->data.filename, filename) == 0) {
+        if (strcmp(fileTable[i]->data.filename, filename) == 0) {
             // If so, return it
             return fileTable[i];
         }
@@ -72,7 +72,7 @@ void FileHeader::RemoveFile(FileEntry* file) {
     }
 
 #if !defined(_CONTENT_PACKAGE)
-    wprintf(L"Removed file %ls\n", file->data.filename);
+    printf("Removed file %s\n", file->data.filename);
 #endif
 
     delete file;
@@ -121,7 +121,7 @@ void FileHeader::WriteHeader(void* saveMem) {
 
     // Write the header
     for (unsigned int i = 0; i < fileTable.size(); ++i) {
-        // wprintf(L"File: %ls, Start = %d, Length = %d, End = %d\n",
+        // printf("File: %s, Start = %d, Length = %d, End = %d\n",
         // fileTable[i]->data.filename, fileTable[i]->data.startOffset,
         // fileTable[i]->data.size(), fileTable[i]->data.startOffset +
         // fileTable[i]->data.size());
@@ -238,7 +238,7 @@ void FileHeader::ReadHeader(
                 fileTable.push_back(entry);
 #if defined(_DEBUG_FILE_HEADER)
                 Log::info(
-                    "File: %ls, Start = %d, Length = %d, End = %d, Timestamp = "
+                    "File: %s, Start = %d, Length = %d, End = %d, Timestamp = "
                     "%lld\n",
                     entry->data.filename, entry->data.startOffset,
                     entry->data.length,
@@ -270,7 +270,7 @@ void FileHeader::ReadHeader(
                 fileTable.push_back(entry);
 #if defined(_DEBUG_FILE_HEADER)
                 Log::info(
-                    "File: %ls, Start = %d, Length = %d, End = %d\n",
+                    "File: %s, Start = %d, Length = %d, End = %d\n",
                     entry->data.filename, entry->data.startOffset,
                     entry->data.length,
                     entry->data.startOffset + entry->data.length);
@@ -327,9 +327,9 @@ void FileHeader::AdjustStartOffsets(FileEntry* file,
     }
 }
 
-bool FileHeader::fileExists(const std::wstring& name) {
+bool FileHeader::fileExists(const std::string& name) {
     for (unsigned int i = 0; i < fileTable.size(); ++i) {
-        if (wcscmp(fileTable[i]->data.filename, name.c_str()) == 0) {
+        if (strcmp(fileTable[i]->data.filename, name.c_str()) == 0) {
             // If so, return it
             return true;
         }
@@ -338,11 +338,11 @@ bool FileHeader::fileExists(const std::wstring& name) {
 }
 
 std::vector<FileEntry*>* FileHeader::getFilesWithPrefix(
-    const std::wstring& prefix) {
+    const std::string& prefix) {
     std::vector<FileEntry*>* files = nullptr;
 
     for (unsigned int i = 0; i < fileTable.size(); ++i) {
-        if (wcsncmp(fileTable[i]->data.filename, prefix.c_str(),
+        if (strncmp(fileTable[i]->data.filename, prefix.c_str(),
                     prefix.size()) == 0) {
             if (files == nullptr) {
                 files = new std::vector<FileEntry*>();

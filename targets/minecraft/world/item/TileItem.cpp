@@ -225,7 +225,7 @@ unsigned int TileItem::getUseDescriptionId() {
 }
 
 void TileItem::registerIcons(IconRegister* iconRegister) {
-    std::wstring iconName = Tile::tiles[tileId]->getTileItemIconName();
+    std::string iconName = Tile::tiles[tileId]->getTileItemIconName();
     if (!iconName.empty()) {
         itemIcon = iconRegister->registerIcon(iconName);
     }

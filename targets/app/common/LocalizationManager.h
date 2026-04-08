@@ -19,13 +19,13 @@ public:
 
     void localeAndLanguageInit();
     void loadStringTable(ArchiveFile* mediaArchive);
-    const wchar_t* getString(int iID) const;
+    const char* getString(int iID) const;
 
-    std::wstring formatHTMLString(int iPad, const std::wstring& desc,
+    std::string formatHTMLString(int iPad, const std::string& desc,
                                   int shadowColour = 0xFFFFFFFF);
-    std::wstring getActionReplacement(int iPad, unsigned char ucAction);
-    std::wstring getVKReplacement(unsigned int uiVKey);
-    std::wstring getIconReplacement(unsigned int uiIcon);
+    std::string getActionReplacement(int iPad, unsigned char ucAction);
+    std::string getVKReplacement(unsigned int uiVKey);
+    std::string getIconReplacement(unsigned int uiIcon);
 
     int getHTMLColour(eMinecraftColour colour);
     int getHTMLColor(eMinecraftColour colour) { return getHTMLColour(colour); }
@@ -34,9 +34,9 @@ public:
     void initialiseTips();
     int getNextTip();
 
-    void getLocale(std::vector<std::wstring>& vecWstrLocales);
-    int get_eMCLang(wchar_t* pwchLocale);
-    int get_xcLang(wchar_t* pwchLocale);
+    void getLocale(std::vector<std::string>& vecWstrLocales);
+    int get_eMCLang(char* pwchLocale);
+    int get_xcLang(char* pwchLocale);
 
     StringTable* getStringTable() const { return m_stringTable; }
 
@@ -45,9 +45,9 @@ private:
 
     StringTable* m_stringTable;
 
-    std::unordered_map<int, std::wstring> m_localeA;
-    std::unordered_map<std::wstring, int> m_eMCLangA;
-    std::unordered_map<std::wstring, int> m_xcLangA;
+    std::unordered_map<int, std::string> m_localeA;
+    std::unordered_map<std::string, int> m_eMCLangA;
+    std::unordered_map<std::string, int> m_xcLangA;
 
     static const int MAX_TIPS_GAMETIP = 50;
     static const int MAX_TIPS_TRIVIATIP = 20;

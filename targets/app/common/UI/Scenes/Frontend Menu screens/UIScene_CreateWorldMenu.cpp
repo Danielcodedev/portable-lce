@@ -58,7 +58,7 @@ UIScene_CreateWorldMenu::UIScene_CreateWorldMenu(int iPad, void* initData,
     initialiseMovie();
 
     m_worldName = app.GetString(IDS_DEFAULT_WORLD_NAME);
-    m_seed = L"";
+    m_seed = "";
 
     m_iPad = iPad;
 
@@ -76,11 +76,11 @@ UIScene_CreateWorldMenu::UIScene_CreateWorldMenu(int iPad, void* initData,
     m_texturePackList.init(app.GetString(IDS_DLC_MENU_TEXTUREPACKS),
                            eControl_TexturePackList);
 
-    m_labelTexturePackName.init(L"");
-    m_labelTexturePackDescription.init(L"");
+    m_labelTexturePackName.init("");
+    m_labelTexturePackDescription.init("");
 
-    wchar_t TempString[256];
-    swprintf(TempString, 256, L"%ls: %ls", app.GetString(IDS_SLIDER_DIFFICULTY),
+    char TempString[256];
+    snprintf(TempString, 256, "%s: %s", app.GetString(IDS_SLIDER_DIFFICULTY),
              app.GetString(m_iDifficultyTitleSettingA[app.GetGameSettings(
                  m_iPad, eGameSetting_Difficulty)]));
     m_sliderDifficulty.init(
@@ -193,11 +193,11 @@ UIScene_CreateWorldMenu::UIScene_CreateWorldMenu(int iPad, void* initData,
             std::uint8_t* imageData = tp->getPackIcon(imageBytes);
 
             if (imageBytes > 0 && imageData) {
-                wchar_t imageName[64];
-                swprintf(imageName, 64, L"tpack%08x", tp->getId());
+                char imageName[64];
+                snprintf(imageName, 64, "tpack%08x", tp->getId());
                 registerSubstitutionTexture(imageName, imageData, imageBytes);
                 m_texturePackList.addPack(i, imageName);
-                app.DebugPrintf("Adding texture pack %ls at %d\n", imageName,
+                app.DebugPrintf("Adding texture pack %s at %d\n", imageName,
                                 i);
             }
         }
@@ -275,8 +275,8 @@ void UIScene_CreateWorldMenu::updateComponents() {
     m_parentLayer->showComponent(m_iPad, eUIComponent_Logo, false);
 }
 
-std::wstring UIScene_CreateWorldMenu::getMoviePath() {
-    return L"CreateWorldMenu";
+std::string UIScene_CreateWorldMenu::getMoviePath() {
+    return "CreateWorldMenu";
 }
 
 UIControl* UIScene_CreateWorldMenu::GetMainPanel() {
@@ -359,8 +359,7 @@ void UIScene_CreateWorldMenu::handlePress(F64 controlId, F64 childId) {
                     m_bIgnoreInput = false;
                     // 4J HEG - No reason to set value if keyboard was cancelled
                     if (bRes) {
-                        std::wstring str =
-                            convStringToWstring(PlatformInput.GetText());
+                        std::string str = PlatformInput.GetText();
                         if (!str.empty()) {
                             m_editWorldName.setLabel(str);
                             m_worldName = std::move(str);
@@ -472,7 +471,7 @@ void UIScene_CreateWorldMenu::StartSharedLaunchFlow() {
 
         // do we have a license?
         if (m_pDLCPack &&
-            !m_pDLCPack->hasPurchasedFile(DLCManager::e_DLCType_Texture, L"")) {
+            !m_pDLCPack->hasPurchasedFile(DLCManager::e_DLCType_Texture, "")) {
             // no
 
             // We need to allow people to use a trial texture pack if they are
@@ -511,14 +510,14 @@ void UIScene_CreateWorldMenu::StartSharedLaunchFlow() {
 }
 
 void UIScene_CreateWorldMenu::handleSliderMove(F64 sliderId, F64 currentValue) {
-    wchar_t TempString[256];
+    char TempString[256];
     int value = (int)currentValue;
     switch ((int)sliderId) {
         case eControl_Difficulty:
             m_sliderDifficulty.handleSliderMove(value);
 
             app.SetGameSettings(m_iPad, eGameSetting_Difficulty, value);
-            swprintf(TempString, 256, L"%ls: %ls",
+            snprintf(TempString, 256, "%s: %s",
                      app.GetString(IDS_SLIDER_DIFFICULTY),
                      app.GetString(m_iDifficultyTitleSettingA[value]));
             m_sliderDifficulty.setLabel(TempString);
@@ -702,18 +701,18 @@ void UIScene_CreateWorldMenu::CreateGame(UIScene_CreateWorldMenu* pClass,
     app.ClearTerrainFeaturePosition();
 
     // create the world and launch
-    std::wstring wWorldName = pClass->m_worldName;
+    std::string wWorldName = pClass->m_worldName;
 
     PlatformStorage.ResetSaveData();
     // Make our next save default to the name of the level
-    PlatformStorage.SetSaveTitle((wchar_t*)wWorldName.c_str());
+    PlatformStorage.SetSaveTitle((char*)wWorldName.c_str());
 
-    std::wstring wSeed;
+    std::string wSeed;
     if (!pClass->m_MoreOptionsParams.seed.empty()) {
         wSeed = pClass->m_MoreOptionsParams.seed;
     } else {
         // random
-        wSeed = L"";
+        wSeed = "";
     }
 
     // start the game
@@ -729,8 +728,8 @@ void UIScene_CreateWorldMenu::CreateGame(UIScene_CreateWorldMenu* pClass,
         // Check if the input string contains a numerical value
         bool isNumber = true;
         for (unsigned int i = 0; i < len; ++i) {
-            if (wSeed.at(i) < L'0' || wSeed.at(i) > L'9') {
-                if (!(i == 0 && wSeed.at(i) == L'-')) {
+            if (wSeed.at(i) < '0' || wSeed.at(i) > '9') {
+                if (!(i == 0 && wSeed.at(i) == '-')) {
                     isNumber = false;
                     break;
                 }

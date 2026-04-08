@@ -18,15 +18,15 @@ UIScene_SettingsControlMenu::UIScene_SettingsControlMenu(int iPad,
     // Setup all the Iggy references we need for this scene
     initialiseMovie();
 
-    wchar_t TempString[256];
-    swprintf(TempString, 256, L"%ls: %d%%",
+    char TempString[256];
+    snprintf(TempString, 256, "%s: %d%%",
              app.GetString(IDS_SLIDER_SENSITIVITY_INGAME),
              app.GetGameSettings(m_iPad, eGameSetting_Sensitivity_InGame));
     m_sliderSensitivityInGame.init(
         TempString, eControl_SensitivityInGame, 0, 200,
         app.GetGameSettings(m_iPad, eGameSetting_Sensitivity_InGame));
 
-    swprintf(TempString, 256, L"%ls: %d%%",
+    snprintf(TempString, 256, "%s: %d%%",
              app.GetString(IDS_SLIDER_SENSITIVITY_INMENU),
              app.GetGameSettings(m_iPad, eGameSetting_Sensitivity_InMenu));
     m_sliderSensitivityInMenu.init(
@@ -44,11 +44,11 @@ UIScene_SettingsControlMenu::UIScene_SettingsControlMenu(int iPad,
 
 UIScene_SettingsControlMenu::~UIScene_SettingsControlMenu() {}
 
-std::wstring UIScene_SettingsControlMenu::getMoviePath() {
+std::string UIScene_SettingsControlMenu::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1) {
-        return L"SettingsControlMenuSplit";
+        return "SettingsControlMenuSplit";
     } else {
-        return L"SettingsControlMenu";
+        return "SettingsControlMenu";
     }
 }
 
@@ -97,14 +97,14 @@ void UIScene_SettingsControlMenu::handleInput(int iPad, int key, bool repeat,
 
 void UIScene_SettingsControlMenu::handleSliderMove(F64 sliderId,
                                                    F64 currentValue) {
-    wchar_t TempString[256];
+    char TempString[256];
     int value = (int)currentValue;
     switch ((int)sliderId) {
         case eControl_SensitivityInGame:
             m_sliderSensitivityInGame.handleSliderMove(value);
 
             app.SetGameSettings(m_iPad, eGameSetting_Sensitivity_InGame, value);
-            swprintf(TempString, 256, L"%ls: %d%%",
+            snprintf(TempString, 256, "%s: %d%%",
                      app.GetString(IDS_SLIDER_SENSITIVITY_INGAME), value);
             m_sliderSensitivityInGame.setLabel(TempString);
 
@@ -113,7 +113,7 @@ void UIScene_SettingsControlMenu::handleSliderMove(F64 sliderId,
             m_sliderSensitivityInMenu.handleSliderMove(value);
 
             app.SetGameSettings(m_iPad, eGameSetting_Sensitivity_InMenu, value);
-            swprintf(TempString, 256, L"%ls: %d%%",
+            snprintf(TempString, 256, "%s: %d%%",
                      app.GetString(IDS_SLIDER_SENSITIVITY_INMENU), value);
             m_sliderSensitivityInMenu.setLabel(TempString);
 

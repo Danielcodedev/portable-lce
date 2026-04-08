@@ -17,8 +17,8 @@ bool IQNetPlayer::IsHost() { return this == &IQNet::m_player[0]; }
 bool IQNetPlayer::IsGuest() { return false; }
 bool IQNetPlayer::IsLocal() { return true; }
 PlayerUID IQNetPlayer::GetXuid() { return INVALID_XUID; }
-const wchar_t* IQNetPlayer::GetGamertag() {
-    static const wchar_t* name = L"stub";
+const char* IQNetPlayer::GetGamertag() {
+    static const char* name = "stub";
     return name;
 }
 int IQNetPlayer::GetSessionIndex() { return 0; }

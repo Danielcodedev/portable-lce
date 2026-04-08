@@ -99,10 +99,6 @@ uint32_t dwProfileSettingsA[NUM_PROFILE_VALUES] = {0, 0, 0, 0, 0};
 //                  running for a long time.
 //-------------------------------------------------------------------------------------
 
-// functions for storing and converting rich presence strings from wchar to utf8
-uint8_t* AddRichPresenceString(int iID);
-void FreeRichPresenceStrings();
-
 bool g_bWidescreen = true;
 
 void DefineActions(void) {
@@ -641,39 +637,3 @@ int main(int argc, const char* argv[]) {
     PlatformRenderer.Shutdown();
     _exit(0);
 }  // end main
-
-// Free resources, unregister custom classes, and exit.
-//	app.Uninit();
-//	g_pd3dDevice->Release();
-
-std::vector<uint8_t*> vRichPresenceStrings;
-
-uint8_t* mallocAndCreateUTF8ArrayFromString(int iID) {
-    const wchar_t* wchString = app.GetString(iID);
-
-    std::wstring srcString = wchString;
-    std::u8string dstString = wstring_to_u8string(srcString);
-
-    int dst_len = dstString.size() + 1;
-    uint8_t* strUtf8 = (uint8_t*)malloc(dst_len);
-    memcpy(strUtf8, dstString.c_str(), dst_len);
-
-    return strUtf8;
-}
-
-uint8_t* AddRichPresenceString(int iID) {
-    uint8_t* strUtf8 = mallocAndCreateUTF8ArrayFromString(iID);
-    if (strUtf8 != nullptr) {
-        vRichPresenceStrings.push_back(strUtf8);
-    }
-    return strUtf8;
-}
-
-void FreeRichPresenceStrings() {
-    uint8_t* strUtf8;
-    for (int i = 0; i < vRichPresenceStrings.size(); i++) {
-        strUtf8 = vRichPresenceStrings.at(i);
-        free(strUtf8);
-    }
-    vRichPresenceStrings.clear();
-}

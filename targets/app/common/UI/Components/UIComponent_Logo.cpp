@@ -11,7 +11,7 @@ UIComponent_Logo::UIComponent_Logo(int iPad, void* initData,
     initialiseMovie();
 }
 
-std::wstring UIComponent_Logo::getMoviePath() {
+std::string UIComponent_Logo::getMoviePath() {
     switch (m_parentLayer->getViewport()) {
         case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_TOP:
         case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_BOTTOM:
@@ -21,11 +21,11 @@ std::wstring UIComponent_Logo::getMoviePath() {
         case IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_TOP_RIGHT:
         case IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_BOTTOM_LEFT:
         case IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_BOTTOM_RIGHT:
-            return L"ComponentLogoSplit";
+            return "ComponentLogoSplit";
             break;
         case IPlatformRenderer::VIEWPORT_TYPE_FULLSCREEN:
         default:
-            return L"ComponentLogo";
+            return "ComponentLogo";
             break;
     }
 }

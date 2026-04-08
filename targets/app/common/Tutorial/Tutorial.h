@@ -47,9 +47,9 @@ public:
         int m_messageId;
         int m_promptId;
         int m_titleId;
-        std::wstring m_messageString;
-        std::wstring m_promptString;
-        std::wstring m_titleString;
+        std::string m_messageString;
+        std::string m_promptString;
+        std::string m_titleString;
         int m_icon;
         int m_iAuxVal;
         bool m_allowFade;
@@ -62,9 +62,9 @@ public:
             m_messageId = -1;
             m_promptId = -1;
             m_titleId = -1;
-            m_messageString = L"";
-            m_promptString = L"";
-            m_titleString = L"";
+            m_messageString = "";
+            m_promptString = "";
+            m_titleString = "";
             m_icon = TUTORIAL_NO_ICON;
             m_iAuxVal = 0;
             m_allowFade = true;
@@ -161,7 +161,7 @@ public:
 
     bool setMessage(PopupMessageDetails* message);
     bool setMessage(TutorialHint* hint, PopupMessageDetails* message);
-    bool setMessage(const std::wstring& message, int icon, int auxValue);
+    bool setMessage(const std::string& message, int icon, int auxValue);
 
     void showTutorialPopup(bool show);
 

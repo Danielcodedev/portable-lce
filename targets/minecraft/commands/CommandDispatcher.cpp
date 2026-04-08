@@ -21,7 +21,7 @@ int CommandDispatcher::performCommand(std::shared_ptr<CommandSender> sender,
         } else {
 #ifndef _CONTENT_PACKAGE
             sender->sendMessage(
-                L"\u00A7cYou do not have permission to use this command.");
+                "\u00A7cYou do not have permission to use this command.");
 #endif
         }
     } else {

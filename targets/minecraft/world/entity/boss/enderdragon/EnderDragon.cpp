@@ -121,29 +121,29 @@ EnderDragon::EnderDragon(Level* level) : Mob(level) {
 // 4J - split off from ctor so we can use shared_from_this()
 void EnderDragon::AddParts() {
     head = std::make_shared<MultiEntityMobPart>(
-        std::dynamic_pointer_cast<MultiEntityMob>(shared_from_this()), L"head",
+        std::dynamic_pointer_cast<MultiEntityMob>(shared_from_this()), "head",
         6, 6);
     neck = std::make_shared<MultiEntityMobPart>(
-        std::dynamic_pointer_cast<MultiEntityMob>(shared_from_this()), L"neck",
+        std::dynamic_pointer_cast<MultiEntityMob>(shared_from_this()), "neck",
         6,
         6);  // 4J Added
     body = std::make_shared<MultiEntityMobPart>(
-        std::dynamic_pointer_cast<MultiEntityMob>(shared_from_this()), L"body",
+        std::dynamic_pointer_cast<MultiEntityMob>(shared_from_this()), "body",
         8, 8);
     tail1 = std::make_shared<MultiEntityMobPart>(
-        std::dynamic_pointer_cast<MultiEntityMob>(shared_from_this()), L"tail",
+        std::dynamic_pointer_cast<MultiEntityMob>(shared_from_this()), "tail",
         4, 4);
     tail2 = std::make_shared<MultiEntityMobPart>(
-        std::dynamic_pointer_cast<MultiEntityMob>(shared_from_this()), L"tail",
+        std::dynamic_pointer_cast<MultiEntityMob>(shared_from_this()), "tail",
         4, 4);
     tail3 = std::make_shared<MultiEntityMobPart>(
-        std::dynamic_pointer_cast<MultiEntityMob>(shared_from_this()), L"tail",
+        std::dynamic_pointer_cast<MultiEntityMob>(shared_from_this()), "tail",
         4, 4);
     wing1 = std::make_shared<MultiEntityMobPart>(
-        std::dynamic_pointer_cast<MultiEntityMob>(shared_from_this()), L"wing",
+        std::dynamic_pointer_cast<MultiEntityMob>(shared_from_this()), "wing",
         4, 4);
     wing2 = std::make_shared<MultiEntityMobPart>(
-        std::dynamic_pointer_cast<MultiEntityMob>(shared_from_this()), L"wing",
+        std::dynamic_pointer_cast<MultiEntityMob>(shared_from_this()), "wing",
         4, 4);
 
     subEntities.push_back(head);
@@ -1757,20 +1757,20 @@ Path* EnderDragon::reconstruct_path(Node* from, Node* to) {
 
 void EnderDragon::addAdditonalSaveData(CompoundTag* entityTag) {
     Log::info("Adding EnderDragon additional save data\n");
-    entityTag->putShort(L"RemainingCrystals", m_remainingCrystalsCount);
-    entityTag->putInt(L"DragonState", (int)getSynchedAction());
+    entityTag->putShort("RemainingCrystals", m_remainingCrystalsCount);
+    entityTag->putInt("DragonState", (int)getSynchedAction());
 
     Mob::addAdditonalSaveData(entityTag);
 }
 
 void EnderDragon::readAdditionalSaveData(CompoundTag* tag) {
     Log::info("Reading EnderDragon additional save data\n");
-    m_remainingCrystalsCount = tag->getShort(L"RemainingCrystals");
-    if (!tag->contains(L"RemainingCrystals"))
+    m_remainingCrystalsCount = tag->getShort("RemainingCrystals");
+    if (!tag->contains("RemainingCrystals"))
         m_remainingCrystalsCount = CRYSTAL_COUNT;
 
-    if (tag->contains(L"DragonState"))
-        setSynchedAction((EEnderdragonAction)tag->getInt(L"DragonState"), true);
+    if (tag->contains("DragonState"))
+        setSynchedAction((EEnderdragonAction)tag->getInt("DragonState"), true);
 
     Mob::readAdditionalSaveData(tag);
 }

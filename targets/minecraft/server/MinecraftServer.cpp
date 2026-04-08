@@ -108,7 +108,7 @@ time_util::time_point MinecraftServer::s_slowQueueLastTime = {};
 bool MinecraftServer::s_slowQueuePacketSent = false;
 #endif
 
-std::unordered_map<std::wstring, int> MinecraftServer::ironTimers;
+std::unordered_map<std::string, int> MinecraftServer::ironTimers;
 
 MinecraftServer::MinecraftServer() {
     // 4J - added initialisers
@@ -120,9 +120,9 @@ MinecraftServer::MinecraftServer() {
     m_bLoaded = false;
     stopped = false;
     tickCount = 0;
-    std::wstring progressStatus;
+    std::string progressStatus;
     progress = 0;
-    motd = L"";
+    motd = "";
 
     m_isServerPaused = false;
     m_serverPausedEvent = new C4JThread::Event;
@@ -147,7 +147,7 @@ MinecraftServer::~MinecraftServer() {}
 bool MinecraftServer::initServer(int64_t seed, NetworkGameInitData* initData,
                                  std::uint32_t initSettings, bool findSeed) {
     // 4J - removed
-    settings = new Settings(new File(L"server.properties"));
+    settings = new Settings(new File("server.properties"));
 
     Log::info("\n*** SERVER SETTINGS ***\n");
     Log::info(
@@ -171,26 +171,26 @@ bool MinecraftServer::initServer(int64_t seed, NetworkGameInitData* initData,
     Log::info("\n");
 
     // TODO 4J Stu - Init a load of settings based on data passed as params
-    // settings->setBooleanAndSave( L"host-friends-only",
+    // settings->setBooleanAndSave( "host-friends-only",
     // (gameServices().getGameHostOption(eGameHostOption_FriendsOfFriends)>0) );
 
     // 4J - Unused
-    // localIp = settings->getString(L"server-ip", L"");
-    // onlineMode = settings->getBoolean(L"online-mode", true);
-    // motd = settings->getString(L"motd", L"A Minecraft Server");
+    // localIp = settings->getString("server-ip", "");
+    // onlineMode = settings->getBoolean("online-mode", true);
+    // motd = settings->getString("motd", "A Minecraft Server");
     // motd.replace('§', '$');
 
-    setAnimals(settings->getBoolean(L"spawn-animals", true));
-    setNpcsEnabled(settings->getBoolean(L"spawn-npcs", true));
+    setAnimals(settings->getBoolean("spawn-animals", true));
+    setNpcsEnabled(settings->getBoolean("spawn-npcs", true));
     setPvpAllowed(gameServices().getGameHostOption(eGameHostOption_PvP) > 0
                       ? true
-                      : false);  // settings->getBoolean(L"pvp", true);
+                      : false);  // settings->getBoolean("pvp", true);
 
     // 4J Stu - We should never have hacked clients flying when they shouldn't
     // be like the PC version, so enable flying always Fix for #46612 - TU5:
     // Code: Multiplayer: A client can be banned for flying when accidentaly
     // being blown by dynamite
-    setFlightAllowed(true);  // settings->getBoolean(L"allow-flight", false);
+    setFlightAllowed(true);  // settings->getBoolean("allow-flight", false);
 
     // 4J Stu - Enabling flight to stop it kicking us when we use it
 #if defined(_DEBUG_MENUS_ENABLED)
@@ -213,8 +213,8 @@ bool MinecraftServer::initServer(int64_t seed, NetworkGameInitData* initData,
 
     int64_t levelNanoTime = System::nanoTime();
 
-    std::wstring levelName = settings->getString(L"level-name", L"world");
-    std::wstring levelTypeString;
+    std::string levelName = settings->getString("level-name", "world");
+    std::string levelTypeString;
 
     bool gameRuleUseFlatWorld = false;
     if (gameServices().getLevelGenerationOptions() != nullptr) {
@@ -223,9 +223,9 @@ bool MinecraftServer::initServer(int64_t seed, NetworkGameInitData* initData,
     }
     if (gameRuleUseFlatWorld ||
         gameServices().getGameHostOption(eGameHostOption_LevelType) > 0) {
-        levelTypeString = settings->getString(L"level-type", L"flat");
+        levelTypeString = settings->getString("level-type", "flat");
     } else {
-        levelTypeString = settings->getString(L"level-type", L"default");
+        levelTypeString = settings->getString("level-type", "default");
     }
 
     LevelType* pLevelType = LevelType::getLevelType(levelTypeString);
@@ -241,14 +241,14 @@ bool MinecraftServer::initServer(int64_t seed, NetworkGameInitData* initData,
     }
 
     setMaxBuildHeight(
-        settings->getInt(L"max-build-height", Level::maxBuildHeight));
+        settings->getInt("max-build-height", Level::maxBuildHeight));
     setMaxBuildHeight(((getMaxBuildHeight() + 8) / 16) * 16);
     setMaxBuildHeight(
         std::clamp(getMaxBuildHeight(), 64, Level::maxBuildHeight));
-    // settings->setProperty(L"max-build-height", maxBuildHeight);
+    // settings->setProperty("max-build-height", maxBuildHeight);
 
     //        logger.info("Preparing level \"" + levelName + "\"");
-    m_bLoaded = loadLevel(new McRegionLevelStorageSource(File(L".")), levelName,
+    m_bLoaded = loadLevel(new McRegionLevelStorageSource(File(".")), levelName,
                           seed, pLevelType, initData);
     //        logger.info("Done (" + (System.nanoTime() - levelNanoTime) + "ns)!
     //        For help, type \"help\" or \"?\"");
@@ -363,7 +363,7 @@ void MinecraftServer::postProcessTerminate(ProgressRenderer* mcprogress) {
 }
 
 bool MinecraftServer::loadLevel(LevelStorageSource* storageSource,
-                                const std::wstring& name, int64_t levelSeed,
+                                const std::string& name, int64_t levelSeed,
                                 LevelType* pLevelType,
                                 NetworkGameInitData* initData) {
     //	4J - TODO - do with new save stuff
@@ -377,7 +377,7 @@ bool MinecraftServer::loadLevel(LevelStorageSource* storageSource,
     levels = std::vector<ServerLevel*>(3);
 
     int gameTypeId = settings->getInt(
-        L"gamemode",
+        "gamemode",
         gameServices().getGameHostOption(
             eGameHostOption_GameType));  // LevelSettings::GAMETYPE_SURVIVAL);
     GameType* gameType = LevelSettings::validateGameType(gameTypeId);
@@ -415,7 +415,7 @@ bool MinecraftServer::loadLevel(LevelStorageSource* storageSource,
                                           // file from PS3->PS4
 
         storage = std::shared_ptr<McRegionLevelStorage>(
-            new McRegionLevelStorage(pSave, File(L"."), name, true));
+            new McRegionLevelStorage(pSave, File("."), name, true));
     } else {
         // We are loading a save from the storage manager
 #if defined(SPLIT_SAVES)
@@ -428,23 +428,23 @@ bool MinecraftServer::loadLevel(LevelStorageSource* storageSource,
         }
         ConsoleSaveFileSplit* newFormatSave = nullptr;
         if (bLevelGenBaseSave) {
-            ConsoleSaveFileOriginal oldFormatSave(L"");
+            ConsoleSaveFileOriginal oldFormatSave("");
             newFormatSave = new ConsoleSaveFileSplit(&oldFormatSave);
         } else {
-            newFormatSave = new ConsoleSaveFileSplit(L"");
+            newFormatSave = new ConsoleSaveFileSplit("");
         }
 
         storage = std::shared_ptr<McRegionLevelStorage>(
-            new McRegionLevelStorage(newFormatSave, File(L"."), name, true));
+            new McRegionLevelStorage(newFormatSave, File("."), name, true));
 #else
         storage = std::make_shared<McRegionLevelStorage>(
-            new ConsoleSaveFileOriginal(L""), File(L"."), name, true);
+            new ConsoleSaveFileOriginal(""), File("."), name, true);
 #endif
     }
 
     //	McRegionLevelStorage *storage = new McRegionLevelStorage(new
-    // ConsoleSaveFile( L"" ), L"", L"", 0); // original
-    //    McRegionLevelStorage *storage = new McRegionLevelStorage(File(L"."),
+    // ConsoleSaveFile( "" ), "", "", 0); // original
+    //    McRegionLevelStorage *storage = new McRegionLevelStorage(File("."),
     //    name, true); // TODO
     for (unsigned int i = 0; i < levels.size(); i++) {
         if (s_bServerHalted || !g_NetworkManager.IsInSession()) {
@@ -479,7 +479,7 @@ bool MinecraftServer::loadLevel(LevelStorageSource* storageSource,
         //        chunk to load, which might actually happen there
 
         // 4J Stu - We set the levels difficulty based on the minecraft options
-        // levels[i]->difficulty = settings->getBoolean(L"spawn-monsters", true)
+        // levels[i]->difficulty = settings->getBoolean("spawn-monsters", true)
         // ? Difficulty::EASY : Difficulty::PEACEFUL;
         Minecraft* pMinecraft = Minecraft::GetInstance();
         //		m_lastSentDifficulty = pMinecraft->options->difficulty;
@@ -492,7 +492,7 @@ bool MinecraftServer::loadLevel(LevelStorageSource* storageSource,
         levels[i]->setSpawnSettings(false, false);
 #else
         levels[i]->setSpawnSettings(
-            settings->getBoolean(L"spawn-monsters", true), animals);
+            settings->getBoolean("spawn-monsters", true), animals);
 #endif
         levels[i]->getLevelData()->setGameType(gameType);
 
@@ -578,7 +578,7 @@ bool MinecraftServer::loadLevel(LevelStorageSource* storageSource,
     int i = 0;
     for (int i = 0; i < levels.size(); i++) {
         //        logger.info("Preparing start region for level " + i);
-        if (i == 0 || settings->getBoolean(L"allow-nether", true)) {
+        if (i == 0 || settings->getBoolean("allow-nether", true)) {
             ServerLevel* level = levels[i];
             if (levelChunksNeedConverted) {
                 // 				storage->getSaveFile()->convertLevelChunks(level)
@@ -605,7 +605,7 @@ bool MinecraftServer::loadLevel(LevelStorageSource* storageSource,
                     //                    lastTime + 1000)
                     {
                         int pos = (x + r) * twoRPlusOne + (z + 1);
-                        //                        setProgress(L"Preparing spawn
+                        //                        setProgress("Preparing spawn
                         //                        area", (pos) * 100 / total);
                         mcprogress->progressStagePercentage((pos + r) * 100 /
                                                             total);
@@ -791,14 +791,14 @@ void MinecraftServer::overwriteHellBordersForNewWorldSize(ServerLevel* level,
 
 #endif
 
-void MinecraftServer::setProgress(const std::wstring& status, int progress) {
+void MinecraftServer::setProgress(const std::string& status, int progress) {
     progressStatus = status;
     this->progress = progress;
     //    logger.info(status + ": " + progress + "%");
 }
 
 void MinecraftServer::endProgress() {
-    progressStatus = L"";
+    progressStatus = "";
     this->progress = 0;
 }
 
@@ -1131,16 +1131,16 @@ void MinecraftServer::run(int64_t seed, void* lpParameter) {
                         tick();
                         //						int64_t
                         // after = System::currentTimeMillis();
-                        //						PIXReportCounter(L"Server
+                        //						PIXReportCounter("Server
                         // time",(float)(after-before));
 
                         chunkPacketManagement_PostTick();
                     }
                     //					int64_t afterall =
                     // System::currentTimeMillis();
-                    // M_PIXReportCounter(L"Server time
+                    // M_PIXReportCounter("Server time
                     // all",(float)(afterall-beforeall));
-                    //					PIXReportCounter(L"Server
+                    //					PIXReportCounter("Server
                     // ticks",(float)tickcount);
                 }
             } else {
@@ -1160,7 +1160,7 @@ void MinecraftServer::run(int64_t seed, void* lpParameter) {
                 MinecraftServer::setTimeAtEndOfTick = false;
                 for (unsigned int i = 0; i < levels.size(); i++) {
                     //					if (i == 0 ||
-                    // settings->getBoolean(L"allow-nether", true))
+                    // settings->getBoolean("allow-nether", true))
                     //// 4J removed - we always have nether
                     {
                         ServerLevel* level = levels[i];
@@ -1171,7 +1171,7 @@ void MinecraftServer::run(int64_t seed, void* lpParameter) {
             if (MinecraftServer::setTimeOfDayAtEndOfTick) {
                 MinecraftServer::setTimeOfDayAtEndOfTick = false;
                 for (unsigned int i = 0; i < levels.size(); i++) {
-                    if (i == 0 || settings->getBoolean(L"allow-nether", true)) {
+                    if (i == 0 || settings->getBoolean("allow-nether", true)) {
                         ServerLevel* level = levels[i];
                         level->setDayTime(MinecraftServer::setTimeOfDay);
                     }
@@ -1314,18 +1314,18 @@ void MinecraftServer::run(int64_t seed, void* lpParameter) {
                             ConsoleSchematicFile::XboxSchematicInitParam*
                                 initData = (ConsoleSchematicFile::
                                                 XboxSchematicInitParam*)param;
-                            File targetFileDir(L"Schematics");
+                            File targetFileDir("Schematics");
                             if (!targetFileDir.exists()) targetFileDir.mkdir();
 
-                            wchar_t filename[128];
-                            swprintf(filename, 128, L"%ls%dx%dx%d.sch",
+                            char filename[128];
+                            snprintf(filename, 128, "%s%dx%dx%d.sch",
                                      initData->name,
                                      (initData->endX - initData->startX + 1),
                                      (initData->endY - initData->startY + 1),
                                      (initData->endZ - initData->startZ + 1));
 
                             File dataFile =
-                                File(targetFileDir, std::wstring(filename));
+                                File(targetFileDir, std::string(filename));
                             if (dataFile.exists()) dataFile._delete();
                             FileOutputStream fos = FileOutputStream(dataFile);
                             DataOutputStream dos = DataOutputStream(&fos);
@@ -1406,7 +1406,7 @@ void MinecraftServer::broadcastStopSavingPacket() {
 }
 
 void MinecraftServer::tick() {
-    std::vector<std::wstring> toRemove;
+    std::vector<std::string> toRemove;
     for (auto it = ironTimers.begin(); it != ironTimers.end(); it++) {
         int t = it->second;
         if (t > 0) {
@@ -1433,7 +1433,7 @@ void MinecraftServer::tick() {
     }*/
 
     for (unsigned int i = 0; i < levels.size(); i++) {
-        //        if (i == 0 || settings->getBoolean(L"allow-nether", true))
+        //        if (i == 0 || settings->getBoolean("allow-nether", true))
         //        // 4J removed - we always have nether
         {
             ServerLevel* level = levels[i];
@@ -1506,7 +1506,7 @@ void MinecraftServer::tick() {
     //    }
 }
 
-void MinecraftServer::handleConsoleInput(const std::wstring& msg,
+void MinecraftServer::handleConsoleInput(const std::string& msg,
                                          ConsoleInputSource* source) {
     consoleInput.push_back(new ConsoleInput(msg, source));
 }
@@ -1538,15 +1538,15 @@ void MinecraftServer::HaltServer(bool bPrimaryPlayerSignedOut) {
     }
 }
 
-File* MinecraftServer::getFile(const std::wstring& name) {
+File* MinecraftServer::getFile(const std::string& name) {
     return new File(name);
 }
 
-void MinecraftServer::info(const std::wstring& string) {}
+void MinecraftServer::info(const std::string& string) {}
 
-void MinecraftServer::warn(const std::wstring& string) {}
+void MinecraftServer::warn(const std::string& string) {}
 
-std::wstring MinecraftServer::getConsoleName() { return L"CONSOLE"; }
+std::string MinecraftServer::getConsoleName() { return "CONSOLE"; }
 
 ServerLevel* MinecraftServer::getLevel(int dimension) {
     if (dimension == -1)

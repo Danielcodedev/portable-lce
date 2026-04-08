@@ -146,16 +146,16 @@ bool CGameNetworkManager::StartNetworkGame(Minecraft* minecraft,
                     if (param->levelGen->requiresBaseSave() &&
                         !param->levelGen->getBaseSavePath().empty()) {
 #if defined(_WINDOWS64)
-                        std::wstring fileRoot =
-                            L"Windows64Media\\Tutorial\\" +
+                        std::string fileRoot =
+                            "Windows64Media\\Tutorial\\" +
                             param->levelGen->getBaseSavePath();
                         File root(fileRoot);
                         if (!root.exists())
-                            fileRoot = L"Windows64\\Tutorial\\" +
+                            fileRoot = "Windows64\\Tutorial\\" +
                                        param->levelGen->getBaseSavePath();
 #else
-                        std::wstring fileRoot =
-                            L"Tutorial\\" + param->levelGen->getBaseSavePath();
+                        std::string fileRoot =
+                            "Tutorial\\" + param->levelGen->getBaseSavePath();
 #endif
                         File grf(fileRoot);
                         if (grf.exists()) {
@@ -402,7 +402,7 @@ bool CGameNetworkManager::StartNetworkGame(Minecraft* minecraft,
             Socket::addIncomingSocket(socket);
 
             connection->send(std::shared_ptr<PreLoginPacket>(new PreLoginPacket(
-                convStringToWstring(PlatformProfile.GetGamertag(idx)))));
+                PlatformProfile.GetGamertag(idx))));
 
             createdConnections.push_back(connection);
 
@@ -717,8 +717,8 @@ int CGameNetworkManager::JoinFromInvite_SignInReturned(void* pParam,
                 Minecraft::GetInstance()->clearConnectionFailed();
 
                 // change the minecraft player name
-                Minecraft::GetInstance()->user->name = convStringToWstring(
-                    PlatformProfile.GetGamertag(PlatformProfile.GetPrimaryPad()));
+                Minecraft::GetInstance()->user->name = 
+                    PlatformProfile.GetGamertag(PlatformProfile.GetPrimaryPad());
 
                 bool success = g_NetworkManager.JoinGameFromInviteInfo(
                     iPad,            // dwUserIndex
@@ -1026,13 +1026,13 @@ bool CGameNetworkManager::SystemFlagGet(INetworkPlayer* pNetworkPlayer,
     return s_pPlatformNetworkManager->SystemFlagGet(pNetworkPlayer, index);
 }
 
-std::wstring CGameNetworkManager::GatherStats() {
+std::string CGameNetworkManager::GatherStats() {
     return s_pPlatformNetworkManager->GatherStats();
 }
 
 void CGameNetworkManager::renderQueueMeter() {}
 
-std::wstring CGameNetworkManager::GatherRTTStats() {
+std::string CGameNetworkManager::GatherRTTStats() {
     return s_pPlatformNetworkManager->GatherRTTStats();
 }
 
@@ -1379,8 +1379,8 @@ void CGameNetworkManager::HandleInviteWhenInMenus(
                 g_NetworkManager.SetLocalGame(false);
 
                 // change the minecraft player name
-                Minecraft::GetInstance()->user->name = convStringToWstring(
-                    PlatformProfile.GetGamertag(PlatformProfile.GetPrimaryPad()));
+                Minecraft::GetInstance()->user->name = 
+                    PlatformProfile.GetGamertag(PlatformProfile.GetPrimaryPad());
 
                 bool success = g_NetworkManager.JoinGameFromInviteInfo(
                     userIndex, localUsersMask, pInviteInfo);

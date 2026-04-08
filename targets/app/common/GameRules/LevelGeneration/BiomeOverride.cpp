@@ -24,18 +24,18 @@ void BiomeOverride::writeAttributes(DataOutputStream* dos,
     dos->writeUTF(toWString(m_topTile));
 }
 
-void BiomeOverride::addAttribute(const std::wstring& attributeName,
-                                 const std::wstring& attributeValue) {
-    if (attributeName.compare(L"tileId") == 0) {
+void BiomeOverride::addAttribute(const std::string& attributeName,
+                                 const std::string& attributeValue) {
+    if (attributeName.compare("tileId") == 0) {
         int value = fromWString<int>(attributeValue);
         m_tile = value;
         app.DebugPrintf("BiomeOverride: Adding parameter tileId=%d\n", m_tile);
-    } else if (attributeName.compare(L"topTileId") == 0) {
+    } else if (attributeName.compare("topTileId") == 0) {
         int value = fromWString<int>(attributeValue);
         m_topTile = value;
         app.DebugPrintf("BiomeOverride: Adding parameter topTileId=%d\n",
                         m_topTile);
-    } else if (attributeName.compare(L"biomeId") == 0) {
+    } else if (attributeName.compare("biomeId") == 0) {
         int value = fromWString<int>(attributeValue);
         m_biomeId = value;
         app.DebugPrintf("BiomeOverride: Adding parameter biomeId=%d\n",

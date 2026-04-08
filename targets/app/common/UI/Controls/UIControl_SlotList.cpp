@@ -16,9 +16,9 @@ bool UIControl_SlotList::setupControl(UIScene* scene, IggyValuePath* parent,
     bool success = UIControl_Base::setupControl(scene, parent, controlName);
 
     // SlotList specific initialisers
-    m_addSlotFunc = registerFastName(L"addSlot");
-    m_setRedBoxFunc = registerFastName(L"SetSlotRedBox");
-    m_setHighlightFunc = registerFastName(L"SetSlotHighlight");
+    m_addSlotFunc = registerFastName("addSlot");
+    m_setRedBoxFunc = registerFastName("SetSlotRedBox");
+    m_setHighlightFunc = registerFastName("SetSlotHighlight");
 
     m_lastHighlighted = 0;
 

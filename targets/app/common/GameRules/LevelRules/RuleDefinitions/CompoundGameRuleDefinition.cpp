@@ -47,9 +47,9 @@ GameRuleDefinition* CompoundGameRuleDefinition::addChild(
         rule = new UpdatePlayerRuleDefinition();
     } else {
 #ifndef _CONTENT_PACKAGE
-        wprintf(
-            L"CompoundGameRuleDefinition: Attempted to add invalid child rule "
-            L"- %d\n",
+        printf(
+            "CompoundGameRuleDefinition: Attempted to add invalid child rule "
+            "- %d\n",
             ruleType);
 #endif
     }
@@ -70,7 +70,7 @@ void CompoundGameRuleDefinition::populateGameRule(
         value.isPointer = true;
 
         // Somehow add the newRule to the current rule
-        rule->setParameter(L"rule" + toWString<int>(i), value);
+        rule->setParameter("rule" + toWString<int>(i), value);
         ++i;
     }
     GameRuleDefinition::populateGameRule(type, rule);

@@ -10,7 +10,7 @@
 #include "java/InputOutputStream/DataOutputStream.h"
 
 TextureAndGeometryPacket::TextureAndGeometryPacket() {
-    this->textureName = L"";
+    this->textureName = "";
     this->dwTextureBytes = 0;
     this->pbData = nullptr;
     this->dwBoxC = 0;
@@ -32,13 +32,13 @@ TextureAndGeometryPacket::~TextureAndGeometryPacket() {
 }
 
 TextureAndGeometryPacket::TextureAndGeometryPacket(
-    const std::wstring& textureName, std::uint8_t* pbData,
+    const std::string& textureName, std::uint8_t* pbData,
     std::uint32_t dataBytes) {
     this->textureName = textureName;
 
-    std::wstring skinValue = textureName.substr(7, textureName.size());
-    skinValue = skinValue.substr(0, skinValue.find_first_of(L'.'));
-    std::wstringstream ss;
+    std::string skinValue = textureName.substr(7, textureName.size());
+    skinValue = skinValue.substr(0, skinValue.find_first_of('.'));
+    std::stringstream ss;
     ss << std::dec << skinValue.c_str();
     ss >> this->dwSkinID;
     this->dwSkinID = MAKE_SKIN_BITMASK(true, this->dwSkinID);
@@ -50,13 +50,13 @@ TextureAndGeometryPacket::TextureAndGeometryPacket(
 }
 
 TextureAndGeometryPacket::TextureAndGeometryPacket(
-    const std::wstring& textureName, std::uint8_t* pbData,
+    const std::string& textureName, std::uint8_t* pbData,
     std::uint32_t dataBytes, DLCSkinFile* pDLCSkinFile) {
     this->textureName = textureName;
 
-    std::wstring skinValue = textureName.substr(7, textureName.size());
-    skinValue = skinValue.substr(0, skinValue.find_first_of(L'.'));
-    std::wstringstream ss;
+    std::string skinValue = textureName.substr(7, textureName.size());
+    skinValue = skinValue.substr(0, skinValue.find_first_of('.'));
+    std::stringstream ss;
     ss << std::dec << skinValue.c_str();
     ss >> this->dwSkinID;
     this->dwSkinID = MAKE_SKIN_BITMASK(true, this->dwSkinID);
@@ -80,14 +80,14 @@ TextureAndGeometryPacket::TextureAndGeometryPacket(
 }
 
 TextureAndGeometryPacket::TextureAndGeometryPacket(
-    const std::wstring& textureName, std::uint8_t* pbData,
+    const std::string& textureName, std::uint8_t* pbData,
     std::uint32_t dataBytes, std::vector<SKIN_BOX*>* pvSkinBoxes,
     unsigned int uiAnimOverrideBitmask) {
     this->textureName = textureName;
 
-    std::wstring skinValue = textureName.substr(7, textureName.size());
-    skinValue = skinValue.substr(0, skinValue.find_first_of(L'.'));
-    std::wstringstream ss;
+    std::string skinValue = textureName.substr(7, textureName.size());
+    skinValue = skinValue.substr(0, skinValue.find_first_of('.'));
+    std::stringstream ss;
     ss << std::dec << skinValue.c_str();
     ss >> this->dwSkinID;
     this->dwSkinID = MAKE_SKIN_BITMASK(true, this->dwSkinID);

@@ -12,7 +12,7 @@ class GRFObject;
 
 class XboxStructureActionPlaceSpawner : public XboxStructureActionPlaceBlock {
 private:
-    std::wstring m_entityId;
+    std::string m_entityId;
 
 public:
     XboxStructureActionPlaceSpawner();
@@ -23,8 +23,8 @@ public:
     }
 
     virtual void writeAttributes(DataOutputStream* dos, unsigned int numAttrs);
-    virtual void addAttribute(const std::wstring& attributeName,
-                              const std::wstring& attributeValue);
+    virtual void addAttribute(const std::string& attributeName,
+                              const std::string& attributeValue);
 
     bool placeSpawnerInLevel(StructurePiece* structure, Level* level,
                              BoundingBox* chunkBB);

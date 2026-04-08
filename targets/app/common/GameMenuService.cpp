@@ -14,7 +14,7 @@ bool GameMenuService::openCrafting2x2(int iPad, std::shared_ptr<LocalPlayer> pla
 bool GameMenuService::openCrafting3x3(int iPad, std::shared_ptr<LocalPlayer> player, int x, int y, int z) {
     return game_.LoadCrafting3x3Menu(iPad, player, x, y, z);
 }
-bool GameMenuService::openEnchanting(int iPad, std::shared_ptr<Inventory> inventory, int x, int y, int z, Level* level, const std::wstring& name) {
+bool GameMenuService::openEnchanting(int iPad, std::shared_ptr<Inventory> inventory, int x, int y, int z, Level* level, const std::string& name) {
     return game_.LoadEnchantingMenu(iPad, inventory, x, y, z, level, name);
 }
 bool GameMenuService::openFurnace(int iPad, std::shared_ptr<Inventory> inventory, std::shared_ptr<FurnaceTileEntity> furnace) {
@@ -38,7 +38,7 @@ bool GameMenuService::openSign(int iPad, std::shared_ptr<SignTileEntity> sign) {
 bool GameMenuService::openRepairing(int iPad, std::shared_ptr<Inventory> inventory, Level* level, int x, int y, int z) {
     return game_.LoadRepairingMenu(iPad, inventory, level, x, y, z);
 }
-bool GameMenuService::openTrading(int iPad, std::shared_ptr<Inventory> inventory, std::shared_ptr<Merchant> trader, Level* level, const std::wstring& name) {
+bool GameMenuService::openTrading(int iPad, std::shared_ptr<Inventory> inventory, std::shared_ptr<Merchant> trader, Level* level, const std::string& name) {
     return game_.LoadTradingMenu(iPad, inventory, trader, level, name);
 }
 bool GameMenuService::openCommandBlock(int iPad, std::shared_ptr<CommandBlockEntity> commandBlock) {

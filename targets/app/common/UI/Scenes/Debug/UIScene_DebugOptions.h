@@ -11,7 +11,7 @@ class UILayer;
 
 class UIScene_DebugOptionsMenu : public UIScene {
 private:
-    static const wchar_t* m_DebugCheckboxTextA[eDebugSetting_Max + 1];
+    static const char* m_DebugCheckboxTextA[eDebugSetting_Max + 1];
 
     int m_iTotalCheckboxElements;
 
@@ -46,7 +46,7 @@ protected:
     UI_MAP_ELEMENT(m_checkboxes[20], "checkbox21")
     UI_END_MAP_ELEMENTS_AND_NAMES()
 
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
 
 public:
     // INPUT

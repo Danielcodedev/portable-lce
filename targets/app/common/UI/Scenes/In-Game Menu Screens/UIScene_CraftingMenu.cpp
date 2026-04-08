@@ -39,10 +39,10 @@ UIScene_CraftingMenu::UIScene_CraftingMenu(int iPad, void* _initData,
     // Setup all the Iggy references we need for this scene
     initialiseMovie();
 
-    for (unsigned int i = 0; i < 4; ++i) m_labelIngredientsDesc[i].init(L"");
-    m_labelDescription.init(L"");
-    m_labelGroupName.init(L"");
-    m_labelItemName.init(L"");
+    for (unsigned int i = 0; i < 4; ++i) m_labelIngredientsDesc[i].init("");
+    m_labelDescription.init("");
+    m_labelGroupName.init("");
+    m_labelItemName.init("");
     m_labelInventory.init(app.GetString(IDS_INVENTORY));
     m_labelIngredients.init(app.GetString(IDS_INGREDIENTS));
 
@@ -231,19 +231,19 @@ EUIScene UIScene_CraftingMenu::getSceneType() {
     }
 }
 
-std::wstring UIScene_CraftingMenu::getMoviePath() {
+std::string UIScene_CraftingMenu::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1) {
         m_bSplitscreen = true;
         if (m_iContainerType == RECIPE_TYPE_3x3) {
-            return L"Crafting3x3MenuSplit";
+            return "Crafting3x3MenuSplit";
         } else {
-            return L"Crafting2x2MenuSplit";
+            return "Crafting2x2MenuSplit";
         }
     } else {
         if (m_iContainerType == RECIPE_TYPE_3x3) {
-            return L"Crafting3x3Menu";
+            return "Crafting3x3Menu";
         } else {
-            return L"Crafting2x2Menu";
+            return "Crafting2x2Menu";
         }
     }
 }
@@ -440,7 +440,7 @@ void UIScene_CraftingMenu::hideAllIngredientsSlots() {
         m_ingredientsInfo[i].alpha = 31;
         m_ingredientsInfo[i].show = false;
 
-        m_labelIngredientsDesc[i].setLabel(L"");
+        m_labelIngredientsDesc[i].setLabel("");
 
         IggyDataValue result;
         IggyDataValue value[2];
@@ -519,7 +519,7 @@ void UIScene_CraftingMenu::setIngredientDescriptionRedBox(int index,
 }
 
 void UIScene_CraftingMenu::setIngredientDescriptionText(int index,
-                                                        const wchar_t* text) {
+                                                        const char* text) {
     m_labelIngredientsDesc[index].setLabel(text);
 }
 
@@ -540,15 +540,15 @@ void UIScene_CraftingMenu::showTabHighlight(int iIndex, bool show) {
     }
 }
 
-void UIScene_CraftingMenu::setGroupText(const wchar_t* text) {
+void UIScene_CraftingMenu::setGroupText(const char* text) {
     m_labelGroupName.setLabel(text);
 }
 
-void UIScene_CraftingMenu::setDescriptionText(const wchar_t* text) {
+void UIScene_CraftingMenu::setDescriptionText(const char* text) {
     m_labelDescription.setLabel(text);
 }
 
-void UIScene_CraftingMenu::setItemText(const wchar_t* text) {
+void UIScene_CraftingMenu::setItemText(const char* text) {
     m_labelItemName.setLabel(text);
 }
 

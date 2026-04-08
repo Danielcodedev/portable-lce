@@ -22,13 +22,13 @@ bool UIControl_ButtonList::setupControl(UIScene* scene, IggyValuePath* parent,
     bool success = UIControl_Base::setupControl(scene, parent, controlName);
 
     // SlotList specific initialisers
-    m_addNewItemFunc = registerFastName(L"addNewItem");
-    m_removeAllItemsFunc = registerFastName(L"removeAllItems");
-    m_funcHighlightItem = registerFastName(L"HighlightItem");
-    m_funcRemoveItem = registerFastName(L"RemoveItem");
-    m_funcSetButtonLabel = registerFastName(L"SetButtonLabel");
-    m_funcSetTouchFocus = registerFastName(L"SetTouchFocus");
-    m_funcCanTouchTrigger = registerFastName(L"CanTouchTrigger");
+    m_addNewItemFunc = registerFastName("addNewItem");
+    m_removeAllItemsFunc = registerFastName("removeAllItems");
+    m_funcHighlightItem = registerFastName("HighlightItem");
+    m_funcRemoveItem = registerFastName("RemoveItem");
+    m_funcSetButtonLabel = registerFastName("SetButtonLabel");
+    m_funcSetTouchFocus = registerFastName("SetTouchFocus");
+    m_funcCanTouchTrigger = registerFastName("CanTouchTrigger");
 
     return success;
 }
@@ -65,40 +65,15 @@ void UIControl_ButtonList::addItem(const std::string& label) {
     addItem(label, m_itemCount);
 }
 
-void UIControl_ButtonList::addItem(const std::wstring& label) {
-    addItem(label, m_itemCount);
-}
-
 void UIControl_ButtonList::addItem(const std::string& label, int data) {
     IggyDataValue result;
     IggyDataValue value[2];
 
     IggyStringUTF8 stringVal;
-    stringVal.string = (char*)label.c_str();
+    stringVal.string = const_cast<char*>((char*)label.c_str());
     stringVal.length = (S32)label.length();
     value[0].type = IGGY_DATATYPE_string_UTF8;
     value[0].string8 = stringVal;
-
-    value[1].type = IGGY_DATATYPE_number;
-    value[1].number = data;
-    IggyResult out =
-        IggyPlayerCallMethodRS(m_parentScene->getMovie(), &result,
-                               getIggyValuePath(), m_addNewItemFunc, 2, value);
-
-    ++m_itemCount;
-}
-
-void UIControl_ButtonList::addItem(const std::wstring& label, int data) {
-    IggyDataValue result;
-    IggyDataValue value[2];
-
-    const std::u16string convLabel = wstring_to_u16string(label);
-
-    IggyStringUTF16 stringVal;
-    stringVal.string = convLabel.c_str();
-    stringVal.length = convLabel.length();
-    value[0].type = IGGY_DATATYPE_string_UTF16;
-    value[0].string16 = stringVal;
 
     value[1].type = IGGY_DATATYPE_number;
     value[1].number = data;
@@ -140,20 +115,18 @@ void UIControl_ButtonList::updateChildFocus(int iChild) {
 }
 
 void UIControl_ButtonList::setButtonLabel(int iButtonId,
-                                          const std::wstring& label) {
+                                          const std::string& label) {
     IggyDataValue result;
     IggyDataValue value[2];
 
     value[0].type = IGGY_DATATYPE_number;
     value[0].number = iButtonId;
 
-    const std::u16string convLabel = wstring_to_u16string(label);
-
-    IggyStringUTF16 stringVal;
-    stringVal.string = convLabel.c_str();
-    stringVal.length = convLabel.length();
-    value[1].type = IGGY_DATATYPE_string_UTF16;
-    value[1].string16 = stringVal;
+    IggyStringUTF8 stringVal;
+    stringVal.string = const_cast<char*>(label.c_str());
+    stringVal.length = label.length();
+    value[1].type = IGGY_DATATYPE_string_UTF8;
+    value[1].string8 = stringVal;
     IggyResult out = IggyPlayerCallMethodRS(m_parentScene->getMovie(), &result,
                                             getIggyValuePath(),
                                             m_funcSetButtonLabel, 2, value);

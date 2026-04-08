@@ -11,6 +11,7 @@
 #include "app/common/DLC/DLCFile.h"
 #include "app/linux/LinuxGame.h"
 #include "platform/XboxStubs.h"
+#include "util/StringHelpers.h"
 #if defined(_WINDOWS64)
 #include "app/windows/XML/ATGXmlParser.h"
 #include "app/windows/XML/xmlFilesCallback.h"
@@ -69,7 +70,7 @@ inline std::wstring ReadAudioParamString(const std::uint8_t* data,
 }
 }  // namespace
 
-DLCAudioFile::DLCAudioFile(const std::wstring& path)
+DLCAudioFile::DLCAudioFile(const std::string& path)
     : DLCFile(DLCManager::e_DLCType_Audio, path) {
     m_pbData = nullptr;
     m_dataBytes = 0;
@@ -92,8 +93,7 @@ const wchar_t* DLCAudioFile::wchTypeNamesA[] = {
     L"CREDIT",
 };
 
-DLCAudioFile::EAudioParameterType DLCAudioFile::getParameterType(
-    const std::wstring& paramName) {
+DLCAudioFile::EAudioParameterType DLCAudioFile::getParameterType(const std::wstring& paramName) {
     EAudioParameterType type = e_AudioParamType_Invalid;
 
     for (int i = 0; i < e_AudioParamType_Max; ++i) {
@@ -107,7 +107,7 @@ DLCAudioFile::EAudioParameterType DLCAudioFile::getParameterType(
 }
 
 void DLCAudioFile::addParameter(EAudioType type, EAudioParameterType ptype,
-                                const std::wstring& value) {
+                                const std::string& value) {
     switch (ptype) {
         case e_AudioParamType_Credit:  // If this parameter exists, then mark
                                        // this as free
@@ -136,14 +136,14 @@ void DLCAudioFile::addParameter(EAudioType type, EAudioParameterType ptype,
                         maximumChars = 35;
                         break;
                 }
-                std::wstring creditValue = value;
+                std::string creditValue = value;
                 while (creditValue.length() > maximumChars) {
                     unsigned int i = 1;
                     while (i < creditValue.length() &&
                            (i + 1) <= maximumChars) {
                         i++;
                     }
-                    int iLast = (int)creditValue.find_last_of(L" ", i);
+                    int iLast = (int)creditValue.find_last_of(" ", i);
                     switch (XGetLanguage()) {
                         case XC_LANGUAGE_JAPANESE:
                         case XC_LANGUAGE_TCHINESE:
@@ -151,7 +151,7 @@ void DLCAudioFile::addParameter(EAudioType type, EAudioParameterType ptype,
                             iLast = maximumChars;
                             break;
                         default:
-                            iLast = (int)creditValue.find_last_of(L" ", i);
+                            iLast = (int)creditValue.find_last_of(" ", i);
                             break;
                     }
 
@@ -238,7 +238,7 @@ bool DLCAudioFile::processDLCDataFile(std::uint8_t* pbData,
 
             if (it != parameterMapping.end()) {
                 addParameter(type, (EAudioParameterType)paramBuf.dwType,
-                             ReadAudioParamString(pbTemp, 0));
+                             wstringtofilename(ReadAudioParamString(pbTemp, 0)));
             }
             pbTemp += AudioParamAdvance(paramBuf.dwWchCount);
             ReadAudioDlcStruct(&paramBuf, pbTemp);
@@ -257,7 +257,7 @@ int DLCAudioFile::GetCountofType(DLCAudioFile::EAudioType eType) {
     return m_parameters[eType].size();
 }
 
-std::wstring& DLCAudioFile::GetSoundName(int iIndex) {
+std::string& DLCAudioFile::GetSoundName(int iIndex) {
     int iWorldType = e_AudioType_Overworld;
     while (iIndex >= m_parameters[iWorldType].size()) {
         iIndex -= m_parameters[iWorldType].size();

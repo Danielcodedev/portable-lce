@@ -49,11 +49,11 @@ UIScene_HopperMenu::UIScene_HopperMenu(int iPad, void* _initData,
     delete initData;
 }
 
-std::wstring UIScene_HopperMenu::getMoviePath() {
+std::string UIScene_HopperMenu::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1) {
-        return L"HopperMenuSplit";
+        return "HopperMenuSplit";
     } else {
-        return L"HopperMenu";
+        return "HopperMenu";
     }
 }
 

@@ -31,8 +31,8 @@ public:
 
     virtual GameRuleDefinition* addChild(
         ConsoleGameRules::EGameRuleType ruleType);
-    virtual void addAttribute(const std::wstring& attributeName,
-                              const std::wstring& attributeValue);
+    virtual void addAttribute(const std::string& attributeName,
+                              const std::string& attributeValue);
 
     bool addItemToContainer(std::shared_ptr<Container> container, int slotId);
 };

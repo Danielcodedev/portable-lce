@@ -25,16 +25,16 @@ bool UIControl_Label::setupControl(UIScene* scene, IggyValuePath* parent,
 void UIControl_Label::init(UIString label) {
     m_label = label;
 
-    const std::u16string convLabel = wstring_to_u16string(label.getString());
+    const std::string labelString = label.getString();
 
     IggyDataValue result;
     IggyDataValue value[1];
-    value[0].type = IGGY_DATATYPE_string_UTF16;
-    IggyStringUTF16 stringVal;
+    value[0].type = IGGY_DATATYPE_string_UTF8;
+    IggyStringUTF8 stringVal;
 
-    stringVal.string = convLabel.c_str();
-    stringVal.length = convLabel.length();
-    value[0].string16 = stringVal;
+    stringVal.string = const_cast<char*>(labelString.c_str());
+    stringVal.length = labelString.length();
+    value[0].string8 = stringVal;
     IggyResult out =
         IggyPlayerCallMethodRS(m_parentScene->getMovie(), &result,
                                getIggyValuePath(), m_initFunc, 1, value);

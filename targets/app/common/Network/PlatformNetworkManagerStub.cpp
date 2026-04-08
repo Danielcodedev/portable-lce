@@ -78,7 +78,7 @@ void IPlatformNetworkStub::NotifyPlayerJoined(IQNetPlayer* pQNetPlayer) {
         g_NetworkManager.CreateSocket(networkPlayer, localPlayer);
     }
 
-    app.DebugPrintf("Player 0x%p \"%ls\" joined; %s; voice %i; camera %i.\n",
+    app.DebugPrintf("Player 0x%p \"%s\" joined; %s; voice %i; camera %i.\n",
                     pQNetPlayer, pQNetPlayer->GetGamertag(), pszDescription,
                     (int)pQNetPlayer->HasVoice(),
                     (int)pQNetPlayer->HasCamera());
@@ -297,7 +297,7 @@ void IPlatformNetworkStub::UpdateAndSetGameSessionData(
     // ((NetworkPlayerXbox *)pNetworkPlayer)->GetUID();
     //
     // 				char *temp;
-    // 				temp = (char *)wstringtofilename(
+    // 				temp = (char *)wstring_to_string(
     // pNetworkPlayer->GetOnlineName() );
     // 				memcpy(m_hostGameSessionData.szPlayers[i],temp,XUSER_NAME_SIZE);
     // 			}
@@ -430,20 +430,20 @@ bool IPlatformNetworkStub::SystemFlagGet(INetworkPlayer* pNetworkPlayer,
     return false;
 }
 
-std::wstring IPlatformNetworkStub::GatherStats() { return L""; }
+std::string IPlatformNetworkStub::GatherStats() { return ""; }
 
-std::wstring IPlatformNetworkStub::GatherRTTStats() {
-    std::wstring stats(L"Rtt: ");
+std::string IPlatformNetworkStub::GatherRTTStats() {
+    std::string stats("Rtt: ");
 
-    wchar_t stat[32];
+    char stat[32];
 
     for (unsigned int i = 0; i < GetPlayerCount(); ++i) {
         IQNetPlayer* pQNetPlayer =
             ((NetworkPlayerQNet*)GetPlayerByIndex(i))->GetQNetPlayer();
 
         if (!pQNetPlayer->IsLocal()) {
-            memset(stat, 0, 32 * sizeof(wchar_t));
-            swprintf(stat, 32, L"%d: %d/", i, pQNetPlayer->GetCurrentRtt());
+            memset(stat, 0, 32 * sizeof(char));
+            snprintf(stat, 32, "%d: %d/", i, pQNetPlayer->GetCurrentRtt());
             stats.append(stat);
         }
     }

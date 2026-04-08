@@ -249,13 +249,13 @@ void IUIScene_TradingMenu::updateDisplay() {
             MerchantRecipe* activeRecipe =
                 m_activeOffers.at(selectedShopItem).first;
 
-            std::wstring wsTemp;
+            std::string wsTemp;
 
             // 4J-PB - need to get the villager type here
             wsTemp = app.GetString(IDS_VILLAGER_OFFERS_ITEM);
-            wsTemp = replaceAll(wsTemp, L"{*VILLAGER_TYPE*}",
+            wsTemp = replaceAll(wsTemp, "{*VILLAGER_TYPE*}",
                                 m_merchant->getDisplayName());
-            int iPos = wsTemp.find(L"%s");
+            int iPos = wsTemp.find("%s");
             wsTemp.replace(iPos, 2,
                            activeRecipe->getSellItem()->getHoverName());
 
@@ -276,12 +276,12 @@ void IUIScene_TradingMenu::updateDisplay() {
             if (buyAItem != nullptr)
                 setRequest1Name(buyAItem->getHoverName());
             else
-                setRequest1Name(L"");
+                setRequest1Name("");
 
             if (buyBItem != nullptr)
                 setRequest2Name(buyBItem->getHoverName());
             else
-                setRequest2Name(L"");
+                setRequest2Name("");
 
             bool canMake = true;
 
@@ -313,8 +313,8 @@ void IUIScene_TradingMenu::updateDisplay() {
             if (canMake) iA = IDS_TOOLTIPS_TRADE;
         } else {
             setTitle(m_merchant->getDisplayName());
-            setRequest1Name(L"");
-            setRequest2Name(L"");
+            setRequest1Name("");
+            setRequest2Name("");
             setRequest1RedBox(false);
             setRequest2RedBox(false);
             setRequest1Item(nullptr);

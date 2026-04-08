@@ -996,7 +996,7 @@ void Game::HandleXuiActions(void) {
                             eStream_Overworld_Calm1, eStream_Overworld_piano3,
                             eStream_Nether1, eStream_Nether4,
                             eStream_end_dragon, eStream_end_end, eStream_CD_1);
-                        pMinecraft->soundEngine->playStreaming(L"", 0, 0, 0, 1,
+                        pMinecraft->soundEngine->playStreaming("", 0, 0, 0, 1,
                                                                1);
 
                         const unsigned int result =
@@ -1050,8 +1050,8 @@ void Game::HandleXuiActions(void) {
 
                     // change the minecraft player name
                     Minecraft::GetInstance()->user->name =
-                        convStringToWstring(PlatformProfile.GetGamertag(
-                            PlatformProfile.GetPrimaryPad()));
+                        PlatformProfile.GetGamertag(
+                            PlatformProfile.GetPrimaryPad());
 
                     bool success = g_NetworkManager.JoinGameFromInviteInfo(
                         inviteData->dwUserIndex,       // dwUserIndex
@@ -1258,7 +1258,7 @@ void Game::HandleXuiActions(void) {
                     uiIDA[1] = IDS_EXIT_GAME;
 
                     // pass in the gamertag format std::string
-                    wchar_t wchFormat[40];
+                    char wchFormat[40];
                     INetworkPlayer* player =
                         g_NetworkManager.GetLocalPlayerByUserIndex(i);
 
@@ -1266,7 +1266,7 @@ void Game::HandleXuiActions(void) {
                     // banned this level and decided not to unban then we may
                     // have left the game by now
                     if (player) {
-                        swprintf(wchFormat, 40, L"%ls\n\n%%ls",
+                        snprintf(wchFormat, 40, "%s\n\n%%s",
                                  player->GetOnlineName());
 
                         IPlatformStorage::EMessageResult result =
@@ -1303,7 +1303,7 @@ void Game::HandleXuiActions(void) {
                         // do we have a license?
                         if (pDLCPack &&
                             pDLCPack->hasPurchasedFile(
-                                DLCManager::e_DLCType_Texture, L"")) {
+                                DLCManager::e_DLCType_Texture, "")) {
                             purchased = true;
                         }
                     }
@@ -1312,7 +1312,7 @@ void Game::HandleXuiActions(void) {
                     // to this
                     if (pMinecraft->skins->getSelected()->hasAudio()) {
                         Minecraft::GetInstance()->soundEngine->playStreaming(
-                            L"", 0, 0, 0, 1, 1);
+                            "", 0, 0, 0, 1, 1);
                     }
                 } break;
 

@@ -833,7 +833,7 @@ bool RandomLevelSource::tick() { return false; }
 
 bool RandomLevelSource::shouldSave() { return true; }
 
-std::wstring RandomLevelSource::gatherStats() { return L"RandomLevelSource"; }
+std::string RandomLevelSource::gatherStats() { return "RandomLevelSource"; }
 
 std::vector<Biome::MobSpawnerData*>* RandomLevelSource::getMobsAt(
     MobCategory* mobCategory, int x, int y, int z) {
@@ -849,7 +849,7 @@ std::vector<Biome::MobSpawnerData*>* RandomLevelSource::getMobsAt(
 }
 
 TilePos* RandomLevelSource::findNearestMapFeature(
-    Level* level, const std::wstring& featureName, int x, int y, int z) {
+    Level* level, const std::string& featureName, int x, int y, int z) {
     if (LargeFeature::STRONGHOLD == featureName &&
         strongholdFeature != nullptr) {
         return strongholdFeature->getNearestGeneratedFeature(level, x, y, z);

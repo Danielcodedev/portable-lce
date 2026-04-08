@@ -131,8 +131,8 @@ void UIScene_InGameSaveManagementMenu::handleGainFocus(bool navBack) {
     }
 }
 
-std::wstring UIScene_InGameSaveManagementMenu::getMoviePath() {
-    return L"SaveMenu";
+std::string UIScene_InGameSaveManagementMenu::getMoviePath() {
+    return "SaveMenu";
 }
 
 void UIScene_InGameSaveManagementMenu::tick() {
@@ -173,7 +173,7 @@ void UIScene_InGameSaveManagementMenu::tick() {
                 m_iSaveDetailsCount = m_pSaveDetails->iSaveC;
                 for (unsigned int i = 0; i < m_pSaveDetails->iSaveC; ++i) {
                     m_buttonListSaves.addItem(
-                        m_pSaveDetails->SaveInfoA[i].UTF8SaveTitle, L"");
+                        m_pSaveDetails->SaveInfoA[i].UTF8SaveTitle, "");
 
                     m_saveDetails[i].saveId = i;
                     memcpy(m_saveDetails[i].UTF8SaveName,
@@ -224,9 +224,9 @@ void UIScene_InGameSaveManagementMenu::tick() {
                     MAX_SAVEFILENAME_LENGTH,  // total length of source UTF-8
                                               // string,
                     // in char's (= bytes), including end-of-string \0
-                    (wchar_t*)u16Message,    // destination buffer
+                    (char*)u16Message,    // destination buffer
                     MAX_SAVEFILENAME_LENGTH  // size of destination buffer, in
-                                             // wchar_t's
+                                             // char's
                 );
 #else
                 uint32_t srcmax, dstmax;
@@ -245,13 +245,13 @@ void UIScene_InGameSaveManagementMenu::tick() {
 #endif
                 if (m_saveDetails[m_iRequestingThumbnailId].pbThumbnailData) {
                     registerSubstitutionTexture(
-                        (wchar_t*)u16Message,
+                        (char*)u16Message,
                         m_saveDetails[m_iRequestingThumbnailId].pbThumbnailData,
                         m_saveDetails[m_iRequestingThumbnailId]
                             .dwThumbnailSize);
                 }
                 m_buttonListSaves.setTextureName(m_iRequestingThumbnailId,
-                                                 (wchar_t*)u16Message);
+                                                 (char*)u16Message);
 
                 ++m_iRequestingThumbnailId;
                 if (m_iRequestingThumbnailId <

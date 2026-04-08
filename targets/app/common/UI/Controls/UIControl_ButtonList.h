@@ -33,11 +33,11 @@ public:
 
     void clearList();
 
-    void addItem(const std::wstring& label);
     void addItem(const std::string& label);
+    // void addItem(const std::wstring& label);
 
-    void addItem(const std::wstring& label, int data);
     void addItem(const std::string& label, int data);
+    // void addItem(const std::wstring& label, int data);
 
     void removeItem(int index);
 
@@ -48,7 +48,7 @@ public:
 
     void updateChildFocus(int iChild);
 
-    void setButtonLabel(int iButtonId, const std::wstring& label);
+    void setButtonLabel(int iButtonId, const std::string& label);
 };
 
 class UIControl_DynamicButtonList : public UIControl_ButtonList {

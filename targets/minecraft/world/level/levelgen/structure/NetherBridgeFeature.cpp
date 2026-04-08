@@ -33,7 +33,7 @@ NetherBridgeFeature::~NetherBridgeFeature() {
     if (netherFortressPos != nullptr) delete netherFortressPos;
 }
 
-std::wstring NetherBridgeFeature::getFeatureName() { return L"Fortress"; }
+std::string NetherBridgeFeature::getFeatureName() { return "Fortress"; }
 
 std::vector<Biome::MobSpawnerData*>* NetherBridgeFeature::getBridgeEnemies() {
     return &bridgeEnemies;

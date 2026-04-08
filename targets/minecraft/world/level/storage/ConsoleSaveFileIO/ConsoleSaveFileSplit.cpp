@@ -362,7 +362,7 @@ FileEntry* ConsoleSaveFileSplit::GetRegionFileEntry(unsigned int regionIndex) {
 }
 
 ConsoleSaveFileSplit::ConsoleSaveFileSplit(
-    const std::wstring& fileName, void* pvSaveData /*= nullptr*/,
+    const std::string& fileName, void* pvSaveData /*= nullptr*/,
     unsigned int initialFileSize /*= 0*/, bool forceCleanSave /*= false*/,
     ESavePlatform plat /*= SAVE_FILE_PLATFORM_LOCAL*/) {
     unsigned int fileSize = initialFileSize;
@@ -398,7 +398,7 @@ ConsoleSaveFileSplit::ConsoleSaveFileSplit(ConsoleSaveFile* sourceSave,
 
     if (alreadySmallRegions) {
         std::vector<FileEntry*>* sourceFiles =
-            sourceSave->getFilesWithPrefix(L"");
+            sourceSave->getFilesWithPrefix("");
 
         unsigned int bytesWritten = 0;
         for (auto it = sourceFiles->begin(); it != sourceFiles->end(); ++it) {
@@ -419,7 +419,7 @@ ConsoleSaveFileSplit::ConsoleSaveFileSplit(ConsoleSaveFile* sourceSave,
     }
 }
 
-void ConsoleSaveFileSplit::_init(const std::wstring& fileName, void* pvSaveData,
+void ConsoleSaveFileSplit::_init(const std::string& fileName, void* pvSaveData,
                                  unsigned int fileSize, ESavePlatform plat) {
     m_lastTickTime = 0;
 
@@ -746,7 +746,7 @@ bool ConsoleSaveFileSplit::writeFile(FileEntry* file, const void* lpBuffer,
 
         file->currentFilePointer += *lpNumberOfBytesWritten;
 
-        // wprintf(L"Wrote %d bytes to %s, new file pointer is %I64d\n",
+        // printf("Wrote %d bytes to %s, new file pointer is %I64d\n",
         // *lpNumberOfBytesWritten, file->data.filename,
         // file->currentFilePointer);
 
@@ -813,7 +813,7 @@ bool ConsoleSaveFileSplit::zeroFile(FileEntry* file,
 
         file->currentFilePointer += *lpNumberOfBytesWritten;
 
-        // wprintf(L"Wrote %d bytes to %s, new file pointer is %I64d\n",
+        // printf("Wrote %d bytes to %s, new file pointer is %I64d\n",
         // *lpNumberOfBytesWritten, file->data.filename,
         // file->currentFilePointer);
 
@@ -868,7 +868,7 @@ bool ConsoleSaveFileSplit::readFile(FileEntry* file, void* lpBuffer,
 
         file->currentFilePointer += *lpNumberOfBytesRead;
 
-        // wprintf(L"Read %d bytes from %s, new file pointer is %I64d\n",
+        // printf("Read %d bytes from %s, new file pointer is %I64d\n",
         // *lpNumberOfBytesRead, file->data.filename, file->currentFilePointer);
     }
 
@@ -1171,26 +1171,26 @@ void ConsoleSaveFileSplit::MoveDataBeyond(FileEntry* file,
 // DIM1/r.x.z.mcr		00 02 xx zz
 
 bool ConsoleSaveFileSplit::GetNumericIdentifierFromName(
-    const std::wstring& fileName, unsigned int* idOut) {
+    const std::string& fileName, unsigned int* idOut) {
     // Determine whether it is one of our region file names if the file
     // extension is ".mbr"
     if (fileName.length() < 4) return false;
-    std::wstring extension = fileName.substr(fileName.length() - 4, 4);
-    if (extension != std::wstring(L".mcr")) return false;
+    std::string extension = fileName.substr(fileName.length() - 4, 4);
+    if (extension != std::string(".mcr")) return false;
 
     unsigned int id = 0;
     int x, z;
 
-    const wchar_t* cstr = fileName.c_str();
-    const wchar_t* body = cstr + 2;
+    const char* cstr = fileName.c_str();
+    const char* body = cstr + 2;
 
     // If this filename starts with a "r" then assume it is of the format
     // "r.x.z.mcr" - don't do anything as default value we've set are correct
-    if (cstr[0] != L'r') {
+    if (cstr[0] != 'r') {
         // Must be prefixed by "DIM-1r." or "DIM1/r."
         body = cstr + 7;
         // Differentiate between these 2 options
-        if (cstr[3] == L'-') {
+        if (cstr[3] == '-') {
             // "DIM-1r."
             id = 0x00010000;
         } else {
@@ -1199,7 +1199,7 @@ bool ConsoleSaveFileSplit::GetNumericIdentifierFromName(
         }
     }
     // Get x/z coords
-    swscanf(body, L"%d.%d.mcr", &x, &z);
+    sscanf(body, "%d.%d.mcr", &x, &z);
 
     // Pack full id
     // 4jcraft added cast to unsigned
@@ -1214,25 +1214,25 @@ bool ConsoleSaveFileSplit::GetNumericIdentifierFromName(
 // Convert a numeric file identifier (for region files) back into a normal
 // filename. See comment above.
 
-std::wstring ConsoleSaveFileSplit::GetNameFromNumericIdentifier(
+std::string ConsoleSaveFileSplit::GetNameFromNumericIdentifier(
     unsigned int idIn) {
-    std::wstring prefix;
+    std::string prefix;
 
     switch (idIn & 0x00ff0000) {
         case 0:
-            prefix = L"";
+            prefix = "";
             break;
         case 1:
-            prefix = L"DIM-1";
+            prefix = "DIM-1";
             break;
         case 2:
-            prefix = L"DIM1/";
+            prefix = "DIM1/";
             break;
     }
     signed char regionX = (idIn >> 8) & 255;
     signed char regionZ = idIn & 255;
-    std::wstring region = (prefix + std::wstring(L"r.") + toWString(regionX) +
-                           L"." + toWString(regionZ) + L".mcr");
+    std::string region = (prefix + std::string("r.") + toWString(regionX) +
+                           "." + toWString(regionZ) + ".mcr");
 
     return region;
 }
@@ -1432,11 +1432,11 @@ void ConsoleSaveFileSplit::DebugFlushToFile(
 
     unsigned int numberOfBytesWritten = 0;
 
-    File targetFileDir(L"Saves");
+    File targetFileDir("Saves");
 
     if (!targetFileDir.exists()) targetFileDir.mkdir();
 
-    wchar_t* fileName = new wchar_t[XCONTENT_MAX_FILENAME_LENGTH + 1];
+    char* fileName = new char[XCONTENT_MAX_FILENAME_LENGTH + 1];
 
     auto now_tp = std::chrono::system_clock::now();
     std::time_t now_tt = std::chrono::system_clock::to_time_t(now_tp);
@@ -1450,17 +1450,17 @@ void ConsoleSaveFileSplit::DebugFlushToFile(
     // 14 chars for the digits
     // 11 chars for the separators + suffix
     // 25 chars total
-    std::wstring cutFileName = m_fileName;
+    std::string cutFileName = m_fileName;
     if (m_fileName.length() > XCONTENT_MAX_FILENAME_LENGTH - 25) {
         cutFileName = m_fileName.substr(0, XCONTENT_MAX_FILENAME_LENGTH - 25);
     }
-    swprintf(fileName, XCONTENT_MAX_FILENAME_LENGTH + 1,
-             L"\\v%04d-%ls%02d.%02d.%02d.%02d.%02d.mcs", VER_PRODUCTBUILD,
+    snprintf(fileName, XCONTENT_MAX_FILENAME_LENGTH + 1,
+             "\\v%04d-%s%02d.%02d.%02d.%02d.%02d.mcs", VER_PRODUCTBUILD,
              cutFileName.c_str(), t.tm_mon + 1, t.tm_mday, t.tm_hour, t.tm_min,
              t.tm_sec);
 
-    const std::wstring outputPath =
-        targetFileDir.getPath() + std::wstring(fileName);
+    const std::string outputPath =
+        targetFileDir.getPath() + std::string(fileName);
     bool writeSucceeded = false;
 
     if (compressedData != nullptr && compressedDataSize > 0) {
@@ -1485,10 +1485,10 @@ unsigned int ConsoleSaveFileSplit::getSizeOnDisk() {
     return header.GetFileSize();
 }
 
-std::wstring ConsoleSaveFileSplit::getFilename() { return m_fileName; }
+std::string ConsoleSaveFileSplit::getFilename() { return m_fileName; }
 
 std::vector<FileEntry*>* ConsoleSaveFileSplit::getFilesWithPrefix(
-    const std::wstring& prefix) {
+    const std::string& prefix) {
     return header.getFilesWithPrefix(prefix);
 }
 
@@ -1588,17 +1588,17 @@ void ConsoleSaveFileSplit::ConvertToLocalPlatform() {
     }
     // convert each of the region files to the local platform
     std::vector<FileEntry*>* allFilesInSave =
-        getFilesWithPrefix(std::wstring(L""));
+        getFilesWithPrefix(std::string(""));
     for (auto it = allFilesInSave->begin(); it < allFilesInSave->end(); ++it) {
         FileEntry* fe = *it;
-        std::wstring fName(fe->data.filename);
-        std::wstring suffix(L".mcr");
+        std::string fName(fe->data.filename);
+        std::string suffix(".mcr");
         if (fName.compare(fName.length() - suffix.length(), suffix.length(),
                           suffix) == 0) {
-            Log::info("Processing a region file: %ls\n", fName.c_str());
+            Log::info("Processing a region file: %s\n", fName.c_str());
             ConvertRegionFile(File(fe->data.filename));
         } else {
-            Log::info("%ls is not a region file, ignoring\n",
+            Log::info("%s is not a region file, ignoring\n",
                             fName.c_str());
         }
     }

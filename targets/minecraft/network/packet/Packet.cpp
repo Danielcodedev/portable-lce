@@ -352,11 +352,11 @@ void Packet::staticCtor() {
 }
 
 IllegalArgumentException::IllegalArgumentException(
-    const std::wstring& information) {
+    const std::string& information) {
     this->information = information;
 }
 
-IOException::IOException(const std::wstring& information) {
+IOException::IOException(const std::string& information) {
     this->information = information;
 }
 
@@ -440,11 +440,11 @@ void Packet::updatePacketStatsPIX() {
          it++) {
         Packet::PacketStatistics* stat = it->second;
         int64_t count = stat->getRunningCount();
-        wchar_t pixName[256];
-        swprintf_s(pixName, L"Packet count %d", stat->id);
+        char pixName[256];
+        snprintf(pixName, "Packet count %d", stat->id);
         //		PIXReportCounter(pixName,(float)count);
         int64_t total = stat->getRunningTotal();
-        swprintf_s(pixName, L"Packet bytes %d", stat->id);
+        snprintf(pixName, "Packet bytes %d", stat->id);
         PIXReportCounter(pixName, (float)total);
         stat->IncrementPos();
     }
@@ -519,13 +519,13 @@ std::shared_ptr<Packet> Packet::readPacket(
         // Log::info("Bad packet id %d\n", id);
         assert(0);
         assert(false);
-        //            throw new IOException(wstring(L"Bad packet id ") +
+        //            throw new IOException(string("Bad packet id ") +
         //            toWString<int>(id));
     }
 
     packet = getPacket(id);
     if (packet == nullptr)
-        assert(false);  // throw new IOException(wstring(L"Bad packet id ") +
+        assert(false);  // throw new IOException(string("Bad packet id ") +
                         // toWString<int>(id));
 
     // Log::info("%s reading packet %d\n", isServer ? "Server" : "Client",
@@ -569,7 +569,7 @@ void Packet::writePacket(
     packet->write(dos);
 }
 
-void Packet::writeUtf(const std::wstring& value,
+void Packet::writeUtf(const std::string& value,
                       DataOutputStream* dos)  // throws IOException TODO 4J JEV,
                                               // should this declare a throws?
 {
@@ -577,27 +577,27 @@ void Packet::writeUtf(const std::wstring& value,
     dos->writeChars(value);
 }
 
-std::wstring Packet::readUtf(DataInputStream* dis,
+std::string Packet::readUtf(DataInputStream* dis,
                              int maxLength)  // throws IOException TODO 4J JEV,
                                              // should this declare a throws?
 {
     short stringLength = dis->readShort();
     if (stringLength > maxLength) {
-        std::wstringstream stream;
-        stream << L"Received string length longer than maximum allowed ("
+        std::stringstream stream;
+        stream << "Received string length longer than maximum allowed ("
                << stringLength << " > " << maxLength << ")";
         assert(false);
         //        throw new IOException( stream.str() );
     }
     if (stringLength < 0) {
         assert(false);
-        //        throw new IOException(L"Received string length is less than
+        //        throw new IOException("Received string length is less than
         //        zero! Weird string!");
     }
 
-    std::wstring builder = L"";
+    std::string builder = "";
     for (int i = 0; i < stringLength; i++) {
-        wchar_t rc = dis->readChar();
+        char rc = dis->readChar();
         builder.push_back(rc);
     }
 

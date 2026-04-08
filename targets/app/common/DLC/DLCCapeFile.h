@@ -6,7 +6,7 @@
 
 class DLCCapeFile : public DLCFile {
 public:
-    DLCCapeFile(const std::wstring& path);
+    DLCCapeFile(const std::string& path);
 
     virtual void addData(std::uint8_t* pbData, std::uint32_t dataBytes);
 };

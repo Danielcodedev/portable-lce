@@ -27,22 +27,22 @@ void StartFeature::writeAttributes(DataOutputStream* dos,
     dos->writeUTF(toWString(m_orientation));
 }
 
-void StartFeature::addAttribute(const std::wstring& attributeName,
-                                const std::wstring& attributeValue) {
-    if (attributeName.compare(L"chunkX") == 0) {
+void StartFeature::addAttribute(const std::string& attributeName,
+                                const std::string& attributeValue) {
+    if (attributeName.compare("chunkX") == 0) {
         int value = fromWString<int>(attributeValue);
         m_chunkX = value;
         app.DebugPrintf("StartFeature: Adding parameter chunkX=%d\n", m_chunkX);
-    } else if (attributeName.compare(L"chunkZ") == 0) {
+    } else if (attributeName.compare("chunkZ") == 0) {
         int value = fromWString<int>(attributeValue);
         m_chunkZ = value;
         app.DebugPrintf("StartFeature: Adding parameter chunkZ=%d\n", m_chunkZ);
-    } else if (attributeName.compare(L"orientation") == 0) {
+    } else if (attributeName.compare("orientation") == 0) {
         int value = fromWString<int>(attributeValue);
         m_orientation = value;
         app.DebugPrintf("StartFeature: Adding parameter orientation=%d\n",
                         m_orientation);
-    } else if (attributeName.compare(L"feature") == 0) {
+    } else if (attributeName.compare("feature") == 0) {
         int value = fromWString<int>(attributeValue);
         m_feature = (StructureFeature::EFeatureTypes)value;
         app.DebugPrintf("StartFeature: Adding parameter feature=%d\n",

@@ -14,129 +14,129 @@
 #define CREDIT_ICON -2
 
 SCreditTextItemDef UIScene_Credits::gs_aCreditDefs[MAX_CREDIT_STRINGS] = {
-    {L"MOJANG", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eExtraLargeText},
-    {L"", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
+    {"MOJANG", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eExtraLargeText},
+    {"", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
      eSmallText},  // extra blank line
-    {L"%ls", IDS_CREDITS_ORIGINALDESIGN, NO_TRANSLATED_STRING, eLargeText},
-    {L"Markus Persson", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
+    {"%s", IDS_CREDITS_ORIGINALDESIGN, NO_TRANSLATED_STRING, eLargeText},
+    {"Markus Persson", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
      eSmallText},  // extra blank line
-    {L"%ls", IDS_CREDITS_PMPROD, NO_TRANSLATED_STRING, eLargeText},
-    {L"Daniel Kaplan", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
+    {"%s", IDS_CREDITS_PMPROD, NO_TRANSLATED_STRING, eLargeText},
+    {"Daniel Kaplan", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
      eSmallText},  // extra blank line
-    {L"%ls", IDS_CREDITS_RESTOFMOJANG, NO_TRANSLATED_STRING, eMediumText},
-    {L"%ls", IDS_CREDITS_LEADPC, NO_TRANSLATED_STRING, eLargeText},
-    {L"Jens Bergensten", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
+    {"%s", IDS_CREDITS_RESTOFMOJANG, NO_TRANSLATED_STRING, eMediumText},
+    {"%s", IDS_CREDITS_LEADPC, NO_TRANSLATED_STRING, eLargeText},
+    {"Jens Bergensten", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
      eSmallText},
-    {L"%ls", IDS_CREDITS_JON_KAGSTROM, NO_TRANSLATED_STRING, eSmallText},
-    {L"%ls", IDS_CREDITS_CEO, NO_TRANSLATED_STRING, eLargeText},
-    {L"Carl Manneh", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"%ls", IDS_CREDITS_DOF, NO_TRANSLATED_STRING, eLargeText},
-    {L"Lydia Winters", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"%ls", IDS_CREDITS_WCW, NO_TRANSLATED_STRING, eLargeText},
-    {L"Karin Severinsson", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
+    {"%s", IDS_CREDITS_JON_KAGSTROM, NO_TRANSLATED_STRING, eSmallText},
+    {"%s", IDS_CREDITS_CEO, NO_TRANSLATED_STRING, eLargeText},
+    {"Carl Manneh", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"%s", IDS_CREDITS_DOF, NO_TRANSLATED_STRING, eLargeText},
+    {"Lydia Winters", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"%s", IDS_CREDITS_WCW, NO_TRANSLATED_STRING, eLargeText},
+    {"Karin Severinsson", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
      eSmallText},
-    {L"%ls", IDS_CREDITS_CUSTOMERSUPPORT, NO_TRANSLATED_STRING, eLargeText},
-    {L"Marc Watson", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
+    {"%s", IDS_CREDITS_CUSTOMERSUPPORT, NO_TRANSLATED_STRING, eLargeText},
+    {"Marc Watson", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
      eSmallText},  // extra blank line
-    {L"%ls", IDS_CREDITS_DESPROG, NO_TRANSLATED_STRING, eLargeText},
-    {L"Aron Nieminen", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
+    {"%s", IDS_CREDITS_DESPROG, NO_TRANSLATED_STRING, eLargeText},
+    {"Aron Nieminen", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
      eSmallText},  // extra blank line
-    {L"%ls", IDS_CREDITS_CHIEFARCHITECT, NO_TRANSLATED_STRING, eLargeText},
-    {L"Daniel Frisk", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"%ls", IDS_CREDITS_CODENINJA, NO_TRANSLATED_STRING, eLargeText},
-    {L"%ls", IDS_CREDITS_TOBIAS_MOLLSTAM, NO_TRANSLATED_STRING, eSmallText},
-    {L"%ls", IDS_CREDITS_OFFICEDJ, NO_TRANSLATED_STRING, eLargeText},
-    {L"Kristoffer Jelbring", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
+    {"%s", IDS_CREDITS_CHIEFARCHITECT, NO_TRANSLATED_STRING, eLargeText},
+    {"Daniel Frisk", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"%s", IDS_CREDITS_CODENINJA, NO_TRANSLATED_STRING, eLargeText},
+    {"%s", IDS_CREDITS_TOBIAS_MOLLSTAM, NO_TRANSLATED_STRING, eSmallText},
+    {"%s", IDS_CREDITS_OFFICEDJ, NO_TRANSLATED_STRING, eLargeText},
+    {"Kristoffer Jelbring", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
      eSmallText},
-    {L"%ls", IDS_CREDITS_DEVELOPER, NO_TRANSLATED_STRING, eLargeText},
-    {L"Leonard Axelsson", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
+    {"%s", IDS_CREDITS_DEVELOPER, NO_TRANSLATED_STRING, eLargeText},
+    {"Leonard Axelsson", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
      eSmallText},
-    {L"%ls", IDS_CREDITS_BULLYCOORD, NO_TRANSLATED_STRING, eLargeText},
-    {L"Jakob Porser", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"%ls", IDS_CREDITS_ARTDEVELOPER, NO_TRANSLATED_STRING, eLargeText},
-    {L"Junkboy", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"%ls", IDS_CREDITS_EXPLODANIM, NO_TRANSLATED_STRING, eLargeText},
-    {L"Mattis Grahm", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"%ls", IDS_CREDITS_CONCEPTART, NO_TRANSLATED_STRING, eLargeText},
-    {L"Henrik Petterson", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
+    {"%s", IDS_CREDITS_BULLYCOORD, NO_TRANSLATED_STRING, eLargeText},
+    {"Jakob Porser", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"%s", IDS_CREDITS_ARTDEVELOPER, NO_TRANSLATED_STRING, eLargeText},
+    {"Junkboy", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"%s", IDS_CREDITS_EXPLODANIM, NO_TRANSLATED_STRING, eLargeText},
+    {"Mattis Grahm", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"%s", IDS_CREDITS_CONCEPTART, NO_TRANSLATED_STRING, eLargeText},
+    {"Henrik Petterson", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
      eSmallText},
-    {L"%ls", IDS_CREDITS_CRUNCHER, NO_TRANSLATED_STRING, eLargeText},
-    {L"Patrick Geuder", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"%ls", IDS_CREDITS_MUSICANDSOUNDS, NO_TRANSLATED_STRING, eLargeText},
-    {L"Daniel Rosenfeld (C418)", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
+    {"%s", IDS_CREDITS_CRUNCHER, NO_TRANSLATED_STRING, eLargeText},
+    {"Patrick Geuder", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"%s", IDS_CREDITS_MUSICANDSOUNDS, NO_TRANSLATED_STRING, eLargeText},
+    {"Daniel Rosenfeld (C418)", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
      eSmallText},
-    {L"", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
+    {"", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
      eSmallText},  // extra blank line
 
     // Added credit for horses
-    {L"Developers of Mo' Creatures:", NO_TRANSLATED_STRING,
+    {"Developers of Mo' Creatures:", NO_TRANSLATED_STRING,
      NO_TRANSLATED_STRING, eExtraLargeText},
-    {L"John Olarte (DrZhark)", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
+    {"John Olarte (DrZhark)", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
      eSmallText},
-    {L"Kent Christian Jensen", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
+    {"Kent Christian Jensen", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
      eSmallText},
-    {L"Dan Roque", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
+    {"Dan Roque", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
      eSmallText},  // extra blank line
 
-    {L"4J Studios", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
+    {"4J Studios", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
      eExtraLargeText},
-    {L"%ls", IDS_CREDITS_PROGRAMMING, NO_TRANSLATED_STRING, eLargeText},
-    {L"Paddy Burns", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"Richard Reavy", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"Stuart Ross", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"James Vaughan", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"Mark Hughes", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"Harry Gordon", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"Thomas Kronberg", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
+    {"%s", IDS_CREDITS_PROGRAMMING, NO_TRANSLATED_STRING, eLargeText},
+    {"Paddy Burns", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"Richard Reavy", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"Stuart Ross", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"James Vaughan", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"Mark Hughes", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"Harry Gordon", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"Thomas Kronberg", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
      eSmallText},
 
-    {L"%ls", IDS_CREDITS_ART, NO_TRANSLATED_STRING, eLargeText},
-    {L"David Keningale", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
+    {"%s", IDS_CREDITS_ART, NO_TRANSLATED_STRING, eLargeText},
+    {"David Keningale", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
      eSmallText},
-    {L"Alan Redmond", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"Chris Reeves", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"Kate Wright", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"Michael Hansen", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"Donald Robertson", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
+    {"Alan Redmond", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"Chris Reeves", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"Kate Wright", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"Michael Hansen", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"Donald Robertson", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
      eSmallText},
-    {L"Jamie Keddie", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"Thomas Naylor", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"Brian Lindsay", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"Hannah Watts", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"Rebecca O'Neil", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"Jamie Keddie", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"Thomas Naylor", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"Brian Lindsay", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"Hannah Watts", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"Rebecca O'Neil", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
 
-    {L"%ls", IDS_CREDITS_QA, NO_TRANSLATED_STRING, eLargeText},
-    {L"Steven Gary Woodward", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
+    {"%s", IDS_CREDITS_QA, NO_TRANSLATED_STRING, eLargeText},
+    {"Steven Gary Woodward", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
      eSmallText},
-    {L"George Vaughan", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
+    {"George Vaughan", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
      eSmallText},  // extra blank line
-    {L"%ls", IDS_CREDITS_SPECIALTHANKS, NO_TRANSLATED_STRING, eLargeText},
-    {L"Chris van der Kuyl", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
+    {"%s", IDS_CREDITS_SPECIALTHANKS, NO_TRANSLATED_STRING, eLargeText},
+    {"Chris van der Kuyl", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
      eSmallText},
-    {L"Roni Percy", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"Anne Clarke", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
-    {L"Anthony Kent", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"Roni Percy", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"Anne Clarke", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
+    {"Anthony Kent", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING, eSmallText},
 
     // Miles & Iggy credits
-    {L"", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
+    {"", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
      eSmallText},                                      // extra blank line
-    {L"", CREDIT_ICON, eCreditIcon_Iggy, eSmallText},  // extra blank line
-    {L"Uses Iggy.", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
+    {"", CREDIT_ICON, eCreditIcon_Iggy, eSmallText},  // extra blank line
+    {"Uses Iggy.", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
      eSmallText},  // extra blank line
-    {L"Copyright (C) 2009-2014 by RAD Game Tools, Inc.", NO_TRANSLATED_STRING,
+    {"Copyright (C) 2009-2014 by RAD Game Tools, Inc.", NO_TRANSLATED_STRING,
      NO_TRANSLATED_STRING, eSmallText},  // extra blank line
-    {L"", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
+    {"", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
      eSmallText},                                       // extra blank line
-    {L"", CREDIT_ICON, eCreditIcon_Miles, eSmallText},  // extra blank line
-    {L"Uses Miles Sound System.", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
+    {"", CREDIT_ICON, eCreditIcon_Miles, eSmallText},  // extra blank line
+    {"Uses Miles Sound System.", NO_TRANSLATED_STRING, NO_TRANSLATED_STRING,
      eSmallText},  // extra blank line
-    {L"Copyright (C) 1991-2014 by RAD Game Tools, Inc.", NO_TRANSLATED_STRING,
+    {"Copyright (C) 1991-2014 by RAD Game Tools, Inc.", NO_TRANSLATED_STRING,
      NO_TRANSLATED_STRING, eSmallText},  // extra blank line
 };
 
@@ -164,13 +164,13 @@ UIScene_Credits::UIScene_Credits(int iPad, void* initData, UILayer* parentLayer)
             setNextLabel(gs_aCreditDefs[i].m_Text, gs_aCreditDefs[i].m_eType);
         } else  // using additional translated string.
         {
-            wchar_t* creditsString = new wchar_t[128];
+            char* creditsString = new char[128];
             if (gs_aCreditDefs[i].m_iStringID[1] != NO_TRANSLATED_STRING) {
-                swprintf(creditsString, 128, gs_aCreditDefs[i].m_Text,
+                snprintf(creditsString, 128, gs_aCreditDefs[i].m_Text,
                          app.GetString(gs_aCreditDefs[i].m_iStringID[0]),
                          app.GetString(gs_aCreditDefs[i].m_iStringID[1]));
             } else {
-                swprintf(creditsString, 128, gs_aCreditDefs[i].m_Text,
+                snprintf(creditsString, 128, gs_aCreditDefs[i].m_Text,
                          app.GetString(gs_aCreditDefs[i].m_iStringID[0]));
             }
             setNextLabel(creditsString, gs_aCreditDefs[i].m_eType);
@@ -179,7 +179,7 @@ UIScene_Credits::UIScene_Credits(int iPad, void* initData, UILayer* parentLayer)
     }
 }
 
-std::wstring UIScene_Credits::getMoviePath() { return L"Credits"; }
+std::string UIScene_Credits::getMoviePath() { return "Credits"; }
 
 void UIScene_Credits::updateTooltips() {
     ui.SetTooltips(m_iPad, -1, IDS_TOOLTIPS_BACK);
@@ -228,30 +228,30 @@ void UIScene_Credits::tick() {
                 addImage((ECreditIcons)pDef->m_iStringID[1]);
             } else  // using additional translated string.
             {
-                std::wstring sanitisedString = std::wstring(pDef->m_Text);
+                std::string sanitisedString = std::string(pDef->m_Text);
 
                 // 4J-JEV: Some DLC credits contain copyright or registered
                 // symbols that are not rendered in some fonts.
                 if (!ui.UsingBitmapFont()) {
                     sanitisedString =
-                        replaceAll(sanitisedString, L"\u00A9", L"(C)");
+                        replaceAll(sanitisedString, "\u00A9", "(C)");
                     sanitisedString =
-                        replaceAll(sanitisedString, L"\u00AE", L"(R)");
+                        replaceAll(sanitisedString, "\u00AE", "(R)");
                     sanitisedString =
-                        replaceAll(sanitisedString, L"\u2013", L"-");
+                        replaceAll(sanitisedString, "\u2013", "-");
                 }
 
-                wchar_t* creditsString = new wchar_t[128];
+                char* creditsString = new char[128];
                 if (pDef->m_iStringID[0] == NO_TRANSLATED_STRING) {
                     memset(creditsString, 0, 128);
                     memcpy(creditsString, sanitisedString.c_str(),
-                           sizeof(wchar_t) * sanitisedString.length());
+                           sizeof(char) * sanitisedString.length());
                 } else if (pDef->m_iStringID[1] != NO_TRANSLATED_STRING) {
-                    swprintf(creditsString, 128, sanitisedString.c_str(),
+                    snprintf(creditsString, 128, sanitisedString.c_str(),
                              app.GetString(pDef->m_iStringID[0]),
                              app.GetString(pDef->m_iStringID[1]));
                 } else {
-                    swprintf(creditsString, 128, sanitisedString.c_str(),
+                    snprintf(creditsString, 128, sanitisedString.c_str(),
                              app.GetString(pDef->m_iStringID[0]));
                 }
 
@@ -265,7 +265,7 @@ void UIScene_Credits::tick() {
 void UIScene_Credits::handleInput(int iPad, int key, bool repeat, bool pressed,
                                   bool released, bool& handled) {
     // app.DebugPrintf("UIScene_DebugOverlay handling input for pad %d, key %d,
-    // down- %ls, pressed- %ls, released- %ls\n", iPad, key,
+    // down- %s, pressed- %s, released- %s\n", iPad, key,
     // down?"true":"false", pressed?"true":"false", released?"true":"false");
 
     ui.AnimateKeyPress(m_iPad, key, repeat, pressed, released);
@@ -284,18 +284,16 @@ void UIScene_Credits::handleInput(int iPad, int key, bool repeat, bool pressed,
     }
 }
 
-void UIScene_Credits::setNextLabel(const std::wstring& label,
+void UIScene_Credits::setNextLabel(const std::string& label,
                                    ECreditTextTypes size) {
     IggyDataValue result;
     IggyDataValue value[3];
 
-    const std::u16string convLabel = wstring_to_u16string(label);
-
-    IggyStringUTF16 stringVal;
-    stringVal.string = convLabel.c_str();
-    stringVal.length = convLabel.length();
-    value[0].type = IGGY_DATATYPE_string_UTF16;
-    value[0].string16 = stringVal;
+    IggyStringUTF8 stringVal;
+    stringVal.string = const_cast<char*>(label.c_str());
+    stringVal.length = label.length();
+    value[0].type = IGGY_DATATYPE_string_UTF8;
+    value[0].string8 = stringVal;
 
     value[1].type = IGGY_DATATYPE_number;
     value[1].number = (int)size;

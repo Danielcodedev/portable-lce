@@ -8,21 +8,21 @@
 class DLCTextureFile : public DLCFile {
 private:
     bool m_bIsAnim;
-    std::wstring m_animString;
+    std::string m_animString;
 
     std::uint8_t* m_pbData;
     std::uint32_t m_dataBytes;
 
 public:
-    DLCTextureFile(const std::wstring& path);
+    DLCTextureFile(const std::string& path);
 
     virtual void addData(std::uint8_t* pbData, std::uint32_t dataBytes);
     virtual std::uint8_t* getData(std::uint32_t& dataBytes);
 
     virtual void addParameter(DLCManager::EDLCParameterType type,
-                              const std::wstring& value);
+                              const std::string& value);
 
-    virtual std::wstring getParameterAsString(
+    virtual std::string getParameterAsString(
         DLCManager::EDLCParameterType type);
     virtual bool getParameterAsBool(DLCManager::EDLCParameterType type);
 };

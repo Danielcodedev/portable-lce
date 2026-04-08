@@ -414,7 +414,7 @@ std::shared_ptr<ItemInstance> AnvilMenu::quickMoveStack(
     return clicked;
 }
 
-void AnvilMenu::setItemName(const std::wstring& name) {
+void AnvilMenu::setItemName(const std::string& name) {
     itemName = name;
     if (getSlot(RESULT_SLOT)->hasItem()) {
         std::shared_ptr<ItemInstance> item = getSlot(RESULT_SLOT)->getItem();

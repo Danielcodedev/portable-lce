@@ -22,7 +22,7 @@ void ArrowRenderer::render(std::shared_ptr<Entity> _arrow, double x, double y,
     // type Arrow rather than shared_ptr<Entity>  we have here - do some casting
     // around instead
     std::shared_ptr<Arrow> arrow = std::dynamic_pointer_cast<Arrow>(_arrow);
-    bindTexture(_arrow);  // 4J - was L"/item/arrows.png"
+    bindTexture(_arrow);  // 4J - was "/item/arrows.png"
 
     glPushMatrix();
 

@@ -45,8 +45,8 @@ void IUIScene_StartGame::HandleDLCMountingComplete() {
         std::uint8_t* imageData = tp->getPackIcon(imageBytes);
 
         if (imageBytes > 0 && imageData) {
-            wchar_t imageName[64];
-            swprintf(imageName, 64, L"tpack%08x", tp->getId());
+            char imageName[64];
+            snprintf(imageName, 64, "tpack%08x", tp->getId());
             registerSubstitutionTexture(imageName, imageData, imageBytes);
             m_texturePackList.addPack(i, imageName);
         }
@@ -148,9 +148,9 @@ void IUIScene_StartGame::UpdateTexturePackDescription(int index) {
             StringTable* pStringTable =
                 new StringTable(pbFileData, dwFileBytes);
             m_texturePackTitle.SetText(
-                pStringTable->getString(L"IDS_DISPLAY_NAME"));
+                pStringTable->getString("IDS_DISPLAY_NAME"));
             m_texturePackDescription.SetText(
-                pStringTable->getString(L"IDS_TP_DESCRIPTION"));
+                pStringTable->getString("IDS_TP_DESCRIPTION"));
         }
 
         app.GetFileFromTPD(eTPDFileType_Icon, pbData, dwBytes, &pbFileData,
@@ -179,23 +179,23 @@ void IUIScene_StartGame::UpdateTexturePackDescription(int index) {
 
         // if(imageBytes > 0 && imageData)
         //{
-        //	registerSubstitutionTexture(L"texturePackIcon", imageData,
+        //	registerSubstitutionTexture("texturePackIcon", imageData,
         // imageBytes);
-        //	m_bitmapTexturePackIcon.setTextureName(L"texturePackIcon");
+        //	m_bitmapTexturePackIcon.setTextureName("texturePackIcon");
         // }
 
-        wchar_t imageName[64];
-        swprintf(imageName, 64, L"tpack%08x", tp->getId());
+        char imageName[64];
+        snprintf(imageName, 64, "tpack%08x", tp->getId());
         m_bitmapTexturePackIcon.setTextureName(imageName);
 
         imageData = tp->getPackComparison(imageBytes);
 
         if (imageBytes > 0 && imageData) {
-            swprintf(imageName, 64, L"texturePackComparison%08x", tp->getId());
+            snprintf(imageName, 64, "texturePackComparison%08x", tp->getId());
             registerSubstitutionTexture(imageName, imageData, imageBytes);
             m_bitmapComparison.setTextureName(imageName);
         } else {
-            m_bitmapComparison.setTextureName(L"");
+            m_bitmapComparison.setTextureName("");
         }
     }
 }

@@ -27,14 +27,14 @@ UIScene_EULA::UIScene_EULA(int iPad, void* initData, UILayer* parentLayer)
 
     m_buttonConfirm.init(app.GetString(IDS_TOOLTIPS_ACCEPT), eControl_Confirm);
 
-    std::wstring EULA = L"";
+    std::string EULA = "";
 
-    std::vector<std::wstring> paragraphs;
+    std::vector<std::string> paragraphs;
     int lastIndex = 0;
-    for (int index = EULA.find(L"\r\n", lastIndex, 2);
-         index != std::wstring::npos;
-         index = EULA.find(L"\r\n", lastIndex, 2)) {
-        paragraphs.push_back(EULA.substr(lastIndex, index - lastIndex) + L" ");
+    for (int index = EULA.find("\r\n", lastIndex, 2);
+         index != std::string::npos;
+         index = EULA.find("\r\n", lastIndex, 2)) {
+        paragraphs.push_back(EULA.substr(lastIndex, index - lastIndex) + " ");
         lastIndex = index + 2;
     }
     paragraphs.push_back(EULA.substr(lastIndex, EULA.length() - lastIndex));
@@ -63,7 +63,7 @@ UIScene_EULA::~UIScene_EULA() {
     m_parentLayer->removeComponent(eUIComponent_Logo);
 }
 
-std::wstring UIScene_EULA::getMoviePath() { return L"EULA"; }
+std::string UIScene_EULA::getMoviePath() { return "EULA"; }
 
 void UIScene_EULA::updateTooltips() {
     ui.SetTooltips(DEFAULT_XUI_MENU_USER, IDS_TOOLTIPS_SELECT);

@@ -288,10 +288,10 @@ void PlayerRenderer::additionalRendering(std::shared_ptr<LivingEntity> _mob,
                 float s = 17 / 16.0f;
                 glScalef(s, -s, -s);
 
-                std::wstring extra = L"";
+                std::string extra = "";
                 if (headGear->hasTag() &&
-                    headGear->getTag()->contains(L"SkullOwner")) {
-                    extra = headGear->getTag()->getString(L"SkullOwner");
+                    headGear->getTag()->contains("SkullOwner")) {
+                    extra = headGear->getTag()->getString("SkullOwner");
                 }
                 SkullTileRenderer::instance->renderSkull(
                     -0.5f, 0, -0.5f, Facing::UP, 180, headGear->getAuxValue(),
@@ -304,7 +304,7 @@ void PlayerRenderer::additionalRendering(std::shared_ptr<LivingEntity> _mob,
 
     // need to add a custom texture for deadmau5
     if (mob != nullptr && gameServices().isXuidDeadmau5(mob->getXuid()) &&
-        bindTexture(mob->customTextureUrl, L"")) {
+        bindTexture(mob->customTextureUrl, "")) {
         for (int i = 0; i < 2; i++) {
             float yr = (mob->yRotO + (mob->yRot - mob->yRotO) * a) -
                        (mob->yBodyRotO + (mob->yBodyRot - mob->yBodyRotO) * a);
@@ -328,7 +328,7 @@ void PlayerRenderer::additionalRendering(std::shared_ptr<LivingEntity> _mob,
     /*bool loaded = mob->getCloakTexture()->isLoaded();
 bool b1 = !mob->isInvisible();
 bool b2 = !mob->isCapeHidden();*/
-    if (bindTexture(mob->customTextureUrl2, L"") && !mob->isInvisible()) {
+    if (bindTexture(mob->customTextureUrl2, "") && !mob->isInvisible()) {
         glPushMatrix();
         glTranslatef(0, 0, 2 / 16.0f);
 
@@ -459,7 +459,7 @@ bool b2 = !mob->isCapeHidden();*/
 
 void PlayerRenderer::renderNameTags(std::shared_ptr<LivingEntity> player,
                                     double x, double y, double z,
-                                    std::wstring msg, float scale,
+                                    std::string msg, float scale,
                                     double dist) {
     LivingEntityRenderer::renderNameTags(player, x, y, z, msg, scale, dist);
 }

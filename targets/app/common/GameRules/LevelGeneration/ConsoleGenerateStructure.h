@@ -33,8 +33,8 @@ public:
         ConsoleGameRules::EGameRuleType ruleType);
 
     virtual void writeAttributes(DataOutputStream* dos, unsigned int numAttrs);
-    virtual void addAttribute(const std::wstring& attributeName,
-                              const std::wstring& attributeValue);
+    virtual void addAttribute(const std::string& attributeName,
+                              const std::string& attributeValue);
 
     // StructurePiece
     virtual BoundingBox* getBoundingBox();

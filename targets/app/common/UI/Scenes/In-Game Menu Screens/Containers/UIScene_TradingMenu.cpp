@@ -38,12 +38,12 @@ UIScene_TradingMenu::UIScene_TradingMenu(int iPad, void* _initData,
 
     // 4J-PB - "Villager" appears for a short time on opening the trading menu
     // m_labelTrading.init( app.GetString(IDS_VILLAGER) );
-    m_labelTrading.init(L"");
+    m_labelTrading.init("");
     m_labelInventory.init(app.GetString(IDS_INVENTORY));
     m_labelRequired.init(app.GetString(IDS_REQUIRED_ITEMS_FOR_TRADE));
 
-    m_labelRequest1.init(L"");
-    m_labelRequest2.init(L"");
+    m_labelRequest1.init("");
+    m_labelRequest2.init("");
 
     TradingScreenInput* initData = (TradingScreenInput*)_initData;
     m_merchant = initData->trader;
@@ -86,11 +86,11 @@ UIScene_TradingMenu::UIScene_TradingMenu(int iPad, void* _initData,
     app.SetRichPresenceContext(iPad, CONTEXT_GAME_STATE_TRADING);
 }
 
-std::wstring UIScene_TradingMenu::getMoviePath() {
+std::string UIScene_TradingMenu::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1) {
-        return L"TradingMenuSplit";
+        return "TradingMenuSplit";
     } else {
-        return L"TradingMenu";
+        return "TradingMenu";
     }
 }
 
@@ -245,15 +245,15 @@ void UIScene_TradingMenu::moveSelector(bool right) {
                                             m_funcMoveSelector, 1, value);
 }
 
-void UIScene_TradingMenu::setTitle(const std::wstring& name) {
+void UIScene_TradingMenu::setTitle(const std::string& name) {
     m_labelTrading.setLabel(name);
 }
 
-void UIScene_TradingMenu::setRequest1Name(const std::wstring& name) {
+void UIScene_TradingMenu::setRequest1Name(const std::string& name) {
     m_labelRequest1.setLabel(name);
 }
 
-void UIScene_TradingMenu::setRequest2Name(const std::wstring& name) {
+void UIScene_TradingMenu::setRequest2Name(const std::string& name) {
     m_labelRequest2.setLabel(name);
 }
 
@@ -271,17 +271,16 @@ void UIScene_TradingMenu::setTradeRedBox(int index, bool show) {
 
 void UIScene_TradingMenu::setOfferDescription(
     std::vector<HtmlString>* description) {
-    std::wstring descriptionStr = HtmlString::Compose(description);
-    const std::u16string conv = wstring_to_u16string(descriptionStr);
+    std::string descriptionStr = HtmlString::Compose(description);
 
     IggyDataValue result;
     IggyDataValue value[1];
 
-    IggyStringUTF16 stringVal;
-    stringVal.string = conv.c_str();
-    stringVal.length = conv.length();
-    value[0].type = IGGY_DATATYPE_string_UTF16;
-    value[0].string16 = stringVal;
+    IggyStringUTF8 stringVal;
+    stringVal.string = const_cast<char*>(descriptionStr.c_str());
+    stringVal.length = descriptionStr.length();
+    value[0].type = IGGY_DATATYPE_string_UTF8;
+    value[0].string8 = stringVal;
 
     IggyResult out = IggyPlayerCallMethodRS(
         getMovie(), &result, IggyPlayerRootPath(getMovie()),

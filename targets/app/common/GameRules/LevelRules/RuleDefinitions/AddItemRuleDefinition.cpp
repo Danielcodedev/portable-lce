@@ -55,29 +55,29 @@ GameRuleDefinition* AddItemRuleDefinition::addChild(
     return rule;
 }
 
-void AddItemRuleDefinition::addAttribute(const std::wstring& attributeName,
-                                         const std::wstring& attributeValue) {
-    if (attributeName.compare(L"itemId") == 0) {
+void AddItemRuleDefinition::addAttribute(const std::string& attributeName,
+                                         const std::string& attributeValue) {
+    if (attributeName.compare("itemId") == 0) {
         int value = fromWString<int>(attributeValue);
         m_itemId = value;
         // app.DebugPrintf(2,"AddItemRuleDefinition: Adding parameter
         // itemId=%d\n",m_itemId);
-    } else if (attributeName.compare(L"quantity") == 0) {
+    } else if (attributeName.compare("quantity") == 0) {
         int value = fromWString<int>(attributeValue);
         m_quantity = value;
         // app.DebugPrintf(2,"AddItemRuleDefinition: Adding parameter
         // quantity=%d\n",m_quantity);
-    } else if (attributeName.compare(L"auxValue") == 0) {
+    } else if (attributeName.compare("auxValue") == 0) {
         int value = fromWString<int>(attributeValue);
         m_auxValue = value;
         // app.DebugPrintf(2,"AddItemRuleDefinition: Adding parameter
         // auxValue=%d\n",m_auxValue);
-    } else if (attributeName.compare(L"dataTag") == 0) {
+    } else if (attributeName.compare("dataTag") == 0) {
         int value = fromWString<int>(attributeValue);
         m_dataTag = value;
         // app.DebugPrintf(2,"AddItemRuleDefinition: Adding parameter
         // dataTag=%d\n",m_dataTag);
-    } else if (attributeName.compare(L"slot") == 0) {
+    } else if (attributeName.compare("slot") == 0) {
         int value = fromWString<int>(attributeValue);
         m_slot = value;
         // app.DebugPrintf(2,"AddItemRuleDefinition: Adding parameter

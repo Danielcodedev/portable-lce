@@ -50,7 +50,7 @@ void RespawnPacket::read(DataInputStream* dis)  // throws IOException
     dimension = dis->readByte();
     playerGameType = GameType::byId(dis->readByte());
     mapHeight = dis->readShort();
-    std::wstring typeName = readUtf(dis, 16);
+    std::string typeName = readUtf(dis, 16);
     m_pLevelType = LevelType::getLevelType(typeName);
     if (m_pLevelType == nullptr) {
         m_pLevelType = LevelType::lvl_normal;
@@ -72,7 +72,7 @@ void RespawnPacket::write(DataOutputStream* dos)  // throws IOException
     dos->writeByte(playerGameType->getId());
     dos->writeShort(mapHeight);
     if (m_pLevelType == nullptr) {
-        writeUtf(L"", dos);
+        writeUtf("", dos);
     } else {
         writeUtf(m_pLevelType->getGeneratorName(), dos);
     }

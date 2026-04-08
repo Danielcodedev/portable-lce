@@ -56,11 +56,11 @@ UIScene_DeathMenu::~UIScene_DeathMenu() {
     }
 }
 
-std::wstring UIScene_DeathMenu::getMoviePath() {
+std::string UIScene_DeathMenu::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1) {
-        return L"DeathMenuSplit";
+        return "DeathMenuSplit";
     } else {
-        return L"DeathMenu";
+        return "DeathMenu";
     }
 }
 

@@ -34,7 +34,7 @@ void GLRenderer::BeginConditionalSurvey(int) {}
 void GLRenderer::EndConditionalSurvey() {}
 void GLRenderer::BeginConditionalRendering(int) {}
 void GLRenderer::EndConditionalRendering() {}
-void GLRenderer::BeginEvent(const wchar_t*) {}
+void GLRenderer::BeginEvent(const char*) {}
 void GLRenderer::EndEvent() {}
 void GLRenderer::Tick() {}
 

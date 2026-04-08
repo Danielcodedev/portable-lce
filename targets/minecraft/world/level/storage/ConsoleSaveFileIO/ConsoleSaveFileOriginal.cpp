@@ -43,7 +43,7 @@ unsigned int ConsoleSaveFileOriginal::pagesCommitted = 0;
 void* ConsoleSaveFileOriginal::pvHeap = nullptr;
 
 ConsoleSaveFileOriginal::ConsoleSaveFileOriginal(
-    const std::wstring& fileName, void* pvSaveData /*= nullptr*/,
+    const std::string& fileName, void* pvSaveData /*= nullptr*/,
     unsigned int initialFileSize /*= 0*/, bool forceCleanSave /*= false*/,
     ESavePlatform plat /*= SAVE_FILE_PLATFORM_LOCAL*/) {
     // One time initialise of static stuff required for our storage
@@ -316,7 +316,7 @@ bool ConsoleSaveFileOriginal::writeFile(FileEntry* file, const void* lpBuffer,
 
     file->currentFilePointer += *lpNumberOfBytesWritten;
 
-    // wprintf(L"Wrote %d bytes to %s, new file pointer is %I64d\n",
+    // printf("Wrote %d bytes to %s, new file pointer is %I64d\n",
     // *lpNumberOfBytesWritten, file->data.filename, file->currentFilePointer);
 
     file->updateLastModifiedTime();
@@ -350,7 +350,7 @@ bool ConsoleSaveFileOriginal::zeroFile(FileEntry* file,
 
     file->currentFilePointer += *lpNumberOfBytesWritten;
 
-    // wprintf(L"Wrote %d bytes to %s, new file pointer is %I64d\n",
+    // printf("Wrote %d bytes to %s, new file pointer is %I64d\n",
     // *lpNumberOfBytesWritten, file->data.filename, file->currentFilePointer);
 
     file->updateLastModifiedTime();
@@ -390,7 +390,7 @@ bool ConsoleSaveFileOriginal::readFile(FileEntry* file, void* lpBuffer,
 
     file->currentFilePointer += *lpNumberOfBytesRead;
 
-    // wprintf(L"Read %d bytes from %s, new file pointer is %I64d\n",
+    // printf("Read %d bytes from %s, new file pointer is %I64d\n",
     // *lpNumberOfBytesRead, file->data.filename, file->currentFilePointer);
 
     ReleaseSaveAccess();
@@ -719,11 +719,11 @@ void ConsoleSaveFileOriginal::DebugFlushToFile(
     unsigned int fileSize = header.GetFileSize();
 
     unsigned int numberOfBytesWritten = 0;
-    File targetFileDir(L"Saves");
+    File targetFileDir("Saves");
 
     if (!targetFileDir.exists()) targetFileDir.mkdir();
 
-    wchar_t* fileName = new wchar_t[XCONTENT_MAX_FILENAME_LENGTH + 1];
+    char* fileName = new char[XCONTENT_MAX_FILENAME_LENGTH + 1];
 
     std::time_t now = std::time(nullptr);
     std::tm t = *std::gmtime(&now);
@@ -731,17 +731,17 @@ void ConsoleSaveFileOriginal::DebugFlushToFile(
     // 14 chars for the digits
     // 11 chars for the separators + suffix
     // 25 chars total
-    std::wstring cutFileName = m_fileName;
+    std::string cutFileName = m_fileName;
     if (m_fileName.length() > XCONTENT_MAX_FILENAME_LENGTH - 25) {
         cutFileName = m_fileName.substr(0, XCONTENT_MAX_FILENAME_LENGTH - 25);
     }
-    swprintf(fileName, XCONTENT_MAX_FILENAME_LENGTH + 1,
-             L"\\v%04d-%ls%02d.%02d.%02d.%02d.%02d.mcs", VER_PRODUCTBUILD,
+    snprintf(fileName, XCONTENT_MAX_FILENAME_LENGTH + 1,
+             "\\v%04d-%s%02d.%02d.%02d.%02d.%02d.mcs", VER_PRODUCTBUILD,
              cutFileName.c_str(), t.tm_mon + 1, t.tm_mday, t.tm_hour, t.tm_min,
              t.tm_sec);
 
-    const std::wstring outputPath =
-        targetFileDir.getPath() + std::wstring(fileName);
+    const std::string outputPath =
+        targetFileDir.getPath() + std::string(fileName);
     bool writeSucceeded = false;
 
     if (compressedData != nullptr && compressedDataSize > 0) {
@@ -766,10 +766,10 @@ unsigned int ConsoleSaveFileOriginal::getSizeOnDisk() {
     return header.GetFileSize();
 }
 
-std::wstring ConsoleSaveFileOriginal::getFilename() { return m_fileName; }
+std::string ConsoleSaveFileOriginal::getFilename() { return m_fileName; }
 
 std::vector<FileEntry*>* ConsoleSaveFileOriginal::getFilesWithPrefix(
-    const std::wstring& prefix) {
+    const std::string& prefix) {
     return header.getFilesWithPrefix(prefix);
 }
 
@@ -862,17 +862,17 @@ void ConsoleSaveFileOriginal::ConvertToLocalPlatform() {
     }
     // convert each of the region files to the local platform
     std::vector<FileEntry*>* allFilesInSave =
-        getFilesWithPrefix(std::wstring(L""));
+        getFilesWithPrefix(std::string(""));
     for (auto it = allFilesInSave->begin(); it < allFilesInSave->end(); ++it) {
         FileEntry* fe = *it;
-        std::wstring fName(fe->data.filename);
-        std::wstring suffix(L".mcr");
+        std::string fName(fe->data.filename);
+        std::string suffix(".mcr");
         if (fName.compare(fName.length() - suffix.length(), suffix.length(),
                           suffix) == 0) {
-            Log::info("Processing a region file: %ls\n", fName.c_str());
+            Log::info("Processing a region file: %s\n", fName.c_str());
             ConvertRegionFile(File(fe->data.filename));
         } else {
-            Log::info("%ls is not a region file, ignoring\n",
+            Log::info("%s is not a region file, ignoring\n",
                             fName.c_str());
         }
     }

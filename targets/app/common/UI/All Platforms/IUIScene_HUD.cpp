@@ -50,7 +50,7 @@ IUIScene_HUD::IUIScene_HUD() {
     m_showDragonHealth = false;
     m_ticksWithNoBoss = 0;
     m_uiSelectedItemOpacityCountDown = 0;
-    m_displayName = L"";
+    m_displayName = "";
     m_lastShowDisplayName = true;
     m_bRidingHorse = true;
     m_horseHealth = 1;

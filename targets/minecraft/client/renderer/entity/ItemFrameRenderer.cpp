@@ -34,7 +34,7 @@ ResourceLocation ItemFrameRenderer::MAP_BACKGROUND_LOCATION =
     ResourceLocation(TN_MISC_MAPBG);
 
 void ItemFrameRenderer::registerTerrainTextures(IconRegister* iconRegister) {
-    backTexture = iconRegister->registerIcon(L"itemframe_back");
+    backTexture = iconRegister->registerIcon("itemframe_back");
 }
 
 void ItemFrameRenderer::render(std::shared_ptr<Entity> _itemframe, double x,

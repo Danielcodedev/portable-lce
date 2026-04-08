@@ -44,31 +44,31 @@ int McRegionChunkStorage::s_runningThreadCount = 0;
 C4JThread* McRegionChunkStorage::s_saveThreads[3];
 
 McRegionChunkStorage::McRegionChunkStorage(ConsoleSaveFile* saveFile,
-                                           const std::wstring& prefix)
+                                           const std::string& prefix)
     : m_prefix(prefix) {
     m_saveFile = saveFile;
 
     // Make sure that if there are any files for regions to be created, that
     // they are created in the order that suits us for making the initial level
     // save work fast
-    if (prefix == L"") {
-        m_saveFile->createFile(ConsoleSavePath(L"DIM-1r.-1.-1.mcr"));
-        m_saveFile->createFile(ConsoleSavePath(L"DIM-1r.0.-1.mcr"));
-        m_saveFile->createFile(ConsoleSavePath(L"DIM-1r.0.0.mcr"));
-        m_saveFile->createFile(ConsoleSavePath(L"DIM-1r.-1.0.mcr"));
-        m_saveFile->createFile(ConsoleSavePath(L"DIM1/r.-1.-1.mcr"));
-        m_saveFile->createFile(ConsoleSavePath(L"DIM1/r.0.-1.mcr"));
-        m_saveFile->createFile(ConsoleSavePath(L"DIM1/r.0.0.mcr"));
-        m_saveFile->createFile(ConsoleSavePath(L"DIM1/r.-1.0.mcr"));
-        m_saveFile->createFile(ConsoleSavePath(L"r.-1.-1.mcr"));
-        m_saveFile->createFile(ConsoleSavePath(L"r.0.-1.mcr"));
-        m_saveFile->createFile(ConsoleSavePath(L"r.0.0.mcr"));
-        m_saveFile->createFile(ConsoleSavePath(L"r.-1.0.mcr"));
+    if (prefix == "") {
+        m_saveFile->createFile(ConsoleSavePath("DIM-1r.-1.-1.mcr"));
+        m_saveFile->createFile(ConsoleSavePath("DIM-1r.0.-1.mcr"));
+        m_saveFile->createFile(ConsoleSavePath("DIM-1r.0.0.mcr"));
+        m_saveFile->createFile(ConsoleSavePath("DIM-1r.-1.0.mcr"));
+        m_saveFile->createFile(ConsoleSavePath("DIM1/r.-1.-1.mcr"));
+        m_saveFile->createFile(ConsoleSavePath("DIM1/r.0.-1.mcr"));
+        m_saveFile->createFile(ConsoleSavePath("DIM1/r.0.0.mcr"));
+        m_saveFile->createFile(ConsoleSavePath("DIM1/r.-1.0.mcr"));
+        m_saveFile->createFile(ConsoleSavePath("r.-1.-1.mcr"));
+        m_saveFile->createFile(ConsoleSavePath("r.0.-1.mcr"));
+        m_saveFile->createFile(ConsoleSavePath("r.0.0.mcr"));
+        m_saveFile->createFile(ConsoleSavePath("r.-1.0.mcr"));
     }
 
 #if defined(SPLIT_SAVES)
     ConsoleSavePath currentFile =
-        ConsoleSavePath(m_prefix + std::wstring(L"entities.dat"));
+        ConsoleSavePath(m_prefix + std::string("entities.dat"));
 
     if (m_saveFile->doesFileExist(currentFile)) {
         ConsoleSaveFileInputStream fis =
@@ -140,7 +140,7 @@ LevelChunk* McRegionChunkStorage::load(Level* level, int x, int z) {
         regionChunkInputStream->deleteChildStream();
         delete regionChunkInputStream;
 
-        if (!chunkData->contains(L"Level")) {
+        if (!chunkData->contains("Level")) {
             char buf[256];
             sprintf(buf,
                     "Chunk file at %d, %d is missing level data, skipping\n", x,
@@ -149,7 +149,7 @@ LevelChunk* McRegionChunkStorage::load(Level* level, int x, int z) {
             delete chunkData;
             return nullptr;
         }
-        if (!chunkData->getCompound(L"Level")->contains(L"Blocks")) {
+        if (!chunkData->getCompound("Level")->contains("Blocks")) {
             char buf[256];
             sprintf(buf,
                     "Chunk file at %d, %d is missing block data, skipping\n", x,
@@ -159,7 +159,7 @@ LevelChunk* McRegionChunkStorage::load(Level* level, int x, int z) {
             return nullptr;
         }
         levelChunk =
-            OldChunkStorage::load(level, chunkData->getCompound(L"Level"));
+            OldChunkStorage::load(level, chunkData->getCompound("Level"));
         if (!levelChunk->isAt(x, z)) {
             char buf[256];
             sprintf(buf,
@@ -173,8 +173,8 @@ LevelChunk* McRegionChunkStorage::load(Level* level, int x, int z) {
 
             // 4J Stu - We delete the data within OldChunkStorage::load, so we
             // can never reload from it
-            // chunkData->putInt(L"xPos", x);
-            // chunkData->putInt(L"zPos", z);
+            // chunkData->putInt("xPos", x);
+            // chunkData->putInt("zPos", z);
             // levelChunk = OldChunkStorage::load(level,
         }
 #if defined(SPLIT_SAVES)
@@ -223,7 +223,7 @@ void McRegionChunkStorage::save(Level* level, LevelChunk* levelChunk) {
             std::lock_guard<std::mutex> lock(cs_memory);
             tag = new CompoundTag();
             CompoundTag* levelData = new CompoundTag();
-            tag->put(L"Level", levelData);
+            tag->put("Level", levelData);
             OldChunkStorage::save(levelChunk, level, levelData);
 
             NbtIo::write(tag, output);
@@ -306,7 +306,7 @@ void McRegionChunkStorage::tick() { m_saveFile->tick(); }
 void McRegionChunkStorage::flush() {
 #if defined(SPLIT_SAVES)
     ConsoleSavePath currentFile =
-        ConsoleSavePath(m_prefix + std::wstring(L"entities.dat"));
+        ConsoleSavePath(m_prefix + std::string("entities.dat"));
     ConsoleSaveFileOutputStream fos =
         ConsoleSaveFileOutputStream(m_saveFile, currentFile);
     BufferedOutputStream bos(&fos, 1024 * 1024);

@@ -35,7 +35,7 @@ void Screen::render(int xm, int ym, float a) {
     }
 }
 
-void Screen::keyPressed(wchar_t eventCharacter, int eventKey) {
+void Screen::keyPressed(char eventCharacter, int eventKey) {
     if (eventKey == Keyboard::KEY_ESCAPE) {
         minecraft->setScreen(nullptr);
         //    minecraft->grabMouse();	// 4J - removed
@@ -48,12 +48,12 @@ void Screen::keyPressed(wchar_t eventCharacter, int eventKey) {
     }
 }
 
-std::wstring Screen::getClipboard() {
+std::string Screen::getClipboard() {
     // 4J - removed
-    return std::wstring();
+    return std::string();
 }
 
-void Screen::setClipboard(const std::wstring& str) {
+void Screen::setClipboard(const std::string& str) {
     // 4J - removed
 }
 

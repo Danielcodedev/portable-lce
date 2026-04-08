@@ -24,7 +24,7 @@
 IUIScene_AnvilMenu::IUIScene_AnvilMenu() {
     m_inventory = nullptr;
     m_repairMenu = nullptr;
-    m_itemName = L"";
+    m_itemName = "";
 }
 
 IUIScene_AbstractContainerMenu::ESceneSection
@@ -171,7 +171,7 @@ bool IUIScene_AnvilMenu::IsSectionSlotList(ESceneSection eSection) {
 void IUIScene_AnvilMenu::handleTick() {
     Minecraft* pMinecraft = Minecraft::GetInstance();
     bool canAfford = true;
-    std::wstring m_costString = L"";
+    std::string m_costString = "";
 
     if (m_repairMenu->cost > 0) {
         if (m_repairMenu->cost >= 40 &&
@@ -181,9 +181,9 @@ void IUIScene_AnvilMenu::handleTick() {
         } else if (!m_repairMenu->getSlot(AnvilMenu::RESULT_SLOT)->hasItem()) {
             // Do nothing
         } else {
-            const wchar_t* costString = app.GetString(IDS_REPAIR_COST);
-            wchar_t temp[256];
-            swprintf(temp, 256, costString, m_repairMenu->cost);
+            const char* costString = app.GetString(IDS_REPAIR_COST);
+            char temp[256];
+            snprintf(temp, 256, costString, m_repairMenu->cost);
             m_costString = temp;
             if (!m_repairMenu->getSlot(AnvilMenu::RESULT_SLOT)
                      ->mayPickup(std::dynamic_pointer_cast<Player>(
@@ -206,7 +206,7 @@ void IUIScene_AnvilMenu::updateItemName() {
     if (slot != nullptr && slot->hasItem()) {
         if (!slot->getItem()->hasCustomHoverName() &&
             m_itemName.compare(slot->getItem()->getHoverName()) == 0) {
-            m_itemName = L"";
+            m_itemName = "";
         }
     }
 
@@ -232,7 +232,7 @@ void IUIScene_AnvilMenu::slotChanged(AbstractContainerMenu* container,
                                      int slotIndex,
                                      std::shared_ptr<ItemInstance> item) {
     if (slotIndex == AnvilMenu::INPUT_SLOT) {
-        m_itemName = item == nullptr ? L"" : item->getHoverName();
+        m_itemName = item == nullptr ? "" : item->getHoverName();
         setEditNameValue(m_itemName);
         setEditNameEditable(item != nullptr);
         if (item != nullptr) {

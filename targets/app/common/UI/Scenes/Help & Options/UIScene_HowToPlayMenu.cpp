@@ -80,11 +80,11 @@ UIScene_HowToPlayMenu::UIScene_HowToPlayMenu(int iPad, void* initData,
     doHorizontalResizeCheck();
 }
 
-std::wstring UIScene_HowToPlayMenu::getMoviePath() {
+std::string UIScene_HowToPlayMenu::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1) {
-        return L"HowToPlayMenuSplit";
+        return "HowToPlayMenuSplit";
     } else {
-        return L"HowToPlayMenu";
+        return "HowToPlayMenu";
     }
 }
 

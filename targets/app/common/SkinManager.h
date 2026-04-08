@@ -18,20 +18,20 @@ public:
     SkinManager();
 
     // Skin get/set (require GameSettingsA pointer from Game)
-    void setPlayerSkin(int iPad, const std::wstring& name,
+    void setPlayerSkin(int iPad, const std::string& name,
                        GAME_SETTINGS** gameSettingsA);
     void setPlayerSkin(int iPad, std::uint32_t dwSkinId,
                        GAME_SETTINGS** gameSettingsA);
-    std::wstring getPlayerSkinName(int iPad, GAME_SETTINGS** gameSettingsA);
+    std::string getPlayerSkinName(int iPad, GAME_SETTINGS** gameSettingsA);
     std::uint32_t getPlayerSkinId(int iPad, GAME_SETTINGS** gameSettingsA,
                                   DLCManager& dlcManager);
 
     // Cape get/set
-    void setPlayerCape(int iPad, const std::wstring& name,
+    void setPlayerCape(int iPad, const std::string& name,
                        GAME_SETTINGS** gameSettingsA);
     void setPlayerCape(int iPad, std::uint32_t dwCapeId,
                        GAME_SETTINGS** gameSettingsA);
-    std::wstring getPlayerCapeName(int iPad, GAME_SETTINGS** gameSettingsA);
+    std::string getPlayerCapeName(int iPad, GAME_SETTINGS** gameSettingsA);
     std::uint32_t getPlayerCapeId(int iPad, GAME_SETTINGS** gameSettingsA);
 
     // Favorite skins
@@ -65,8 +65,8 @@ public:
     unsigned int getAnimOverrideBitmask(std::uint32_t dwSkinID);
 
     // Skin path <-> id conversion (static)
-    static std::uint32_t getSkinIdFromPath(const std::wstring& skin);
-    static std::wstring getSkinPathFromId(std::uint32_t skinId);
+    static std::uint32_t getSkinIdFromPath(const std::string& skin);
+    static std::string getSkinPathFromId(std::uint32_t skinId);
 
     // Default cape
     bool defaultCapeExists();
@@ -76,15 +76,15 @@ public:
     bool isXuidDeadmau5(PlayerUID xuid);
 
     // Memory texture files for player skins
-    void addMemoryTextureFile(const std::wstring& wName, std::uint8_t* pbData,
+    void addMemoryTextureFile(const std::string& wName, std::uint8_t* pbData,
                               unsigned int byteCount);
-    void removeMemoryTextureFile(const std::wstring& wName);
-    void getMemFileDetails(const std::wstring& wName, std::uint8_t** ppbData,
+    void removeMemoryTextureFile(const std::string& wName);
+    void getMemFileDetails(const std::string& wName, std::uint8_t** ppbData,
                            unsigned int* pByteCount);
-    bool isFileInMemoryTextures(const std::wstring& wName);
+    bool isFileInMemoryTextures(const std::string& wName);
 
     // storing skin files
-    std::vector<std::wstring> vSkinNames;
+    std::vector<std::string> vSkinNames;
 
     // per-player additional model parts
     std::uint32_t m_dwAdditionalModelParts[XUSER_MAX_COUNT];
@@ -93,7 +93,7 @@ private:
     PlayerUID m_xuidNotch;
 
     // Memory texture files
-    std::unordered_map<std::wstring, PMEMDATA> m_MEM_Files;
+    std::unordered_map<std::string, PMEMDATA> m_MEM_Files;
     std::mutex csMemFilesLock;
 
     // Additional model parts/skin boxes per skin id

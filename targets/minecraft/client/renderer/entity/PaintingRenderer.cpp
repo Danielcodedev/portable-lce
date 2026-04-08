@@ -31,7 +31,7 @@ void PaintingRenderer::render(std::shared_ptr<Entity> _painting, double x,
     glTranslatef((float)x, (float)y, (float)z);
     glRotatef(rot, 0, 1, 0);
     glEnable(GL_RESCALE_NORMAL);
-    bindTexture(painting);  // 4J was L"/art/kz.png"
+    bindTexture(painting);  // 4J was "/art/kz.png"
 
     Painting::Motive* motive = painting->motive;
 

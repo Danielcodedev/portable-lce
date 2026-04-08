@@ -283,8 +283,8 @@ void LivingEntityRenderer::setupRotations(std::shared_ptr<LivingEntity> mob,
         if (fall > 1) fall = 1;
         glRotatef(fall * getFlipDegrees(mob), 0, 0, 1);
     } else {
-        std::wstring name = mob->getAName();
-        if (name == L"Dinnerbone" || name == L"Grumm") {
+        std::string name = mob->getAName();
+        if (name == "Dinnerbone" || name == "Grumm") {
             if (!mob->instanceof(eTYPE_PLAYER) ||
                 !std::dynamic_pointer_cast<Player>(mob)->isCapeHidden()) {
                 glTranslatef(0, mob->bbHeight + 0.1f, 0);
@@ -385,7 +385,7 @@ void LivingEntityRenderer::renderName(std::shared_ptr<LivingEntity> mob,
         float maxDist = mob->isSneaking() ? 32 : 64;
 
         if (dist < maxDist * maxDist) {
-            std::wstring msg = mob->getDisplayName();
+            std::string msg = mob->getDisplayName();
 
             if (!msg.empty()) {
                 if (mob->isSneaking()) {
@@ -450,7 +450,7 @@ bool LivingEntityRenderer::shouldShowName(std::shared_ptr<LivingEntity> mob) {
 
 void LivingEntityRenderer::renderNameTags(std::shared_ptr<LivingEntity> mob,
                                           double x, double y, double z,
-                                          const std::wstring& msg, float scale,
+                                          const std::string& msg, float scale,
                                           double dist) {
     if (mob->isSleeping()) {
         renderNameTag(mob, msg, x, y - 1.5f, z, 64);
@@ -461,7 +461,7 @@ void LivingEntityRenderer::renderNameTags(std::shared_ptr<LivingEntity> mob,
 
 // 4J Added parameter for color here so that we can colour players names
 void LivingEntityRenderer::renderNameTag(std::shared_ptr<LivingEntity> mob,
-                                         const std::wstring& name, double x,
+                                         const std::string& name, double x,
                                          double y, double z, int maxDist,
                                          int color /*= 0xff000000*/) {
     if (gameServices().getGameSettings(eGameSetting_DisplayHUD) == 0) {
@@ -522,8 +522,8 @@ void LivingEntityRenderer::renderNameTag(std::shared_ptr<LivingEntity> mob,
 
     int offs = 0;
 
-    std::wstring playerName;
-    wchar_t wchName[2];
+    std::string playerName;
+    char wchName[2];
 
     if (mob->instanceof(eTYPE_PLAYER)) {
         std::shared_ptr<Player> player = std::dynamic_pointer_cast<Player>(mob);

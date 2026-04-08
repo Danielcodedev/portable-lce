@@ -18,7 +18,7 @@ public:
                          int y, int z) override;
     bool openEnchanting(int iPad, std::shared_ptr<Inventory> inventory, int x,
                         int y, int z, Level* level,
-                        const std::wstring& name) override;
+                        const std::string& name) override;
     bool openFurnace(int iPad, std::shared_ptr<Inventory> inventory,
                      std::shared_ptr<FurnaceTileEntity> furnace) override;
     bool openBrewingStand(
@@ -35,7 +35,7 @@ public:
                        Level* level, int x, int y, int z) override;
     bool openTrading(int iPad, std::shared_ptr<Inventory> inventory,
                      std::shared_ptr<Merchant> trader, Level* level,
-                     const std::wstring& name) override;
+                     const std::string& name) override;
     bool openCommandBlock(
         int iPad, std::shared_ptr<CommandBlockEntity> commandBlock) override;
     bool openHopper(int iPad, std::shared_ptr<Inventory> inventory,

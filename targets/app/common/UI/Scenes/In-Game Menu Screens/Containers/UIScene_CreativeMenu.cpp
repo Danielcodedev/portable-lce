@@ -37,7 +37,7 @@ UIScene_CreativeMenu::UIScene_CreativeMenu(int iPad, void* _initData,
 
     std::shared_ptr<SimpleContainer> creativeContainer =
         std::shared_ptr<SimpleContainer>(
-            new SimpleContainer(0, L"", false, TabSpec::MAX_SIZE));
+            new SimpleContainer(0, "", false, TabSpec::MAX_SIZE));
     itemPickerMenu =
         new ItemPickerMenu(creativeContainer, initData->player->inventory);
 
@@ -45,7 +45,7 @@ UIScene_CreativeMenu::UIScene_CreativeMenu(int iPad, void* _initData,
                eSectionInventoryCreativeUsing, eSectionInventoryCreativeMax,
                initData->bNavigateBack);
 
-    m_labelInventory.setLabel(L"");
+    m_labelInventory.setLabel("");
     m_bFirstCall = true;
 
     // m_slotListContainer.addSlots(0,TabSpec::MAX_SIZE);
@@ -73,11 +73,11 @@ UIScene_CreativeMenu::UIScene_CreativeMenu(int iPad, void* _initData,
     switchTab(eCreativeInventoryTab_BuildingBlocks);
 }
 
-std::wstring UIScene_CreativeMenu::getMoviePath() {
+std::string UIScene_CreativeMenu::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1) {
-        return L"CreativeMenuSplit";
+        return "CreativeMenuSplit";
     } else {
-        return L"CreativeMenu";
+        return "CreativeMenu";
     }
 }
 

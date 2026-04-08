@@ -8,10 +8,10 @@ uint32_t XUserGetSigninInfo(uint32_t dwUserIndex, uint32_t dwFlags,
     return 0;
 }
 
-const wchar_t* CXuiStringTable::Lookup(const wchar_t* szId) { return szId; }
-const wchar_t* CXuiStringTable::Lookup(uint32_t nIndex) { return L"String"; }
+const char* CXuiStringTable::Lookup(const char* szId) { return szId; }
+const char* CXuiStringTable::Lookup(uint32_t nIndex) { return "String"; }
 void CXuiStringTable::Clear() {}
-int32_t CXuiStringTable::Load(const wchar_t* szId) { return 0; }
+int32_t CXuiStringTable::Load(const char* szId) { return 0; }
 
 uint32_t XGetLanguage() { return 1; }
 uint32_t XGetLocale() { return 0; }

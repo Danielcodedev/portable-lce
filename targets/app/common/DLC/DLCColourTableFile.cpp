@@ -8,7 +8,7 @@
 #include "minecraft/client/skins/TexturePack.h"
 #include "minecraft/client/skins/TexturePackRepository.h"
 
-DLCColourTableFile::DLCColourTableFile(const std::wstring& path)
+DLCColourTableFile::DLCColourTableFile(const std::string& path)
     : DLCFile(DLCManager::e_DLCType_ColourTable, path) {
     m_colourTable = nullptr;
 }

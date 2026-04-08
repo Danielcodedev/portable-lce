@@ -16,7 +16,7 @@ class TextureAndGeometryPacket
     : public Packet,
       public std::enable_shared_from_this<TextureAndGeometryPacket> {
 public:
-    std::wstring textureName;
+    std::string textureName;
     std::uint32_t dwSkinID;
     std::uint8_t* pbData;
     std::uint32_t dwTextureBytes;
@@ -26,12 +26,12 @@ public:
 
     TextureAndGeometryPacket();
     ~TextureAndGeometryPacket();
-    TextureAndGeometryPacket(const std::wstring& textureName,
+    TextureAndGeometryPacket(const std::string& textureName,
                              std::uint8_t* pbData, std::uint32_t dataBytes);
-    TextureAndGeometryPacket(const std::wstring& textureName,
+    TextureAndGeometryPacket(const std::string& textureName,
                              std::uint8_t* pbData, std::uint32_t dataBytes,
                              DLCSkinFile* pDLCSkinFile);
-    TextureAndGeometryPacket(const std::wstring& textureName,
+    TextureAndGeometryPacket(const std::string& textureName,
                              std::uint8_t* pbData, std::uint32_t dataBytes,
                              std::vector<SKIN_BOX*>* pvSkinBoxes,
                              unsigned int uiAnimOverrideBitmask);

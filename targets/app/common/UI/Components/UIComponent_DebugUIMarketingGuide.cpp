@@ -27,6 +27,6 @@ UIComponent_DebugUIMarketingGuide::UIComponent_DebugUIMarketingGuide(
                                             m_funcSetPlatform, 1, value);
 }
 
-std::wstring UIComponent_DebugUIMarketingGuide::getMoviePath() {
-    return L"DebugUIMarketingGuide";
+std::string UIComponent_DebugUIMarketingGuide::getMoviePath() {
+    return "DebugUIMarketingGuide";
 }

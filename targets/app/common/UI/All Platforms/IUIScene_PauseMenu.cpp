@@ -66,7 +66,7 @@ int IUIScene_PauseMenu::ExitGameSaveDialogReturned(
                     pDLCTexPack
                         ->getDLCInfoParentPack();  // tPack->getDLCPack();
                 if (!pDLCPack->hasPurchasedFile(DLCManager::e_DLCType_Texture,
-                                                L"")) {
+                                                "")) {
                     unsigned int uiIDA[2];
                     uiIDA[0] = IDS_CONFIRM_OK;
                     uiIDA[1] = IDS_CONFIRM_CANCEL;
@@ -226,7 +226,7 @@ int IUIScene_PauseMenu::SaveWorldThreadProc(void* lpParameter) {
 
     Minecraft* pMinecraft = Minecraft::GetInstance();
 
-    // wprintf(L"Loading world on thread\n");
+    // printf("Loading world on thread\n");
 
     app.SetGameStarted(false);
 

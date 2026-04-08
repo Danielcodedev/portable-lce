@@ -56,7 +56,7 @@ MultiPlayerLevel::ResetInfo::ResetInfo(int x, int y, int z, int tile,
 MultiPlayerLevel::MultiPlayerLevel(ClientConnection* connection,
                                    LevelSettings* levelSettings, int dimension,
                                    int difficulty)
-    : Level(std::make_shared<MockedLevelStorage>(), L"MpServer",
+    : Level(std::make_shared<MockedLevelStorage>(), "MpServer",
             Dimension::getNew(dimension), levelSettings, false) {
     minecraft = Minecraft::GetInstance();
 
@@ -808,11 +808,11 @@ void MultiPlayerLevel::setDayTime(int64_t newTime) {
     /*if (newTime < 0)
     {
             newTime = -newTime;
-            getGameRules()->set(GameRules::RULE_DAYLIGHT, L"false");
+            getGameRules()->set(GameRules::RULE_DAYLIGHT, "false");
     }
     else
     {
-            getGameRules()->set(GameRules::RULE_DAYLIGHT, L"true");
+            getGameRules()->set(GameRules::RULE_DAYLIGHT, "true");
     }*/
 
     Level::setDayTime(newTime);

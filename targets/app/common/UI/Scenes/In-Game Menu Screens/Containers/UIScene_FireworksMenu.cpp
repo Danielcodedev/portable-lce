@@ -51,11 +51,11 @@ UIScene_FireworksMenu::UIScene_FireworksMenu(int iPad, void* _initData,
     delete initData;
 }
 
-std::wstring UIScene_FireworksMenu::getMoviePath() {
+std::string UIScene_FireworksMenu::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1) {
-        return L"FireworksMenuSplit";
+        return "FireworksMenuSplit";
     } else {
-        return L"FireworksMenu";
+        return "FireworksMenu";
     }
 }
 

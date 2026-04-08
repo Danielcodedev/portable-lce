@@ -30,33 +30,33 @@ UIScene_DebugCreateSchematic::UIScene_DebugCreateSchematic(int iPad,
     // Setup all the Iggy references we need for this scene
     initialiseMovie();
 
-    m_labelTitle.init(L"Name");
-    m_labelStartX.init(L"StartX");
-    m_labelStartY.init(L"StartY");
-    m_labelStartZ.init(L"StartZ");
-    m_labelEndX.init(L"EndX");
-    m_labelEndY.init(L"EndY");
-    m_labelEndZ.init(L"EndZ");
+    m_labelTitle.init("Name");
+    m_labelStartX.init("StartX");
+    m_labelStartY.init("StartY");
+    m_labelStartZ.init("StartZ");
+    m_labelEndX.init("EndX");
+    m_labelEndY.init("EndY");
+    m_labelEndZ.init("EndZ");
 
-    m_textInputStartX.init(L"", eControl_StartX);
-    m_textInputStartY.init(L"", eControl_StartY);
-    m_textInputStartZ.init(L"", eControl_StartZ);
-    m_textInputEndX.init(L"", eControl_EndX);
-    m_textInputEndY.init(L"", eControl_EndY);
-    m_textInputEndZ.init(L"", eControl_EndZ);
-    m_textInputName.init(L"", eControl_Name);
+    m_textInputStartX.init("", eControl_StartX);
+    m_textInputStartY.init("", eControl_StartY);
+    m_textInputStartZ.init("", eControl_StartZ);
+    m_textInputEndX.init("", eControl_EndX);
+    m_textInputEndY.init("", eControl_EndY);
+    m_textInputEndZ.init("", eControl_EndZ);
+    m_textInputName.init("", eControl_Name);
 
-    m_checkboxSaveMobs.init(L"Save Mobs", eControl_SaveMobs, false);
-    m_checkboxUseCompression.init(L"Use Compression", eControl_UseCompression,
+    m_checkboxSaveMobs.init("Save Mobs", eControl_SaveMobs, false);
+    m_checkboxUseCompression.init("Use Compression", eControl_UseCompression,
                                   false);
 
-    m_buttonCreate.init(L"Create", eControl_Create);
+    m_buttonCreate.init("Create", eControl_Create);
 
     m_data = new ConsoleSchematicFile::XboxSchematicInitParam();
 }
 
-std::wstring UIScene_DebugCreateSchematic::getMoviePath() {
-    return L"DebugCreateSchematic";
+std::string UIScene_DebugCreateSchematic::getMoviePath() {
+    return "DebugCreateSchematic";
 }
 
 void UIScene_DebugCreateSchematic::handleInput(int iPad, int key, bool repeat,
@@ -130,7 +130,7 @@ void UIScene_DebugCreateSchematic::handlePress(F64 controlId, F64 childId) {
         case eControl_EndZ:
             m_keyboardCallbackControl = (eControls)((int)controlId);
             PlatformInput.RequestKeyboard(
-                L"Enter something", L"", 0, 25,
+                "Enter something", "", 0, 25,
                 [this](bool bRes) -> int {
                     return handleKeyboardComplete(bRes);
                 },
@@ -157,16 +157,16 @@ void UIScene_DebugCreateSchematic::handleCheckboxToggled(F64 controlId,
 int UIScene_DebugCreateSchematic::handleKeyboardComplete(bool bRes) {
     const char* text = PlatformInput.GetText();
     if (text[0] != '\0') {
-        std::wstring value = convStringToWstring(text);
+        std::string value = text;
         int iVal = 0;
         if (!value.empty()) iVal = fromWString<int>(value);
         switch (m_keyboardCallbackControl) {
             case eControl_Name:
                 m_textInputName.setLabel(value);
                 if (!value.empty()) {
-                    swprintf(m_data->name, 64, L"%ls", value.c_str());
+                    snprintf(m_data->name, 64, "%s", value.c_str());
                 } else {
-                    swprintf(m_data->name, 64, L"schematic");
+                    snprintf(m_data->name, 64, "schematic");
                 }
                 break;
             case eControl_StartX:

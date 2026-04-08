@@ -18,9 +18,9 @@ bool UIControl_TextInput::setupControl(UIScene* scene, IggyValuePath* parent,
     bool success = UIControl_Base::setupControl(scene, parent, controlName);
 
     // TextInput specific initialisers
-    m_textName = registerFastName(L"text");
-    m_funcChangeState = registerFastName(L"ChangeState");
-    m_funcSetCharLimit = registerFastName(L"SetCharLimit");
+    m_textName = registerFastName("text");
+    m_funcChangeState = registerFastName("ChangeState");
+    m_funcSetCharLimit = registerFastName("SetCharLimit");
 
     return success;
 }
@@ -29,16 +29,14 @@ void UIControl_TextInput::init(UIString label, int id) {
     m_label = label;
     m_id = id;
 
-    const std::u16string convLabel = wstring_to_u16string(label.getString());
-
     IggyDataValue result;
     IggyDataValue value[2];
-    value[0].type = IGGY_DATATYPE_string_UTF16;
-    IggyStringUTF16 stringVal;
+    value[0].type = IGGY_DATATYPE_string_UTF8;
+    IggyStringUTF8 stringVal;
 
-    stringVal.string = convLabel.c_str();
-    stringVal.length = convLabel.length();
-    value[0].string16 = stringVal;
+    stringVal.string = const_cast<char*>(label.getString().c_str());
+    stringVal.length = label.getString().length();
+    value[0].string8 = stringVal;
 
     value[1].type = IGGY_DATATYPE_number;
     value[1].number = id;

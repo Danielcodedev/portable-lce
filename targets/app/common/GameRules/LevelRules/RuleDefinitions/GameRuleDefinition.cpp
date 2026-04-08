@@ -20,8 +20,8 @@
 class Connection;
 
 GameRuleDefinition::GameRuleDefinition() {
-    m_descriptionId = L"";
-    m_promptId = L"";
+    m_descriptionId = "";
+    m_promptId = "";
     m_4JDataValue = 0;
 }
 
@@ -65,35 +65,35 @@ void GameRuleDefinition::getChildren(
 GameRuleDefinition* GameRuleDefinition::addChild(
     ConsoleGameRules::EGameRuleType ruleType) {
 #ifndef _CONTENT_PACKAGE
-    wprintf(L"GameRuleDefinition: Attempted to add invalid child rule - %d\n",
+    printf("GameRuleDefinition: Attempted to add invalid child rule - %d\n",
             ruleType);
 #endif
     return nullptr;
 }
 
-void GameRuleDefinition::addAttribute(const std::wstring& attributeName,
-                                      const std::wstring& attributeValue) {
-    if (attributeName.compare(L"descriptionName") == 0) {
+void GameRuleDefinition::addAttribute(const std::string& attributeName,
+                                      const std::string& attributeValue) {
+    if (attributeName.compare("descriptionName") == 0) {
         m_descriptionId = attributeValue;
 #ifndef _CONTENT_PACKAGE
-        wprintf(L"GameRuleDefinition: Adding parameter descriptionId=%ls\n",
+        printf("GameRuleDefinition: Adding parameter descriptionId=%s\n",
                 m_descriptionId.c_str());
 #endif
-    } else if (attributeName.compare(L"promptName") == 0) {
+    } else if (attributeName.compare("promptName") == 0) {
         m_promptId = attributeValue;
 #ifndef _CONTENT_PACKAGE
-        wprintf(L"GameRuleDefinition: Adding parameter m_promptId=%ls\n",
+        printf("GameRuleDefinition: Adding parameter m_promptId=%s\n",
                 m_promptId.c_str());
 #endif
-    } else if (attributeName.compare(L"dataTag") == 0) {
+    } else if (attributeName.compare("dataTag") == 0) {
         m_4JDataValue = fromWString<int>(attributeValue);
         app.DebugPrintf(
             "GameRuleDefinition: Adding parameter m_4JDataValue=%d\n",
             m_4JDataValue);
     } else {
 #ifndef _CONTENT_PACKAGE
-        wprintf(
-            L"GameRuleDefinition: Attempted to add invalid attribute: %ls\n",
+        printf(
+            "GameRuleDefinition: Attempted to add invalid attribute: %s\n",
             attributeName.c_str());
 #endif
     }
@@ -103,20 +103,20 @@ void GameRuleDefinition::populateGameRule(
     GameRulesInstance::EGameRulesInstanceType type, GameRule* rule) {
     GameRule::ValueType value;
     value.b = false;
-    rule->setParameter(L"bComplete", value);
+    rule->setParameter("bComplete", value);
 }
 
 bool GameRuleDefinition::getComplete(GameRule* rule) {
     GameRule::ValueType value;
-    value = rule->getParameter(L"bComplete");
+    value = rule->getParameter("bComplete");
     return value.b;
 }
 
 void GameRuleDefinition::setComplete(GameRule* rule, bool val) {
     GameRule::ValueType value;
-    value = rule->getParameter(L"bComplete");
+    value = rule->getParameter("bComplete");
     value.b = val;
-    rule->setParameter(L"bComplete", value);
+    rule->setParameter("bComplete", value);
 }
 
 std::vector<GameRuleDefinition*>* GameRuleDefinition::enumerate() {
@@ -151,10 +151,10 @@ GameRulesInstance* GameRuleDefinition::generateNewGameRulesInstance(
     return manager;
 }
 
-std::wstring GameRuleDefinition::generateDescriptionString(
-    ConsoleGameRules::EGameRuleType defType, const std::wstring& description,
+std::string GameRuleDefinition::generateDescriptionString(
+    ConsoleGameRules::EGameRuleType defType, const std::string& description,
     void* data, int dataLength) {
-    std::wstring formatted = description;
+    std::string formatted = description;
     switch (defType) {
         case ConsoleGameRules::eGameRuleType_CompleteAllRule:
             formatted = CompleteAllRuleDefinition::generateDescriptionString(

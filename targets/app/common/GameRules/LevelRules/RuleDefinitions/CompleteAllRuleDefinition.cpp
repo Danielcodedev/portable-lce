@@ -66,12 +66,12 @@ void CompleteAllRuleDefinition::updateStatus(GameRule* rule) {
                     goal);
 }
 
-std::wstring CompleteAllRuleDefinition::generateDescriptionString(
-    const std::wstring& description, void* data, int dataLength) {
+std::string CompleteAllRuleDefinition::generateDescriptionString(
+    const std::string& description, void* data, int dataLength) {
     PacketData* values = (PacketData*)data;
-    std::wstring newDesc = description;
+    std::string newDesc = description;
     newDesc =
-        replaceAll(newDesc, L"{*progress*}", toWString<int>(values->progress));
-    newDesc = replaceAll(newDesc, L"{*goal*}", toWString<int>(values->goal));
+        replaceAll(newDesc, "{*progress*}", toWString<int>(values->progress));
+    newDesc = replaceAll(newDesc, "{*goal*}", toWString<int>(values->goal));
     return newDesc;
 }

@@ -31,10 +31,10 @@
 static const std::size_t DLC_WCHAR_BIN_SIZE = 2;
 
 #if WCHAR_MAX > 0xFFFF
-// than sizeof(wchar_t) != DLC_WCHAR_BIN_SIZE
-// e.g. Linux and all Posix/Unix systems with wchar_t beeing 4B/32bit
+// than sizeof(char) != DLC_WCHAR_BIN_SIZE
+// e.g. Linux and all Posix/Unix systems with char beeing 4B/32bit
 static_assert(sizeof(wchar_t) == 4,
-              "wchar_t is not 4bytes but larger than 2bytes ???");
+              "char is not 4bytes but larger than 2bytes ???");
 
 static inline std::wstring dlc_read_wstring(const void* data) {
     const std::uint16_t* p = static_cast<const std::uint16_t*>(data);
@@ -64,7 +64,7 @@ static inline std::wstring dlc_read_wstring(const void* data) {
 // just in case.
 static_assert(sizeof(wchar_t) == 2,
               "How did we get here? wide char smaller than 2 bytes");
-// perfectly fine scince wchar_t will be 2 bytes (UCS-2/UTF-16)
+// perfectly fine scince char will be 2 bytes (UCS-2/UTF-16)
 #define DLC_WSTRING(ptr) std::wstring((wchar_t*)(ptr))
 #endif
 
@@ -86,13 +86,13 @@ void ReadDlcStruct(T* out, const std::uint8_t* data, unsigned int offset = 0) {
     std::memcpy(out, data + offset, sizeof(*out));
 }
 
-std::wstring getMountedDlcReadPath(const std::string& path) {
-    std::wstring readPath = convStringToWstring(path);
+std::string getMountedDlcReadPath(const std::string& path) {
+    std::string readPath = path;
 
 #if defined(_WINDOWS64)
     const std::string mountedPath = PlatformStorage.GetMountedPath(path.c_str());
     if (!mountedPath.empty()) {
-        readPath = convStringToWstring(mountedPath);
+        readPath = mountedPath;
     }
 #endif
 
@@ -104,7 +104,7 @@ bool readOwnedDlcFile(const std::string& path, std::uint8_t** ppData,
     *ppData = nullptr;
     *pBytesRead = 0;
 
-    const std::wstring readPath = getMountedDlcReadPath(path);
+    const std::string readPath = getMountedDlcReadPath(path);
     const std::size_t fSize = PlatformFilesystem.fileSize(readPath);
     if (fSize == 0 || fSize > std::numeric_limits<unsigned int>::max()) {
         return false;
@@ -207,13 +207,13 @@ void DLCManager::LanguageChanged(void) {
     }
 }
 
-DLCPack* DLCManager::getPack(const std::wstring& name) {
+DLCPack* DLCManager::getPack(const std::string& name) {
     DLCPack* pack = nullptr;
     // uint32_t currentIndex = 0;
     DLCPack* currentPack = nullptr;
     for (auto it = m_packs.begin(); it != m_packs.end(); ++it) {
         currentPack = *it;
-        std::wstring wsName = currentPack->getName();
+        std::string wsName = currentPack->getName();
 
         if (wsName.compare(name) == 0) {
             pack = currentPack;
@@ -290,7 +290,7 @@ unsigned int DLCManager::getPackIndex(DLCPack* pack, bool& found,
     return foundIndex;
 }
 
-unsigned int DLCManager::getPackIndexContainingSkin(const std::wstring& path,
+unsigned int DLCManager::getPackIndexContainingSkin(const std::string& path,
                                                     bool& found) {
     unsigned int foundIndex = 0;
     found = false;
@@ -309,7 +309,7 @@ unsigned int DLCManager::getPackIndexContainingSkin(const std::wstring& path,
     return foundIndex;
 }
 
-DLCPack* DLCManager::getPackContainingSkin(const std::wstring& path) {
+DLCPack* DLCManager::getPackContainingSkin(const std::string& path) {
     DLCPack* foundPack = nullptr;
     for (auto it = m_packs.begin(); it != m_packs.end(); ++it) {
         DLCPack* pack = *it;
@@ -323,7 +323,7 @@ DLCPack* DLCManager::getPackContainingSkin(const std::wstring& path) {
     return foundPack;
 }
 
-DLCSkinFile* DLCManager::getSkinFile(const std::wstring& path) {
+DLCSkinFile* DLCManager::getSkinFile(const std::string& path) {
     DLCSkinFile* foundSkinfile = nullptr;
     for (auto it = m_packs.begin(); it != m_packs.end(); ++it) {
         DLCPack* pack = *it;
@@ -355,8 +355,8 @@ unsigned int DLCManager::checkForCorruptDLCAndAlert(
         uiIDA[0] = IDS_CONFIRM_OK;
         if (corruptDLCCount == 1 && firstCorruptPack != nullptr) {
             // pass in the pack format string
-            wchar_t wchFormat[132];
-            swprintf(wchFormat, 132, L"%ls\n\n%%ls",
+            char wchFormat[132];
+            snprintf(wchFormat, 132, "%s\n\n%%s",
                      firstCorruptPack->getName().c_str());
 
             IPlatformStorage::EMessageResult result = ui.RequestErrorMessage(
@@ -375,18 +375,18 @@ unsigned int DLCManager::checkForCorruptDLCAndAlert(
     return corruptDLCCount;
 }
 
-bool DLCManager::readDLCDataFile(unsigned int& dwFilesProcessed,
-                                 const std::wstring& path, DLCPack* pack,
-                                 bool fromArchive) {
-    return readDLCDataFile(dwFilesProcessed,
-                           std::filesystem::path(path).string(), pack,
-                           fromArchive);
-}
+// bool DLCManager::readDLCDataFile(unsigned int& dwFilesProcessed,
+//                                  const std::string& path, DLCPack* pack,
+//                                  bool fromArchive) {
+//     return readDLCDataFile(dwFilesProcessed,
+//                            std::filesystem::path(path).string(), pack,
+//                            fromArchive);
+// }
 
 bool DLCManager::readDLCDataFile(unsigned int& dwFilesProcessed,
                                  const std::string& path, DLCPack* pack,
                                  bool fromArchive) {
-    std::wstring wPath = convStringToWstring(path);
+    std::string wPath = path;
     if (fromArchive && app.getArchiveFileSize(wPath) >= 0) {
         std::vector<uint8_t> bytes = app.getArchiveFile(wPath);
         return processDLCDataFile(dwFilesProcessed, bytes.data(), bytes.size(),
@@ -510,7 +510,7 @@ bool DLCManager::processDLCDataFile(unsigned int& dwFilesProcessed,
                 new DLCPack(pack->getName(), pack->getLicenseMask());
         } else if (type != e_DLCType_PackConfig) {
             dlcFile =
-                pack->addFile(type, DLC_DETAIL_WSTR(pbData, uiCurrentByte));
+                pack->addFile(type, wstringtofilename(DLC_DETAIL_WSTR(pbData, uiCurrentByte)));
         }
 
         // Params
@@ -527,14 +527,14 @@ bool DLCManager::processDLCDataFile(unsigned int& dwFilesProcessed,
 
             if (it != parameterMapping.end()) {
                 if (type == e_DLCType_PackConfig) {
-                    pack->addParameter(it->second, DLC_PARAM_WSTR(pbTemp, 0));
+                    pack->addParameter(it->second, wstringtofilename(DLC_PARAM_WSTR(pbTemp, 0)));
                 } else {
                     if (dlcFile != nullptr)
                         dlcFile->addParameter(it->second,
-                                              DLC_PARAM_WSTR(pbTemp, 0));
+                                              wstringtofilename(DLC_PARAM_WSTR(pbTemp, 0)));
                     else if (dlcTexturePack != nullptr)
                         dlcTexturePack->addParameter(it->second,
-                                                     DLC_PARAM_WSTR(pbTemp, 0));
+                                                     wstringtofilename(DLC_PARAM_WSTR(pbTemp, 0)));
                 }
             }
             pbTemp += DLC_PARAM_ADV(parBuf.dwWchCount);
@@ -571,7 +571,7 @@ bool DLCManager::processDLCDataFile(unsigned int& dwFilesProcessed,
             switch (fileBuf.dwType) {
                 case DLCManager::e_DLCType_Skin:
                     app.vSkinNames.push_back(
-                        DLC_DETAIL_WSTR(pbData, uiCurrentByte));
+                        wstringtofilename(DLC_DETAIL_WSTR(pbData, uiCurrentByte)));
                     break;
             }
 

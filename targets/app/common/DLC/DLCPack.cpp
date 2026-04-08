@@ -24,8 +24,8 @@
 #include "app/linux/Stubs/winapi_stubs.h"
 #include "util/StringHelpers.h"
 
-DLCPack::DLCPack(const std::wstring& name, std::uint32_t dwLicenseMask) {
-    m_dataPath = L"";
+DLCPack::DLCPack(const std::string& name, std::uint32_t dwLicenseMask) {
+    m_dataPath = "";
     m_packName = name;
     m_dwLicenseMask = dwLicenseMask;
     m_ullFullOfferId = 0LL;
@@ -55,7 +55,7 @@ DLCPack::~DLCPack() {
     // invalidates ALL of it's children.
     if (m_data) {
 #if !defined(_CONTENT_PACKAGE)
-        wprintf(L"Deleting data for DLC pack %ls\n", m_packName.c_str());
+        printf("Deleting data for DLC pack %s\n", m_packName.c_str());
 #endif
         // For the same reason, don't delete data pointer for any child pack as
         // it just points to a region within the parent pack that has already
@@ -96,12 +96,12 @@ void DLCPack::addChildPack(DLCPack* childPack) {
 void DLCPack::setParentPack(DLCPack* parentPack) { m_parentPack = parentPack; }
 
 void DLCPack::addParameter(DLCManager::EDLCParameterType type,
-                           const std::wstring& value) {
+                           const std::string& value) {
     switch (type) {
         case DLCManager::e_DLCParamType_PackId: {
             std::uint32_t packId = 0;
 
-            std::wstringstream ss;
+            std::stringstream ss;
             // 4J Stu - numbered using decimal to make it easier for
             // artists/people to number manually
             ss << std::dec << value.c_str();
@@ -112,7 +112,7 @@ void DLCPack::addParameter(DLCManager::EDLCParameterType type,
         case DLCManager::e_DLCParamType_PackVersion: {
             std::uint32_t version = 0;
 
-            std::wstringstream ss;
+            std::stringstream ss;
             // 4J Stu - numbered using decimal to make it easier for
             // artists/people to number manually
             ss << std::dec << value.c_str();
@@ -140,7 +140,7 @@ bool DLCPack::getParameterAsUInt(DLCManager::EDLCParameterType type,
             case DLCManager::e_DLCParamType_NetherParticleColour:
             case DLCManager::e_DLCParamType_EnchantmentTextColour:
             case DLCManager::e_DLCParamType_EnchantmentTextFocusColour: {
-                std::wstringstream ss;
+                std::stringstream ss;
                 ss << std::hex << it->second.c_str();
                 ss >> param;
             } break;
@@ -152,13 +152,13 @@ bool DLCPack::getParameterAsUInt(DLCManager::EDLCParameterType type,
     return false;
 }
 
-DLCFile* DLCPack::addFile(DLCManager::EDLCType type, const std::wstring& path) {
+DLCFile* DLCPack::addFile(DLCManager::EDLCType type, const std::string& path) {
     DLCFile* newFile = nullptr;
 
     switch (type) {
         case DLCManager::e_DLCType_Skin: {
-            std::vector<std::wstring> splitPath = stringSplit(path, L'/');
-            std::wstring strippedPath = splitPath.back();
+            std::vector<std::string> splitPath = stringSplit(path, '/');
+            std::string strippedPath = splitPath.back();
 
             newFile = new DLCSkinFile(strippedPath);
 
@@ -170,8 +170,8 @@ DLCFile* DLCPack::addFile(DLCManager::EDLCType type, const std::wstring& path) {
             }
         } break;
         case DLCManager::e_DLCType_Cape: {
-            std::vector<std::wstring> splitPath = stringSplit(path, L'/');
-            std::wstring strippedPath = splitPath.back();
+            std::vector<std::string> splitPath = stringSplit(path, '/');
+            std::string strippedPath = splitPath.back();
             newFile = new DLCCapeFile(strippedPath);
         } break;
         case DLCManager::e_DLCType_Texture:
@@ -208,13 +208,13 @@ DLCFile* DLCPack::addFile(DLCManager::EDLCType type, const std::wstring& path) {
 
 // MGH - added this comp func, as the embedded func in find_if was confusing the
 // PS3 compiler
-static const std::wstring* g_pathCmpString = nullptr;
+static const std::string* g_pathCmpString = nullptr;
 static bool pathCmp(DLCFile* val) {
     return (g_pathCmpString->compare(val->getPath()) == 0);
 }
 
 bool DLCPack::doesPackContainFile(DLCManager::EDLCType type,
-                                  const std::wstring& path) {
+                                  const std::string& path) {
     bool hasFile = false;
     if (type == DLCManager::e_DLCType_All) {
         for (DLCManager::EDLCType currentType = (DLCManager::EDLCType)0;
@@ -253,7 +253,7 @@ DLCFile* DLCPack::getFile(DLCManager::EDLCType type, unsigned int index) {
     return file;
 }
 
-DLCFile* DLCPack::getFile(DLCManager::EDLCType type, const std::wstring& path) {
+DLCFile* DLCPack::getFile(DLCManager::EDLCType type, const std::string& path) {
     DLCFile* file = nullptr;
     if (type == DLCManager::e_DLCType_All) {
         for (DLCManager::EDLCType currentType = (DLCManager::EDLCType)0;
@@ -298,7 +298,7 @@ unsigned int DLCPack::getDLCItemsCount(
 };
 
 unsigned int DLCPack::getFileIndexAt(DLCManager::EDLCType type,
-                                     const std::wstring& path, bool& found) {
+                                     const std::string& path, bool& found) {
     if (type == DLCManager::e_DLCType_All) {
         app.DebugPrintf("Unimplemented\n");
 #if !defined(__CONTENT_PACKAGE)
@@ -323,7 +323,7 @@ unsigned int DLCPack::getFileIndexAt(DLCManager::EDLCType type,
 }
 
 bool DLCPack::hasPurchasedFile(DLCManager::EDLCType type,
-                               const std::wstring& path) {
+                               const std::string& path) {
     if (type == DLCManager::e_DLCType_All) {
         app.DebugPrintf("Unimplemented\n");
 #if !defined(_CONTENT_PACKAGE)
@@ -350,7 +350,7 @@ void DLCPack::UpdateLanguage() {
     // find the language file
     if (m_files[DLCManager::e_DLCType_LocalisationData].size() > 0) {
         DLCLocalisationFile* localisationFile = (DLCLocalisationFile*)getFile(
-            DLCManager::e_DLCType_LocalisationData, L"languages.loc");
+            DLCManager::e_DLCType_LocalisationData, "languages.loc");
         StringTable* strTable = localisationFile->getStringTable();
         strTable->ReloadStringTable();
     }

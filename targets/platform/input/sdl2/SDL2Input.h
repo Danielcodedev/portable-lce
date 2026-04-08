@@ -50,7 +50,7 @@ public:
 
     // Legacy keyboard request overloads with integer string-table ids used to
     // live here. The remaining public API keeps the direct text/callback form.
-    EKeyboardResult RequestKeyboard(const wchar_t* Title, const wchar_t* Text,
+    EKeyboardResult RequestKeyboard(const char* Title, const char* Text,
                                     int iPad, unsigned int uiMaxChars,
                                     std::function<int(bool)> callback,
                                     SDL2Input::EKeyboardMode eMode);
@@ -80,7 +80,7 @@ public:
     // communication is in-game text chat.
     //
     // 		Intent Protect players from inappropriate language.
-    bool VerifyStrings(wchar_t** pwStringA, int iStringC,
+    bool VerifyStrings(char** pwStringA, int iStringC,
                        std::function<int(STRING_VERIFY_RESPONSE*)> callback);
     void CancelQueuedVerifyStrings(
         std::function<int(STRING_VERIFY_RESPONSE*)> callback);
@@ -93,5 +93,5 @@ public:
     int GetPrimaryPad();
     void SetPrimaryPad(int iPad);
 
-    // bool InputDetected(int userIndex, wchar_t* inputText);
+    // bool InputDetected(int userIndex, char* inputText);
 };

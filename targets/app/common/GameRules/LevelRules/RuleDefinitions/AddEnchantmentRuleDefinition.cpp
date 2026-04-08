@@ -32,8 +32,8 @@ void AddEnchantmentRuleDefinition::writeAttributes(DataOutputStream* dos,
 }
 
 void AddEnchantmentRuleDefinition::addAttribute(
-    const std::wstring& attributeName, const std::wstring& attributeValue) {
-    if (attributeName.compare(L"enchantmentId") == 0) {
+    const std::string& attributeName, const std::string& attributeValue) {
+    if (attributeName.compare("enchantmentId") == 0) {
         int value = fromWString<int>(attributeValue);
         if (value < 0) value = 0;
         if (value >= 256) value = 255;
@@ -41,7 +41,7 @@ void AddEnchantmentRuleDefinition::addAttribute(
         app.DebugPrintf(
             "AddEnchantmentRuleDefinition: Adding parameter enchantmentId=%d\n",
             m_enchantmentId);
-    } else if (attributeName.compare(L"enchantmentLevel") == 0) {
+    } else if (attributeName.compare("enchantmentLevel") == 0) {
         int value = fromWString<int>(attributeValue);
         if (value < 0) value = 0;
         m_enchantmentLevel = value;

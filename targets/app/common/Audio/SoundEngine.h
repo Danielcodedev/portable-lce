@@ -105,7 +105,7 @@ public:
 #endif
     virtual void play(int iSound, float x, float y, float z, float volume,
                       float pitch);
-    virtual void playStreaming(const std::wstring& name, float x, float y,
+    virtual void playStreaming(const std::string& name, float x, float y,
                                float z, float volume, float pitch,
                                bool bMusicDelay = true);
     virtual void playUI(int iSound, float volume, float pitch);
@@ -117,14 +117,14 @@ public:
     virtual void tick(std::shared_ptr<Mob>* players,
                       float a);  // 4J - updated to take array of local players
                                  // rather than single one
-    virtual void add(const std::wstring& name, File* file);
-    virtual void addMusic(const std::wstring& name, File* file);
-    virtual void addStreaming(const std::wstring& name, File* file);
-    virtual char* ConvertSoundPathToName(const std::wstring& name,
+    virtual void add(const std::string& name, File* file);
+    virtual void addMusic(const std::string& name, File* file);
+    virtual void addStreaming(const std::string& name, File* file);
+    virtual char* ConvertSoundPathToName(const std::string& name,
                                          bool bConvertSpaces = false);
     bool isStreamingWavebankReady();  // 4J Added
     int getMusicID(int iDomain);
-    int getMusicID(const std::wstring& name);
+    int getMusicID(const std::string& name);
     void SetStreamingSounds(int iOverworldMin, int iOverWorldMax,
                             int iNetherMin, int iNetherMax, int iEndMin,
                             int iEndMax, int iCD1);
@@ -161,7 +161,7 @@ private:
     int m_StreamState;
     int m_MusicType;
     AUDIO_INFO m_StreamingAudioInfo;
-    std::wstring m_CDMusic;
+    std::string m_CDMusic;
     bool m_bSystemMusicPlaying;
     float m_MasterMusicVolume;
     float m_MasterEffectsVolume;

@@ -14,7 +14,7 @@ extern ResourceLocation GUI_BEACON_LOCATION;
 #endif
 
 AbstractBeaconButton::AbstractBeaconButton(int id, int x, int y)
-    : Button(id, x, y, 22, 22, L"") {
+    : Button(id, x, y, 22, 22, "") {
     hovered = false;
     selected = false;
     iconRes = nullptr;

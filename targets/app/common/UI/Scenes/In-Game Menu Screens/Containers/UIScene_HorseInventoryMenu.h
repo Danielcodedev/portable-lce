@@ -46,11 +46,11 @@ protected:
     UI_MAP_ELEMENT(m_horsePreview, "iggy_horse")
     UI_END_MAP_CHILD_ELEMENTS()
 
-    UI_MAP_NAME(m_funcSetIsDonkey, L"SetIsDonkey")
-    UI_MAP_NAME(m_funcSetHasInventory, L"SetHasInventory")
+    UI_MAP_NAME(m_funcSetIsDonkey, "SetIsDonkey")
+    UI_MAP_NAME(m_funcSetHasInventory, "SetHasInventory")
     UI_END_MAP_ELEMENTS_AND_NAMES()
 
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
     virtual void handleReload();
 
     virtual int getSectionColumns(ESceneSection eSection);

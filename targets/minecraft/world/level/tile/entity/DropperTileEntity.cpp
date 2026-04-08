@@ -8,7 +8,7 @@
 #include "minecraft/world/level/tile/entity/TileEntity.h"
 #include "strings.h"
 
-std::wstring DropperTileEntity::getName() {
+std::string DropperTileEntity::getName() {
     return hasCustomName() ? name : gameServices().getString(IDS_CONTAINER_DROPPER);
 }
 

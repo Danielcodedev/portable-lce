@@ -114,8 +114,8 @@ public:
     virtual void SystemFlagSet(INetworkPlayer* pNetworkPlayer, int index) = 0;
     virtual bool SystemFlagGet(INetworkPlayer* pNetworkPlayer, int index) = 0;
 
-    virtual std::wstring GatherStats() = 0;
-    virtual std::wstring GatherRTTStats() = 0;
+    virtual std::string GatherStats() = 0;
+    virtual std::string GatherRTTStats() = 0;
 
 private:
     virtual void SetSessionTexturePackParentId(int id) = 0;

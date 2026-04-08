@@ -109,7 +109,7 @@ private:
 
 public:
     ~Connection();
-    Connection(Socket* socket, const std::wstring& id,
+    Connection(Socket* socket, const std::string& id,
                PacketListener* packetListener);  // throws IOException
 
     void setListener(PacketListener* packetListener);

@@ -71,7 +71,7 @@ UIScene_LoadMenu::UIScene_LoadMenu(int iPad, void* initData,
     LoadMenuInitData* params = (LoadMenuInitData*)initData;
 
     // m_labelGameName.init(app.GetString(IDS_WORLD_NAME));
-    m_labelSeed.init(L"");
+    m_labelSeed.init("");
     m_labelCreatedMode.init(app.GetString(IDS_CREATED_IN_SURVIVAL));
 
     m_buttonGamemode.init(app.GetString(IDS_GAMEMODE_SURVIVAL),
@@ -82,12 +82,12 @@ UIScene_LoadMenu::UIScene_LoadMenu(int iPad, void* initData,
     m_texturePackList.init(app.GetString(IDS_DLC_MENU_TEXTUREPACKS),
                            eControl_TexturePackList);
 
-    m_labelTexturePackName.init(L"");
-    m_labelTexturePackDescription.init(L"");
+    m_labelTexturePackName.init("");
+    m_labelTexturePackDescription.init("");
 
     m_CurrentDifficulty = app.GetGameSettings(m_iPad, eGameSetting_Difficulty);
-    wchar_t TempString[256];
-    swprintf(TempString, 256, L"%ls: %ls", app.GetString(IDS_SLIDER_DIFFICULTY),
+    char TempString[256];
+    snprintf(TempString, 256, "%s: %s", app.GetString(IDS_SLIDER_DIFFICULTY),
              app.GetString(m_iDifficultyTitleSettingA[app.GetGameSettings(
                  m_iPad, eGameSetting_Difficulty)]));
     m_sliderDifficulty.init(
@@ -187,8 +187,8 @@ UIScene_LoadMenu::UIScene_LoadMenu(int iPad, void* initData,
             std::uint8_t* imageData = tp->getPackIcon(imageBytes);
 
             if (imageBytes > 0 && imageData) {
-                wchar_t textureName[64];
-                swprintf(textureName, 64, L"loadsave");
+                char textureName[64];
+                snprintf(textureName, 64, "loadsave");
                 registerSubstitutionTexture(textureName, imageData, imageBytes);
                 m_bitmapIcon.setTextureName(textureName);
             }
@@ -223,8 +223,8 @@ UIScene_LoadMenu::UIScene_LoadMenu(int iPad, void* initData,
             std::uint8_t* imageData = tp->getPackIcon(imageBytes);
 
             if (imageBytes > 0 && imageData) {
-                wchar_t imageName[64];
-                swprintf(imageName, 64, L"tpack%08x", tp->getId());
+                char imageName[64];
+                snprintf(imageName, 64, "tpack%08x", tp->getId());
                 registerSubstitutionTexture(imageName, imageData, imageBytes);
                 m_texturePackList.addPack(i, imageName);
             }
@@ -256,7 +256,7 @@ void UIScene_LoadMenu::updateComponents() {
     }
 }
 
-std::wstring UIScene_LoadMenu::getMoviePath() { return L"LoadMenu"; }
+std::string UIScene_LoadMenu::getMoviePath() { return "LoadMenu"; }
 
 UIControl* UIScene_LoadMenu::GetMainPanel() { return &m_controlMainPanel; }
 
@@ -300,12 +300,12 @@ void UIScene_LoadMenu::tick() {
         // #endif
 
         if (szSeed[0] != 0) {
-            wchar_t TempString[256];
-            swprintf(TempString, 256, L"%ls: %hs", app.GetString(IDS_SEED),
+            char TempString[256];
+            snprintf(TempString, 256, "%s: %hs", app.GetString(IDS_SEED),
                      szSeed);
             m_labelSeed.setLabel(TempString);
         } else {
-            m_labelSeed.setLabel(L"");
+            m_labelSeed.setLabel("");
         }
 
         // Setup all the text and checkboxes to match what the game was saved
@@ -608,7 +608,7 @@ void UIScene_LoadMenu::StartSharedLaunchFlow() {
 
         // do we have a license?
         if (m_pDLCPack &&
-            !m_pDLCPack->hasPurchasedFile(DLCManager::e_DLCType_Texture, L"")) {
+            !m_pDLCPack->hasPurchasedFile(DLCManager::e_DLCType_Texture, "")) {
             // no
 
             // We need to allow people to use a trial texture pack if they are
@@ -667,14 +667,14 @@ void UIScene_LoadMenu::StartSharedLaunchFlow() {
 }
 
 void UIScene_LoadMenu::handleSliderMove(F64 sliderId, F64 currentValue) {
-    wchar_t TempString[256];
+    char TempString[256];
     int value = (int)currentValue;
     switch ((int)sliderId) {
         case eControl_Difficulty:
             m_sliderDifficulty.handleSliderMove(value);
 
             app.SetGameSettings(m_iPad, eGameSetting_Difficulty, value);
-            swprintf(TempString, 256, L"%ls: %ls",
+            snprintf(TempString, 256, "%s: %s",
                      app.GetString(IDS_SLIDER_DIFFICULTY),
                      app.GetString(m_iDifficultyTitleSettingA[value]));
             m_sliderDifficulty.setLabel(TempString);

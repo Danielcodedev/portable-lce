@@ -13,7 +13,7 @@
 #include "platform/XboxStubs.h"
 
 typedef struct {
-    wchar_t* wchFilename;
+    char* wchFilename;
     eFileExtensionType eEXT;
     eTMSFileType eTMSType;
     std::uint8_t* pbData;
@@ -150,8 +150,8 @@ typedef struct {
 
     uint64_t ullOfferID_Full;
     uint64_t ullOfferID_Trial;
-    wchar_t wchBanner[MAX_BANNERNAME_SIZE];
-    wchar_t wchDataFile[MAX_BANNERNAME_SIZE];
+    char wchBanner[MAX_BANNERNAME_SIZE];
+    char wchDataFile[MAX_BANNERNAME_SIZE];
     int iGender;
     int iConfig;
     unsigned int uiSortIndex;
@@ -176,7 +176,7 @@ typedef struct _TMSPPRequest {
     // char szFilename[MAX_TMSFILENAME_SIZE];
     int (*CallbackFunc)(void*, int, int, IPlatformStorage::PTMSPP_FILEDATA,
                         const char* szFilename);
-    wchar_t wchFilename[MAX_TMSFILENAME_SIZE];
+    char wchFilename[MAX_TMSFILENAME_SIZE];
 
     void* lpCallbackParam;
 } TMSPPRequest;

@@ -13,7 +13,7 @@
 #include "java/InputOutputStream/DataOutputStream.h"
 
 PreLoginPacket::PreLoginPacket() {
-    loginKey = L"";
+    loginKey = "";
     m_playerXuids = nullptr;
     m_dwPlayerCount = 0;
     m_friendsOnlyBits = 0;
@@ -25,7 +25,7 @@ PreLoginPacket::PreLoginPacket() {
     m_netcodeVersion = 0;
 }
 
-PreLoginPacket::PreLoginPacket(std::wstring userName) {
+PreLoginPacket::PreLoginPacket(std::string userName) {
     this->loginKey = userName;
     m_playerXuids = nullptr;
     m_dwPlayerCount = 0;
@@ -39,7 +39,7 @@ PreLoginPacket::PreLoginPacket(std::wstring userName) {
 }
 
 PreLoginPacket::PreLoginPacket(
-    std::wstring userName, PlayerUID* playerXuids, std::uint8_t playerCount,
+    std::string userName, PlayerUID* playerXuids, std::uint8_t playerCount,
     std::uint8_t friendsOnlyBits, std::uint32_t ugcPlayersVersion,
     const char* pszUniqueSaveName, std::uint32_t serverSettings,
     std::uint8_t hostIndex, std::uint32_t texturePackId) {

@@ -51,7 +51,7 @@ static_assert(sizeof(ProfileGameSettings) == 204,
 void* s_profileData[XUSER_MAX_COUNT] = {};
 IPlatformProfile::PROFILESETTINGS s_dashboardSettings[XUSER_MAX_COUNT] = {};
 char s_gamertags[XUSER_MAX_COUNT][16] = {};
-std::wstring s_displayNames[XUSER_MAX_COUNT];
+std::string s_displayNames[XUSER_MAX_COUNT];
 int s_lockedProfile = 0;
 std::function<int(IPlatformProfile::PROFILESETTINGS*, int)>
     s_defaultOptionsCallback;
@@ -65,7 +65,7 @@ void ensureFakeIdentity(int iPad) {
 
     std::snprintf(s_gamertags[iPad], sizeof(s_gamertags[iPad]), "Player%d",
                   iPad + 1);
-    s_displayNames[iPad] = std::wstring(L"Player") + std::to_wstring(iPad + 1);
+    s_displayNames[iPad] = std::string("Player") + std::to_string(iPad + 1);
 }
 
 void initialiseDefaultGameSettings(ProfileGameSettings* gameSettings) {
@@ -157,7 +157,7 @@ char* StubProfile::GetGamertag(int iPad) {
     return s_gamertags[p];
 }
 
-std::wstring StubProfile::GetDisplayName(int iPad) {
+std::string StubProfile::GetDisplayName(int iPad) {
     const int p = isValidPad(iPad) ? iPad : 0;
     ensureFakeIdentity(p);
     return s_displayNames[p];

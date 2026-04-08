@@ -32,8 +32,8 @@ UIScene_FurnaceMenu::UIScene_FurnaceMenu(int iPad, void* _initData,
     m_labelIngredient.init(app.GetString(IDS_INGREDIENT));
     m_labelFuel.init(app.GetString(IDS_FUEL));
 
-    m_progressFurnaceFire.init(L"", 0, 0, 12, 0);
-    m_progressFurnaceArrow.init(L"", 0, 0, 24, 0);
+    m_progressFurnaceFire.init("", 0, 0, 12, 0);
+    m_progressFurnaceArrow.init("", 0, 0, 24, 0);
 
     Minecraft* pMinecraft = Minecraft::GetInstance();
     if (pMinecraft->localgameModes[initData->iPad] != nullptr) {
@@ -58,11 +58,11 @@ UIScene_FurnaceMenu::UIScene_FurnaceMenu(int iPad, void* _initData,
     delete initData;
 }
 
-std::wstring UIScene_FurnaceMenu::getMoviePath() {
+std::string UIScene_FurnaceMenu::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1) {
-        return L"FurnaceMenuSplit";
+        return "FurnaceMenuSplit";
     } else {
-        return L"FurnaceMenu";
+        return "FurnaceMenu";
     }
 }
 

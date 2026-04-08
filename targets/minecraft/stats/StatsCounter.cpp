@@ -356,7 +356,7 @@ void StatsCounter::dumpStatsToTTY() {
     std::vector<Stat*>::iterator statsEnd = Stats::all->end();
     for (std::vector<Stat*>::iterator statsIter = Stats::all->begin();
          statsIter != statsEnd; ++statsIter) {
-        Log::info("%ls\t\t%u\t%u\t%u\t%u\n", (*statsIter)->name.c_str(),
+        Log::info("%s\t\t%u\t%u\t%u\t%u\n", (*statsIter)->name.c_str(),
                         getValue(*statsIter, 0), getValue(*statsIter, 1),
                         getValue(*statsIter, 2), getValue(*statsIter, 3));
     }

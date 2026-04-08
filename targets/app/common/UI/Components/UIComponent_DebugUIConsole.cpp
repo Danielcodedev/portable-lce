@@ -14,8 +14,8 @@ UIComponent_DebugUIConsole::UIComponent_DebugUIConsole(int iPad, void* initData,
     m_bTextChanged = false;
 }
 
-std::wstring UIComponent_DebugUIConsole::getMoviePath() {
-    return L"DebugUIConsoleComponent";
+std::string UIComponent_DebugUIConsole::getMoviePath() {
+    return "DebugUIConsoleComponent";
 }
 
 void UIComponent_DebugUIConsole::tick() {

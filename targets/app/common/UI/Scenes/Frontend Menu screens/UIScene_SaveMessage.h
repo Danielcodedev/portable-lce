@@ -28,7 +28,7 @@ private:
     UI_BEGIN_MAP_ELEMENTS_AND_NAMES(UIScene)
     UI_MAP_ELEMENT(m_buttonConfirm, "Confirm")
     UI_MAP_ELEMENT(m_labelDescription, "Description")
-    UI_MAP_NAME(m_funcAutoResize, L"AutoResize")
+    UI_MAP_NAME(m_funcAutoResize, "AutoResize")
     UI_END_MAP_ELEMENTS_AND_NAMES()
 
 public:
@@ -41,7 +41,7 @@ public:
     virtual void updateTooltips();
 
 protected:
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
 
 public:
     // INPUT

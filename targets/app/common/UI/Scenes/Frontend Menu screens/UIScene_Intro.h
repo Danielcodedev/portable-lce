@@ -18,7 +18,7 @@ private:
 
     IggyName m_funcSetIntroPlatform;
     UI_BEGIN_MAP_ELEMENTS_AND_NAMES(UIScene)
-    UI_MAP_NAME(m_funcSetIntroPlatform, L"SetIntroPlatform")
+    UI_MAP_NAME(m_funcSetIntroPlatform, "SetIntroPlatform")
     UI_END_MAP_ELEMENTS_AND_NAMES()
 
 public:
@@ -30,7 +30,7 @@ public:
     virtual bool hasFocus(int iPad) { return bHasFocus; }
 
 protected:
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
 
 public:
     // INPUT

@@ -15,17 +15,17 @@ class UILayer;
 
 class UIScene_EndPoem : public UIScene {
 private:
-    std::wstring noNoiseString;
-    std::wstring noiseString;
+    std::string noNoiseString;
+    std::string noiseString;
     std::vector<int> m_noiseLengths;
     bool m_bIgnoreInput;
     int m_requestedLabel;
 
-    std::vector<std::wstring> m_paragraphs;
+    std::vector<std::string> m_paragraphs;
 
     IggyName m_funcSetNextLabel;
     UI_BEGIN_MAP_ELEMENTS_AND_NAMES(UIScene)
-    UI_MAP_NAME(m_funcSetNextLabel, L"SetNextLabel")
+    UI_MAP_NAME(m_funcSetNextLabel, "SetNextLabel")
     UI_END_MAP_ELEMENTS_AND_NAMES()
 
 public:
@@ -35,7 +35,7 @@ public:
     virtual void updateTooltips();
 
 protected:
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
 
 public:
     virtual void tick();

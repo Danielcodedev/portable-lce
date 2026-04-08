@@ -28,9 +28,9 @@ public:
     }
 
     void loadStringTable(StringTable* table);
-    const wchar_t* getString(const std::wstring& key);
+    const char* getString(const std::string& key);
 
-    AABB* getNamedArea(const std::wstring& areaName);
+    AABB* getNamedArea(const std::string& areaName);
 
     StringTable* getStringTable() { return m_stringTable; }
 };

@@ -98,9 +98,9 @@ PlayerList::PlayerList(MinecraftServer* server) {
     viewDistance = 10;
 #endif
 
-    // int viewDistance = server->settings->getInt(L"view-distance", 10);
+    // int viewDistance = server->settings->getInt("view-distance", 10);
 
-    maxPlayers = server->settings->getInt(L"max-players", 20);
+    maxPlayers = server->settings->getInt("max-players", 20);
     doWhiteList = false;
 }
 
@@ -193,14 +193,14 @@ void PlayerList::placeNewPlayer(Connection* connection,
     }
 
     if (!player->customTextureUrl.empty() &&
-        player->customTextureUrl.substr(0, 3).compare(L"def") != 0 &&
+        player->customTextureUrl.substr(0, 3).compare("def") != 0 &&
         !gameServices().isFileInMemoryTextures(player->customTextureUrl)) {
         if (server->getConnection()->addPendingTextureRequest(
                 player->customTextureUrl)) {
 #if !defined(_CONTENT_PACKAGE)
-            wprintf(
-                L"Sending texture packet to get custom skin %ls from player "
-                L"%ls\n",
+            printf(
+                "Sending texture packet to get custom skin %s from player "
+                "%s\n",
                 player->customTextureUrl.c_str(), player->name.c_str());
 #endif
             playerConnection->send(std::shared_ptr<TextureAndGeometryPacket>(
@@ -214,14 +214,14 @@ void PlayerList::placeNewPlayer(Connection* connection,
     }
 
     if (!player->customTextureUrl2.empty() &&
-        player->customTextureUrl2.substr(0, 3).compare(L"def") != 0 &&
+        player->customTextureUrl2.substr(0, 3).compare("def") != 0 &&
         !gameServices().isFileInMemoryTextures(player->customTextureUrl2)) {
         if (server->getConnection()->addPendingTextureRequest(
                 player->customTextureUrl2)) {
 #if !defined(_CONTENT_PACKAGE)
-            wprintf(
-                L"Sending texture packet to get custom skin %ls from player "
-                L"%ls\n",
+            printf(
+                "Sending texture packet to get custom skin %s from player "
+                "%s\n",
                 player->customTextureUrl2.c_str(), player->name.c_str());
 #endif
             playerConnection->send(std::shared_ptr<TexturePacket>(
@@ -271,7 +271,7 @@ void PlayerList::placeNewPlayer(Connection* connection,
     addPlayerToReceiving(player);
 
     playerConnection->send(std::make_shared<LoginPacket>(
-        L"", player->entityId, level->getLevelData()->getGenerator(),
+        "", player->entityId, level->getLevelData()->getGenerator(),
         level->getSeed(), player->gameMode->getGameModeForPlayer()->getId(),
         (uint8_t)level->dimension->id, (uint8_t)level->getMaxBuildHeight(),
         (uint8_t)getMaxPlayers(), level->difficulty,
@@ -295,7 +295,7 @@ void PlayerList::placeNewPlayer(Connection* connection,
     // 4J-PB - removed, since it needs to be localised in the language the
     // client is in
     // server->players->broadcastAll( std::shared_ptr<ChatPacket>( new
-    // ChatPacket(L"§e" + playerEntity->name + L" joined the game.") ) );
+    // ChatPacket("§e" + playerEntity->name + " joined the game.") ) );
     broadcastAll(std::shared_ptr<ChatPacket>(
         new ChatPacket(player->name, ChatPacket::e_ChatPlayerJoinedGame)));
 
@@ -583,7 +583,7 @@ void PlayerList::remove(std::shared_ptr<ServerPlayer> player) {
 }
 
 std::shared_ptr<ServerPlayer> PlayerList::getPlayerForLogin(
-    PendingConnection* pendingConnection, const std::wstring& userName,
+    PendingConnection* pendingConnection, const std::string& userName,
     PlayerUID xuid, PlayerUID onlineXuid) {
     if (players.size() >= maxPlayers) {
         pendingConnection->disconnect(DisconnectPacket::eDisconnect_ServerFull);
@@ -1119,7 +1119,7 @@ void PlayerList::tick() {
                 if (newPlayer != nullptr) {
                     receiveAllPlayers[dim][i] = newPlayer;
                     Log::info(
-                        "Replacing primary player %ls with %ls in dimension "
+                        "Replacing primary player %s with %s in dimension "
                         "%d\n",
                         currentPlayer->name.c_str(), newPlayer->name.c_str(),
                         dim);
@@ -1153,18 +1153,18 @@ void PlayerList::broadcastAll(std::shared_ptr<Packet> packet, int dimension) {
     }
 }
 
-std::wstring PlayerList::getPlayerNames() {
-    std::wstring msg;
+std::string PlayerList::getPlayerNames() {
+    std::string msg;
     for (unsigned int i = 0; i < players.size(); i++) {
-        if (i > 0) msg += L", ";
+        if (i > 0) msg += ", ";
         msg += players[i]->name;
     }
     return msg;
 }
 
-bool PlayerList::isWhiteListed(const std::wstring& name) { return true; }
+bool PlayerList::isWhiteListed(const std::string& name) { return true; }
 
-bool PlayerList::isOp(const std::wstring& name) { return false; }
+bool PlayerList::isOp(const std::string& name) { return false; }
 
 bool PlayerList::isOp(std::shared_ptr<ServerPlayer> player) {
     bool cheatsEnabled = gameServices().getGameHostOption(eGameHostOption_CheatsEnabled);
@@ -1178,7 +1178,7 @@ bool PlayerList::isOp(std::shared_ptr<ServerPlayer> player) {
     return isOp;
 }
 
-std::shared_ptr<ServerPlayer> PlayerList::getPlayer(const std::wstring& name) {
+std::shared_ptr<ServerPlayer> PlayerList::getPlayer(const std::string& name) {
     for (unsigned int i = 0; i < players.size(); i++) {
         std::shared_ptr<ServerPlayer> p = players[i];
         if (p->name ==
@@ -1232,8 +1232,8 @@ std::shared_ptr<ServerPlayer> PlayerList::getNearestPlayer(Pos* position,
 std::vector<ServerPlayer>* PlayerList::getPlayers(
     Pos* position, int rangeMin, int rangeMax, int count, int mode,
     int levelMin, int levelMax,
-    std::unordered_map<std::wstring, int>* scoreRequirements,
-    const std::wstring& playerName, const std::wstring& teamName,
+    std::unordered_map<std::string, int>* scoreRequirements,
+    const std::string& playerName, const std::string& teamName,
     Level* level) {
     Log::info("getPlayers NOT IMPLEMENTED!");
     return nullptr;
@@ -1289,7 +1289,7 @@ std::vector<ServerPlayer>* PlayerList::getPlayers(
 
 bool PlayerList::meetsScoreRequirements(
     std::shared_ptr<Player> player,
-    std::unordered_map<std::wstring, int> scoreRequirements) {
+    std::unordered_map<std::string, int> scoreRequirements) {
     Log::info("meetsScoreRequirements NOT IMPLEMENTED!");
     return false;
 
@@ -1321,8 +1321,8 @@ bool PlayerList::meetsScoreRequirements(
     // return true;
 }
 
-void PlayerList::sendMessage(const std::wstring& name,
-                             const std::wstring& message) {
+void PlayerList::sendMessage(const std::string& name,
+                             const std::string& message) {
     std::shared_ptr<ServerPlayer> player = getPlayer(name);
     if (player != nullptr) {
         player->connection->send(std::make_shared<ChatPacket>(message));
@@ -1407,9 +1407,9 @@ void PlayerList::saveAll(ProgressListener* progressListener,
     }
 }
 
-void PlayerList::whiteList(const std::wstring& playerName) {}
+void PlayerList::whiteList(const std::string& playerName) {}
 
-void PlayerList::blackList(const std::wstring& playerName) {}
+void PlayerList::blackList(const std::string& playerName) {}
 
 void PlayerList::reloadWhitelist() {}
 
@@ -1524,7 +1524,7 @@ void PlayerList::removePlayerFromReceiving(std::shared_ptr<ServerPlayer> player,
         dimIndex = 2;
 
 #if !defined(_CONTENT_PACKAGE)
-    Log::info("Requesting remove player %ls as primary in dimension %d\n",
+    Log::info("Requesting remove player %s as primary in dimension %d\n",
                     player->name.c_str(), dimIndex);
 #endif
     bool playerRemoved = false;
@@ -1534,7 +1534,7 @@ void PlayerList::removePlayerFromReceiving(std::shared_ptr<ServerPlayer> player,
     if (it != receiveAllPlayers[dimIndex].end()) {
 #if !defined(_CONTENT_PACKAGE)
         Log::info(
-            "Remove: Removing player %ls as primary in dimension %d\n",
+            "Remove: Removing player %s as primary in dimension %d\n",
             player->name.c_str(), dimIndex);
 #endif
         receiveAllPlayers[dimIndex].erase(it);
@@ -1554,7 +1554,7 @@ void PlayerList::removePlayerFromReceiving(std::shared_ptr<ServerPlayer> player,
                 otherPlayer->IsSameSystem(thisPlayer)) {
 #if !defined(_CONTENT_PACKAGE)
                 Log::info(
-                    "Remove: Adding player %ls as primary in dimension %d\n",
+                    "Remove: Adding player %s as primary in dimension %d\n",
                     newPlayer->name.c_str(), dimIndex);
 #endif
                 receiveAllPlayers[dimIndex].push_back(newPlayer);
@@ -1564,7 +1564,7 @@ void PlayerList::removePlayerFromReceiving(std::shared_ptr<ServerPlayer> player,
     } else if (thisPlayer == nullptr) {
 #if !defined(_CONTENT_PACKAGE)
         Log::info(
-            "Remove: Qnet player for %ls was nullptr so re-checking all "
+            "Remove: Qnet player for %s was nullptr so re-checking all "
             "players\n",
             player->name.c_str());
 #endif
@@ -1597,7 +1597,7 @@ void PlayerList::removePlayerFromReceiving(std::shared_ptr<ServerPlayer> player,
                 if (!foundPrimary) {
 #if !defined(_CONTENT_PACKAGE)
                     Log::info(
-                        "Remove: Adding player %ls as primary in dimension "
+                        "Remove: Adding player %s as primary in dimension "
                         "%d\n",
                         newPlayer->name.c_str(), newPlayerDim);
 #endif
@@ -1616,7 +1616,7 @@ void PlayerList::addPlayerToReceiving(std::shared_ptr<ServerPlayer> player) {
         playerDim = 2;
 
 #if !defined(_CONTENT_PACKAGE)
-    Log::info("Requesting add player %ls as primary in dimension %d\n",
+    Log::info("Requesting add player %s as primary in dimension %d\n",
                     player->name.c_str(), playerDim);
 #endif
 
@@ -1627,7 +1627,7 @@ void PlayerList::addPlayerToReceiving(std::shared_ptr<ServerPlayer> player) {
     if (thisPlayer == nullptr) {
 #if !defined(_CONTENT_PACKAGE)
         Log::info(
-            "Add: Qnet player for player %ls is nullptr so not adding them\n",
+            "Add: Qnet player for player %s is nullptr so not adding them\n",
             player->name.c_str());
 #endif
         shouldAddPlayer = false;
@@ -1647,7 +1647,7 @@ void PlayerList::addPlayerToReceiving(std::shared_ptr<ServerPlayer> player) {
 
     if (shouldAddPlayer) {
 #if !defined(_CONTENT_PACKAGE)
-        Log::info("Add: Adding player %ls as primary in dimension %d\n",
+        Log::info("Add: Adding player %s as primary in dimension %d\n",
                         player->name.c_str(), playerDim);
 #endif
         receiveAllPlayers[playerDim].push_back(player);

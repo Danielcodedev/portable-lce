@@ -70,11 +70,11 @@ protected:
     UI_MAP_ELEMENT(m_controlIconHolder, "IconHolder")
     UI_MAP_ELEMENT(m_controlExitScreenshot, "ExitScreenShot")
 
-    UI_MAP_NAME(m_funcAdjustLayout, L"AdjustLayout")
-    UI_MAP_NAME(m_funcSetupIconHolder, L"SetupIconHolder")
+    UI_MAP_NAME(m_funcAdjustLayout, "AdjustLayout")
+    UI_MAP_NAME(m_funcSetupIconHolder, "SetupIconHolder")
     UI_END_MAP_ELEMENTS_AND_NAMES()
 
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
 
 public:
     virtual EUIScene getSceneType() { return eUIComponent_TutorialPopup; }
@@ -112,13 +112,13 @@ protected:
     void handleTimerComplete(int id);
 
 private:
-    void _SetDescription(UIScene* interactScene, const std::wstring& desc,
-                         const std::wstring& title, bool allowFade,
+    void _SetDescription(UIScene* interactScene, const std::string& desc,
+                         const std::string& title, bool allowFade,
                          bool isReminder);
-    std::wstring _SetIcon(int icon, int iAuxVal, bool isFoil,
-                          const wchar_t* desc);
-    std::wstring _SetImage(std::wstring& desc);
-    std::wstring ParseDescription(int iPad, std::wstring& text);
+    std::string _SetIcon(int icon, int iAuxVal, bool isFoil,
+                          const char* desc);
+    std::string _SetImage(std::string& desc);
+    std::string ParseDescription(int iPad, std::string& text);
     void UpdateInteractScenePosition(bool visible);
 
     void setupIconHolder(EIcons icon);

@@ -18,10 +18,10 @@ private:
     std::vector<DLCPack*> m_childPacks;
     DLCPack* m_parentPack;
 
-    std::unordered_map<int, std::wstring> m_parameters;
+    std::unordered_map<int, std::string> m_parameters;
 
-    std::wstring m_packName;
-    std::wstring m_dataPath;
+    std::string m_packName;
+    std::string m_dataPath;
     std::uint32_t m_dwLicenseMask;
     int m_dlcMountIndex;
     XCONTENTDEVICEID m_dlcDeviceID;
@@ -34,10 +34,10 @@ private:
         m_data;  // This pointer is for all the data used for this pack, so
                  // deleting it invalidates ALL of it's children.
 public:
-    DLCPack(const std::wstring& name, std::uint32_t dwLicenseMask);
+    DLCPack(const std::string& name, std::uint32_t dwLicenseMask);
     ~DLCPack();
 
-    std::wstring getFullDataPath() { return m_dataPath; }
+    std::string getFullDataPath() { return m_dataPath; }
 
     void SetDataPointer(std::uint8_t* pbData) { m_data = pbData; }
 
@@ -62,7 +62,7 @@ public:
     void setParentPack(DLCPack* parentPack);
 
     void addParameter(DLCManager::EDLCParameterType type,
-                      const std::wstring& value);
+                      const std::string& value);
     bool getParameterAsUInt(DLCManager::EDLCParameterType type,
                             unsigned int& param);
 
@@ -71,38 +71,38 @@ public:
     }
     std::uint32_t getLicenseMask() { return m_dwLicenseMask; }
 
-    std::wstring getName() { return m_packName; }
+    std::string getName() { return m_packName; }
 
     void UpdateLanguage();
     uint64_t getPurchaseOfferId() { return m_ullFullOfferId; }
 
-    DLCFile* addFile(DLCManager::EDLCType type, const std::wstring& path);
+    DLCFile* addFile(DLCManager::EDLCType type, const std::string& path);
     DLCFile* getFile(DLCManager::EDLCType type, unsigned int index);
-    DLCFile* getFile(DLCManager::EDLCType type, const std::wstring& path);
+    DLCFile* getFile(DLCManager::EDLCType type, const std::string& path);
 
     unsigned int getDLCItemsCount(
         DLCManager::EDLCType type = DLCManager::e_DLCType_All);
     unsigned int getFileIndexAt(DLCManager::EDLCType type,
-                                const std::wstring& path, bool& found);
+                                const std::string& path, bool& found);
     bool doesPackContainFile(DLCManager::EDLCType type,
-                             const std::wstring& path);
+                             const std::string& path);
     std::uint32_t GetPackID() { return m_packId; }
 
     unsigned int getSkinCount() {
         return getDLCItemsCount(DLCManager::e_DLCType_Skin);
     }
-    unsigned int getSkinIndexAt(const std::wstring& path, bool& found) {
+    unsigned int getSkinIndexAt(const std::string& path, bool& found) {
         return getFileIndexAt(DLCManager::e_DLCType_Skin, path, found);
     }
-    DLCSkinFile* getSkinFile(const std::wstring& path) {
+    DLCSkinFile* getSkinFile(const std::string& path) {
         return (DLCSkinFile*)getFile(DLCManager::e_DLCType_Skin, path);
     }
     DLCSkinFile* getSkinFile(unsigned int index) {
         return (DLCSkinFile*)getFile(DLCManager::e_DLCType_Skin, index);
     }
-    bool doesPackContainSkin(const std::wstring& path) {
+    bool doesPackContainSkin(const std::string& path) {
         return doesPackContainFile(DLCManager::e_DLCType_Skin, path);
     }
 
-    bool hasPurchasedFile(DLCManager::EDLCType type, const std::wstring& path);
+    bool hasPurchasedFile(DLCManager::EDLCType type, const std::string& path);
 };

@@ -35,7 +35,7 @@ public:
                           bool bNavigateBack = false);
     bool loadEnchantingMenu(int iPad, std::shared_ptr<Inventory> inventory,
                             int x, int y, int z, Level* level,
-                            const std::wstring& name);
+                            const std::string& name);
     bool loadFurnaceMenu(int iPad, std::shared_ptr<Inventory> inventory,
                          std::shared_ptr<FurnaceTileEntity> furnace);
     bool loadBrewingStandMenu(
@@ -55,7 +55,7 @@ public:
                            Level* level, int x, int y, int z);
     bool loadTradingMenu(int iPad, std::shared_ptr<Inventory> inventory,
                          std::shared_ptr<Merchant> trader, Level* level,
-                         const std::wstring& name);
+                         const std::string& name);
     bool loadHopperMenu(int iPad, std::shared_ptr<Inventory> inventory,
                         std::shared_ptr<HopperTileEntity> hopper);
     bool loadHopperMenu(int iPad, std::shared_ptr<Inventory> inventory,

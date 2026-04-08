@@ -48,11 +48,11 @@ UIScene_DispenserMenu::UIScene_DispenserMenu(int iPad, void* _initData,
     delete initData;
 }
 
-std::wstring UIScene_DispenserMenu::getMoviePath() {
+std::string UIScene_DispenserMenu::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1) {
-        return L"DispenserMenuSplit";
+        return "DispenserMenuSplit";
     } else {
-        return L"DispenserMenu";
+        return "DispenserMenu";
     }
 }
 

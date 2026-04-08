@@ -11,31 +11,31 @@
 
 class UILayer;
 
-const wchar_t*
+const char*
     UIScene_DebugOptionsMenu::m_DebugCheckboxTextA[eDebugSetting_Max + 1] = {
-        L"Load Saves From Local Folder Mode",
-        L"Write Saves To Local Folder Mode",
-        L"Freeze Players",  // L"Not Used",
-        L"Display Safe Area",
-        L"Mobs don't attack",
-        L"Freeze Time",
-        L"Disable Weather",
-        L"Craft Anything",
-        L"Use DPad for debug",
-        L"Mobs don't tick",
-        L"Art tools",  // L"Instant Mine",
-        L"Show UI Console",
-        L"Distributable Save",
-        L"Debug Leaderboards",
-        L"Height-Water Maps",
-        L"Superflat Nether",
-        // L"Light/Dark background",
-        L"More lightning when thundering",
-        L"Biome override",
-        // L"Go To End",
-        L"Go To Overworld",
-        L"Unlock All DLC",  // L"Toggle Font",
-        L"Show Marketing Guide",
+        "Load Saves From Local Folder Mode",
+        "Write Saves To Local Folder Mode",
+        "Freeze Players",  // "Not Used",
+        "Display Safe Area",
+        "Mobs don't attack",
+        "Freeze Time",
+        "Disable Weather",
+        "Craft Anything",
+        "Use DPad for debug",
+        "Mobs don't tick",
+        "Art tools",  // "Instant Mine",
+        "Show UI Console",
+        "Distributable Save",
+        "Debug Leaderboards",
+        "Height-Water Maps",
+        "Superflat Nether",
+        // "Light/Dark background",
+        "More lightning when thundering",
+        "Biome override",
+        // "Go To End",
+        "Go To Overworld",
+        "Unlock All DLC",  // "Toggle Font",
+        "Show Marketing Guide",
 };
 
 UIScene_DebugOptionsMenu::UIScene_DebugOptionsMenu(int iPad, void* initData,
@@ -51,15 +51,15 @@ UIScene_DebugOptionsMenu::UIScene_DebugOptionsMenu(int iPad, void* initData,
          m_iTotalCheckboxElements < eDebugSetting_Max &&
          m_iTotalCheckboxElements < 21;
          ++m_iTotalCheckboxElements) {
-        std::wstring label(m_DebugCheckboxTextA[m_iTotalCheckboxElements]);
+        std::string label(m_DebugCheckboxTextA[m_iTotalCheckboxElements]);
         m_checkboxes[m_iTotalCheckboxElements].init(
             label, m_iTotalCheckboxElements,
             (uiDebugBitmask & (1 << m_iTotalCheckboxElements)) ? true : false);
     }
 }
 
-std::wstring UIScene_DebugOptionsMenu::getMoviePath() {
-    return L"DebugOptionsMenu";
+std::string UIScene_DebugOptionsMenu::getMoviePath() {
+    return "DebugOptionsMenu";
 }
 
 void UIScene_DebugOptionsMenu::handleInput(int iPad, int key, bool repeat,

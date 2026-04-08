@@ -69,43 +69,43 @@ protected:
 
     UI_MAP_ELEMENT(m_labelDisplayName, "LabelGamertag")
 
-    UI_MAP_NAME(m_funcLoadHud, L"LoadHud")
-    UI_MAP_NAME(m_funcSetExpBarProgress, L"SetExpBarProgress")
-    UI_MAP_NAME(m_funcSetPlayerLevel, L"SetPlayerLevel")
-    UI_MAP_NAME(m_funcSetActiveSlot, L"SetActiveSlot")
+    UI_MAP_NAME(m_funcLoadHud, "LoadHud")
+    UI_MAP_NAME(m_funcSetExpBarProgress, "SetExpBarProgress")
+    UI_MAP_NAME(m_funcSetPlayerLevel, "SetPlayerLevel")
+    UI_MAP_NAME(m_funcSetActiveSlot, "SetActiveSlot")
 
-    UI_MAP_NAME(m_funcSetHealth, L"SetHealth")
-    UI_MAP_NAME(m_funcSetFood, L"SetFood")
-    UI_MAP_NAME(m_funcSetAir, L"SetAir")
-    UI_MAP_NAME(m_funcSetArmour, L"SetArmour")
+    UI_MAP_NAME(m_funcSetHealth, "SetHealth")
+    UI_MAP_NAME(m_funcSetFood, "SetFood")
+    UI_MAP_NAME(m_funcSetAir, "SetAir")
+    UI_MAP_NAME(m_funcSetArmour, "SetArmour")
 
-    UI_MAP_NAME(m_funcShowHealth, L"ShowHealth")
-    UI_MAP_NAME(m_funcShowHorseHealth, L"ShowHorseHealth")
-    UI_MAP_NAME(m_funcShowFood, L"ShowFood")
-    UI_MAP_NAME(m_funcShowAir, L"ShowAir")
-    UI_MAP_NAME(m_funcShowArmour, L"ShowArmour")
-    UI_MAP_NAME(m_funcShowExpbar, L"ShowExpBar")
+    UI_MAP_NAME(m_funcShowHealth, "ShowHealth")
+    UI_MAP_NAME(m_funcShowHorseHealth, "ShowHorseHealth")
+    UI_MAP_NAME(m_funcShowFood, "ShowFood")
+    UI_MAP_NAME(m_funcShowAir, "ShowAir")
+    UI_MAP_NAME(m_funcShowArmour, "ShowArmour")
+    UI_MAP_NAME(m_funcShowExpbar, "ShowExpBar")
 
-    UI_MAP_NAME(m_funcSetRegenerationEffect, L"SetRegenerationEffect")
-    UI_MAP_NAME(m_funcSetFoodSaturationLevel, L"SetFoodSaturationLevel")
+    UI_MAP_NAME(m_funcSetRegenerationEffect, "SetRegenerationEffect")
+    UI_MAP_NAME(m_funcSetFoodSaturationLevel, "SetFoodSaturationLevel")
 
-    UI_MAP_NAME(m_funcSetDragonHealth, L"SetDragonHealth")
-    UI_MAP_NAME(m_funcSetDragonLabel, L"SetDragonLabel")
-    UI_MAP_NAME(m_funcShowDragonHealth, L"ShowDragonHealthBar")
+    UI_MAP_NAME(m_funcSetDragonHealth, "SetDragonHealth")
+    UI_MAP_NAME(m_funcSetDragonLabel, "SetDragonLabel")
+    UI_MAP_NAME(m_funcShowDragonHealth, "ShowDragonHealthBar")
 
-    UI_MAP_NAME(m_funcSetSelectedLabel, L"SetSelectedLabel")
-    UI_MAP_NAME(m_funcHideSelectedLabel, L"HideSelectedLabel")
+    UI_MAP_NAME(m_funcSetSelectedLabel, "SetSelectedLabel")
+    UI_MAP_NAME(m_funcHideSelectedLabel, "HideSelectedLabel")
 
-    UI_MAP_NAME(m_funcRepositionHud, L"RepositionHud")
-    UI_MAP_NAME(m_funcSetDisplayName, L"SetGamertag")
+    UI_MAP_NAME(m_funcRepositionHud, "RepositionHud")
+    UI_MAP_NAME(m_funcSetDisplayName, "SetGamertag")
 
-    UI_MAP_NAME(m_funcSetTooltipsEnabled, L"SetTooltipsEnabled")
+    UI_MAP_NAME(m_funcSetTooltipsEnabled, "SetTooltipsEnabled")
 
-    UI_MAP_NAME(m_funcSetRidingHorse, L"SetRidingHorse")
-    UI_MAP_NAME(m_funcSetHorseHealth, L"SetHorseHealth")
-    UI_MAP_NAME(m_funcSetHorseJumpBarProgress, L"SetHorseJumpBarProgress")
+    UI_MAP_NAME(m_funcSetRidingHorse, "SetRidingHorse")
+    UI_MAP_NAME(m_funcSetHorseHealth, "SetHorseHealth")
+    UI_MAP_NAME(m_funcSetHorseJumpBarProgress, "SetHorseJumpBarProgress")
 
-    UI_MAP_NAME(m_funcSetHealthAbsorb, L"SetHealthAbsorb")
+    UI_MAP_NAME(m_funcSetHealthAbsorb, "SetHealthAbsorb")
     UI_END_MAP_ELEMENTS_AND_NAMES()
 
 public:
@@ -117,7 +117,7 @@ public:
 
 protected:
     // TODO: This should be pure virtual in this class
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
 
 public:
     virtual EUIScene getSceneType() { return eUIScene_HUD; }
@@ -163,12 +163,12 @@ private:
     void SetFoodSaturationLevel(int iSaturation);
 
     void SetDragonHealth(float health);
-    void SetDragonLabel(const std::wstring& label);
+    void SetDragonLabel(const std::string& label);
     void ShowDragonHealth(bool show);
 
     void HideSelectedLabel();
 
-    void SetDisplayName(const std::wstring& displayName);
+    void SetDisplayName(const std::string& displayName);
 
     void SetTooltipsEnabled(bool bEnabled);
 
@@ -179,7 +179,7 @@ private:
     void SetHealthAbsorb(int healthAbsorb);
 
 public:
-    void SetSelectedLabel(const std::wstring& label);
+    void SetSelectedLabel(const std::string& label);
     void ShowDisplayName(bool show);
 
     void handleGameTick();

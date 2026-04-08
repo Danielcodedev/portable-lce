@@ -18,5 +18,5 @@ public:
                     unsigned char numRepeats = TUTORIAL_MESSAGE_DEFAULT_SHOW);
 
     bool canDisplay();
-    const wchar_t* getMessageForDisplay();
+    const char* getMessageForDisplay();
 };

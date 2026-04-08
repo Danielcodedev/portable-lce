@@ -121,13 +121,13 @@ UIScene_LeaderboardsMenu::UIScene_LeaderboardsMenu(int iPad, void* initData,
     SetLeaderboardHeader();
     m_currentFilter = IPlatformLeaderboard::eFM_Friends;
 
-    wchar_t filterBuffer[40];
-    swprintf(filterBuffer, 40, L"%ls%ls", app.GetString(IDS_LEADERBOARD_FILTER),
+    char filterBuffer[40];
+    snprintf(filterBuffer, 40, "%s%s", app.GetString(IDS_LEADERBOARD_FILTER),
              app.GetString(IDS_LEADERBOARD_FILTER_FRIENDS));
     m_labelFilter.init(filterBuffer);
 
-    wchar_t entriesBuffer[40];
-    swprintf(entriesBuffer, 40, L"%ls%i",
+    char entriesBuffer[40];
+    snprintf(entriesBuffer, 40, "%s%i",
              app.GetString(IDS_LEADERBOARD_ENTRIES), 0);
     m_labelEntries.init(entriesBuffer);
 
@@ -154,8 +154,8 @@ void UIScene_LeaderboardsMenu::updateComponents() {
     m_parentLayer->showComponent(m_iPad, eUIComponent_Logo, false);
 }
 
-std::wstring UIScene_LeaderboardsMenu::getMoviePath() {
-    return L"LeaderboardMenu";
+std::string UIScene_LeaderboardsMenu::getMoviePath() {
+    return "LeaderboardMenu";
 }
 
 void UIScene_LeaderboardsMenu::tick() {
@@ -294,24 +294,24 @@ void UIScene_LeaderboardsMenu::handleInput(int iPad, int key, bool repeat,
                 switch (m_currentFilter) {
                     case IPlatformLeaderboard::eFM_Friends: {
                         m_currentFilter = IPlatformLeaderboard::eFM_MyScore;
-                        wchar_t filterBuffer[40];
-                        swprintf(filterBuffer, 40, L"%ls%ls",
+                        char filterBuffer[40];
+                        snprintf(filterBuffer, 40, "%s%s",
                                  app.GetString(IDS_LEADERBOARD_FILTER),
                                  app.GetString(IDS_LEADERBOARD_FILTER_MYSCORE));
                         m_labelFilter.setLabel(filterBuffer);
                     } break;
                     case IPlatformLeaderboard::eFM_MyScore: {
                         m_currentFilter = IPlatformLeaderboard::eFM_TopRank;
-                        wchar_t filterBuffer[40];
-                        swprintf(filterBuffer, 40, L"%ls%ls",
+                        char filterBuffer[40];
+                        snprintf(filterBuffer, 40, "%s%s",
                                  app.GetString(IDS_LEADERBOARD_FILTER),
                                  app.GetString(IDS_LEADERBOARD_FILTER_OVERALL));
                         m_labelFilter.setLabel(filterBuffer);
                     } break;
                     case IPlatformLeaderboard::eFM_TopRank: {
                         m_currentFilter = IPlatformLeaderboard::eFM_Friends;
-                        wchar_t filterBuffer[40];
-                        swprintf(filterBuffer, 40, L"%ls%ls",
+                        char filterBuffer[40];
+                        snprintf(filterBuffer, 40, "%s%s",
                                  app.GetString(IDS_LEADERBOARD_FILTER),
                                  app.GetString(IDS_LEADERBOARD_FILTER_FRIENDS));
                         m_labelFilter.setLabel(filterBuffer);
@@ -445,12 +445,12 @@ bool UIScene_LeaderboardsMenu::RetrieveStats() {
 
             m_leaderboard.m_entries[entryIndex].m_row = entryIndex;
             m_leaderboard.m_entries[entryIndex].m_rank = entryIndex + 1;
-            swprintf(
+            snprintf(
                 m_leaderboard.m_entries[entryIndex].m_wcRank, 12,
-                L"12345678");  //(int)m_leaderboard.m_entries[entryIndex].m_rank);
+                "12345678");  //(int)m_leaderboard.m_entries[entryIndex].m_rank);
 
-            swprintf(m_leaderboard.m_entries[entryIndex].m_gamerTag, 17,
-                     L"WWWWWWWWWWWWWWWW");
+            snprintf(m_leaderboard.m_entries[entryIndex].m_gamerTag, 17,
+                     "WWWWWWWWWWWWWWWW");
 
             // m_leaderboard.m_entries[entryIndex].m_locale = (entryIndex % 37)
             // + 1;
@@ -464,13 +464,13 @@ bool UIScene_LeaderboardsMenu::RetrieveStats() {
                 if (!isDistanceLeaderboard) {
                     m_leaderboard.m_entries[entryIndex].m_columns[i] =
                         USHRT_MAX;
-                    swprintf(m_leaderboard.m_entries[entryIndex].m_wcColumns[i],
-                             12, L"%u",
+                    snprintf(m_leaderboard.m_entries[entryIndex].m_wcColumns[i],
+                             12, "%u",
                              m_leaderboard.m_entries[entryIndex].m_columns[i]);
                 } else {
                     m_leaderboard.m_entries[entryIndex].m_columns[i] = UINT_MAX;
-                    swprintf(m_leaderboard.m_entries[entryIndex].m_wcColumns[i],
-                             12, L"%.1fkm",
+                    snprintf(m_leaderboard.m_entries[entryIndex].m_wcColumns[i],
+                             12, "%.1fkm",
                              ((float)m_leaderboard.m_entries[entryIndex]
                                   .m_columns[i]) /
                                  100.f / 1000.f);
@@ -626,7 +626,7 @@ void UIScene_LeaderboardsMenu::CopyLeaderboardEntry(
     leaderboardEntry->m_rank = statsRow->m_rank;
     unsigned int displayRank = leaderboardEntry->m_rank;
     if (displayRank > 9999999) displayRank = 9999999;
-    swprintf(leaderboardEntry->m_wcRank, 12, L"%u", displayRank);
+    snprintf(leaderboardEntry->m_wcRank, 12, "%u", displayRank);
 
     leaderboardEntry->m_idsErrorMessage = statsRow->m_idsErrorMessage;
 
@@ -650,16 +650,16 @@ void UIScene_LeaderboardsMenu::CopyLeaderboardEntry(
     }
 
     memcpy(leaderboardEntry->m_gamerTag, statsRow->m_name.data(),
-           statsRow->m_name.size() * sizeof(wchar_t));
+           statsRow->m_name.size() * sizeof(char));
 
     // Copy the other columns
     for (unsigned int i = 0; i < statsRow->m_statsSize; i++) {
         leaderboardEntry->m_columns[i] = statsRow->m_statsData[i];
-        memset(leaderboardEntry->m_wcColumns[i], 0, 12 * sizeof(wchar_t));
+        memset(leaderboardEntry->m_wcColumns[i], 0, 12 * sizeof(char));
         if (!isDistanceLeaderboard) {
             unsigned int displayValue = leaderboardEntry->m_columns[i];
             if (displayValue > 99999) displayValue = 99999;
-            swprintf(leaderboardEntry->m_wcColumns[i], 12, L"%u", displayValue);
+            snprintf(leaderboardEntry->m_wcColumns[i], 12, "%u", displayValue);
         } else {
             // check how many digits we have
             int iDigitC = 0;
@@ -673,15 +673,15 @@ void UIScene_LeaderboardsMenu::CopyLeaderboardEntry(
             }
             if (iDigitC < 4) {
                 // m
-                swprintf(leaderboardEntry->m_wcColumns[i], 12, L"%um",
+                snprintf(leaderboardEntry->m_wcColumns[i], 12, "%um",
                          leaderboardEntry->m_columns[i]);
             } else if (iDigitC < 8) {
                 // km with a .X
-                swprintf(leaderboardEntry->m_wcColumns[i], 12, L"%.1fkm",
+                snprintf(leaderboardEntry->m_wcColumns[i], 12, "%.1fkm",
                          ((float)leaderboardEntry->m_columns[i]) / 1000.f);
             } else {
                 // bigger than that, so no decimal point
-                swprintf(leaderboardEntry->m_wcColumns[i], 12, L"%.0fkm",
+                snprintf(leaderboardEntry->m_wcColumns[i], 12, "%.0fkm",
                          ((float)leaderboardEntry->m_columns[i]) / 1000.f);
             }
         }
@@ -697,20 +697,20 @@ void UIScene_LeaderboardsMenu::PopulateLeaderboard(
                                   app.GetString(IDS_LEADERBOARD_GAMERTAG));
 
         // Update entries display
-        wchar_t entriesBuffer[40];
+        char entriesBuffer[40];
         if (app.DebugSettingsOn() &&
             (app.GetGameSettingsDebugMask() &
              (1L << eDebugSetting_DebugLeaderboards))) {
-            swprintf(entriesBuffer, 40, L"%ls12345678",
+            snprintf(entriesBuffer, 40, "%s12345678",
                      app.GetString(IDS_LEADERBOARD_ENTRIES));
         } else {
-            swprintf(entriesBuffer, 40, L"%ls%i",
+            snprintf(entriesBuffer, 40, "%s%i",
                      app.GetString(IDS_LEADERBOARD_ENTRIES),
                      m_leaderboard.m_totalEntryCount);
         }
 
         m_labelEntries.setLabel(entriesBuffer);
-        m_labelInfo.setLabel(L"");
+        m_labelInfo.setLabel("");
         m_labelInfo.setVisible(false);
 
         m_listEntries.initLeaderboard(
@@ -734,8 +734,8 @@ void UIScene_LeaderboardsMenu::PopulateLeaderboard(
 
                     true,  // 4J-JEV: Has error message to display.
 
-                    app.GetString(idsErrorMessage), L"", L"", L"", L"", L"",
-                    L"");
+                    app.GetString(idsErrorMessage), "", "", "", "", "",
+                    "");
             } else {
                 m_listEntries.addDataSet(
                     isLast, m_leaderboard.m_entries[i].m_row,
@@ -759,11 +759,11 @@ void UIScene_LeaderboardsMenu::PopulateLeaderboard(
             }
         }
     } else {
-        m_listEntries.setupTitles(L"", L"");
+        m_listEntries.setupTitles("", "");
 
         // Update entries display (to zero)
-        wchar_t entriesBuffer[40];
-        swprintf(entriesBuffer, 40, L"%ls0",
+        char entriesBuffer[40];
+        snprintf(entriesBuffer, 40, "%s0",
                  app.GetString(IDS_LEADERBOARD_ENTRIES));
         m_labelEntries.setLabel(entriesBuffer);
 

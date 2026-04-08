@@ -71,11 +71,11 @@ UIScene_InventoryMenu::UIScene_InventoryMenu(int iPad, void* _initData,
              INVENTORY_UPDATE_EFFECTS_TIMER_TIME);
 }
 
-std::wstring UIScene_InventoryMenu::getMoviePath() {
+std::string UIScene_InventoryMenu::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1) {
-        return L"InventoryMenuSplit";
+        return "InventoryMenuSplit";
     } else {
-        return L"InventoryMenu";
+        return "InventoryMenu";
     }
 }
 
@@ -276,22 +276,22 @@ void UIScene_InventoryMenu::updateEffectsDisplay() {
         MobEffectInstance* effect = *it;
 
         if (effect->getDuration() >= m_bEffectTime[effect->getId()]) {
-            std::wstring effectString = app.GetString(
+            std::string effectString = app.GetString(
                 effect
                     ->getDescriptionId());  // I18n.get(effect.getDescriptionId()).trim();
             if (effect->getAmplifier() > 0) {
-                std::wstring potencyString = L"";
+                std::string potencyString = "";
                 switch (effect->getAmplifier()) {
                     case 1:
-                        potencyString = L" ";
+                        potencyString = " ";
                         potencyString += app.GetString(IDS_POTION_POTENCY_1);
                         break;
                     case 2:
-                        potencyString = L" ";
+                        potencyString = " ";
                         potencyString += app.GetString(IDS_POTION_POTENCY_2);
                         break;
                     case 3:
-                        potencyString = L" ";
+                        potencyString = " ";
                         potencyString += app.GetString(IDS_POTION_POTENCY_3);
                         break;
                     default:
@@ -310,13 +310,11 @@ void UIScene_InventoryMenu::updateEffectsDisplay() {
             value[0].type = IGGY_DATATYPE_number;
             value[0].number = icon;
 
-            const std::u16string convString =
-                wstring_to_u16string(effectString);
-            IggyStringUTF16 stringVal;
-            stringVal.string = convString.c_str();
-            stringVal.length = convString.length();
-            value[1].type = IGGY_DATATYPE_string_UTF16;
-            value[1].string16 = stringVal;
+            IggyStringUTF8 stringVal;
+            stringVal.string = const_cast<char*>(effectString.c_str());
+            stringVal.length = effectString.length();
+            value[1].type = IGGY_DATATYPE_string_UTF8;
+            value[1].string8 = stringVal;
 
             int seconds =
                 effect->getDuration() / SharedConstants::TICKS_PER_SECOND;

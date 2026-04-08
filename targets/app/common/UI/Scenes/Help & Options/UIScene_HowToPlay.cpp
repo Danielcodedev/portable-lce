@@ -105,7 +105,7 @@ UIScene_HowToPlay::UIScene_HowToPlay(int iPad, void* initData,
     // Setup all the Iggy references we need for this scene
     initialiseMovie();
 
-    std::wstring inventoryString = app.GetString(IDS_INVENTORY);
+    std::string inventoryString = app.GetString(IDS_INVENTORY);
     m_labels[eHowToPlay_LabelCTItem].init(app.GetString(IDS_ITEM_HATCHET_WOOD));
     m_labels[eHowToPlay_LabelCTGroup].init(app.GetString(IDS_GROUPNAME_TOOLS));
     m_labels[eHowToPlay_LabelCTInventory3x3].init(inventoryString);
@@ -132,8 +132,8 @@ UIScene_HowToPlay::UIScene_HowToPlay(int iPad, void* initData,
     m_labels[eHowToPlay_LabelBInventory].init(inventoryString);
     m_labels[eHowToPlay_LabelAnvil_Inventory].init(inventoryString.c_str());
 
-    std::wstring wsTemp = app.GetString(IDS_REPAIR_COST);
-    wsTemp.replace(wsTemp.find(L"%d"), 2, std::wstring(L"8"));
+    std::string wsTemp = app.GetString(IDS_REPAIR_COST);
+    wsTemp.replace(wsTemp.find("%d"), 2, std::string("8"));
 
     m_labels[eHowToPlay_LabelAnvil_Cost].init(wsTemp.c_str());
     m_labels[eHowToPlay_LabelAnvil_ARepairAndName].init(
@@ -162,9 +162,9 @@ UIScene_HowToPlay::UIScene_HowToPlay(int iPad, void* initData,
     m_labels[eHowToPlay_LabelDropperInventory].init(inventoryString.c_str());
 
     wsTemp = app.GetString(IDS_VILLAGER_OFFERS_ITEM);
-    wsTemp = replaceAll(wsTemp, L"{*VILLAGER_TYPE*}",
+    wsTemp = replaceAll(wsTemp, "{*VILLAGER_TYPE*}",
                         app.GetString(IDS_VILLAGER_PRIEST));
-    wsTemp.replace(wsTemp.find(L"%s"), 2, app.GetString(IDS_TILE_LIGHT_GEM));
+    wsTemp.replace(wsTemp.find("%s"), 2, app.GetString(IDS_TILE_LIGHT_GEM));
     m_labels[eHowToPlay_LabelTrading_VillagerOffers].init(wsTemp.c_str());
 
     // Extract pad and required page from init data. We just put the data into
@@ -178,11 +178,11 @@ UIScene_HowToPlay::UIScene_HowToPlay(int iPad, void* initData,
     StartPage(eStartPage);
 }
 
-std::wstring UIScene_HowToPlay::getMoviePath() {
+std::string UIScene_HowToPlay::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1) {
-        return L"HowToPlaySplit";
+        return "HowToPlaySplit";
     } else {
-        return L"HowToPlay";
+        return "HowToPlay";
     }
 }
 
@@ -265,45 +265,45 @@ void UIScene_HowToPlay::StartPage(EHowToPlayPage ePage) {
     SHowToPlayPageDef* pDef = &(gs_aPageDefs[m_eCurrPage]);
 
     // Replace button identifiers in the text with actual button images.
-    std::wstring replacedText =
+    std::string replacedText =
         app.FormatHTMLString(m_iPad, app.GetString(pDef->m_iTextStringID));
     // 4J-PB - replace the title with the platform specific title, and the
     // platform name
     //	replacedText =
-    // replaceAll(replacedText,L"{*TITLE_UPDATE_NAME*}",app.GetString(IDS_TITLE_UPDATE_NAME));
-    replacedText = replaceAll(replacedText, L"{*KICK_PLAYER_DESCRIPTION*}",
+    // replaceAll(replacedText,"{*TITLE_UPDATE_NAME*}",app.GetString(IDS_TITLE_UPDATE_NAME));
+    replacedText = replaceAll(replacedText, "{*KICK_PLAYER_DESCRIPTION*}",
                               app.GetString(IDS_KICK_PLAYER_DESCRIPTION));
-    replacedText = replaceAll(replacedText, L"{*BACK_BUTTON*}",
+    replacedText = replaceAll(replacedText, "{*BACK_BUTTON*}",
                               app.GetString(IDS_BACK_BUTTON));
     replacedText =
-        replaceAll(replacedText, L"{*DISABLES_ACHIEVEMENTS*}",
+        replaceAll(replacedText, "{*DISABLES_ACHIEVEMENTS*}",
                    app.GetString(IDS_HOST_OPTION_DISABLES_ACHIEVEMENTS));
 
     // 4J-JEV: Temporary fix: LOC: Minecraft: XB1: KO: Font: Uncategorized:
     // Squares appear instead of hyphens in FIREWORKS description
     if (!ui.UsingBitmapFont()) {
-        replacedText = replaceAll(replacedText, L"\u00A9", L"(C)");
-        replacedText = replaceAll(replacedText, L"\u00AE", L"(R)");
-        replacedText = replaceAll(replacedText, L"\u2013", L"-");
+        replacedText = replaceAll(replacedText, "\u00A9", "(C)");
+        replacedText = replaceAll(replacedText, "\u00AE", "(R)");
+        replacedText = replaceAll(replacedText, "\u2013", "-");
     }
 
     // strip out any tab characters and repeated spaces
     stripWhitespaceForHtml(replacedText, true);
 
     // Set the text colour
-    std::wstring finalText(replacedText.c_str());
-    wchar_t startTags[64];
-    swprintf(startTags, 64, L"<font color=\"#%08x\">",
+    std::string finalText(replacedText.c_str());
+    char startTags[64];
+    snprintf(startTags, 64, "<font color=\"#%08x\">",
              app.GetHTMLColour(eHTMLColor_White));
     finalText = startTags + finalText;
 
-    std::vector<std::wstring> paragraphs;
+    std::vector<std::string> paragraphs;
     int lastIndex = 0;
-    for (int index = finalText.find(L"\r\n", lastIndex, 2);
-         index != std::wstring::npos;
-         index = finalText.find(L"\r\n", lastIndex, 2)) {
+    for (int index = finalText.find("\r\n", lastIndex, 2);
+         index != std::string::npos;
+         index = finalText.find("\r\n", lastIndex, 2)) {
         paragraphs.push_back(finalText.substr(lastIndex, index - lastIndex) +
-                             L" ");
+                             " ");
         lastIndex = index + 2;
     }
     paragraphs.push_back(
@@ -313,19 +313,16 @@ void UIScene_HowToPlay::StartPage(EHowToPlayPage ePage) {
     IggyDataValue result;
 
     IggyDataValue* value = new IggyDataValue[paragraphs.size() + 1];
-    IggyStringUTF16* stringVal = new IggyStringUTF16[paragraphs.size()];
+    IggyStringUTF8* stringVal = new IggyStringUTF8[paragraphs.size()];
 
     value[0].type = IGGY_DATATYPE_number;
     value[0].number = gs_pageToFlashMapping[(int)ePage];
 
     for (unsigned int i = 0; i < paragraphs.size(); ++i) {
-        const std::u16string convParagraph =
-            wstring_to_u16string(paragraphs[i]);
-
-        stringVal[i].string = convParagraph.c_str();
-        stringVal[i].length = convParagraph.length();
-        value[i + 1].type = IGGY_DATATYPE_string_UTF16;
-        value[i + 1].string16 = stringVal[i];
+        stringVal[i].string = const_cast<char*>(paragraphs[i].c_str());
+        stringVal[i].length = paragraphs[i].length();
+        value[i + 1].type = IGGY_DATATYPE_string_UTF8;
+        value[i + 1].string8 = stringVal[i];
     }
 
     IggyResult out = IggyPlayerCallMethodRS(

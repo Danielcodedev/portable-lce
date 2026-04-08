@@ -74,9 +74,9 @@ GameRuleDefinition* UpdatePlayerRuleDefinition::addChild(
         m_items.push_back((AddItemRuleDefinition*)rule);
     } else {
 #ifndef _CONTENT_PACKAGE
-        wprintf(
-            L"UpdatePlayerRuleDefinition: Attempted to add invalid child rule "
-            L"- %d\n",
+        printf(
+            "UpdatePlayerRuleDefinition: Attempted to add invalid child rule "
+            "- %d\n",
             ruleType);
 #endif
     }
@@ -84,38 +84,38 @@ GameRuleDefinition* UpdatePlayerRuleDefinition::addChild(
 }
 
 void UpdatePlayerRuleDefinition::addAttribute(
-    const std::wstring& attributeName, const std::wstring& attributeValue) {
-    if (attributeName.compare(L"spawnX") == 0) {
+    const std::string& attributeName, const std::string& attributeValue) {
+    if (attributeName.compare("spawnX") == 0) {
         if (m_spawnPos == nullptr) m_spawnPos = new Pos();
         int value = fromWString<int>(attributeValue);
         m_spawnPos->x = value;
         app.DebugPrintf(
             "UpdatePlayerRuleDefinition: Adding parameter spawnX=%d\n", value);
-    } else if (attributeName.compare(L"spawnY") == 0) {
+    } else if (attributeName.compare("spawnY") == 0) {
         if (m_spawnPos == nullptr) m_spawnPos = new Pos();
         int value = fromWString<int>(attributeValue);
         m_spawnPos->y = value;
         app.DebugPrintf(
             "UpdatePlayerRuleDefinition: Adding parameter spawnY=%d\n", value);
-    } else if (attributeName.compare(L"spawnZ") == 0) {
+    } else if (attributeName.compare("spawnZ") == 0) {
         if (m_spawnPos == nullptr) m_spawnPos = new Pos();
         int value = fromWString<int>(attributeValue);
         m_spawnPos->z = value;
         app.DebugPrintf(
             "UpdatePlayerRuleDefinition: Adding parameter spawnZ=%d\n", value);
-    } else if (attributeName.compare(L"health") == 0) {
+    } else if (attributeName.compare("health") == 0) {
         int value = fromWString<int>(attributeValue);
         m_health = value;
         m_bUpdateHealth = true;
         app.DebugPrintf(
             "UpdatePlayerRuleDefinition: Adding parameter health=%d\n", value);
-    } else if (attributeName.compare(L"food") == 0) {
+    } else if (attributeName.compare("food") == 0) {
         int value = fromWString<int>(attributeValue);
         m_food = value;
         m_bUpdateFood = true;
         app.DebugPrintf(
             "UpdatePlayerRuleDefinition: Adding parameter health=%d\n", value);
-    } else if (attributeName.compare(L"yRot") == 0) {
+    } else if (attributeName.compare("yRot") == 0) {
         float value = fromWString<float>(attributeValue);
         m_yRot = value;
         m_bUpdateYRot = true;

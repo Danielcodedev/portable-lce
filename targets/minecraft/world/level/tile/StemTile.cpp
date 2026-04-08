@@ -16,7 +16,7 @@
 
 class Icon;
 
-const std::wstring StemTile::TEXTURE_ANGLED = L"stem_bent";
+const std::string StemTile::TEXTURE_ANGLED = "stem_bent";
 
 StemTile::StemTile(int id, Tile* fruit) : Bush(id) {
     this->fruit = fruit;
@@ -209,7 +209,7 @@ int StemTile::cloneTileId(Level* level, int x, int y, int z) {
 }
 
 void StemTile::registerIcons(IconRegister* iconRegister) {
-    icon = iconRegister->registerIcon(L"stem_straight");
+    icon = iconRegister->registerIcon("stem_straight");
     iconAngled = iconRegister->registerIcon(TEXTURE_ANGLED);
 }
 

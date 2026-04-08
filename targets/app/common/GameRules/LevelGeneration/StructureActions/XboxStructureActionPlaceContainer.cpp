@@ -45,9 +45,9 @@ GameRuleDefinition* XboxStructureActionPlaceContainer::addChild(
         m_items.push_back((AddItemRuleDefinition*)rule);
     } else {
 #ifndef _CONTENT_PACKAGE
-        wprintf(
-            L"XboxStructureActionPlaceContainer: Attempted to add invalid "
-            L"child rule - %d\n",
+        printf(
+            "XboxStructureActionPlaceContainer: Attempted to add invalid "
+            "child rule - %d\n",
             ruleType);
 #endif
     }
@@ -55,8 +55,8 @@ GameRuleDefinition* XboxStructureActionPlaceContainer::addChild(
 }
 
 void XboxStructureActionPlaceContainer::addAttribute(
-    const std::wstring& attributeName, const std::wstring& attributeValue) {
-    if (attributeName.compare(L"facing") == 0) {
+    const std::string& attributeName, const std::string& attributeValue) {
+    if (attributeName.compare("facing") == 0) {
         int value = fromWString<int>(attributeValue);
         m_data = value;
         app.DebugPrintf(

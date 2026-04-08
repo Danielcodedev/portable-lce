@@ -8,7 +8,7 @@
 #include "minecraft/world/item/ItemInstance.h"
 #include "net.minecraft.world.ContainerListener.h"
 
-SimpleContainer::SimpleContainer(int name, std::wstring stringName,
+SimpleContainer::SimpleContainer(int name, std::string stringName,
                                  bool customName, int size) {
     this->name = name;
     this->stringName = stringName;
@@ -81,17 +81,17 @@ void SimpleContainer::setItem(unsigned int slot,
 
 unsigned int SimpleContainer::getContainerSize() { return size; }
 
-std::wstring SimpleContainer::getName() {
+std::string SimpleContainer::getName() {
     return stringName.empty() ? gameServices().getString(name) : stringName;
 }
 
-std::wstring SimpleContainer::getCustomName() {
-    return hasCustomName() ? stringName : L"";
+std::string SimpleContainer::getCustomName() {
+    return hasCustomName() ? stringName : "";
 }
 
 bool SimpleContainer::hasCustomName() { return customName; }
 
-void SimpleContainer::setCustomName(const std::wstring& name) {
+void SimpleContainer::setCustomName(const std::string& name) {
     customName = true;
     this->stringName = name;
 }

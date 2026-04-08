@@ -27,7 +27,7 @@ private:
         uint8_t m_smallId;
         char m_voiceStatus;
         short m_colorState;
-        std::wstring m_name;
+        std::string m_name;
 
     } PlayerInfo;
 
@@ -36,7 +36,7 @@ private:
     std::vector<PlayerInfo*> m_players;  // A std::vector of player info structs
     // char m_playersVoiceState[MINECRAFT_NET_MAX_PLAYERS];
     // short m_playersColourState[MINECRAFT_NET_MAX_PLAYERS];
-    // std::wstring m_playerNames[MINECRAFT_NET_MAX_PLAYERS];
+    // std::string m_playerNames[MINECRAFT_NET_MAX_PLAYERS];
 
     UIControl_Button m_buttonGameOptions;
     UIControl_PlayerList m_playerList;
@@ -59,7 +59,7 @@ public:
 
 protected:
     // TODO: This should be pure virtual in this class
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
 
 public:
     // INPUT

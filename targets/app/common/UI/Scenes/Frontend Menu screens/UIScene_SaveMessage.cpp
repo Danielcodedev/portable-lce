@@ -56,7 +56,7 @@ UIScene_SaveMessage::~UIScene_SaveMessage() {
     m_parentLayer->removeComponent(eUIComponent_Logo);
 }
 
-std::wstring UIScene_SaveMessage::getMoviePath() { return L"SaveMessage"; }
+std::string UIScene_SaveMessage::getMoviePath() { return "SaveMessage"; }
 
 void UIScene_SaveMessage::updateTooltips() {
     ui.SetTooltips(DEFAULT_XUI_MENU_USER, IDS_TOOLTIPS_SELECT);

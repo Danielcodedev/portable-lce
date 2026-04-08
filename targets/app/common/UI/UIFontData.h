@@ -20,7 +20,7 @@ public:
     std::string m_strFontName;
 
     // Filename of the glyph archive.
-    std::wstring m_wstrFilename;
+    std::string m_wstrFilename;
 
     // Number of glyphs in the archive.
     unsigned int m_uiGlyphCount;

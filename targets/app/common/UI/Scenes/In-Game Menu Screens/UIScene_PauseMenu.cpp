@@ -95,11 +95,11 @@ UIScene_PauseMenu::~UIScene_PauseMenu() {
     m_parentLayer->showComponent(m_iPad, eUIComponent_Logo, false);
 }
 
-std::wstring UIScene_PauseMenu::getMoviePath() {
+std::string UIScene_PauseMenu::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1) {
-        return L"PauseMenuSplit";
+        return "PauseMenuSplit";
     } else {
-        return L"PauseMenu";
+        return "PauseMenu";
     }
 }
 
@@ -394,7 +394,7 @@ void UIScene_PauseMenu::PerformActionSaveGame() {
         m_pDLCPack =
             pDLCTexPack->getDLCInfoParentPack();  // tPack->getDLCPack();
 
-        if (!m_pDLCPack->hasPurchasedFile(DLCManager::e_DLCType_Texture, L"")) {
+        if (!m_pDLCPack->hasPurchasedFile(DLCManager::e_DLCType_Texture, "")) {
             // upsell
             unsigned int uiIDA[2];
             uiIDA[0] = IDS_CONFIRM_OK;

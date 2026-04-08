@@ -45,7 +45,7 @@ UIScene_Intro::UIScene_Intro(int iPad, void* initData, UILayer* parentLayer)
                                             m_funcSetIntroPlatform, 3, value);
 }
 
-std::wstring UIScene_Intro::getMoviePath() { return L"Intro"; }
+std::string UIScene_Intro::getMoviePath() { return "Intro"; }
 
 void UIScene_Intro::handleInput(int iPad, int key, bool repeat, bool pressed,
                                 bool released, bool& handled) {

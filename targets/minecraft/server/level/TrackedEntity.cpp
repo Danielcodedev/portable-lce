@@ -599,7 +599,7 @@ void TrackedEntity::updatePlayer(EntityTracker* tracker,
         if (e->instanceof(eTYPE_PLAYER)) {
             std::shared_ptr<Player> plr = std::dynamic_pointer_cast<Player>(e);
             Log::info(
-                "TrackedEntity:: Player '%ls' is now visible to player '%ls', "
+                "TrackedEntity:: Player '%s' is now visible to player '%s', "
                 "%s.\n",
                 plr->name.c_str(), sp->name.c_str(),
                 (e->riding == nullptr ? "not riding minecart" : "in minecart"));
@@ -712,7 +712,7 @@ void TrackedEntity::updatePlayers(
 
 std::shared_ptr<Packet> TrackedEntity::getAddEntityPacket() {
     if (e->removed) {
-        Log::info("Fetching addPacket for removed entity - %ls\n",
+        Log::info("Fetching addPacket for removed entity - %s\n",
                         e->getAName().c_str());
     }
 

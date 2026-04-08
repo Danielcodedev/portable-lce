@@ -72,7 +72,7 @@ public:
     bool IsGuest();
     bool IsLocal();
     PlayerUID GetXuid();
-    const wchar_t* GetGamertag();
+    const char* GetGamertag();
     int GetSessionIndex();
     bool IsTalking();
     bool IsMutedByLocalUser(uint32_t dwUserIndex);

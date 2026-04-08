@@ -50,10 +50,10 @@ bool IsEqualXUID(PlayerUID a, PlayerUID b);
 // XUI string table
 class CXuiStringTable {
 public:
-    const wchar_t* Lookup(const wchar_t* szId);
-    const wchar_t* Lookup(uint32_t nIndex);
+    const char* Lookup(const char* szId);
+    const char* Lookup(uint32_t nIndex);
     void Clear();
-    int32_t Load(const wchar_t* szId);
+    int32_t Load(const char* szId);
 };
 
 // User sign-in

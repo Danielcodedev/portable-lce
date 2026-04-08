@@ -36,25 +36,25 @@ void PauseScreen::init() {
         gameServices().setXuiServerAction(PlatformInput.GetPrimaryPad(),
                                eXuiServerAction_PauseServer, (void*)true);
     buttons.push_back(new Button(1, width / 2 - 100, height / 4 + 24 * 5 + yo,
-                                 I18n::get(L"menu.returnToMenu")));
+                                 I18n::get("menu.returnToMenu")));
     if (!g_NetworkManager.IsHost()) {
-        buttons[0]->msg = I18n::get(L"menu.disconnect");
+        buttons[0]->msg = I18n::get("menu.disconnect");
     }
 
     buttons.push_back(new Button(4, width / 2 - 100, height / 4 + 24 * 1 + yo,
-                                 L"LBack to game"));
+                                 "LBack to game"));
     buttons.push_back(new Button(0, width / 2 - 100, height / 4 + 24 * 4 + yo,
-                                 L"LOptions..."));
+                                 "LOptions..."));
 
     buttons.push_back(new Button(4, width / 2 - 100, height / 4 + 24 * 1 + yo,
-                                 I18n::get(L"menu.returnToGame")));
+                                 I18n::get("menu.returnToGame")));
     buttons.push_back(new Button(0, width / 2 - 100, height / 4 + 24 * 4 + yo,
-                                 I18n::get(L"menu.options")));
+                                 I18n::get("menu.options")));
 
     buttons.push_back(new Button(5, width / 2 - 100, height / 4 + 24 * 2 + yo,
-                                 98, 20, I18n::get(L"gui.achievements")));
+                                 98, 20, I18n::get("gui.achievements")));
     buttons.push_back(new Button(6, width / 2 + 2, height / 4 + 24 * 2 + yo, 98,
-                                 20, I18n::get(L"gui.stats")));
+                                 20, I18n::get("gui.stats")));
     /*
      * if (minecraft->serverConnection!=null) { buttons.get(1).active =
      * false; buttons.get(2).active = false; buttons.get(3).active = false;
@@ -67,7 +67,7 @@ void PauseScreen::exitWorld(Minecraft* minecraft, bool save) {
     // places such as the deathscreen need this)
     MinecraftServer* server = MinecraftServer::getInstance();
 
-    minecraft->setScreen(new MessageScreen(L"Leaving world"));
+    minecraft->setScreen(new MessageScreen("Leaving world"));
     if (g_NetworkManager.IsHost()) {
         server->setSaveOnExit(save);
     }
@@ -121,11 +121,11 @@ void PauseScreen::render(int xm, int ym, float a) {
         col = sinf(col * std::numbers::pi * 2) * 0.2f + 0.8f;
         int br = (int)(255 * col);
 
-        drawString(font, L"Saving level..", 8, height - 16,
+        drawString(font, "Saving level..", 8, height - 16,
                    br << 16 | br << 8 | br);
     }
 
-    drawCenteredString(font, L"Game menu", width / 2, 40, 0xffffff);
+    drawCenteredString(font, "Game menu", width / 2, 40, 0xffffff);
 
     Screen::render(xm, ym, a);
 }

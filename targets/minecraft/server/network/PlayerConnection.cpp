@@ -191,7 +191,7 @@ void PlayerConnection::disconnect(DisconnectPacket::eDisconnectReason reason) {
     // 4J-PB - removed, since it needs to be localised in the language the
     // client is in
     // server->players->broadcastAll( std::shared_ptr<ChatPacket>( new
-    // ChatPacket(L"§e" + player->name + L" left the game.") ) );
+    // ChatPacket("§e" + player->name + " left the game.") ) );
     if (getWasKicked()) {
         server->getPlayers()->broadcastAll(std::make_shared<ChatPacket>(
             player->name, ChatPacket::e_ChatPlayerKickedFromGame));
@@ -382,7 +382,7 @@ void PlayerConnection::handleMovePlayer(
             //            ", " + zt); System.out.println("Expected " + player->x
             //            + ", " + player->y + ", " + player->z);
 #if !defined(_CONTENT_PACKAGE)
-            wprintf(L"%ls moved wrongly!\n", player->name.c_str());
+            printf("%s moved wrongly!\n", player->name.c_str());
             Log::info("Got position %f, %f, %f\n", xt, yt, zt);
             Log::info("Expected %f, %f, %f\n", player->x, player->y,
                             player->z);
@@ -407,7 +407,7 @@ void PlayerConnection::handleMovePlayer(
                     //                    logger.warning(player->name + " was
                     //                    kicked for floating too long!");
 #if !defined(_CONTENT_PACKAGE)
-                    wprintf(L"%ls was kicked for floating too long!\n",
+                    printf("%s was kicked for floating too long!\n",
                             player->name.c_str());
 #endif
                     disconnect(DisconnectPacket::eDisconnect_NoFlying);
@@ -623,7 +623,7 @@ void PlayerConnection::onDisconnect(DisconnectPacket::eDisconnectReason reason,
     // 4J-PB - removed, since it needs to be localised in the language the
     // client is in
     // server->players->broadcastAll( std::shared_ptr<ChatPacket>( new
-    // ChatPacket(L"§e" + player->name + L" left the game.") ) );
+    // ChatPacket("§e" + player->name + " left the game.") ) );
     if (getWasKicked()) {
         server->getPlayers()->broadcastAll(std::make_shared<ChatPacket>(
             player->name, ChatPacket::e_ChatPlayerKickedFromGame));
@@ -646,8 +646,8 @@ void PlayerConnection::send(std::shared_ptr<Packet> packet) {
         if (!server->getPlayers()->canReceiveAllPackets(player)) {
             // Check if we are allowed to send this packet type
             if (!Packet::canSendToAnyClient(packet)) {
-                // wprintf(L"Not the systems primary player, so not sending them
-                // a packet : %ls / %d\n", player->name.c_str(), packet->getId()
+                // printf("Not the systems primary player, so not sending them
+                // a packet : %s / %d\n", player->name.c_str(), packet->getId()
                 // );
                 return;
             }
@@ -662,8 +662,8 @@ void PlayerConnection::queueSend(std::shared_ptr<Packet> packet) {
         if (!server->getPlayers()->canReceiveAllPackets(player)) {
             // Check if we are allowed to send this packet type
             if (!Packet::canSendToAnyClient(packet)) {
-                // wprintf(L"Not the systems primary player, so not queueing
-                // them a packet : %ls\n",
+                // printf("Not the systems primary player, so not queueing
+                // them a packet : %s\n",
                 // connection->getSocket()->getPlayer()->GetGamertag() );
                 return;
             }
@@ -687,7 +687,7 @@ void PlayerConnection::handleChat(std::shared_ptr<ChatPacket> packet) {
     // 4J - TODO
 }
 
-void PlayerConnection::handleCommand(const std::wstring& message) {
+void PlayerConnection::handleCommand(const std::string& message) {
     // 4J - TODO
 }
 
@@ -747,19 +747,19 @@ int PlayerConnection::countDelayedPackets() {
     return connection->countDelayedPackets();
 }
 
-void PlayerConnection::info(const std::wstring& string) {
+void PlayerConnection::info(const std::string& string) {
     // 4J-PB - removed, since it needs to be localised in the language the
     // client is in
-    // send( std::shared_ptr<ChatPacket>( new ChatPacket(L"§7" + string) ) );
+    // send( std::shared_ptr<ChatPacket>( new ChatPacket("§7" + string) ) );
 }
 
-void PlayerConnection::warn(const std::wstring& string) {
+void PlayerConnection::warn(const std::string& string) {
     // 4J-PB - removed, since it needs to be localised in the language the
     // client is in
-    // send( std::shared_ptr<ChatPacket>( new ChatPacket(L"§9" + string) ) );
+    // send( std::shared_ptr<ChatPacket>( new ChatPacket("§9" + string) ) );
 }
 
-std::wstring PlayerConnection::getConsoleName() { return player->getName(); }
+std::string PlayerConnection::getConsoleName() { return player->getName(); }
 
 void PlayerConnection::handleInteract(std::shared_ptr<InteractPacket> packet) {
     ServerLevel* level = server->getLevel(player->dimension);
@@ -809,7 +809,7 @@ void PlayerConnection::handleTexture(std::shared_ptr<TexturePacket> packet) {
     if (packet->dataBytes == 0) {
         // Request for texture
 #if !defined(_CONTENT_PACKAGE)
-        wprintf(L"Server received request for custom texture %ls\n",
+        printf("Server received request for custom texture %s\n",
                 packet->textureName.c_str());
 #endif
         std::uint8_t* pbData = nullptr;
@@ -825,7 +825,7 @@ void PlayerConnection::handleTexture(std::shared_ptr<TexturePacket> packet) {
     } else {
         // Response with texture data
 #if !defined(_CONTENT_PACKAGE)
-        wprintf(L"Server received custom texture %ls\n",
+        printf("Server received custom texture %s\n",
                 packet->textureName.c_str());
 #endif
         gameServices().addMemoryTextureFile(packet->textureName, packet->pbData,
@@ -842,7 +842,7 @@ void PlayerConnection::handleTextureAndGeometry(
     if (packet->dwTextureBytes == 0) {
         // Request for texture and geometry
 #if !defined(_CONTENT_PACKAGE)
-        wprintf(L"Server received request for custom texture %ls\n",
+        printf("Server received request for custom texture %s\n",
                 packet->textureName.c_str());
 #endif
         std::uint8_t* pbData = nullptr;
@@ -882,7 +882,7 @@ void PlayerConnection::handleTextureAndGeometry(
     } else {
         // Response with texture and geometry data
 #if !defined(_CONTENT_PACKAGE)
-        wprintf(L"Server received custom texture %ls and geometry\n",
+        printf("Server received custom texture %s and geometry\n",
                 packet->textureName.c_str());
 #endif
         gameServices().addMemoryTextureFile(packet->textureName, packet->pbData,
@@ -891,7 +891,7 @@ void PlayerConnection::handleTextureAndGeometry(
         // add the geometry to the app list
         if (packet->dwBoxC != 0) {
 #if !defined(_CONTENT_PACKAGE)
-            wprintf(L"Adding skin boxes for skin id %X, box count %d\n",
+            printf("Adding skin boxes for skin id %X, box count %d\n",
                     packet->dwSkinID, packet->dwBoxC);
 #endif
             gameServices().setAdditionalSkinBoxes(packet->dwSkinID, packet->BoxDataA,
@@ -908,7 +908,7 @@ void PlayerConnection::handleTextureAndGeometry(
     }
 }
 
-void PlayerConnection::handleTextureReceived(const std::wstring& textureName) {
+void PlayerConnection::handleTextureReceived(const std::string& textureName) {
     // This sends the server received texture out to any other players waiting
     // for the data
     auto it = find(m_texturesRequested.begin(), m_texturesRequested.end(),
@@ -927,7 +927,7 @@ void PlayerConnection::handleTextureReceived(const std::wstring& textureName) {
 }
 
 void PlayerConnection::handleTextureAndGeometryReceived(
-    const std::wstring& textureName) {
+    const std::string& textureName) {
     // This sends the server received texture out to any other players waiting
     // for the data
     auto it = find(m_texturesRequested.begin(), m_texturesRequested.end(),
@@ -968,7 +968,7 @@ void PlayerConnection::handleTextureChange(
         case TextureChangePacket::e_TextureChange_Skin:
             player->setCustomSkin(gameServices().getSkinIdFromPath(packet->path));
 #if !defined(_CONTENT_PACKAGE)
-            wprintf(L"Skin for server player %ls has changed to %ls (%d)\n",
+            printf("Skin for server player %s has changed to %s (%d)\n",
                     player->name.c_str(), player->customTextureUrl.c_str(),
                     player->getPlayerDefaultSkin());
 #endif
@@ -977,19 +977,19 @@ void PlayerConnection::handleTextureChange(
             player->setCustomCape(Player::getCapeIdFromPath(packet->path));
             // player->customTextureUrl2 = packet->path;
 #if !defined(_CONTENT_PACKAGE)
-            wprintf(L"Cape for server player %ls has changed to %ls\n",
+            printf("Cape for server player %s has changed to %s\n",
                     player->name.c_str(), player->customTextureUrl2.c_str());
 #endif
             break;
     }
     if (!packet->path.empty() &&
-        packet->path.substr(0, 3).compare(L"def") != 0 &&
+        packet->path.substr(0, 3).compare("def") != 0 &&
         !gameServices().isFileInMemoryTextures(packet->path)) {
         if (server->connection->addPendingTextureRequest(packet->path)) {
 #if !defined(_CONTENT_PACKAGE)
-            wprintf(
-                L"Sending texture packet to get custom skin %ls from player "
-                L"%ls\n",
+            printf(
+                "Sending texture packet to get custom skin %s from player "
+                "%s\n",
                 packet->path.c_str(), player->name.c_str());
 #endif
             send(std::shared_ptr<TexturePacket>(
@@ -1010,21 +1010,21 @@ void PlayerConnection::handleTextureAndGeometryChange(
     std::shared_ptr<TextureAndGeometryChangePacket> packet) {
     player->setCustomSkin(gameServices().getSkinIdFromPath(packet->path));
 #if !defined(_CONTENT_PACKAGE)
-    wprintf(
-        L"PlayerConnection::handleTextureAndGeometryChange - Skin for server "
-        L"player %ls has changed to %ls (%d)\n",
+    printf(
+        "PlayerConnection::handleTextureAndGeometryChange - Skin for server "
+        "player %s has changed to %s (%d)\n",
         player->name.c_str(), player->customTextureUrl.c_str(),
         player->getPlayerDefaultSkin());
 #endif
 
     if (!packet->path.empty() &&
-        packet->path.substr(0, 3).compare(L"def") != 0 &&
+        packet->path.substr(0, 3).compare("def") != 0 &&
         !gameServices().isFileInMemoryTextures(packet->path)) {
         if (server->connection->addPendingTextureRequest(packet->path)) {
 #if !defined(_CONTENT_PACKAGE)
-            wprintf(
-                L"Sending texture packet to get custom skin %ls from player "
-                L"%ls\n",
+            printf(
+                "Sending texture packet to get custom skin %s from player "
+                "%s\n",
                 packet->path.c_str(), player->name.c_str());
 #endif
             send(std::shared_ptr<TextureAndGeometryPacket>(
@@ -1264,9 +1264,9 @@ void PlayerConnection::handleSetCreativeModeSlot(
                 MapItem::getSavedData(item->getAuxValue(), player->level);
             // 4J Stu - We only have one map per player per dimension, so don't
             // reset the one that they have when a new one is created
-            wchar_t buf[64];
-            swprintf(buf, 64, L"map_%d", item->getAuxValue());
-            std::wstring id = std::wstring(buf);
+            char buf[64];
+            snprintf(buf, 64, "map_%d", item->getAuxValue());
+            std::string id = std::string(buf);
             if (data == nullptr) {
                 data = std::make_shared<MapItemSavedData>(id);
             }
@@ -1352,8 +1352,8 @@ void PlayerConnection::handleSignUpdate(
             std::shared_ptr<SignTileEntity> ste =
                 std::dynamic_pointer_cast<SignTileEntity>(te);
             if (!ste->isEditable() || ste->getPlayerWhoMayEdit() != player) {
-                server->warn(L"Player " + player->getName() +
-                             L" just tried to change non-editable sign");
+                server->warn("Player " + player->getName() +
+                             " just tried to change non-editable sign");
                 return;
             }
         }
@@ -1366,7 +1366,7 @@ void PlayerConnection::handleSignUpdate(
             std::shared_ptr<SignTileEntity> ste =
                 std::dynamic_pointer_cast<SignTileEntity>(te);
             for (int i = 0; i < 4; i++) {
-                std::wstring lineText = packet->lines[i].substr(0, 15);
+                std::string lineText = packet->lines[i].substr(0, 15);
                 ste->SetMessage(i, lineText);
             }
             ste->SetVerified(false);
@@ -1423,7 +1423,7 @@ void PlayerConnection::handlePlayerInfo(
                 if (serverPlayer->gameMode->getGameModeForPlayer() !=
                     gameType) {
 #if !defined(_CONTENT_PACKAGE)
-                    wprintf(L"Setting %ls to game mode %d\n",
+                    printf("Setting %s to game mode %d\n",
                             serverPlayer->name.c_str(), gameType);
 #endif
                     serverPlayer->setPlayerGamePrivilege(
@@ -1438,7 +1438,7 @@ void PlayerConnection::handlePlayerInfo(
                             gameType->getId()));
                 } else {
 #if !defined(_CONTENT_PACKAGE)
-                    wprintf(L"%ls already has game mode %d\n",
+                    printf("%s already has game mode %d\n",
                             serverPlayer->name.c_str(), gameType);
 #endif
                 }
@@ -1617,7 +1617,7 @@ void PlayerConnection::handleCustomPayload(
             int x = input.readInt();
             int y = input.readInt();
             int z = input.readInt();
-            std::wstring command = Packet::readUtf(&input, 256);
+            std::string command = Packet::readUtf(&input, 256);
 
             std::shared_ptr<TileEntity> tileEntity =
                 player->level->getTileEntity(x, y, z);
@@ -1656,11 +1656,11 @@ void PlayerConnection::handleCustomPayload(
         AnvilMenu* menu = dynamic_cast<AnvilMenu*>(player->containerMenu);
         if (menu) {
             if (customPayloadPacket->data.empty()) {
-                menu->setItemName(L"");
+                menu->setItemName("");
             } else {
                 ByteArrayInputStream bais(customPayloadPacket->data);
                 DataInputStream dis(&bais);
-                std::wstring name = dis.readUTF();
+                std::string name = dis.readUTF();
                 if (name.length() <= 30) {
                     menu->setItemName(name);
                 }

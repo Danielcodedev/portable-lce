@@ -210,8 +210,8 @@ void Particle::setNextMiscAnimTex() { texX++; }
 bool Particle::isAttackable() { return false; }
 
 //@Override
-std::wstring Particle::toString() {
-    return L"A particle";  // getClass()->getSimpleName() + ", Pos (" + x + ","
+std::string Particle::toString() {
+    return "A particle";  // getClass()->getSimpleName() + ", Pos (" + x + ","
                            // + y + "," + z + "), RGBA (" + rCol + "," + gCol +
                            // "," + bCol + "," + alpha + "), Age " + age;
 }

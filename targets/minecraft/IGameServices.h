@@ -30,7 +30,7 @@ public:
 
     // -- Strings --
 
-    [[nodiscard]] virtual const wchar_t* getString(int id) = 0;
+    [[nodiscard]] virtual const char* getString(int id) = 0;
 
     // -- Debug settings --
 
@@ -55,14 +55,14 @@ public:
 
     // -- Texture cache --
 
-    virtual void addMemoryTextureFile(const std::wstring& name,
+    virtual void addMemoryTextureFile(const std::string& name,
                                       std::uint8_t* data,
                                       unsigned int size) = 0;
-    virtual void removeMemoryTextureFile(const std::wstring& name) = 0;
-    virtual void getMemFileDetails(const std::wstring& name,
+    virtual void removeMemoryTextureFile(const std::string& name) = 0;
+    virtual void getMemFileDetails(const std::string& name,
                                    std::uint8_t** data,
                                    unsigned int* size) = 0;
-    [[nodiscard]] virtual bool isFileInMemoryTextures(const std::wstring& name) = 0;
+    [[nodiscard]] virtual bool isFileInMemoryTextures(const std::string& name) = 0;
 
     // -- Player settings --
 
@@ -119,9 +119,9 @@ public:
 
     // -- Skin / cape / animation --
 
-    [[nodiscard]] virtual std::wstring getPlayerSkinName(int iPad) = 0;
+    [[nodiscard]] virtual std::string getPlayerSkinName(int iPad) = 0;
     [[nodiscard]] virtual std::uint32_t getPlayerSkinId(int iPad) = 0;
-    [[nodiscard]] virtual std::wstring getPlayerCapeName(int iPad) = 0;
+    [[nodiscard]] virtual std::string getPlayerCapeName(int iPad) = 0;
     [[nodiscard]] virtual std::uint32_t getPlayerCapeId(int iPad) = 0;
     [[nodiscard]] virtual std::uint32_t getAdditionalModelPartsForPad(int iPad) = 0;
     virtual void setAdditionalSkinBoxes(std::uint32_t dwSkinID,
@@ -137,8 +137,8 @@ public:
                                         unsigned int bitmask) = 0;
     [[nodiscard]] virtual unsigned int getAnimOverrideBitmask(
         std::uint32_t dwSkinID) = 0;
-    [[nodiscard]] virtual std::uint32_t getSkinIdFromPath(const std::wstring& skin) = 0;
-    [[nodiscard]] virtual std::wstring getSkinPathFromId(std::uint32_t skinId) = 0;
+    [[nodiscard]] virtual std::uint32_t getSkinIdFromPath(const std::string& skin) = 0;
+    [[nodiscard]] virtual std::string getSkinPathFromId(std::uint32_t skinId) = 0;
     [[nodiscard]] virtual bool defaultCapeExists() = 0;
     [[nodiscard]] virtual bool isXuidNotch(PlayerUID xuid) = 0;
     [[nodiscard]] virtual bool isXuidDeadmau5(PlayerUID xuid) = 0;
@@ -172,23 +172,23 @@ public:
 
     // -- Archive / resources --
 
-    [[nodiscard]] virtual bool hasArchiveFile(const std::wstring& filename) = 0;
+    [[nodiscard]] virtual bool hasArchiveFile(const std::string& filename) = 0;
     [[nodiscard]] virtual std::vector<std::uint8_t> getArchiveFile(
-        const std::wstring& filename) = 0;
+        const std::string& filename) = 0;
 
     // -- Strings / formatting / misc queries --
 
     [[nodiscard]] virtual int getHTMLColour(eMinecraftColour colour) = 0;
-    [[nodiscard]] virtual std::wstring getEntityName(EntityTypeId type) = 0;
-    [[nodiscard]] virtual const wchar_t* getGameRulesString(
-        const std::wstring& key) = 0;
+    [[nodiscard]] virtual std::string getEntityName(EntityTypeId type) = 0;
+    [[nodiscard]] virtual const char* getGameRulesString(
+        const std::string& key) = 0;
     [[nodiscard]] virtual unsigned int createImageTextData(
         std::uint8_t* textMetadata, int64_t seed, bool hasSeed,
         unsigned int uiHostOptions, unsigned int uiTexturePackId) = 0;
-    [[nodiscard]] virtual std::wstring getFilePath(std::uint32_t packId,
-                                     std::wstring filename,
+    [[nodiscard]] virtual std::string getFilePath(std::uint32_t packId,
+                                     std::string filename,
                                      bool bAddDataFolder,
-                                     std::wstring mountPoint = L"TPACK:") = 0;
+                                     std::string mountPoint = "TPACK:") = 0;
     [[nodiscard]] virtual char* getUniqueMapName() = 0;
     virtual void setUniqueMapName(char* name) = 0;
     [[nodiscard]] virtual unsigned int getOpacityTimer(int iPad) = 0;
@@ -202,11 +202,11 @@ public:
     // -- DLC --
 
     [[nodiscard]] virtual DLCSkinFile* getDLCSkinFile(
-        const std::wstring& name) = 0;
+        const std::string& name) = 0;
     [[nodiscard]] virtual bool dlcNeedsCorruptCheck() = 0;
     virtual unsigned int dlcCheckForCorrupt(bool showMessage = true) = 0;
     [[nodiscard]] virtual bool dlcReadDataFile(unsigned int& filesProcessed,
-                                 const std::wstring& path, DLCPack* pack,
+                                 const std::string& path, DLCPack* pack,
                                  bool fromArchive = false) = 0;
     virtual void dlcRemovePack(DLCPack* pack) = 0;
 
@@ -222,7 +222,7 @@ public:
 
     // -- Shared data --
 
-    [[nodiscard]] virtual std::vector<std::wstring>& getSkinNames() = 0;
+    [[nodiscard]] virtual std::vector<std::string>& getSkinNames() = 0;
     [[nodiscard]] virtual std::vector<FEATURE_DATA*>& getTerrainFeatures() = 0;
 
     // -- Menu service --

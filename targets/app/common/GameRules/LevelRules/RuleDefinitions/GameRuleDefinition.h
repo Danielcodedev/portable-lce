@@ -25,8 +25,8 @@ private:
 
 protected:
     // These attributes should map to those in the XSD GameRuleType
-    std::wstring m_descriptionId;
-    std::wstring m_promptId;
+    std::string m_descriptionId;
+    std::string m_promptId;
     int m_4JDataValue;
 
 public:
@@ -47,8 +47,8 @@ public:
 
     virtual GameRuleDefinition* addChild(
         ConsoleGameRules::EGameRuleType ruleType);
-    virtual void addAttribute(const std::wstring& attributeName,
-                              const std::wstring& attributeValue);
+    virtual void addAttribute(const std::string& attributeName,
+                              const std::string& attributeValue);
 
     virtual void populateGameRule(
         GameRulesInstance::EGameRulesInstanceType type, GameRule* rule);
@@ -80,8 +80,8 @@ public:
     static GameRulesInstance* generateNewGameRulesInstance(
         GameRulesInstance::EGameRulesInstanceType type, LevelRuleset* rules,
         Connection* connection);
-    static std::wstring generateDescriptionString(
+    static std::string generateDescriptionString(
         ConsoleGameRules::EGameRuleType defType,
-        const std::wstring& description, void* data = nullptr,
+        const std::string& description, void* data = nullptr,
         int dataLength = 0);
 };

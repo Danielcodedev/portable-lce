@@ -51,9 +51,9 @@ GameRuleDefinition* ConsoleGenerateStructure::addChild(
         m_actions.push_back((XboxStructureActionPlaceSpawner*)rule);
     } else {
 #ifndef _CONTENT_PACKAGE
-        wprintf(
-            L"ConsoleGenerateStructure: Attempted to add invalid child rule - "
-            L"%d\n",
+        printf(
+            "ConsoleGenerateStructure: Attempted to add invalid child rule - "
+            "%d\n",
             ruleType);
 #endif
     }
@@ -78,29 +78,29 @@ void ConsoleGenerateStructure::writeAttributes(DataOutputStream* dos,
 }
 
 void ConsoleGenerateStructure::addAttribute(
-    const std::wstring& attributeName, const std::wstring& attributeValue) {
-    if (attributeName.compare(L"x") == 0) {
+    const std::string& attributeName, const std::string& attributeValue) {
+    if (attributeName.compare("x") == 0) {
         int value = fromWString<int>(attributeValue);
         m_x = value;
         app.DebugPrintf("ConsoleGenerateStructure: Adding parameter x=%d\n",
                         m_x);
-    } else if (attributeName.compare(L"y") == 0) {
+    } else if (attributeName.compare("y") == 0) {
         int value = fromWString<int>(attributeValue);
         m_y = value;
         app.DebugPrintf("ConsoleGenerateStructure: Adding parameter y=%d\n",
                         m_y);
-    } else if (attributeName.compare(L"z") == 0) {
+    } else if (attributeName.compare("z") == 0) {
         int value = fromWString<int>(attributeValue);
         m_z = value;
         app.DebugPrintf("ConsoleGenerateStructure: Adding parameter z=%d\n",
                         m_z);
-    } else if (attributeName.compare(L"orientation") == 0) {
+    } else if (attributeName.compare("orientation") == 0) {
         int value = fromWString<int>(attributeValue);
         orientation = value;
         app.DebugPrintf(
             "ConsoleGenerateStructure: Adding parameter orientation=%d\n",
             orientation);
-    } else if (attributeName.compare(L"dim") == 0) {
+    } else if (attributeName.compare("dim") == 0) {
         m_dimension = fromWString<int>(attributeValue);
         if (m_dimension > 1 || m_dimension < -1) m_dimension = 0;
         app.DebugPrintf(

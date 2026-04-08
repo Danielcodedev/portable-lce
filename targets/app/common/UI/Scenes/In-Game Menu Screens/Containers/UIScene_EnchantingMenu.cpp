@@ -60,11 +60,11 @@ UIScene_EnchantingMenu::UIScene_EnchantingMenu(int iPad, void* _initData,
     delete initData;
 }
 
-std::wstring UIScene_EnchantingMenu::getMoviePath() {
+std::string UIScene_EnchantingMenu::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1) {
-        return L"EnchantingMenuSplit";
+        return "EnchantingMenuSplit";
     } else {
-        return L"EnchantingMenu";
+        return "EnchantingMenu";
     }
 }
 

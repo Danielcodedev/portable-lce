@@ -50,7 +50,7 @@ protected:
     UI_END_MAP_CHILD_ELEMENTS()
     UI_END_MAP_ELEMENTS_AND_NAMES()
 
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
     virtual void handleReload();
 
     virtual int getSectionColumns(ESceneSection eSection);

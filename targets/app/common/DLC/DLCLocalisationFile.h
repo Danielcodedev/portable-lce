@@ -11,7 +11,7 @@ private:
     StringTable* m_strings;
 
 public:
-    DLCLocalisationFile(const std::wstring& path);
+    DLCLocalisationFile(const std::string& path);
     DLCLocalisationFile(
         std::uint8_t* pbData,
         std::uint32_t dataBytes);  // when we load in a texture pack details

@@ -19,9 +19,9 @@ bool UIControl_CheckBox::setupControl(UIScene* scene, IggyValuePath* parent,
     bool success = UIControl_Base::setupControl(scene, parent, controlName);
 
     // CheckBox specific initialisers
-    m_checkedProp = registerFastName(L"Checked");
-    m_funcEnable = registerFastName(L"EnableCheckBox");
-    m_funcSetCheckBox = registerFastName(L"SetCheckBox");
+    m_checkedProp = registerFastName("Checked");
+    m_funcEnable = registerFastName("EnableCheckBox");
+    m_funcSetCheckBox = registerFastName("SetCheckBox");
 
     m_bEnabled = true;
 
@@ -33,16 +33,14 @@ void UIControl_CheckBox::init(UIString label, int id, bool checked) {
     m_id = id;
     m_bChecked = checked;
 
-    const std::u16string convLabel = wstring_to_u16string(label.getString());
-
     IggyDataValue result;
     IggyDataValue value[3];
-    value[0].type = IGGY_DATATYPE_string_UTF16;
-    IggyStringUTF16 stringVal;
+    value[0].type = IGGY_DATATYPE_string_UTF8;
+    IggyStringUTF8 stringVal;
 
-    stringVal.string = convLabel.c_str();
-    stringVal.length = convLabel.length();
-    value[0].string16 = stringVal;
+    stringVal.string = const_cast<char*>(label.getString().c_str());
+    stringVal.length = label.getString().length();
+    value[0].string8 = stringVal;
 
     value[1].type = IGGY_DATATYPE_number;
     value[1].number = (int)id;

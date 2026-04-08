@@ -16,14 +16,14 @@
 
 #define MAX_MIP_LEVELS 5
 
-Texture::Texture(const std::wstring& name, int mode, int width, int height,
+Texture::Texture(const std::string& name, int mode, int width, int height,
                  int depth, int wrapMode, int format, int minFilter,
                  int magFilter, bool mipMap) {
     _init(name, mode, width, height, depth, wrapMode, format, minFilter,
           magFilter, mipMap);
 }
 
-void Texture::_init(const std::wstring& name, int mode, int width, int height,
+void Texture::_init(const std::string& name, int mode, int width, int height,
                     int depth, int wrapMode, int format, int minFilter,
                     int magFilter, bool mipMap) {
     this->name = name;
@@ -89,7 +89,7 @@ void Texture::_init(const std::wstring& name, int mode, int width, int height,
     managerId = TextureManager::getInstance()->createTextureID();
 }
 
-void Texture::_init(const std::wstring& name, int mode, int width, int height,
+void Texture::_init(const std::string& name, int mode, int width, int height,
                     int depth, int wrapMode, int format, int minFilter,
                     int magFilter, BufferedImage* image, bool mipMap) {
     _init(name, mode, width, height, depth, wrapMode, format, minFilter,
@@ -144,14 +144,14 @@ void Texture::_init(const std::wstring& name, int mode, int width, int height,
     }
 }
 
-Texture::Texture(const std::wstring& name, int mode, int width, int height,
+Texture::Texture(const std::string& name, int mode, int width, int height,
                  int wrapMode, int format, int minFilter, int magFilter,
                  BufferedImage* image, bool mipMap) {
     _init(name, mode, width, height, 1, wrapMode, format, minFilter, magFilter,
           image, mipMap);
 }
 
-Texture::Texture(const std::wstring& name, int mode, int width, int height,
+Texture::Texture(const std::string& name, int mode, int width, int height,
                  int depth, int wrapMode, int format, int minFilter,
                  int magFilter, BufferedImage* image, bool mipMap) {
     _init(name, mode, width, height, depth, wrapMode, format, minFilter,
@@ -206,11 +206,11 @@ void Texture::fill(const Rect2i* rect, int color) {
     }
 }
 
-void Texture::writeAsBMP(const std::wstring& name) {
+void Texture::writeAsBMP(const std::string& name) {
     // 4J Don't need
 }
 
-void Texture::writeAsPNG(const std::wstring& filename) {
+void Texture::writeAsPNG(const std::string& filename) {
     // 4J Don't need
 }
 
@@ -529,7 +529,7 @@ int Texture::getWidth() { return width; }
 
 int Texture::getHeight() { return height; }
 
-std::wstring Texture::getName() { return name; }
+std::string Texture::getName() { return name; }
 
 void Texture::setImmediateUpdate(bool immediateUpdate) {
     this->immediateUpdate = immediateUpdate;

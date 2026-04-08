@@ -88,11 +88,11 @@ Socket* NetworkPlayerQNet::GetSocket() { return m_pSocket; }
 
 PlayerUID NetworkPlayerQNet::GetUID() { return m_qnetPlayer->GetXuid(); }
 
-const wchar_t* NetworkPlayerQNet::GetOnlineName() {
+const char* NetworkPlayerQNet::GetOnlineName() {
     return m_qnetPlayer->GetGamertag();
 }
 
-std::wstring NetworkPlayerQNet::GetDisplayName() {
+std::string NetworkPlayerQNet::GetDisplayName() {
     return m_qnetPlayer->GetGamertag();
 }
 

@@ -27,7 +27,7 @@ class DLCGameRulesHeader;
 class File;
 class LevelRuleset;
 
-#define GAME_RULE_SAVENAME L"requiredGameRules.grf"
+#define GAME_RULE_SAVENAME "requiredGameRules.grf"
 
 // 4J-JEV:
 #define LEVEL_GEN_ID int
@@ -35,8 +35,8 @@ class LevelRuleset;
 
 class GameRuleManager {
 public:
-    static const wchar_t* wchTagNameA[ConsoleGameRules::eGameRuleType_Count];
-    static const wchar_t* wchAttrNameA[ConsoleGameRules::eGameRuleAttr_Count];
+    static const char* wchTagNameA[ConsoleGameRules::eGameRuleType_Count];
+    static const char* wchAttrNameA[ConsoleGameRules::eGameRuleAttr_Count];
 
     static const short version_number = 2;
 
@@ -70,10 +70,10 @@ public:
 
 private:
     void readAttributes(DataInputStream* dis,
-                        std::vector<std::wstring>* tagsAndAtts,
+                        std::vector<std::string>* tagsAndAtts,
                         GameRuleDefinition* rule);
     void readChildren(
-        DataInputStream* dis, std::vector<std::wstring>* tagsAndAtts,
+        DataInputStream* dis, std::vector<std::string>* tagsAndAtts,
         std::unordered_map<int, ConsoleGameRules::EGameRuleType>* tagIdMap,
         GameRuleDefinition* rule);
 
@@ -98,7 +98,7 @@ public:
     LevelGenerationOptions* getLevelGenerationOptions() {
         return m_currentLevelGenerationOptions;
     }
-    const wchar_t* GetGameRulesString(const std::wstring& key);
+    const char* GetGameRulesString(const std::string& key);
 
     // 4J-JEV:
     // Properly cleans-up and unloads the current set of gameRules.

@@ -18,26 +18,24 @@ bool UIControl_DynamicLabel::setupControl(UIScene* scene, IggyValuePath* parent,
     bool success = UIControl_Base::setupControl(scene, parent, controlName);
 
     // Label specific initialisers
-    m_funcAddText = registerFastName(L"AddText");
-    m_funcTouchScroll = registerFastName(L"TouchScroll");
-    m_funcGetRealWidth = registerFastName(L"GetRealWidth");
-    m_funcGetRealHeight = registerFastName(L"GetRealHeight");
+    m_funcAddText = registerFastName("AddText");
+    m_funcTouchScroll = registerFastName("TouchScroll");
+    m_funcGetRealWidth = registerFastName("GetRealWidth");
+    m_funcGetRealHeight = registerFastName("GetRealHeight");
 
     return success;
 }
 
-void UIControl_DynamicLabel::addText(const std::wstring& text,
+void UIControl_DynamicLabel::addText(const std::string& text,
                                      bool bLastEntry) {
-    const std::u16string convText = wstring_to_u16string(text);
-
     IggyDataValue result;
     IggyDataValue value[2];
 
-    IggyStringUTF16 stringVal;
-    stringVal.string = convText.c_str();
-    stringVal.length = convText.length();
-    value[0].type = IGGY_DATATYPE_string_UTF16;
-    value[0].string16 = stringVal;
+    IggyStringUTF8 stringVal;
+    stringVal.string = const_cast<char*>(text.c_str());
+    stringVal.length = text.length();
+    value[0].type = IGGY_DATATYPE_string_UTF8;
+    value[0].string8 = stringVal;
 
     value[1].type = IGGY_DATATYPE_boolean;
     value[1].boolval = bLastEntry;

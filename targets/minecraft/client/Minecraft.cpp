@@ -1,6 +1,3 @@
-#include "minecraft/IGameServices.h"
-#include "minecraft/client/IMenuService.h"
-#include "minecraft/util/Log.h"
 #include "Minecraft.h"
 
 #include <assert.h>
@@ -13,10 +10,12 @@
 #include <ctime>
 #include <thread>
 
-#include "platform/profile/profile.h"
-#include "platform/renderer/renderer.h"
-#include "platform/storage/storage.h"
-#include "minecraft/GameEnums.h"
+#include "Options.h"
+#include "Pos.h"
+#include "ProgressRenderer.h"
+#include "SharedConstants.h"
+#include "Timer.h"
+#include "User.h"
 #include "app/common/Audio/SoundEngine.h"
 #include "app/common/DLC/DLCManager.h"
 #include "app/common/Network/GameNetworkManager.h"
@@ -26,22 +25,16 @@
 #include "app/common/UI/All Platforms/UIStructs.h"
 #include "app/linux/Linux_UIController.h"
 #include "app/linux/Stubs/winapi_stubs.h"
-#include "platform/XboxStubs.h"
-#include "Options.h"
-#include "Pos.h"
-#include "ProgressRenderer.h"
-#include "SharedConstants.h"
-#include "Timer.h"
-#include "User.h"
-#include "minecraft/world/entity/player/SkinTypes.h"
-#include "minecraft/world/level/storage/ConsoleSaveFileIO/compression.h"
 #include "java/Class.h"
 #include "java/Random.h"
+#include "minecraft/GameEnums.h"
+#include "minecraft/IGameServices.h"
+#include "minecraft/client/IMenuService.h"
 #include "minecraft/client/gui/DeathScreen.h"
 #include "minecraft/client/gui/ErrorScreen.h"
 #include "minecraft/client/gui/PauseScreen.h"
-#include "minecraft/client/gui/inventory/InventoryScreen.h"
 #include "minecraft/client/gui/Screen.h"
+#include "minecraft/client/gui/inventory/InventoryScreen.h"
 #include "minecraft/client/gui/particle/GuiParticles.h"
 #include "minecraft/client/model/HumanoidModel.h"
 #include "minecraft/client/multiplayer/MultiPlayerLevel.h"
@@ -66,6 +59,7 @@
 #include "minecraft/sounds/SoundTypes.h"
 #include "minecraft/stats/Stats.h"
 #include "minecraft/stats/StatsCounter.h"
+#include "minecraft/util/Log.h"
 #include "minecraft/world/entity/Entity.h"
 #include "minecraft/world/entity/ItemFrame.h"
 #include "minecraft/world/entity/Mob.h"
@@ -80,6 +74,7 @@
 #include "minecraft/world/entity/player/Abilities.h"
 #include "minecraft/world/entity/player/Inventory.h"
 #include "minecraft/world/entity/player/Player.h"
+#include "minecraft/world/entity/player/SkinTypes.h"
 #include "minecraft/world/food/FoodData.h"
 #include "minecraft/world/item/DyePowderItem.h"
 #include "minecraft/world/item/FoodItem.h"
@@ -91,6 +86,7 @@
 #include "minecraft/world/level/chunk/CompressedTileStorage.h"
 #include "minecraft/world/level/dimension/Dimension.h"
 #include "minecraft/world/level/material/Material.h"
+#include "minecraft/world/level/storage/ConsoleSaveFileIO/compression.h"
 #include "minecraft/world/level/storage/LevelData.h"
 #include "minecraft/world/level/storage/LevelStorageSource.h"
 #include "minecraft/world/level/storage/McRegionLevelStorageSource.h"
@@ -99,19 +95,21 @@
 #include "minecraft/world/level/tile/TallGrassPlantTile.h"
 #include "minecraft/world/level/tile/Tile.h"
 #include "minecraft/world/phys/HitResult.h"
+#include "platform/XboxStubs.h"
+#include "platform/profile/profile.h"
+#include "platform/renderer/renderer.h"
+#include "platform/storage/storage.h"
 #include "strings.h"
 #if defined(ENABLE_JAVA_GUIS)
 #include "minecraft/client/gui/inventory/CreativeInventoryScreen.h"
 #endif
-#include "platform/input/input.h"
-#include "app/common/Minecraft_Macros.h"
 #include "app/common/Colours/ColourTable.h"
 #include "app/common/ConsoleGameMode.h"
 #include "app/common/DLC/DLCPack.h"
+#include "app/common/Minecraft_Macros.h"
 #include "app/common/Tutorial/FullTutorialMode.h"
 #include "app/common/UI/All Platforms/IUIScene_CreativeMenu.h"
 #include "app/common/UI/UIFontData.h"
-#include "util/StringHelpers.h"
 #include "java/File.h"
 #include "java/System.h"
 #include "minecraft/StaticConstructors.h"
@@ -130,6 +128,8 @@
 #include "minecraft/world/item/alchemy/PotionMacros.h"
 #include "minecraft/world/level/chunk/SparseDataStorage.h"
 #include "minecraft/world/level/chunk/SparseLightStorage.h"
+#include "platform/input/input.h"
+#include "util/StringHelpers.h"
 
 class ChunkSource;
 
@@ -149,7 +149,7 @@ int64_t Minecraft::frameTimes[512];
 int64_t Minecraft::tickTimes[512];
 int Minecraft::frameTimePos = 0;
 int64_t Minecraft::warezTime = 0;
-File Minecraft::workDir = File(L"");
+File Minecraft::workDir = File("");
 
 ResourceLocation Minecraft::DEFAULT_FONT_LOCATION =
     ResourceLocation(TN_DEFAULT_FONT);
@@ -203,14 +203,14 @@ Minecraft::Minecraft(Component* mouseComponent, Canvas* parent,
     soundEngine = new SoundEngine();
     mouseHandler = nullptr;
     skins = nullptr;
-    workingDirectory = File(L"");
+    workingDirectory = File("");
     levelSource = nullptr;
     stats[0] = nullptr;
     stats[1] = nullptr;
     stats[2] = nullptr;
     stats[3] = nullptr;
     connectToPort = 0;
-    workDir = File(L"");
+    workDir = File("");
     // 4J removed
     // wasDown = false;
     lastTimer = -1;
@@ -283,7 +283,7 @@ void Minecraft::clearConnectionFailed() {
     gameServices().setDisconnectReason(DisconnectPacket::eDisconnect_None);
 }
 
-void Minecraft::connectTo(const std::wstring& server, int port) {
+void Minecraft::connectTo(const std::string& server, int port) {
     connectToIp = server;
     connectToPort = port;
 }
@@ -293,7 +293,7 @@ void Minecraft::init() {
 
     workingDirectory = getWorkingDirectory();
     levelSource =
-        new McRegionLevelStorageSource(File(workingDirectory, L"saves"));
+        new McRegionLevelStorageSource(File(workingDirectory, "saves"));
     //        levelSource = new MemoryLevelStorageSource();
     options = new Options(this, workingDirectory);
     skins = new TexturePackRepository(workingDirectory, this);
@@ -302,9 +302,9 @@ void Minecraft::init() {
     // renderLoadingScreen();
 
     font =
-        new Font(options, L"font/Default.png", textures, false,
+        new Font(options, "font/Default.png", textures, false,
                  &DEFAULT_FONT_LOCATION, 23, 20, 8, 8, SFontData::Codepoints);
-    altFont = new Font(options, L"font/alternate.png", textures, false,
+    altFont = new Font(options, "font/alternate.png", textures, false,
                        &ALT_FONT_LOCATION, 16, 16, 8, 8);
 
     // if (options.languageCode != null) {
@@ -316,9 +316,9 @@ void Minecraft::init() {
     // }
 
     // 4J Stu - Not using these any more
-    // WaterColor::init(textures->loadTexturePixels(L"misc/watercolor.png"));
-    // GrassColor::init(textures->loadTexturePixels(L"misc/grasscolor.png"));
-    // FoliageColor::init(textures->loadTexturePixels(L"misc/foliagecolor.png"));
+    // WaterColor::init(textures->loadTexturePixels("misc/watercolor.png"));
+    // GrassColor::init(textures->loadTexturePixels("misc/grasscolor.png"));
+    // FoliageColor::init(textures->loadTexturePixels("misc/foliagecolor.png"));
 
     gameRenderer = new GameRenderer(this);
     EntityRenderDispatcher::instance->itemInHandRenderer =
@@ -341,7 +341,7 @@ void Minecraft::init() {
     // Keyboard::create();
     Mouse::create();
 
-    checkGlError(L"Pre startup");
+    checkGlError("Pre startup");
 
     // width = Display.getDisplayMode().getWidth();
     // height = Display.getDisplayMode().getHeight();
@@ -358,7 +358,7 @@ void Minecraft::init() {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glMatrixMode(GL_MODELVIEW);
-    checkGlError(L"Startup");
+    checkGlError("Startup");
 
     //    openGLCapabilities = new OpenGLCapabilities();	// 4J - removed
 
@@ -378,10 +378,10 @@ void Minecraft::init() {
     //    } catch (Exception e) {
     //    }
 
-    checkGlError(L"Post startup");
+    checkGlError("Post startup");
     gui = new Gui(this);
 
-    if (connectToIp != L"")  // 4J - was nullptr comparison
+    if (connectToIp != "")  // 4J - was nullptr comparison
     {
         //        setScreen(new ConnectScreen(this, connectToIp,
         //        connectToPort));		// 4J TODO - put back in
@@ -462,36 +462,36 @@ void Minecraft::blit(int x, int y, int sx, int sy, int w, int h) {
 }
 
 File Minecraft::getWorkingDirectory() {
-    if (workDir.getPath().empty()) workDir = getWorkingDirectory(L"4jcraft");
+    if (workDir.getPath().empty()) workDir = getWorkingDirectory("4jcraft");
     return workDir;
 }
 
-File Minecraft::getWorkingDirectory(const std::wstring& applicationName) {
+File Minecraft::getWorkingDirectory(const std::string& applicationName) {
     // 4J - original version
     // 4jcraft: ported to C++
-    std::wstring userHome = convStringToWstring(getenv("HOME"));
+    std::string userHome = getenv("HOME");
     File* workingDirectory;
 #if defined(__linux__)
-    workingDirectory = new File(userHome, L'.' + applicationName + L'/');
+    workingDirectory = new File(userHome, '.' + applicationName + '/');
 #elif defined(_WINDOWS64)
     std::string applicationData = getenv("APPDATA");
     if (!applicationData.empty()) {
-        workingDirectory = new File(convStringToWstring(applicationData),
-                                    L'.' + applicationName + L'/');
+        workingDirectory =
+            new File(applicationData, '.' + applicationName + '/');
     } else {
-        workingDirectory = new File(userHome, L'.' + applicationName + L'/');
+        workingDirectory = new File(userHome, '.' + applicationName + '/');
     }
 // #elif defined(_MACOS)
 //		workingDirectory = new File(userHome, "Library/Application
 // Support/" + applicationName);
 #else
-    workingDirectory = new File(userHome, applicationName + L'/');
+    workingDirectory = new File(userHome, applicationName + '/');
 #endif
     if (!workingDirectory->exists()) {
         if (!workingDirectory->mkdirs()) {
             Log::info("The working directory could not be created");
             assert(0);
-            // throw new RuntimeException(L"The working directory could not be
+            // throw new RuntimeException("The working directory could not be
             // created: " + workingDirectory);
         }
     }
@@ -568,7 +568,7 @@ void Minecraft::setScreen(Screen* screen) {
 #endif
 }
 
-void Minecraft::checkGlError(const std::wstring& string) {
+void Minecraft::checkGlError(const std::string& string) {
     // 4J - TODO
 }
 
@@ -714,8 +714,9 @@ void Minecraft::updatePlayerViewportAssignments() {
         for (int i = 0; i < XUSER_MAX_COUNT; i++) {
             if (localplayers[i] != nullptr) {
                 // Primary player settings decide what the mode is
-                if (gameServices().getGameSettings(PlatformInput.GetPrimaryPad(),
-                                        eGameSetting_SplitScreenVertical)) {
+                if (gameServices().getGameSettings(
+                        PlatformInput.GetPrimaryPad(),
+                        eGameSetting_SplitScreenVertical)) {
                     localplayers[i]->m_iScreenSection =
                         IPlatformRenderer::VIEWPORT_TYPE_SPLIT_LEFT + found;
                 } else {
@@ -741,10 +742,12 @@ void Minecraft::updatePlayerViewportAssignments() {
                     if ((localplayers[i]->m_iScreenSection >=
                          IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_TOP_LEFT) &&
                         (localplayers[i]->m_iScreenSection <=
-                         IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_BOTTOM_RIGHT)) {
+                         IPlatformRenderer::
+                             VIEWPORT_TYPE_QUADRANT_BOTTOM_RIGHT)) {
                         quadrantsAllocated
                             [localplayers[i]->m_iScreenSection -
-                             IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_TOP_LEFT] = true;
+                             IPlatformRenderer::
+                                 VIEWPORT_TYPE_QUADRANT_TOP_LEFT] = true;
                     }
                 } else {
                     // Reset the viewport so that it can be assigned in the next
@@ -766,7 +769,9 @@ void Minecraft::updatePlayerViewportAssignments() {
                     for (int j = 0; j < 4; j++) {
                         if (!quadrantsAllocated[j]) {
                             localplayers[i]->m_iScreenSection =
-                                IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_TOP_LEFT + j;
+                                IPlatformRenderer::
+                                    VIEWPORT_TYPE_QUADRANT_TOP_LEFT +
+                                j;
                             quadrantsAllocated[j] = true;
                             break;
                         }
@@ -834,7 +839,7 @@ void Minecraft::addPendingLocalConnection(int idx,
 }
 
 std::shared_ptr<MultiplayerLocalPlayer> Minecraft::createExtraLocalPlayer(
-    int idx, const std::wstring& name, int iPad, int iDimension,
+    int idx, const std::string& name, int iPad, int iDimension,
     ClientConnection* clientConnection /*= nullptr*/,
     MultiPlayerLevel* levelpassedin) {
     if (clientConnection == nullptr) return nullptr;
@@ -845,7 +850,7 @@ std::shared_ptr<MultiplayerLocalPlayer> Minecraft::createExtraLocalPlayer(
             // A temp player displaying a connecting screen
             tempScreenSection = localplayers[idx]->m_iScreenSection;
         }
-        std::wstring prevname = user->name;
+        std::string prevname = user->name;
         user->name = name;
 
         // Don't need this any more
@@ -939,8 +944,7 @@ void Minecraft::storeExtraLocalPlayer(int idx) {
     localplayers[idx]->input = new Input();
 
     if (PlatformProfile.IsSignedIn(idx)) {
-        localplayers[idx]->name =
-            convStringToWstring(PlatformProfile.GetGamertag(idx));
+        localplayers[idx]->name = PlatformProfile.GetGamertag(idx);
     }
 }
 
@@ -1013,8 +1017,7 @@ void Minecraft::createPrimaryLocalPlayer(int iPad) {
     // gameRenderer->itemInHandRenderer = localitemInHandRenderers[iPad];
     //  Give them the gamertag if they're signed in
     if (PlatformProfile.IsSignedIn(PlatformInput.GetPrimaryPad())) {
-        user->name = convStringToWstring(
-            PlatformProfile.GetGamertag(PlatformInput.GetPrimaryPad()));
+        user->name = PlatformProfile.GetGamertag(PlatformInput.GetPrimaryPad());
     }
 }
 
@@ -1074,7 +1077,8 @@ void Minecraft::run_middle() {
                         // player has a app action running , or has any crafting
                         // or containers open, don't autosave
                         if (!PlatformStorage.GetSaveDisabled() &&
-                            (gameServices().getXuiAction(PlatformInput.GetPrimaryPad()) ==
+                            (gameServices().getXuiAction(
+                                 PlatformInput.GetPrimaryPad()) ==
                              eAppAction_Idle)) {
                             if (!ui.IsPauseMenuDisplayed(
                                     PlatformInput.GetPrimaryPad()) &&
@@ -1101,7 +1105,7 @@ void Minecraft::run_middle() {
                                     if (pDLCPack) {
                                         if (!pDLCPack->hasPurchasedFile(
                                                 DLCManager::e_DLCType_Texture,
-                                                L"")) {
+                                                "")) {
                                             bTrialTexturepack = true;
                                         }
                                     }
@@ -1139,9 +1143,9 @@ void Minecraft::run_middle() {
 #endif
 
                                             Log::info("%02d:%02d:%02d\n",
-                                                            utcTime.tm_hour,
-                                                            utcTime.tm_min,
-                                                            utcTime.tm_sec);
+                                                      utcTime.tm_hour,
+                                                      utcTime.tm_min,
+                                                      utcTime.tm_sec);
                                         }
 #endif
                                     } else {
@@ -1167,7 +1171,8 @@ void Minecraft::run_middle() {
                 // the level in their banned list and ask if they want to play
                 // it
                 for (int i = 0; i < XUSER_MAX_COUNT; i++) {
-                    if (localplayers[i] && (gameServices().getBanListCheck(i) == false) &&
+                    if (localplayers[i] &&
+                        (gameServices().getBanListCheck(i) == false) &&
                         !Minecraft::GetInstance()->isTutorial() &&
                         PlatformProfile.IsSignedInLive(i) &&
                         !PlatformProfile.IsGuest(i)) {
@@ -1183,15 +1188,17 @@ void Minecraft::run_middle() {
                             PlayerUID xuid = pHostPlayer->GetUID();
 
                             if (gameServices().isInBannedLevelList(
-                                    i, xuid, gameServices().getUniqueMapName())) {
+                                    i, xuid,
+                                    gameServices().getUniqueMapName())) {
                                 // put up a message box asking if the player
                                 // would like to unban this level
                                 Log::info("This level is banned\n");
                                 // set the app action to bring up the message
                                 // box to give them the option to remove from
                                 // the ban list or exit the level
-                                gameServices().setAction(i, eAppAction_LevelInBanLevelList,
-                                              (void*)true);
+                                gameServices().setAction(
+                                    i, eAppAction_LevelInBanLevelList,
+                                    (void*)true);
                             }
                         }
                     }
@@ -1235,10 +1242,11 @@ void Minecraft::run_middle() {
                     if (localplayers[i]) {
                         // 4J-PB - add these to check for coming out of idle
                         if (PlatformInput.ButtonPressed(i,
-                                                       MINECRAFT_ACTION_JUMP))
+                                                        MINECRAFT_ACTION_JUMP))
                             localplayers[i]->ullButtonsPressed |=
                                 1LL << MINECRAFT_ACTION_JUMP;
-                        if (PlatformInput.ButtonPressed(i, MINECRAFT_ACTION_USE))
+                        if (PlatformInput.ButtonPressed(i,
+                                                        MINECRAFT_ACTION_USE))
                             localplayers[i]->ullButtonsPressed |=
                                 1LL << MINECRAFT_ACTION_USE;
 
@@ -1246,8 +1254,8 @@ void Minecraft::run_middle() {
                                 i, MINECRAFT_ACTION_INVENTORY))
                             localplayers[i]->ullButtonsPressed |=
                                 1LL << MINECRAFT_ACTION_INVENTORY;
-                        if (PlatformInput.ButtonPressed(i,
-                                                       MINECRAFT_ACTION_ACTION))
+                        if (PlatformInput.ButtonPressed(
+                                i, MINECRAFT_ACTION_ACTION))
                             localplayers[i]->ullButtonsPressed |=
                                 1LL << MINECRAFT_ACTION_ACTION;
                         if (PlatformInput.ButtonPressed(
@@ -1266,7 +1274,7 @@ void Minecraft::run_middle() {
 #endif
                         }
                         if (PlatformInput.ButtonPressed(i,
-                                                       MINECRAFT_ACTION_DROP))
+                                                        MINECRAFT_ACTION_DROP))
                             localplayers[i]->ullButtonsPressed |=
                                 1LL << MINECRAFT_ACTION_DROP;
 
@@ -1293,7 +1301,8 @@ void Minecraft::run_middle() {
                                 1LL << MINECRAFT_ACTION_GAME_INFO;
 
 #if !defined(_FINAL_BUILD)
-                        if (gameServices().debugSettingsOn() && gameServices().getUseDPadForDebug()) {
+                        if (gameServices().debugSettingsOn() &&
+                            gameServices().getUseDPadForDebug()) {
                             localplayers[i]->ullDpad_last = 0;
                             localplayers[i]->ullDpad_this = 0;
                             localplayers[i]->ullDpad_filtered = 0;
@@ -1400,7 +1409,8 @@ void Minecraft::run_middle() {
                                         // if this is a local game, then the
                                         // player just needs to be signed in
                                         if (g_NetworkManager.IsLocalGame() ||
-                                            (PlatformProfile.IsSignedInLive(i) &&
+                                            (PlatformProfile.IsSignedInLive(
+                                                 i) &&
                                              PlatformProfile
                                                  .AllowedToPlayMultiplayer(
                                                      i))) {
@@ -1433,11 +1443,7 @@ void Minecraft::run_middle() {
                                                     player =
                                                         createExtraLocalPlayer(
                                                             i,
-                                                            (convStringToWstring(
-                                                                 PlatformProfile
-                                                                     .GetGamertag(
-                                                                         i)))
-                                                                .c_str(),
+                                                            PlatformProfile.GetGamertag(i),
                                                             i,
                                                             level->dimension
                                                                 ->id);
@@ -1623,7 +1629,7 @@ void Minecraft::run_middle() {
                     // // 4J added
                 }
                 // int64_t tickDuraction = System::nanoTime() - beforeTickTime;
-                checkGlError(L"Pre render");
+                checkGlError("Pre render");
 
                 TileRenderer::fancy = options->fancyGraphics;
 
@@ -1767,7 +1773,7 @@ void Minecraft::run_middle() {
                 }
                 }
                 */
-                checkGlError(L"Post render");
+                checkGlError("Post render");
                 frames++;
                 // pause = !isClientSide() && screen != nullptr &&
                 // screen->isPauseScreen();
@@ -1781,9 +1787,9 @@ void Minecraft::run_middle() {
 
 #if !defined(_CONTENT_PACKAGE)
                 while (System::nanoTime() >= lastTime + 1000000000) {
-                    fpsString = toWString<int>(frames) + L" fps, " +
+                    fpsString = toWString<int>(frames) + " fps, " +
                                 toWString<int>(Chunk::updates) +
-                                L" chunk updates";
+                                " chunk updates";
                     Chunk::updates = 0;
                     lastTime += 1000000000;
                     frames = 0;
@@ -2023,7 +2029,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures) {
 
     if (!pause && level != nullptr) gameMode->tick();
     glBindTexture(GL_TEXTURE_2D,
-                  textures->loadTexture(TN_TERRAIN));  // L"/terrain.png"));
+                  textures->loadTexture(TN_TERRAIN));  // "/terrain.png"));
     if (bFirst) {
         if (!pause) textures->tick(bUpdateTextures);
     }
@@ -3315,7 +3321,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures) {
                         // Otherwise just the original game code for handling
                         // autorepeat
                         if (PlatformInput.ButtonDown(iPad,
-                                                    MINECRAFT_ACTION_USE) &&
+                                                     MINECRAFT_ACTION_USE) &&
                             ticks - player->lastClickTick[1] >=
                                 timer->ticksPerSecond / 4) {
                             player->handleMouseClick(1);
@@ -3433,7 +3439,8 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures) {
 #if defined(ENABLE_JAVA_GUIS)
             setScreen(new InventoryScreen(player));
 #else
-            gameServices().menus().openInventory(iPad, std::static_pointer_cast<LocalPlayer>(player));
+            gameServices().menus().openInventory(
+                iPad, std::static_pointer_cast<LocalPlayer>(player));
 #endif
         }
 
@@ -3454,7 +3461,8 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures) {
                 setScreen(new CreativeInventoryScreen(player));
             }
 #else
-                gameServices().menus().openCreative(iPad, std::static_pointer_cast<LocalPlayer>(player));
+                gameServices().menus().openCreative(
+                    iPad, std::static_pointer_cast<LocalPlayer>(player));
             }
             // 4J-PB - Microsoft request that we use the 3x3 crafting if someone
             // presses X while at the workbench
@@ -3471,15 +3479,15 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures) {
                                     &hitResult->pos, false, &usedItem);
             } else {
                 ui.PlayUISFX(eSFX_Press);
-                gameServices().menus().openCrafting2x2(iPad, std::static_pointer_cast<LocalPlayer>(player));
+                gameServices().menus().openCrafting2x2(
+                    iPad, std::static_pointer_cast<LocalPlayer>(player));
             }
 #endif
         }
 
         if ((player->ullButtonsPressed & (1LL << MINECRAFT_ACTION_PAUSEMENU))) {
-            Log::info(
-                "PAUSE PRESS PROCESSING - ipad = %d, NavigateToScene\n",
-                player->GetXboxPad());
+            Log::info("PAUSE PRESS PROCESSING - ipad = %d, NavigateToScene\n",
+                      player->GetXboxPad());
             ui.PlayUISFX(eSFX_Press);
 #if !defined(ENABLE_JAVA_GUIS)
             ui.NavigateToScene(iPad, eUIScene_PauseMenu, nullptr,
@@ -3504,7 +3512,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures) {
         }
         if (selected || wheel != 0 ||
             (player->ullButtonsPressed & (1LL << MINECRAFT_ACTION_DROP))) {
-            std::wstring itemName = L"";
+            std::string itemName = "";
             std::shared_ptr<ItemInstance> selectedItem =
                 player->getSelectedItem();
             // Dropping items happens over network, so if we only have one then
@@ -3533,7 +3541,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures) {
     // #ifndef _CONTENT_PACKAGE
     // 	if(!(ui.GetMenuDisplayed(iPad)))
     // 	{
-    // 		wchar_t wchInput;
+    // 		char wchInput;
     // 		if(PlatformInput.InputDetected(iPad,&wchInput))
     // 		{
     // 			printf("Input Detected!\n");
@@ -3666,13 +3674,13 @@ bool Minecraft::isClientSide() {
 }
 
 void Minecraft::selectLevel(ConsoleSaveFile* saveFile,
-                            const std::wstring& levelId,
-                            const std::wstring& levelName,
+                            const std::string& levelId,
+                            const std::string& levelName,
                             LevelSettings* levelSettings) {}
 
-bool Minecraft::saveSlot(int slot, const std::wstring& name) { return false; }
+bool Minecraft::saveSlot(int slot, const std::string& name) { return false; }
 
-bool Minecraft::loadSlot(const std::wstring& userName, int slot) {
+bool Minecraft::loadSlot(const std::string& userName, int slot) {
     return false;
 }
 
@@ -3715,7 +3723,7 @@ MultiPlayerLevel* Minecraft::getLevel(int dimension) {
 // Also causing ambiguous call for some reason
 // as it is matching shared_ptr<Player> from the func below with bool from this
 // one
-// void Minecraft::setLevel(Level *level, const wstring& message, bool
+// void Minecraft::setLevel(Level *level, const string& message, bool
 // doForceStatsSave /*= true*/)
 //{
 //	setLevel(level, message, nullptr, doForceStatsSave);
@@ -3745,7 +3753,7 @@ void Minecraft::setLevel(MultiPlayerLevel* level, int message /*=-1*/,
     }
 
     // 4J-PB - since we now play music in the menu, just let it keep playing
-    // soundEngine->playStreaming(L"", 0, 0, 0, 0, 0);
+    // soundEngine->playStreaming("", 0, 0, 0, 0, 0);
 
     // 4J - stop update thread from processing this level, which blocks until it
     // is safe to move on - will be re-enabled if we set the level to be
@@ -3947,42 +3955,42 @@ void Minecraft::prepareLevel(int title) {
     }
 }
 
-void Minecraft::fileDownloaded(const std::wstring& name, File* file) {
-    int p = (int)name.find(L"/");
-    std::wstring category = name.substr(0, p);
-    std::wstring name2 = name.substr(p + 1);
+void Minecraft::fileDownloaded(const std::string& name, File* file) {
+    int p = (int)name.find("/");
+    std::string category = name.substr(0, p);
+    std::string name2 = name.substr(p + 1);
     toLower(category);
-    if (category == L"sound") {
+    if (category == "sound") {
         soundEngine->add(name, file);
-    } else if (category == L"newsound") {
+    } else if (category == "newsound") {
         soundEngine->add(name, file);
-    } else if (category == L"streaming") {
+    } else if (category == "streaming") {
         soundEngine->addStreaming(name, file);
-    } else if (category == L"music") {
+    } else if (category == "music") {
         soundEngine->addMusic(name, file);
-    } else if (category == L"newmusic") {
+    } else if (category == "newmusic") {
         soundEngine->addMusic(name, file);
     }
 }
 
-std::wstring Minecraft::gatherStats1() {
+std::string Minecraft::gatherStats1() {
     // return levelRenderer->gatherStats1();
-    return L"Time to autosave: " +
-           toWString<int64_t>(gameServices().secondsToAutosave()) + L"s";
+    return "Time to autosave: " +
+           toWString<int64_t>(gameServices().secondsToAutosave()) + "s";
 }
 
-std::wstring Minecraft::gatherStats2() {
+std::string Minecraft::gatherStats2() {
     return g_NetworkManager.GatherStats();
     // return levelRenderer->gatherStats2();
 }
 
-std::wstring Minecraft::gatherStats3() {
+std::string Minecraft::gatherStats3() {
     return g_NetworkManager.GatherRTTStats();
-    // return L"P: " + particleEngine->countParticles() + L". T: " +
+    // return "P: " + particleEngine->countParticles() + ". T: " +
     // level->gatherStats();
 }
 
-std::wstring Minecraft::gatherStats4() {
+std::string Minecraft::gatherStats4() {
     return level->gatherChunkSourceStats();
 }
 
@@ -4041,7 +4049,8 @@ void Minecraft::respawnPlayer(int iPad, int dimension, int newEntityId) {
     }
 
     // Set the animation override if the skin has one
-    std::uint32_t dwSkinID = gameServices().getSkinIdFromPath(player->customTextureUrl);
+    std::uint32_t dwSkinID =
+        gameServices().getSkinIdFromPath(player->customTextureUrl);
     if (GET_IS_DLC_SKIN_FROM_BITMASK(dwSkinID)) {
         player->setAnimOverrideBitmask(
             player->getSkinAnimOverrideBitmask(dwSkinID));
@@ -4055,14 +4064,17 @@ void Minecraft::respawnPlayer(int iPad, int dimension, int newEntityId) {
         createPrimaryLocalPlayer(iPad);
 
         // update the debugoptions
-        gameServices().setGameSettingsDebugMask(PlatformInput.GetPrimaryPad(),
-                                     gameServices().debugGetMask(-1, true));
+        gameServices().setGameSettingsDebugMask(
+            PlatformInput.GetPrimaryPad(),
+            gameServices().debugGetMask(-1, true));
     } else {
         storeExtraLocalPlayer(iPad);
     }
 
     player->setShowOnMaps(
-        gameServices().getGameHostOption(eGameHostOption_Gamertags) != 0 ? true : false);
+        gameServices().getGameHostOption(eGameHostOption_Gamertags) != 0
+            ? true
+            : false);
 
     player->resetPos();
     level->addEntity(player);
@@ -4089,15 +4101,15 @@ void Minecraft::respawnPlayer(int iPad, int dimension, int newEntityId) {
     gameRenderer->EnableUpdateThread();
 }
 
-void Minecraft::start(const std::wstring& name, const std::wstring& sid) {
-    startAndConnectTo(name, sid, L"");
+void Minecraft::start(const std::string& name, const std::string& sid) {
+    startAndConnectTo(name, sid, "");
 }
 
-void Minecraft::startAndConnectTo(const std::wstring& name,
-                                  const std::wstring& sid,
-                                  const std::wstring& url) {
+void Minecraft::startAndConnectTo(const std::string& name,
+                                  const std::string& sid,
+                                  const std::string& url) {
     bool fullScreen = false;
-    std::wstring userName = name;
+    std::string userName = name;
 
     /* 4J - removed window handling things here
     final Frame frame = new Frame("Minecraft");
@@ -4134,18 +4146,18 @@ void Minecraft::startAndConnectTo(const std::wstring& name,
     final Thread thread = new Thread(minecraft, "Minecraft main thread");
     thread.setPriority(Thread.MAX_PRIORITY);
     */
-    minecraft->serverDomain = L"www.minecraft.net";
+    minecraft->serverDomain = "www.minecraft.net";
 
     {
-        if (userName != L"" &&
-            sid != L"")  // 4J - username & side were compared with nullptr
-                         // rather than empty strings
+        if (userName != "" &&
+            sid != "")  // 4J - username & side were compared with nullptr
+                        // rather than empty strings
         {
             minecraft->user = new User(userName, sid);
         } else {
             minecraft->user = new User(
-                L"Player" + toWString<int>(System::currentTimeMillis() % 1000),
-                L"");
+                "Player" + toWString<int>(System::currentTimeMillis() % 1000),
+                "");
         }
     }
     // else
@@ -4191,8 +4203,8 @@ bool useLomp = false;
 int g_iMainThreadId;
 
 void Minecraft::main() {
-    std::wstring name;
-    std::wstring sessionId;
+    std::string name;
+    std::string sessionId;
 
     // g_iMainThreadId = GetCurrentThreadId();
 
@@ -4215,8 +4227,8 @@ void Minecraft::main() {
     // 4J-PB - Can't call this for the first 5 seconds of a game - MS rule
     {
         name =
-            L"Player" + toWString<int64_t>(System::currentTimeMillis() % 1000);
-        sessionId = L"-";
+            "Player" + toWString<int64_t>(System::currentTimeMillis() % 1000);
+        sessionId = "-";
         /* 4J - TODO - get a session ID from somewhere?
         if (args.size() > 0) name = args[0];
         sessionId = "-";
@@ -4253,7 +4265,7 @@ bool Minecraft::renderDebug() {
     return (m_instance != nullptr && m_instance->options->renderDebug);
 }
 
-bool Minecraft::handleClientSideCommand(const std::wstring& chatMessage) {
+bool Minecraft::handleClientSideCommand(const std::string& chatMessage) {
     return false;
 }
 
@@ -4488,10 +4500,7 @@ int Minecraft::InGame_SignInReturned(void* pParam, bool bContinue, int iPad) {
                         pMinecraftClass->localplayers[iPad];
                     if (player == nullptr) {
                         player = pMinecraftClass->createExtraLocalPlayer(
-                            iPad,
-                            (convStringToWstring(
-                                 PlatformProfile.GetGamertag(iPad)))
-                                .c_str(),
+                            iPad, PlatformProfile.GetGamertag(iPad),
                             iPad, pMinecraftClass->level->dimension->id);
                     }
                 }
@@ -4528,8 +4537,7 @@ void Minecraft::tickAllConnections() {
     setLocalPlayerIdx(oldIdx);
 }
 
-bool Minecraft::addPendingClientTextureRequest(
-    const std::wstring& textureName) {
+bool Minecraft::addPendingClientTextureRequest(const std::string& textureName) {
     auto it = find(m_pendingTextureRequests.begin(),
                    m_pendingTextureRequests.end(), textureName);
     if (it == m_pendingTextureRequests.end()) {
@@ -4539,7 +4547,7 @@ bool Minecraft::addPendingClientTextureRequest(
     return false;
 }
 
-void Minecraft::handleClientTextureReceived(const std::wstring& textureName) {
+void Minecraft::handleClientTextureReceived(const std::string& textureName) {
     auto it = find(m_pendingTextureRequests.begin(),
                    m_pendingTextureRequests.end(), textureName);
     if (it != m_pendingTextureRequests.end()) {

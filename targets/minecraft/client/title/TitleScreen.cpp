@@ -35,21 +35,21 @@ TitleScreen::TitleScreen() {
     vo = 0;
     multiplayerButton = nullptr;
 
-    splash = L"missingno";
+    splash = "missingno";
     //    try {	// 4J - removed try/catch
-    std::vector<std::wstring> splashes;
+    std::vector<std::string> splashes;
 
     // 4jcraft: copied over from UIScene_MainMenu
     int splashIndex;
 
-    std::wstring filename = L"splashes.txt";
+    std::string filename = "splashes.txt";
     if (gameServices().hasArchiveFile(filename)) {
         std::vector<uint8_t> splashesArray = gameServices().getArchiveFile(filename);
         ByteArrayInputStream bais(splashesArray);
         InputStreamReader isr(&bais);
         BufferedReader br(&isr);
 
-        std::wstring line = L"";
+        std::string line = "";
         while (!(line = br.readLine()).empty()) {
             line = trimString(line);
             if (line.length() > 0) {
@@ -89,7 +89,7 @@ void TitleScreen::tick() {
     // // 4J - temp testing
 }
 
-void TitleScreen::keyPressed(wchar_t eventCharacter, int eventKey) {}
+void TitleScreen::keyPressed(char eventCharacter, int eventKey) {}
 
 void TitleScreen::init() {
     Log::info("TitleScreen::init() START\n");
@@ -117,23 +117,23 @@ if (c.get(Calendar.MONTH) + 1 == 11 && c.get(Calendar.DAY_OF_MONTH) == 9) {
     const int topPos = height / 4 + spacing * 2;
 
     buttons.push_back(new Button(1, width / 2 - 100, topPos,
-                                 language->getElement(L"menu.singleplayer")));
+                                 language->getElement("menu.singleplayer")));
     buttons.push_back(multiplayerButton = new Button(
                           2, width / 2 - 100, topPos + spacing * 1,
-                          language->getElement(L"menu.multiplayer")));
+                          language->getElement("menu.multiplayer")));
     buttons.push_back(new Button(3, width / 2 - 100, topPos + spacing * 2,
-                                 language->getElement(L"menu.mods")));
+                                 language->getElement("menu.mods")));
 
     if (minecraft->appletMode) {
         buttons.push_back(new Button(0, width / 2 - 100, topPos + spacing * 3,
-                                     language->getElement(L"menu.options")));
+                                     language->getElement("menu.options")));
     } else {
         buttons.push_back(new Button(0, width / 2 - 100,
                                      topPos + spacing * 3 + 12, 98, 20,
-                                     language->getElement(L"menu.options")));
+                                     language->getElement("menu.options")));
         buttons.push_back(new Button(4, width / 2 + 2,
                                      topPos + spacing * 3 + 12, 98, 20,
-                                     language->getElement(L"menu.quit")));
+                                     language->getElement("menu.quit")));
     }
 
     if (minecraft->user == nullptr) {
@@ -417,7 +417,7 @@ void TitleScreen::render(int xm, int ym, float a) {
     drawString(
         font, ClientConstants::VERSION_STRING, 2, height - 10,
         0xffffff);  // 4jcraft: use the same height as the copyright message
-    std::wstring msg = L"Copyright Mojang AB. Do not distribute.";
+    std::string msg = "Copyright Mojang AB. Do not distribute.";
     drawString(font, msg, width - font->width(msg) - 2, height - 10, 0xffffff);
 
     Screen::render(xm, ym, a);

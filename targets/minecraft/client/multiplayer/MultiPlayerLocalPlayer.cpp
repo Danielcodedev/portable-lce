@@ -211,7 +211,7 @@ std::shared_ptr<ItemEntity> MultiplayerLocalPlayer::drop() {
 void MultiplayerLocalPlayer::reallyDrop(
     std::shared_ptr<ItemEntity> itemEntity) {}
 
-void MultiplayerLocalPlayer::chat(const std::wstring& message) {
+void MultiplayerLocalPlayer::chat(const std::string& message) {
     connection->send(std::make_shared<ChatPacket>(message));
 }
 
@@ -373,7 +373,7 @@ void MultiplayerLocalPlayer::setAndBroadcastCustomSkin(std::uint32_t skinId) {
     std::uint32_t oldSkinIndex = getCustomSkin();
     LocalPlayer::setCustomSkin(skinId);
 #if !defined(_CONTENT_PACKAGE)
-    wprintf(L"Skin for local player %ls has changed to %ls (%d)\n",
+    printf("Skin for local player %s has changed to %s (%d)\n",
             name.c_str(), customTextureUrl.c_str(), getPlayerDefaultSkin());
 #endif
     if (getCustomSkin() != oldSkinIndex)
@@ -386,7 +386,7 @@ void MultiplayerLocalPlayer::setAndBroadcastCustomCape(std::uint32_t capeId) {
     std::uint32_t oldCapeIndex = getCustomCape();
     LocalPlayer::setCustomCape(capeId);
 #if !defined(_CONTENT_PACKAGE)
-    wprintf(L"Cape for local player %ls has changed to %ls\n", name.c_str(),
+    printf("Cape for local player %s has changed to %s\n", name.c_str(),
             customTextureUrl2.c_str());
 #endif
     if (getCustomCape() != oldCapeIndex)

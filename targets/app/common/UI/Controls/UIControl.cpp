@@ -32,12 +32,12 @@ bool UIControl::setupControl(UIScene* scene, IggyValuePath* parent,
         IggyValuePathMakeNameRef(&m_iggyPath, parent, controlName.c_str());
     m_isValid = res ? true : false;
 
-    m_nameXPos = registerFastName(L"x");
-    m_nameYPos = registerFastName(L"y");
-    m_nameWidth = registerFastName(L"width");
-    m_nameHeight = registerFastName(L"height");
-    m_funcSetAlpha = registerFastName(L"SetControlAlpha");
-    m_nameVisible = registerFastName(L"visible");
+    m_nameXPos = registerFastName("x");
+    m_nameYPos = registerFastName("y");
+    m_nameWidth = registerFastName("width");
+    m_nameHeight = registerFastName("height");
+    m_funcSetAlpha = registerFastName("SetControlAlpha");
+    m_nameVisible = registerFastName("visible");
 
     if (m_isValid) {
         IggyDatatype controlType = IGGY_DATATYPE__invalid_request;
@@ -77,7 +77,7 @@ void UIControl::ReInit() {
         IggyDataValue value[2];
         IggyStringUTF8 stringVal;
 
-        stringVal.string = (char*)m_controlName.c_str();
+        stringVal.string = const_cast<char*>((char*)m_controlName.c_str());
         stringVal.length = m_controlName.length();
         value[0].type = IGGY_DATATYPE_string_UTF8;
         value[0].string8 = stringVal;
@@ -113,7 +113,7 @@ void UIControl::setOpacity(float percent) {
         IggyDataValue value[2];
         IggyStringUTF8 stringVal;
 
-        stringVal.string = (char*)m_controlName.c_str();
+        stringVal.string = const_cast<char*>((char*)m_controlName.c_str());
         stringVal.length = m_controlName.length();
         value[0].type = IGGY_DATATYPE_string_UTF8;
         value[0].string8 = stringVal;
@@ -156,6 +156,6 @@ bool UIControl::getVisible() {
     return bVisible;
 }
 
-IggyName UIControl::registerFastName(const std::wstring& name) {
+IggyName UIControl::registerFastName(const std::string& name) {
     return m_parentScene->registerFastName(name);
 }

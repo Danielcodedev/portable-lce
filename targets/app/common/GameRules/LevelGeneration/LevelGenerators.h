@@ -14,7 +14,7 @@ private:
 public:
     LevelGenerators();
 
-    void addLevelGenerator(const std::wstring& displayName,
+    void addLevelGenerator(const std::string& displayName,
                            LevelGenerationOptions* generator);
     void removeLevelGenerator(LevelGenerationOptions* generator);
 

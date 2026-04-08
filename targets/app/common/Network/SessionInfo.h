@@ -23,7 +23,7 @@ typedef struct _GameSessionData {
 class FriendSessionInfo {
 public:
     SessionID sessionId;
-    wchar_t* displayLabel;
+    char* displayLabel;
     unsigned char displayLabelLength;
     unsigned char displayLabelViewableStartIndex;
     GameSessionData data;

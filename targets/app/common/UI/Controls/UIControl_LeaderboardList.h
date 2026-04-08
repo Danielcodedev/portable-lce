@@ -44,13 +44,13 @@ public:
 
     void clearList();
 
-    void setupTitles(const std::wstring& rank, const std::wstring& gamertag);
+    void setupTitles(const std::string& rank, const std::string& gamertag);
     void initLeaderboard(int iFirstFocus, int iTotalEntries, int iNumColumns);
     void setColumnIcon(int iColumn, int iType);
     void addDataSet(bool bLast, int iId, int iRank,
-                    const std::wstring& gamertag, bool bDisplayMessage,
-                    const std::wstring& col0, const std::wstring& col1,
-                    const std::wstring& col2, const std::wstring& col3,
-                    const std::wstring& col4, const std::wstring& col5,
-                    const std::wstring& col6);
+                    const std::string& gamertag, bool bDisplayMessage,
+                    const std::string& col0, const std::string& col1,
+                    const std::string& col2, const std::string& col3,
+                    const std::string& col4, const std::string& col5,
+                    const std::string& col6);
 };

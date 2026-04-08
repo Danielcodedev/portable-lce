@@ -43,15 +43,15 @@ protected:
     UI_MAP_ELEMENT(m_ButtonSymbols, "Button_symbols")
     UI_MAP_ELEMENT(m_ButtonBackspace, "Button_bspace")
 
-    UI_MAP_NAME(m_funcInitFunctionButtons, L"InitFunctionButtons");
+    UI_MAP_NAME(m_funcInitFunctionButtons, "InitFunctionButtons");
 
-    UI_MAP_NAME(m_funcCursorRightButtonPressed, L"CursorRightButtonPressed");
-    UI_MAP_NAME(m_funcCursorLeftButtonPressed, L"CursorLeftButtonPressed");
-    UI_MAP_NAME(m_funcCapsButtonPressed, L"CapsButtonPressed");
-    UI_MAP_NAME(m_funcBackspaceButtonPressed, L"BackspaceButtonPressed");
-    UI_MAP_NAME(m_funcSpaceButtonPressed, L"SpaceButtonPressed");
-    UI_MAP_NAME(m_funcSymbolButtonPressed, L"SymbolButtonPressed");
-    UI_MAP_NAME(m_funcDoneButtonPressed, L"DoneButtonPressed");
+    UI_MAP_NAME(m_funcCursorRightButtonPressed, "CursorRightButtonPressed");
+    UI_MAP_NAME(m_funcCursorLeftButtonPressed, "CursorLeftButtonPressed");
+    UI_MAP_NAME(m_funcCapsButtonPressed, "CapsButtonPressed");
+    UI_MAP_NAME(m_funcBackspaceButtonPressed, "BackspaceButtonPressed");
+    UI_MAP_NAME(m_funcSpaceButtonPressed, "SpaceButtonPressed");
+    UI_MAP_NAME(m_funcSymbolButtonPressed, "SymbolButtonPressed");
+    UI_MAP_NAME(m_funcDoneButtonPressed, "DoneButtonPressed");
     UI_END_MAP_ELEMENTS_AND_NAMES()
 
 public:
@@ -72,7 +72,7 @@ protected:
 
 protected:
     // TODO: This should be pure virtual in this class
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
 
 private:
     void KeyboardDonePressed();

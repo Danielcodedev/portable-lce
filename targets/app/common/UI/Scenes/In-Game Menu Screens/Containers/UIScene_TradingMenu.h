@@ -58,14 +58,14 @@ protected:
 
     UI_END_MAP_CHILD_ELEMENTS()
 
-    UI_MAP_NAME(m_funcMoveSelector, L"MoveSelector")
-    UI_MAP_NAME(m_funcShowScrollRightArrow, L"ShowScrollRightArrow")
-    UI_MAP_NAME(m_funcShowScrollLeftArrow, L"ShowScrollLeftArrow")
-    UI_MAP_NAME(m_funcSetOfferDescription, L"SetOfferDescription")
-    UI_MAP_NAME(m_funcSetActiveSlot, L"SetSelectorSlot")
+    UI_MAP_NAME(m_funcMoveSelector, "MoveSelector")
+    UI_MAP_NAME(m_funcShowScrollRightArrow, "ShowScrollRightArrow")
+    UI_MAP_NAME(m_funcShowScrollLeftArrow, "ShowScrollLeftArrow")
+    UI_MAP_NAME(m_funcSetOfferDescription, "SetOfferDescription")
+    UI_MAP_NAME(m_funcSetActiveSlot, "SetSelectorSlot")
     UI_END_MAP_ELEMENTS_AND_NAMES()
 
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
     virtual void updateTooltips();
     virtual void handleDestroy();
     virtual void handleReload();
@@ -80,9 +80,9 @@ protected:
     virtual void showScrollRightArrow(bool show);
     virtual void showScrollLeftArrow(bool show);
     virtual void moveSelector(bool right);
-    virtual void setTitle(const std::wstring& name);
-    virtual void setRequest1Name(const std::wstring& name);
-    virtual void setRequest2Name(const std::wstring& name);
+    virtual void setTitle(const std::string& name);
+    virtual void setRequest1Name(const std::string& name);
+    virtual void setRequest2Name(const std::string& name);
 
     virtual void setRequest1RedBox(bool show);
     virtual void setRequest2RedBox(bool show);

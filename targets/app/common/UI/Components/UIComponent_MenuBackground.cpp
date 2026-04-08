@@ -18,7 +18,7 @@ UIComponent_MenuBackground::UIComponent_MenuBackground(int iPad, void* initData,
     initialiseMovie();
 }
 
-std::wstring UIComponent_MenuBackground::getMoviePath() {
+std::string UIComponent_MenuBackground::getMoviePath() {
     switch (m_parentLayer->getViewport()) {
         case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_TOP:
         case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_BOTTOM:
@@ -38,7 +38,7 @@ std::wstring UIComponent_MenuBackground::getMoviePath() {
 
     // We use the fullscreen one even in splitscreen, just draw different parts
     // of it
-    return L"MenuBackground";
+    return "MenuBackground";
 }
 
 void UIComponent_MenuBackground::render(S32 width, S32 height,

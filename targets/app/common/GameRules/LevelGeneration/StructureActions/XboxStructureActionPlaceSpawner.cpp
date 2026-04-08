@@ -15,7 +15,7 @@
 
 XboxStructureActionPlaceSpawner::XboxStructureActionPlaceSpawner() {
     m_tile = Tile::mobSpawner_Id;
-    m_entityId = L"Pig";
+    m_entityId = "Pig";
 }
 
 XboxStructureActionPlaceSpawner::~XboxStructureActionPlaceSpawner() {}
@@ -29,12 +29,12 @@ void XboxStructureActionPlaceSpawner::writeAttributes(DataOutputStream* dos,
 }
 
 void XboxStructureActionPlaceSpawner::addAttribute(
-    const std::wstring& attributeName, const std::wstring& attributeValue) {
-    if (attributeName.compare(L"entity") == 0) {
+    const std::string& attributeName, const std::string& attributeValue) {
+    if (attributeName.compare("entity") == 0) {
         m_entityId = attributeValue;
 #ifndef _CONTENT_PACKAGE
-        wprintf(
-            L"XboxStructureActionPlaceSpawner: Adding parameter entity=%ls\n",
+        printf(
+            "XboxStructureActionPlaceSpawner: Adding parameter entity=%s\n",
             m_entityId.c_str());
 #endif
     } else {
@@ -64,9 +64,9 @@ bool XboxStructureActionPlaceSpawner::placeSpawnerInLevel(
                 level->getTileEntity(worldX, worldY, worldZ));
 
 #ifndef _CONTENT_PACKAGE
-        wprintf(
-            L"XboxStructureActionPlaceSpawner - placing a %ls spawner at "
-            L"(%d,%d,%d)\n",
+        printf(
+            "XboxStructureActionPlaceSpawner - placing a %s spawner at "
+            "(%d,%d,%d)\n",
             m_entityId.c_str(), worldX, worldY, worldZ);
 #endif
         if (entity != nullptr) {

@@ -36,7 +36,7 @@ public:
     virtual void updateTooltips();
 
 protected:
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
 
 public:
     // INPUT

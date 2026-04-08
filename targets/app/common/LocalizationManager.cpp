@@ -75,7 +75,7 @@ void LocalizationManager::loadStringTable(ArchiveFile* mediaArchive) {
         // we need to unload the current std::string table, this is a reload
         delete m_stringTable;
     }
-    std::wstring localisationFile = L"languages.loc";
+    std::string localisationFile = "languages.loc";
     if (mediaArchive->hasFile(localisationFile)) {
         std::vector<uint8_t> locFile =
             mediaArchive->getFile(localisationFile);
@@ -87,7 +87,7 @@ void LocalizationManager::loadStringTable(ArchiveFile* mediaArchive) {
     }
 }
 
-const wchar_t* LocalizationManager::getString(int iID) const {
+const char* LocalizationManager::getString(int iID) const {
     return m_stringTable->getString(iID);
 }
 
@@ -183,154 +183,154 @@ int LocalizationManager::getHTMLFontSize(EHTMLFontSize size) {
     return s_iHTMLFontSizesA[size];
 }
 
-std::wstring LocalizationManager::formatHTMLString(
-    int iPad, const std::wstring& desc, int shadowColour /*= 0xFFFFFFFF*/) {
-    std::wstring text(desc);
+std::string LocalizationManager::formatHTMLString(
+    int iPad, const std::string& desc, int shadowColour /*= 0xFFFFFFFF*/) {
+    std::string text(desc);
 
-    wchar_t replacements[64];
-    text = replaceAll(text, L"{*B*}", L"<br />");
-    swprintf(replacements, 64, L"<font color=\"#%08x\">",
+    char replacements[64];
+    text = replaceAll(text, "{*B*}", "<br />");
+    snprintf(replacements, 64, "<font color=\"#%08x\">",
              getHTMLColour(eHTMLColor_T1));
-    text = replaceAll(text, L"{*T1*}", replacements);
-    swprintf(replacements, 64, L"<font color=\"#%08x\">",
+    text = replaceAll(text, "{*T1*}", replacements);
+    snprintf(replacements, 64, "<font color=\"#%08x\">",
              getHTMLColour(eHTMLColor_T2));
-    text = replaceAll(text, L"{*T2*}", replacements);
-    swprintf(replacements, 64, L"<font color=\"#%08x\">",
+    text = replaceAll(text, "{*T2*}", replacements);
+    snprintf(replacements, 64, "<font color=\"#%08x\">",
              getHTMLColour(eHTMLColor_T3));
-    text = replaceAll(text, L"{*T3*}", replacements);
-    swprintf(replacements, 64, L"<font color=\"#%08x\">",
+    text = replaceAll(text, "{*T3*}", replacements);
+    snprintf(replacements, 64, "<font color=\"#%08x\">",
              getHTMLColour(eHTMLColor_Black));
-    text = replaceAll(text, L"{*ETB*}", replacements);
-    swprintf(replacements, 64, L"<font color=\"#%08x\">",
+    text = replaceAll(text, "{*ETB*}", replacements);
+    snprintf(replacements, 64, "<font color=\"#%08x\">",
              getHTMLColour(eHTMLColor_White));
-    text = replaceAll(text, L"{*ETW*}", replacements);
-    text = replaceAll(text, L"{*EF*}", L"</font>");
+    text = replaceAll(text, "{*ETW*}", replacements);
+    text = replaceAll(text, "{*EF*}", "</font>");
 
-    swprintf(replacements, 64, L"<font color=\"#%08x\" shadowcolor=\"#%08x\">",
+    snprintf(replacements, 64, "<font color=\"#%08x\" shadowcolor=\"#%08x\">",
              getHTMLColour(eHTMLColor_0), shadowColour);
-    text = replaceAll(text, L"{*C0*}", replacements);
-    swprintf(replacements, 64, L"<font color=\"#%08x\" shadowcolor=\"#%08x\">",
+    text = replaceAll(text, "{*C0*}", replacements);
+    snprintf(replacements, 64, "<font color=\"#%08x\" shadowcolor=\"#%08x\">",
              getHTMLColour(eHTMLColor_1), shadowColour);
-    text = replaceAll(text, L"{*C1*}", replacements);
-    swprintf(replacements, 64, L"<font color=\"#%08x\" shadowcolor=\"#%08x\">",
+    text = replaceAll(text, "{*C1*}", replacements);
+    snprintf(replacements, 64, "<font color=\"#%08x\" shadowcolor=\"#%08x\">",
              getHTMLColour(eHTMLColor_2), shadowColour);
-    text = replaceAll(text, L"{*C2*}", replacements);
-    swprintf(replacements, 64, L"<font color=\"#%08x\" shadowcolor=\"#%08x\">",
+    text = replaceAll(text, "{*C2*}", replacements);
+    snprintf(replacements, 64, "<font color=\"#%08x\" shadowcolor=\"#%08x\">",
              getHTMLColour(eHTMLColor_3), shadowColour);
-    text = replaceAll(text, L"{*C3*}", replacements);
-    swprintf(replacements, 64, L"<font color=\"#%08x\" shadowcolor=\"#%08x\">",
+    text = replaceAll(text, "{*C3*}", replacements);
+    snprintf(replacements, 64, "<font color=\"#%08x\" shadowcolor=\"#%08x\">",
              getHTMLColour(eHTMLColor_4), shadowColour);
-    text = replaceAll(text, L"{*C4*}", replacements);
-    swprintf(replacements, 64, L"<font color=\"#%08x\" shadowcolor=\"#%08x\">",
+    text = replaceAll(text, "{*C4*}", replacements);
+    snprintf(replacements, 64, "<font color=\"#%08x\" shadowcolor=\"#%08x\">",
              getHTMLColour(eHTMLColor_5), shadowColour);
-    text = replaceAll(text, L"{*C5*}", replacements);
-    swprintf(replacements, 64, L"<font color=\"#%08x\" shadowcolor=\"#%08x\">",
+    text = replaceAll(text, "{*C5*}", replacements);
+    snprintf(replacements, 64, "<font color=\"#%08x\" shadowcolor=\"#%08x\">",
              getHTMLColour(eHTMLColor_6), shadowColour);
-    text = replaceAll(text, L"{*C6*}", replacements);
-    swprintf(replacements, 64, L"<font color=\"#%08x\" shadowcolor=\"#%08x\">",
+    text = replaceAll(text, "{*C6*}", replacements);
+    snprintf(replacements, 64, "<font color=\"#%08x\" shadowcolor=\"#%08x\">",
              getHTMLColour(eHTMLColor_7), shadowColour);
-    text = replaceAll(text, L"{*C7*}", replacements);
-    swprintf(replacements, 64, L"<font color=\"#%08x\" shadowcolor=\"#%08x\">",
+    text = replaceAll(text, "{*C7*}", replacements);
+    snprintf(replacements, 64, "<font color=\"#%08x\" shadowcolor=\"#%08x\">",
              getHTMLColour(eHTMLColor_8), shadowColour);
-    text = replaceAll(text, L"{*C8*}", replacements);
-    swprintf(replacements, 64, L"<font color=\"#%08x\" shadowcolor=\"#%08x\">",
+    text = replaceAll(text, "{*C8*}", replacements);
+    snprintf(replacements, 64, "<font color=\"#%08x\" shadowcolor=\"#%08x\">",
              getHTMLColour(eHTMLColor_9), shadowColour);
-    text = replaceAll(text, L"{*C9*}", replacements);
-    swprintf(replacements, 64, L"<font color=\"#%08x\" shadowcolor=\"#%08x\">",
+    text = replaceAll(text, "{*C9*}", replacements);
+    snprintf(replacements, 64, "<font color=\"#%08x\" shadowcolor=\"#%08x\">",
              getHTMLColour(eHTMLColor_a), shadowColour);
-    text = replaceAll(text, L"{*CA*}", replacements);
-    swprintf(replacements, 64, L"<font color=\"#%08x\" shadowcolor=\"#%08x\">",
+    text = replaceAll(text, "{*CA*}", replacements);
+    snprintf(replacements, 64, "<font color=\"#%08x\" shadowcolor=\"#%08x\">",
              getHTMLColour(eHTMLColor_b), shadowColour);
-    text = replaceAll(text, L"{*CB*}", replacements);
-    swprintf(replacements, 64, L"<font color=\"#%08x\" shadowcolor=\"#%08x\">",
+    text = replaceAll(text, "{*CB*}", replacements);
+    snprintf(replacements, 64, "<font color=\"#%08x\" shadowcolor=\"#%08x\">",
              getHTMLColour(eHTMLColor_c), shadowColour);
-    text = replaceAll(text, L"{*CC*}", replacements);
-    swprintf(replacements, 64, L"<font color=\"#%08x\" shadowcolor=\"#%08x\">",
+    text = replaceAll(text, "{*CC*}", replacements);
+    snprintf(replacements, 64, "<font color=\"#%08x\" shadowcolor=\"#%08x\">",
              getHTMLColour(eHTMLColor_d), shadowColour);
-    text = replaceAll(text, L"{*CD*}", replacements);
-    swprintf(replacements, 64, L"<font color=\"#%08x\" shadowcolor=\"#%08x\">",
+    text = replaceAll(text, "{*CD*}", replacements);
+    snprintf(replacements, 64, "<font color=\"#%08x\" shadowcolor=\"#%08x\">",
              getHTMLColour(eHTMLColor_e), shadowColour);
-    text = replaceAll(text, L"{*CE*}", replacements);
-    swprintf(replacements, 64, L"<font color=\"#%08x\" shadowcolor=\"#%08x\">",
+    text = replaceAll(text, "{*CE*}", replacements);
+    snprintf(replacements, 64, "<font color=\"#%08x\" shadowcolor=\"#%08x\">",
              getHTMLColour(eHTMLColor_f), shadowColour);
-    text = replaceAll(text, L"{*CF*}", replacements);
+    text = replaceAll(text, "{*CF*}", replacements);
 
     // Swap for southpaw.
     if (app.GetGameSettings(iPad, eGameSetting_ControlSouthPaw)) {
         text =
-            replaceAll(text, L"{*CONTROLLER_ACTION_MOVE*}",
+            replaceAll(text, "{*CONTROLLER_ACTION_MOVE*}",
                        getActionReplacement(iPad, MINECRAFT_ACTION_LOOK_RIGHT));
-        text = replaceAll(text, L"{*CONTROLLER_ACTION_LOOK*}",
+        text = replaceAll(text, "{*CONTROLLER_ACTION_LOOK*}",
                           getActionReplacement(iPad, MINECRAFT_ACTION_RIGHT));
 
-        text = replaceAll(text, L"{*CONTROLLER_MENU_NAVIGATE*}",
+        text = replaceAll(text, "{*CONTROLLER_MENU_NAVIGATE*}",
                           getVKReplacement(VK_PAD_RTHUMB_LEFT));
     } else {
-        text = replaceAll(text, L"{*CONTROLLER_ACTION_MOVE*}",
+        text = replaceAll(text, "{*CONTROLLER_ACTION_MOVE*}",
                           getActionReplacement(iPad, MINECRAFT_ACTION_RIGHT));
         text =
-            replaceAll(text, L"{*CONTROLLER_ACTION_LOOK*}",
+            replaceAll(text, "{*CONTROLLER_ACTION_LOOK*}",
                        getActionReplacement(iPad, MINECRAFT_ACTION_LOOK_RIGHT));
 
-        text = replaceAll(text, L"{*CONTROLLER_MENU_NAVIGATE*}",
+        text = replaceAll(text, "{*CONTROLLER_MENU_NAVIGATE*}",
                           getVKReplacement(VK_PAD_LTHUMB_LEFT));
     }
 
-    text = replaceAll(text, L"{*CONTROLLER_ACTION_JUMP*}",
+    text = replaceAll(text, "{*CONTROLLER_ACTION_JUMP*}",
                       getActionReplacement(iPad, MINECRAFT_ACTION_JUMP));
     text =
-        replaceAll(text, L"{*CONTROLLER_ACTION_SNEAK*}",
+        replaceAll(text, "{*CONTROLLER_ACTION_SNEAK*}",
                    getActionReplacement(iPad, MINECRAFT_ACTION_SNEAK_TOGGLE));
-    text = replaceAll(text, L"{*CONTROLLER_ACTION_USE*}",
+    text = replaceAll(text, "{*CONTROLLER_ACTION_USE*}",
                       getActionReplacement(iPad, MINECRAFT_ACTION_USE));
-    text = replaceAll(text, L"{*CONTROLLER_ACTION_ACTION*}",
+    text = replaceAll(text, "{*CONTROLLER_ACTION_ACTION*}",
                       getActionReplacement(iPad, MINECRAFT_ACTION_ACTION));
-    text = replaceAll(text, L"{*CONTROLLER_ACTION_LEFT_SCROLL*}",
+    text = replaceAll(text, "{*CONTROLLER_ACTION_LEFT_SCROLL*}",
                       getActionReplacement(iPad, MINECRAFT_ACTION_LEFT_SCROLL));
     text =
-        replaceAll(text, L"{*CONTROLLER_ACTION_RIGHT_SCROLL*}",
+        replaceAll(text, "{*CONTROLLER_ACTION_RIGHT_SCROLL*}",
                    getActionReplacement(iPad, MINECRAFT_ACTION_RIGHT_SCROLL));
-    text = replaceAll(text, L"{*CONTROLLER_ACTION_INVENTORY*}",
+    text = replaceAll(text, "{*CONTROLLER_ACTION_INVENTORY*}",
                       getActionReplacement(iPad, MINECRAFT_ACTION_INVENTORY));
-    text = replaceAll(text, L"{*CONTROLLER_ACTION_CRAFTING*}",
+    text = replaceAll(text, "{*CONTROLLER_ACTION_CRAFTING*}",
                       getActionReplacement(iPad, MINECRAFT_ACTION_CRAFTING));
-    text = replaceAll(text, L"{*CONTROLLER_ACTION_DROP*}",
+    text = replaceAll(text, "{*CONTROLLER_ACTION_DROP*}",
                       getActionReplacement(iPad, MINECRAFT_ACTION_DROP));
     text = replaceAll(
-        text, L"{*CONTROLLER_ACTION_CAMERA*}",
+        text, "{*CONTROLLER_ACTION_CAMERA*}",
         getActionReplacement(iPad, MINECRAFT_ACTION_RENDER_THIRD_PERSON));
-    text = replaceAll(text, L"{*CONTROLLER_ACTION_MENU_PAGEDOWN*}",
+    text = replaceAll(text, "{*CONTROLLER_ACTION_MENU_PAGEDOWN*}",
                       getActionReplacement(iPad, ACTION_MENU_PAGEDOWN));
     text =
-        replaceAll(text, L"{*CONTROLLER_ACTION_DISMOUNT*}",
+        replaceAll(text, "{*CONTROLLER_ACTION_DISMOUNT*}",
                    getActionReplacement(iPad, MINECRAFT_ACTION_SNEAK_TOGGLE));
-    text = replaceAll(text, L"{*CONTROLLER_VK_A*}", getVKReplacement(VK_PAD_A));
-    text = replaceAll(text, L"{*CONTROLLER_VK_B*}", getVKReplacement(VK_PAD_B));
-    text = replaceAll(text, L"{*CONTROLLER_VK_X*}", getVKReplacement(VK_PAD_X));
-    text = replaceAll(text, L"{*CONTROLLER_VK_Y*}", getVKReplacement(VK_PAD_Y));
-    text = replaceAll(text, L"{*CONTROLLER_VK_LB*}",
+    text = replaceAll(text, "{*CONTROLLER_VK_A*}", getVKReplacement(VK_PAD_A));
+    text = replaceAll(text, "{*CONTROLLER_VK_B*}", getVKReplacement(VK_PAD_B));
+    text = replaceAll(text, "{*CONTROLLER_VK_X*}", getVKReplacement(VK_PAD_X));
+    text = replaceAll(text, "{*CONTROLLER_VK_Y*}", getVKReplacement(VK_PAD_Y));
+    text = replaceAll(text, "{*CONTROLLER_VK_LB*}",
                       getVKReplacement(VK_PAD_LSHOULDER));
-    text = replaceAll(text, L"{*CONTROLLER_VK_RB*}",
+    text = replaceAll(text, "{*CONTROLLER_VK_RB*}",
                       getVKReplacement(VK_PAD_RSHOULDER));
-    text = replaceAll(text, L"{*CONTROLLER_VK_LS*}",
+    text = replaceAll(text, "{*CONTROLLER_VK_LS*}",
                       getVKReplacement(VK_PAD_LTHUMB_UP));
-    text = replaceAll(text, L"{*CONTROLLER_VK_RS*}",
+    text = replaceAll(text, "{*CONTROLLER_VK_RS*}",
                       getVKReplacement(VK_PAD_RTHUMB_UP));
-    text = replaceAll(text, L"{*CONTROLLER_VK_LT*}",
+    text = replaceAll(text, "{*CONTROLLER_VK_LT*}",
                       getVKReplacement(VK_PAD_LTRIGGER));
-    text = replaceAll(text, L"{*CONTROLLER_VK_RT*}",
+    text = replaceAll(text, "{*CONTROLLER_VK_RT*}",
                       getVKReplacement(VK_PAD_RTRIGGER));
-    text = replaceAll(text, L"{*ICON_SHANK_01*}",
+    text = replaceAll(text, "{*ICON_SHANK_01*}",
                       getIconReplacement(XZP_ICON_SHANK_01));
-    text = replaceAll(text, L"{*ICON_SHANK_03*}",
+    text = replaceAll(text, "{*ICON_SHANK_03*}",
                       getIconReplacement(XZP_ICON_SHANK_03));
-    text = replaceAll(text, L"{*CONTROLLER_ACTION_DPAD_UP*}",
+    text = replaceAll(text, "{*CONTROLLER_ACTION_DPAD_UP*}",
                       getActionReplacement(iPad, MINECRAFT_ACTION_DPAD_UP));
-    text = replaceAll(text, L"{*CONTROLLER_ACTION_DPAD_DOWN*}",
+    text = replaceAll(text, "{*CONTROLLER_ACTION_DPAD_DOWN*}",
                       getActionReplacement(iPad, MINECRAFT_ACTION_DPAD_DOWN));
-    text = replaceAll(text, L"{*CONTROLLER_ACTION_DPAD_RIGHT*}",
+    text = replaceAll(text, "{*CONTROLLER_ACTION_DPAD_RIGHT*}",
                       getActionReplacement(iPad, MINECRAFT_ACTION_DPAD_RIGHT));
-    text = replaceAll(text, L"{*CONTROLLER_ACTION_DPAD_LEFT*}",
+    text = replaceAll(text, "{*CONTROLLER_ACTION_DPAD_LEFT*}",
                       getActionReplacement(iPad, MINECRAFT_ACTION_DPAD_LEFT));
 
     std::uint32_t dwLanguage = XGetLanguage();
@@ -338,64 +338,64 @@ std::wstring LocalizationManager::formatHTMLString(
         case XC_LANGUAGE_KOREAN:
         case XC_LANGUAGE_JAPANESE:
         case XC_LANGUAGE_TCHINESE:
-            text = replaceAll(text, L"&nbsp;", L"");
+            text = replaceAll(text, "&nbsp;", "");
             break;
     }
 
     return text;
 }
 
-std::wstring LocalizationManager::getActionReplacement(
+std::string LocalizationManager::getActionReplacement(
     int iPad, unsigned char ucAction) {
     unsigned int input = PlatformInput.GetGameJoypadMaps(
         PlatformInput.GetJoypadMapVal(iPad), ucAction);
 
-    std::wstring replacement = L"";
+    std::string replacement = "";
 
     if (input & _360_JOY_BUTTON_A)
-        replacement = L"ButtonA";
+        replacement = "ButtonA";
     else if (input & _360_JOY_BUTTON_B)
-        replacement = L"ButtonB";
+        replacement = "ButtonB";
     else if (input & _360_JOY_BUTTON_X)
-        replacement = L"ButtonX";
+        replacement = "ButtonX";
     else if (input & _360_JOY_BUTTON_Y)
-        replacement = L"ButtonY";
+        replacement = "ButtonY";
     else if ((input & _360_JOY_BUTTON_LSTICK_UP) ||
              (input & _360_JOY_BUTTON_LSTICK_DOWN) ||
              (input & _360_JOY_BUTTON_LSTICK_LEFT) ||
              (input & _360_JOY_BUTTON_LSTICK_RIGHT)) {
-        replacement = L"ButtonLeftStick";
+        replacement = "ButtonLeftStick";
     } else if ((input & _360_JOY_BUTTON_RSTICK_LEFT) ||
                (input & _360_JOY_BUTTON_RSTICK_RIGHT) ||
                (input & _360_JOY_BUTTON_RSTICK_UP) ||
                (input & _360_JOY_BUTTON_RSTICK_DOWN)) {
-        replacement = L"ButtonRightStick";
+        replacement = "ButtonRightStick";
     } else if (input & _360_JOY_BUTTON_DPAD_LEFT)
-        replacement = L"ButtonDpadL";
+        replacement = "ButtonDpadL";
     else if (input & _360_JOY_BUTTON_DPAD_RIGHT)
-        replacement = L"ButtonDpadR";
+        replacement = "ButtonDpadR";
     else if (input & _360_JOY_BUTTON_DPAD_UP)
-        replacement = L"ButtonDpadU";
+        replacement = "ButtonDpadU";
     else if (input & _360_JOY_BUTTON_DPAD_DOWN)
-        replacement = L"ButtonDpadD";
+        replacement = "ButtonDpadD";
     else if (input & _360_JOY_BUTTON_LT)
-        replacement = L"ButtonLeftTrigger";
+        replacement = "ButtonLeftTrigger";
     else if (input & _360_JOY_BUTTON_RT)
-        replacement = L"ButtonRightTrigger";
+        replacement = "ButtonRightTrigger";
     else if (input & _360_JOY_BUTTON_RB)
-        replacement = L"ButtonRightBumper";
+        replacement = "ButtonRightBumper";
     else if (input & _360_JOY_BUTTON_LB)
-        replacement = L"ButtonLeftBumper";
+        replacement = "ButtonLeftBumper";
     else if (input & _360_JOY_BUTTON_BACK)
-        replacement = L"ButtonBack";
+        replacement = "ButtonBack";
     else if (input & _360_JOY_BUTTON_START)
-        replacement = L"ButtonStart";
+        replacement = "ButtonStart";
     else if (input & _360_JOY_BUTTON_RTHUMB)
-        replacement = L"ButtonRS";
+        replacement = "ButtonRS";
     else if (input & _360_JOY_BUTTON_LTHUMB)
-        replacement = L"ButtonLS";
+        replacement = "ButtonLS";
 
-    wchar_t string[128];
+    char string[128];
 
 #if defined(_WIN64)
     int size = 45;
@@ -404,39 +404,39 @@ std::wstring LocalizationManager::getActionReplacement(
     int size = 45;
 #endif
 
-    swprintf(string, 128,
-             L"<img src=\"%ls\" align=\"middle\" height=\"%d\" width=\"%d\"/>",
+    snprintf(string, 128,
+             "<img src=\"%s\" align=\"middle\" height=\"%d\" width=\"%d\"/>",
              replacement.c_str(), size, size);
 
     return string;
 }
 
-std::wstring LocalizationManager::getVKReplacement(unsigned int uiVKey) {
-    std::wstring replacement = L"";
+std::string LocalizationManager::getVKReplacement(unsigned int uiVKey) {
+    std::string replacement = "";
     switch (uiVKey) {
         case VK_PAD_A:
-            replacement = L"ButtonA";
+            replacement = "ButtonA";
             break;
         case VK_PAD_B:
-            replacement = L"ButtonB";
+            replacement = "ButtonB";
             break;
         case VK_PAD_X:
-            replacement = L"ButtonX";
+            replacement = "ButtonX";
             break;
         case VK_PAD_Y:
-            replacement = L"ButtonY";
+            replacement = "ButtonY";
             break;
         case VK_PAD_LSHOULDER:
-            replacement = L"ButtonLeftBumper";
+            replacement = "ButtonLeftBumper";
             break;
         case VK_PAD_RSHOULDER:
-            replacement = L"ButtonRightBumper";
+            replacement = "ButtonRightBumper";
             break;
         case VK_PAD_LTRIGGER:
-            replacement = L"ButtonLeftTrigger";
+            replacement = "ButtonLeftTrigger";
             break;
         case VK_PAD_RTRIGGER:
-            replacement = L"ButtonRightTrigger";
+            replacement = "ButtonRightTrigger";
             break;
         case VK_PAD_LTHUMB_UP:
         case VK_PAD_LTHUMB_DOWN:
@@ -446,7 +446,7 @@ std::wstring LocalizationManager::getVKReplacement(unsigned int uiVKey) {
         case VK_PAD_LTHUMB_UPRIGHT:
         case VK_PAD_LTHUMB_DOWNRIGHT:
         case VK_PAD_LTHUMB_DOWNLEFT:
-            replacement = L"ButtonLeftStick";
+            replacement = "ButtonLeftStick";
             break;
         case VK_PAD_RTHUMB_UP:
         case VK_PAD_RTHUMB_DOWN:
@@ -456,12 +456,12 @@ std::wstring LocalizationManager::getVKReplacement(unsigned int uiVKey) {
         case VK_PAD_RTHUMB_UPRIGHT:
         case VK_PAD_RTHUMB_DOWNRIGHT:
         case VK_PAD_RTHUMB_DOWNLEFT:
-            replacement = L"ButtonRightStick";
+            replacement = "ButtonRightStick";
             break;
         default:
             break;
     }
-    wchar_t string[128];
+    char string[128];
 
 #if defined(_WIN64)
     int size = 45;
@@ -470,15 +470,15 @@ std::wstring LocalizationManager::getVKReplacement(unsigned int uiVKey) {
     int size = 45;
 #endif
 
-    swprintf(string, 128,
-             L"<img src=\"%ls\" align=\"middle\" height=\"%d\" width=\"%d\"/>",
+    snprintf(string, 128,
+             "<img src=\"%s\" align=\"middle\" height=\"%d\" width=\"%d\"/>",
              replacement.c_str(), size, size);
 
     return string;
 }
 
-std::wstring LocalizationManager::getIconReplacement(unsigned int uiIcon) {
-    wchar_t string[128];
+std::string LocalizationManager::getIconReplacement(unsigned int uiIcon) {
+    char string[128];
 
 #if defined(_WIN64)
     int size = 33;
@@ -487,11 +487,11 @@ std::wstring LocalizationManager::getIconReplacement(unsigned int uiIcon) {
     int size = 33;
 #endif
 
-    swprintf(string, 128,
-             L"<img src=\"Icon_Shank\" align=\"middle\" height=\"%d\" "
-             L"width=\"%d\"/>",
+    snprintf(string, 128,
+             "<img src=\"Icon_Shank\" align=\"middle\" height=\"%d\" "
+             "width=\"%d\"/>",
              size, size);
-    std::wstring result = L"";
+    std::string result = "";
     switch (uiIcon) {
         case XZP_ICON_SHANK_01:
             result = string;
@@ -506,7 +506,7 @@ std::wstring LocalizationManager::getIconReplacement(unsigned int uiIcon) {
 }
 
 void LocalizationManager::getLocale(
-    std::vector<std::wstring>& vecWstrLocales) {
+    std::vector<std::string>& vecWstrLocales) {
     std::vector<eMCLang> locales;
 
     const unsigned int systemLanguage = XGetLanguage();
@@ -662,201 +662,201 @@ void LocalizationManager::getLocale(
     }
 }
 
-int LocalizationManager::get_eMCLang(wchar_t* pwchLocale) {
+int LocalizationManager::get_eMCLang(char* pwchLocale) {
     return m_eMCLangA[pwchLocale];
 }
 
-int LocalizationManager::get_xcLang(wchar_t* pwchLocale) {
+int LocalizationManager::get_xcLang(char* pwchLocale) {
     return m_xcLangA[pwchLocale];
 }
 
 void LocalizationManager::localeAndLanguageInit() {
-    m_localeA[eMCLang_zhCHT] = L"zh-CHT";
-    m_localeA[eMCLang_csCS] = L"cs-CS";
-    m_localeA[eMCLang_laLAS] = L"la-LAS";
-    m_localeA[eMCLang_null] = L"en-EN";
-    m_localeA[eMCLang_enUS] = L"en-US";
-    m_localeA[eMCLang_enGB] = L"en-GB";
-    m_localeA[eMCLang_enIE] = L"en-IE";
-    m_localeA[eMCLang_enAU] = L"en-AU";
-    m_localeA[eMCLang_enNZ] = L"en-NZ";
-    m_localeA[eMCLang_enCA] = L"en-CA";
-    m_localeA[eMCLang_jaJP] = L"ja-JP";
-    m_localeA[eMCLang_deDE] = L"de-DE";
-    m_localeA[eMCLang_deAT] = L"de-AT";
-    m_localeA[eMCLang_frFR] = L"fr-FR";
-    m_localeA[eMCLang_frCA] = L"fr-CA";
-    m_localeA[eMCLang_esES] = L"es-ES";
-    m_localeA[eMCLang_esMX] = L"es-MX";
-    m_localeA[eMCLang_itIT] = L"it-IT";
-    m_localeA[eMCLang_koKR] = L"ko-KR";
-    m_localeA[eMCLang_ptPT] = L"pt-PT";
-    m_localeA[eMCLang_ptBR] = L"pt-BR";
-    m_localeA[eMCLang_ruRU] = L"ru-RU";
-    m_localeA[eMCLang_nlNL] = L"nl-NL";
-    m_localeA[eMCLang_fiFI] = L"fi-FI";
-    m_localeA[eMCLang_svSV] = L"sv-SV";
-    m_localeA[eMCLang_daDA] = L"da-DA";
-    m_localeA[eMCLang_noNO] = L"no-NO";
-    m_localeA[eMCLang_plPL] = L"pl-PL";
-    m_localeA[eMCLang_trTR] = L"tr-TR";
-    m_localeA[eMCLang_elEL] = L"el-EL";
-    m_localeA[eMCLang_zhSG] = L"zh-SG";
-    m_localeA[eMCLang_zhCN] = L"zh-CN";
-    m_localeA[eMCLang_zhHK] = L"zh-HK";
-    m_localeA[eMCLang_zhTW] = L"zh-TW";
-    m_localeA[eMCLang_nlBE] = L"nl-BE";
-    m_localeA[eMCLang_daDK] = L"da-DK";
-    m_localeA[eMCLang_frBE] = L"fr-BE";
-    m_localeA[eMCLang_frCH] = L"fr-CH";
-    m_localeA[eMCLang_deCH] = L"de-CH";
-    m_localeA[eMCLang_nbNO] = L"nb-NO";
-    m_localeA[eMCLang_enGR] = L"en-GR";
-    m_localeA[eMCLang_enHK] = L"en-HK";
-    m_localeA[eMCLang_enSA] = L"en-SA";
-    m_localeA[eMCLang_enHU] = L"en-HU";
-    m_localeA[eMCLang_enIN] = L"en-IN";
-    m_localeA[eMCLang_enIL] = L"en-IL";
-    m_localeA[eMCLang_enSG] = L"en-SG";
-    m_localeA[eMCLang_enSK] = L"en-SK";
-    m_localeA[eMCLang_enZA] = L"en-ZA";
-    m_localeA[eMCLang_enCZ] = L"en-CZ";
-    m_localeA[eMCLang_enAE] = L"en-AE";
-    m_localeA[eMCLang_esAR] = L"es-AR";
-    m_localeA[eMCLang_esCL] = L"es-CL";
-    m_localeA[eMCLang_esCO] = L"es-CO";
-    m_localeA[eMCLang_esUS] = L"es-US";
-    m_localeA[eMCLang_svSE] = L"sv-SE";
-    m_localeA[eMCLang_csCZ] = L"cs-CZ";
-    m_localeA[eMCLang_elGR] = L"el-GR";
-    m_localeA[eMCLang_nnNO] = L"nn-NO";
-    m_localeA[eMCLang_skSK] = L"sk-SK";
-    m_localeA[eMCLang_hans] = L"zh-HANS";
-    m_localeA[eMCLang_hant] = L"zh-HANT";
+    m_localeA[eMCLang_zhCHT] = "zh-CHT";
+    m_localeA[eMCLang_csCS] = "cs-CS";
+    m_localeA[eMCLang_laLAS] = "la-LAS";
+    m_localeA[eMCLang_null] = "en-EN";
+    m_localeA[eMCLang_enUS] = "en-US";
+    m_localeA[eMCLang_enGB] = "en-GB";
+    m_localeA[eMCLang_enIE] = "en-IE";
+    m_localeA[eMCLang_enAU] = "en-AU";
+    m_localeA[eMCLang_enNZ] = "en-NZ";
+    m_localeA[eMCLang_enCA] = "en-CA";
+    m_localeA[eMCLang_jaJP] = "ja-JP";
+    m_localeA[eMCLang_deDE] = "de-DE";
+    m_localeA[eMCLang_deAT] = "de-AT";
+    m_localeA[eMCLang_frFR] = "fr-FR";
+    m_localeA[eMCLang_frCA] = "fr-CA";
+    m_localeA[eMCLang_esES] = "es-ES";
+    m_localeA[eMCLang_esMX] = "es-MX";
+    m_localeA[eMCLang_itIT] = "it-IT";
+    m_localeA[eMCLang_koKR] = "ko-KR";
+    m_localeA[eMCLang_ptPT] = "pt-PT";
+    m_localeA[eMCLang_ptBR] = "pt-BR";
+    m_localeA[eMCLang_ruRU] = "ru-RU";
+    m_localeA[eMCLang_nlNL] = "nl-NL";
+    m_localeA[eMCLang_fiFI] = "fi-FI";
+    m_localeA[eMCLang_svSV] = "sv-SV";
+    m_localeA[eMCLang_daDA] = "da-DA";
+    m_localeA[eMCLang_noNO] = "no-NO";
+    m_localeA[eMCLang_plPL] = "pl-PL";
+    m_localeA[eMCLang_trTR] = "tr-TR";
+    m_localeA[eMCLang_elEL] = "el-EL";
+    m_localeA[eMCLang_zhSG] = "zh-SG";
+    m_localeA[eMCLang_zhCN] = "zh-CN";
+    m_localeA[eMCLang_zhHK] = "zh-HK";
+    m_localeA[eMCLang_zhTW] = "zh-TW";
+    m_localeA[eMCLang_nlBE] = "nl-BE";
+    m_localeA[eMCLang_daDK] = "da-DK";
+    m_localeA[eMCLang_frBE] = "fr-BE";
+    m_localeA[eMCLang_frCH] = "fr-CH";
+    m_localeA[eMCLang_deCH] = "de-CH";
+    m_localeA[eMCLang_nbNO] = "nb-NO";
+    m_localeA[eMCLang_enGR] = "en-GR";
+    m_localeA[eMCLang_enHK] = "en-HK";
+    m_localeA[eMCLang_enSA] = "en-SA";
+    m_localeA[eMCLang_enHU] = "en-HU";
+    m_localeA[eMCLang_enIN] = "en-IN";
+    m_localeA[eMCLang_enIL] = "en-IL";
+    m_localeA[eMCLang_enSG] = "en-SG";
+    m_localeA[eMCLang_enSK] = "en-SK";
+    m_localeA[eMCLang_enZA] = "en-ZA";
+    m_localeA[eMCLang_enCZ] = "en-CZ";
+    m_localeA[eMCLang_enAE] = "en-AE";
+    m_localeA[eMCLang_esAR] = "es-AR";
+    m_localeA[eMCLang_esCL] = "es-CL";
+    m_localeA[eMCLang_esCO] = "es-CO";
+    m_localeA[eMCLang_esUS] = "es-US";
+    m_localeA[eMCLang_svSE] = "sv-SE";
+    m_localeA[eMCLang_csCZ] = "cs-CZ";
+    m_localeA[eMCLang_elGR] = "el-GR";
+    m_localeA[eMCLang_nnNO] = "nn-NO";
+    m_localeA[eMCLang_skSK] = "sk-SK";
+    m_localeA[eMCLang_hans] = "zh-HANS";
+    m_localeA[eMCLang_hant] = "zh-HANT";
 
-    m_eMCLangA[L"zh-CHT"] = eMCLang_zhCHT;
-    m_eMCLangA[L"cs-CS"] = eMCLang_csCS;
-    m_eMCLangA[L"la-LAS"] = eMCLang_laLAS;
-    m_eMCLangA[L"en-EN"] = eMCLang_null;
-    m_eMCLangA[L"en-US"] = eMCLang_enUS;
-    m_eMCLangA[L"en-GB"] = eMCLang_enGB;
-    m_eMCLangA[L"en-IE"] = eMCLang_enIE;
-    m_eMCLangA[L"en-AU"] = eMCLang_enAU;
-    m_eMCLangA[L"en-NZ"] = eMCLang_enNZ;
-    m_eMCLangA[L"en-CA"] = eMCLang_enCA;
-    m_eMCLangA[L"ja-JP"] = eMCLang_jaJP;
-    m_eMCLangA[L"de-DE"] = eMCLang_deDE;
-    m_eMCLangA[L"de-AT"] = eMCLang_deAT;
-    m_eMCLangA[L"fr-FR"] = eMCLang_frFR;
-    m_eMCLangA[L"fr-CA"] = eMCLang_frCA;
-    m_eMCLangA[L"es-ES"] = eMCLang_esES;
-    m_eMCLangA[L"es-MX"] = eMCLang_esMX;
-    m_eMCLangA[L"it-IT"] = eMCLang_itIT;
-    m_eMCLangA[L"ko-KR"] = eMCLang_koKR;
-    m_eMCLangA[L"pt-PT"] = eMCLang_ptPT;
-    m_eMCLangA[L"pt-BR"] = eMCLang_ptBR;
-    m_eMCLangA[L"ru-RU"] = eMCLang_ruRU;
-    m_eMCLangA[L"nl-NL"] = eMCLang_nlNL;
-    m_eMCLangA[L"fi-FI"] = eMCLang_fiFI;
-    m_eMCLangA[L"sv-SV"] = eMCLang_svSV;
-    m_eMCLangA[L"da-DA"] = eMCLang_daDA;
-    m_eMCLangA[L"no-NO"] = eMCLang_noNO;
-    m_eMCLangA[L"pl-PL"] = eMCLang_plPL;
-    m_eMCLangA[L"tr-TR"] = eMCLang_trTR;
-    m_eMCLangA[L"el-EL"] = eMCLang_elEL;
-    m_eMCLangA[L"zh-SG"] = eMCLang_zhSG;
-    m_eMCLangA[L"zh-CN"] = eMCLang_zhCN;
-    m_eMCLangA[L"zh-HK"] = eMCLang_zhHK;
-    m_eMCLangA[L"zh-TW"] = eMCLang_zhTW;
-    m_eMCLangA[L"nl-BE"] = eMCLang_nlBE;
-    m_eMCLangA[L"da-DK"] = eMCLang_daDK;
-    m_eMCLangA[L"fr-BE"] = eMCLang_frBE;
-    m_eMCLangA[L"fr-CH"] = eMCLang_frCH;
-    m_eMCLangA[L"de-CH"] = eMCLang_deCH;
-    m_eMCLangA[L"nb-NO"] = eMCLang_nbNO;
-    m_eMCLangA[L"en-GR"] = eMCLang_enGR;
-    m_eMCLangA[L"en-HK"] = eMCLang_enHK;
-    m_eMCLangA[L"en-SA"] = eMCLang_enSA;
-    m_eMCLangA[L"en-HU"] = eMCLang_enHU;
-    m_eMCLangA[L"en-IN"] = eMCLang_enIN;
-    m_eMCLangA[L"en-IL"] = eMCLang_enIL;
-    m_eMCLangA[L"en-SG"] = eMCLang_enSG;
-    m_eMCLangA[L"en-SK"] = eMCLang_enSK;
-    m_eMCLangA[L"en-ZA"] = eMCLang_enZA;
-    m_eMCLangA[L"en-CZ"] = eMCLang_enCZ;
-    m_eMCLangA[L"en-AE"] = eMCLang_enAE;
-    m_eMCLangA[L"es-AR"] = eMCLang_esAR;
-    m_eMCLangA[L"es-CL"] = eMCLang_esCL;
-    m_eMCLangA[L"es-CO"] = eMCLang_esCO;
-    m_eMCLangA[L"es-US"] = eMCLang_esUS;
-    m_eMCLangA[L"sv-SE"] = eMCLang_svSE;
-    m_eMCLangA[L"cs-CZ"] = eMCLang_csCZ;
-    m_eMCLangA[L"el-GR"] = eMCLang_elGR;
-    m_eMCLangA[L"nn-NO"] = eMCLang_nnNO;
-    m_eMCLangA[L"sk-SK"] = eMCLang_skSK;
-    m_eMCLangA[L"zh-HANS"] = eMCLang_hans;
-    m_eMCLangA[L"zh-HANT"] = eMCLang_hant;
+    m_eMCLangA["zh-CHT"] = eMCLang_zhCHT;
+    m_eMCLangA["cs-CS"] = eMCLang_csCS;
+    m_eMCLangA["la-LAS"] = eMCLang_laLAS;
+    m_eMCLangA["en-EN"] = eMCLang_null;
+    m_eMCLangA["en-US"] = eMCLang_enUS;
+    m_eMCLangA["en-GB"] = eMCLang_enGB;
+    m_eMCLangA["en-IE"] = eMCLang_enIE;
+    m_eMCLangA["en-AU"] = eMCLang_enAU;
+    m_eMCLangA["en-NZ"] = eMCLang_enNZ;
+    m_eMCLangA["en-CA"] = eMCLang_enCA;
+    m_eMCLangA["ja-JP"] = eMCLang_jaJP;
+    m_eMCLangA["de-DE"] = eMCLang_deDE;
+    m_eMCLangA["de-AT"] = eMCLang_deAT;
+    m_eMCLangA["fr-FR"] = eMCLang_frFR;
+    m_eMCLangA["fr-CA"] = eMCLang_frCA;
+    m_eMCLangA["es-ES"] = eMCLang_esES;
+    m_eMCLangA["es-MX"] = eMCLang_esMX;
+    m_eMCLangA["it-IT"] = eMCLang_itIT;
+    m_eMCLangA["ko-KR"] = eMCLang_koKR;
+    m_eMCLangA["pt-PT"] = eMCLang_ptPT;
+    m_eMCLangA["pt-BR"] = eMCLang_ptBR;
+    m_eMCLangA["ru-RU"] = eMCLang_ruRU;
+    m_eMCLangA["nl-NL"] = eMCLang_nlNL;
+    m_eMCLangA["fi-FI"] = eMCLang_fiFI;
+    m_eMCLangA["sv-SV"] = eMCLang_svSV;
+    m_eMCLangA["da-DA"] = eMCLang_daDA;
+    m_eMCLangA["no-NO"] = eMCLang_noNO;
+    m_eMCLangA["pl-PL"] = eMCLang_plPL;
+    m_eMCLangA["tr-TR"] = eMCLang_trTR;
+    m_eMCLangA["el-EL"] = eMCLang_elEL;
+    m_eMCLangA["zh-SG"] = eMCLang_zhSG;
+    m_eMCLangA["zh-CN"] = eMCLang_zhCN;
+    m_eMCLangA["zh-HK"] = eMCLang_zhHK;
+    m_eMCLangA["zh-TW"] = eMCLang_zhTW;
+    m_eMCLangA["nl-BE"] = eMCLang_nlBE;
+    m_eMCLangA["da-DK"] = eMCLang_daDK;
+    m_eMCLangA["fr-BE"] = eMCLang_frBE;
+    m_eMCLangA["fr-CH"] = eMCLang_frCH;
+    m_eMCLangA["de-CH"] = eMCLang_deCH;
+    m_eMCLangA["nb-NO"] = eMCLang_nbNO;
+    m_eMCLangA["en-GR"] = eMCLang_enGR;
+    m_eMCLangA["en-HK"] = eMCLang_enHK;
+    m_eMCLangA["en-SA"] = eMCLang_enSA;
+    m_eMCLangA["en-HU"] = eMCLang_enHU;
+    m_eMCLangA["en-IN"] = eMCLang_enIN;
+    m_eMCLangA["en-IL"] = eMCLang_enIL;
+    m_eMCLangA["en-SG"] = eMCLang_enSG;
+    m_eMCLangA["en-SK"] = eMCLang_enSK;
+    m_eMCLangA["en-ZA"] = eMCLang_enZA;
+    m_eMCLangA["en-CZ"] = eMCLang_enCZ;
+    m_eMCLangA["en-AE"] = eMCLang_enAE;
+    m_eMCLangA["es-AR"] = eMCLang_esAR;
+    m_eMCLangA["es-CL"] = eMCLang_esCL;
+    m_eMCLangA["es-CO"] = eMCLang_esCO;
+    m_eMCLangA["es-US"] = eMCLang_esUS;
+    m_eMCLangA["sv-SE"] = eMCLang_svSE;
+    m_eMCLangA["cs-CZ"] = eMCLang_csCZ;
+    m_eMCLangA["el-GR"] = eMCLang_elGR;
+    m_eMCLangA["nn-NO"] = eMCLang_nnNO;
+    m_eMCLangA["sk-SK"] = eMCLang_skSK;
+    m_eMCLangA["zh-HANS"] = eMCLang_hans;
+    m_eMCLangA["zh-HANT"] = eMCLang_hant;
 
-    m_xcLangA[L"zh-CHT"] = XC_LOCALE_CHINA;
-    m_xcLangA[L"cs-CS"] = XC_LOCALE_CHINA;
-    m_xcLangA[L"en-EN"] = XC_LOCALE_UNITED_STATES;
-    m_xcLangA[L"en-US"] = XC_LOCALE_UNITED_STATES;
-    m_xcLangA[L"en-GB"] = XC_LOCALE_GREAT_BRITAIN;
-    m_xcLangA[L"en-IE"] = XC_LOCALE_IRELAND;
-    m_xcLangA[L"en-AU"] = XC_LOCALE_AUSTRALIA;
-    m_xcLangA[L"en-NZ"] = XC_LOCALE_NEW_ZEALAND;
-    m_xcLangA[L"en-CA"] = XC_LOCALE_CANADA;
-    m_xcLangA[L"ja-JP"] = XC_LOCALE_JAPAN;
-    m_xcLangA[L"de-DE"] = XC_LOCALE_GERMANY;
-    m_xcLangA[L"de-AT"] = XC_LOCALE_AUSTRIA;
-    m_xcLangA[L"fr-FR"] = XC_LOCALE_FRANCE;
-    m_xcLangA[L"fr-CA"] = XC_LOCALE_CANADA;
-    m_xcLangA[L"es-ES"] = XC_LOCALE_SPAIN;
-    m_xcLangA[L"es-MX"] = XC_LOCALE_MEXICO;
-    m_xcLangA[L"it-IT"] = XC_LOCALE_ITALY;
-    m_xcLangA[L"ko-KR"] = XC_LOCALE_KOREA;
-    m_xcLangA[L"pt-PT"] = XC_LOCALE_PORTUGAL;
-    m_xcLangA[L"pt-BR"] = XC_LOCALE_BRAZIL;
-    m_xcLangA[L"ru-RU"] = XC_LOCALE_RUSSIAN_FEDERATION;
-    m_xcLangA[L"nl-NL"] = XC_LOCALE_NETHERLANDS;
-    m_xcLangA[L"fi-FI"] = XC_LOCALE_FINLAND;
-    m_xcLangA[L"sv-SV"] = XC_LOCALE_SWEDEN;
-    m_xcLangA[L"da-DA"] = XC_LOCALE_DENMARK;
-    m_xcLangA[L"no-NO"] = XC_LOCALE_NORWAY;
-    m_xcLangA[L"pl-PL"] = XC_LOCALE_POLAND;
-    m_xcLangA[L"tr-TR"] = XC_LOCALE_TURKEY;
-    m_xcLangA[L"el-EL"] = XC_LOCALE_GREECE;
-    m_xcLangA[L"la-LAS"] = XC_LOCALE_LATIN_AMERICA;
-    m_xcLangA[L"zh-SG"] = XC_LOCALE_SINGAPORE;
-    m_xcLangA[L"Zh-CN"] = XC_LOCALE_CHINA;
-    m_xcLangA[L"zh-HK"] = XC_LOCALE_HONG_KONG;
-    m_xcLangA[L"zh-TW"] = XC_LOCALE_TAIWAN;
-    m_xcLangA[L"nl-BE"] = XC_LOCALE_BELGIUM;
-    m_xcLangA[L"da-DK"] = XC_LOCALE_DENMARK;
-    m_xcLangA[L"fr-BE"] = XC_LOCALE_BELGIUM;
-    m_xcLangA[L"fr-CH"] = XC_LOCALE_SWITZERLAND;
-    m_xcLangA[L"de-CH"] = XC_LOCALE_SWITZERLAND;
-    m_xcLangA[L"nb-NO"] = XC_LOCALE_NORWAY;
-    m_xcLangA[L"en-GR"] = XC_LOCALE_GREECE;
-    m_xcLangA[L"en-HK"] = XC_LOCALE_HONG_KONG;
-    m_xcLangA[L"en-SA"] = XC_LOCALE_SAUDI_ARABIA;
-    m_xcLangA[L"en-HU"] = XC_LOCALE_HUNGARY;
-    m_xcLangA[L"en-IN"] = XC_LOCALE_INDIA;
-    m_xcLangA[L"en-IL"] = XC_LOCALE_ISRAEL;
-    m_xcLangA[L"en-SG"] = XC_LOCALE_SINGAPORE;
-    m_xcLangA[L"en-SK"] = XC_LOCALE_SLOVAK_REPUBLIC;
-    m_xcLangA[L"en-ZA"] = XC_LOCALE_SOUTH_AFRICA;
-    m_xcLangA[L"en-CZ"] = XC_LOCALE_CZECH_REPUBLIC;
-    m_xcLangA[L"en-AE"] = XC_LOCALE_UNITED_ARAB_EMIRATES;
-    m_xcLangA[L"ja-IP"] = XC_LOCALE_JAPAN;
-    m_xcLangA[L"es-AR"] = XC_LOCALE_ARGENTINA;
-    m_xcLangA[L"es-CL"] = XC_LOCALE_CHILE;
-    m_xcLangA[L"es-CO"] = XC_LOCALE_COLOMBIA;
-    m_xcLangA[L"es-US"] = XC_LOCALE_UNITED_STATES;
-    m_xcLangA[L"sv-SE"] = XC_LOCALE_SWEDEN;
-    m_xcLangA[L"cs-CZ"] = XC_LOCALE_CZECH_REPUBLIC;
-    m_xcLangA[L"el-GR"] = XC_LOCALE_GREECE;
-    m_xcLangA[L"sk-SK"] = XC_LOCALE_SLOVAK_REPUBLIC;
-    m_xcLangA[L"zh-HANS"] = XC_LOCALE_CHINA;
-    m_xcLangA[L"zh-HANT"] = XC_LOCALE_CHINA;
+    m_xcLangA["zh-CHT"] = XC_LOCALE_CHINA;
+    m_xcLangA["cs-CS"] = XC_LOCALE_CHINA;
+    m_xcLangA["en-EN"] = XC_LOCALE_UNITED_STATES;
+    m_xcLangA["en-US"] = XC_LOCALE_UNITED_STATES;
+    m_xcLangA["en-GB"] = XC_LOCALE_GREAT_BRITAIN;
+    m_xcLangA["en-IE"] = XC_LOCALE_IRELAND;
+    m_xcLangA["en-AU"] = XC_LOCALE_AUSTRALIA;
+    m_xcLangA["en-NZ"] = XC_LOCALE_NEW_ZEALAND;
+    m_xcLangA["en-CA"] = XC_LOCALE_CANADA;
+    m_xcLangA["ja-JP"] = XC_LOCALE_JAPAN;
+    m_xcLangA["de-DE"] = XC_LOCALE_GERMANY;
+    m_xcLangA["de-AT"] = XC_LOCALE_AUSTRIA;
+    m_xcLangA["fr-FR"] = XC_LOCALE_FRANCE;
+    m_xcLangA["fr-CA"] = XC_LOCALE_CANADA;
+    m_xcLangA["es-ES"] = XC_LOCALE_SPAIN;
+    m_xcLangA["es-MX"] = XC_LOCALE_MEXICO;
+    m_xcLangA["it-IT"] = XC_LOCALE_ITALY;
+    m_xcLangA["ko-KR"] = XC_LOCALE_KOREA;
+    m_xcLangA["pt-PT"] = XC_LOCALE_PORTUGAL;
+    m_xcLangA["pt-BR"] = XC_LOCALE_BRAZIL;
+    m_xcLangA["ru-RU"] = XC_LOCALE_RUSSIAN_FEDERATION;
+    m_xcLangA["nl-NL"] = XC_LOCALE_NETHERLANDS;
+    m_xcLangA["fi-FI"] = XC_LOCALE_FINLAND;
+    m_xcLangA["sv-SV"] = XC_LOCALE_SWEDEN;
+    m_xcLangA["da-DA"] = XC_LOCALE_DENMARK;
+    m_xcLangA["no-NO"] = XC_LOCALE_NORWAY;
+    m_xcLangA["pl-PL"] = XC_LOCALE_POLAND;
+    m_xcLangA["tr-TR"] = XC_LOCALE_TURKEY;
+    m_xcLangA["el-EL"] = XC_LOCALE_GREECE;
+    m_xcLangA["la-LAS"] = XC_LOCALE_LATIN_AMERICA;
+    m_xcLangA["zh-SG"] = XC_LOCALE_SINGAPORE;
+    m_xcLangA["Zh-CN"] = XC_LOCALE_CHINA;
+    m_xcLangA["zh-HK"] = XC_LOCALE_HONG_KONG;
+    m_xcLangA["zh-TW"] = XC_LOCALE_TAIWAN;
+    m_xcLangA["nl-BE"] = XC_LOCALE_BELGIUM;
+    m_xcLangA["da-DK"] = XC_LOCALE_DENMARK;
+    m_xcLangA["fr-BE"] = XC_LOCALE_BELGIUM;
+    m_xcLangA["fr-CH"] = XC_LOCALE_SWITZERLAND;
+    m_xcLangA["de-CH"] = XC_LOCALE_SWITZERLAND;
+    m_xcLangA["nb-NO"] = XC_LOCALE_NORWAY;
+    m_xcLangA["en-GR"] = XC_LOCALE_GREECE;
+    m_xcLangA["en-HK"] = XC_LOCALE_HONG_KONG;
+    m_xcLangA["en-SA"] = XC_LOCALE_SAUDI_ARABIA;
+    m_xcLangA["en-HU"] = XC_LOCALE_HUNGARY;
+    m_xcLangA["en-IN"] = XC_LOCALE_INDIA;
+    m_xcLangA["en-IL"] = XC_LOCALE_ISRAEL;
+    m_xcLangA["en-SG"] = XC_LOCALE_SINGAPORE;
+    m_xcLangA["en-SK"] = XC_LOCALE_SLOVAK_REPUBLIC;
+    m_xcLangA["en-ZA"] = XC_LOCALE_SOUTH_AFRICA;
+    m_xcLangA["en-CZ"] = XC_LOCALE_CZECH_REPUBLIC;
+    m_xcLangA["en-AE"] = XC_LOCALE_UNITED_ARAB_EMIRATES;
+    m_xcLangA["ja-IP"] = XC_LOCALE_JAPAN;
+    m_xcLangA["es-AR"] = XC_LOCALE_ARGENTINA;
+    m_xcLangA["es-CL"] = XC_LOCALE_CHILE;
+    m_xcLangA["es-CO"] = XC_LOCALE_COLOMBIA;
+    m_xcLangA["es-US"] = XC_LOCALE_UNITED_STATES;
+    m_xcLangA["sv-SE"] = XC_LOCALE_SWEDEN;
+    m_xcLangA["cs-CZ"] = XC_LOCALE_CZECH_REPUBLIC;
+    m_xcLangA["el-GR"] = XC_LOCALE_GREECE;
+    m_xcLangA["sk-SK"] = XC_LOCALE_SLOVAK_REPUBLIC;
+    m_xcLangA["zh-HANS"] = XC_LOCALE_CHINA;
+    m_xcLangA["zh-HANT"] = XC_LOCALE_CHINA;
 }

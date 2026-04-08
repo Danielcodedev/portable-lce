@@ -29,14 +29,14 @@ public:
     };
     static const wchar_t* wchTypeNamesA[e_AudioParamType_Max];
 
-    DLCAudioFile(const std::wstring& path);
+    DLCAudioFile(const std::string& path);
 
     virtual void addData(std::uint8_t* pbData, std::uint32_t dataBytes);
     virtual std::uint8_t* getData(std::uint32_t& dataBytes);
 
     bool processDLCDataFile(std::uint8_t* pbData, std::uint32_t dataLength);
     int GetCountofType(DLCAudioFile::EAudioType ptype);
-    std::wstring& GetSoundName(int iIndex);
+    std::string& GetSoundName(int iIndex);
 
 private:
     using DLCFile::addParameter;
@@ -44,13 +44,13 @@ private:
     std::uint8_t* m_pbData;
     std::uint32_t m_dataBytes;
     static const int CURRENT_AUDIO_VERSION_NUM = 1;
-    // std::unordered_map<int, std::wstring> m_parameters;
-    std::vector<std::wstring> m_parameters[e_AudioType_Max];
+    // std::unordered_map<int, std::string> m_parameters;
+    std::vector<std::string> m_parameters[e_AudioType_Max];
 
     // use the EAudioType to order these
     void addParameter(DLCAudioFile::EAudioType type,
                       DLCAudioFile::EAudioParameterType ptype,
-                      const std::wstring& value);
+                      const std::string& value);
     DLCAudioFile::EAudioParameterType getParameterType(
         const std::wstring& paramName);
 };

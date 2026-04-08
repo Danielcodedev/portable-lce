@@ -33,7 +33,7 @@
 
 #if defined(SONY_REMOTE_STORAGE_DOWNLOAD)
 unsigned long UIScene_LoadOrJoinMenu::m_ulFileSize = 0L;
-std::wstring UIScene_LoadOrJoinMenu::m_wstrStageText = L"";
+std::string UIScene_LoadOrJoinMenu::m_wstrStageText = "";
 bool UIScene_LoadOrJoinMenu::m_bSaveTransferRunning = false;
 #endif
 
@@ -315,9 +315,9 @@ void UIScene_LoadOrJoinMenu::handleGainFocus(bool navBack) {
         if (m_bMultiplayerAllowed) {
 #if TO_BE_IMPLEMENTED
             HXUICLASS hClassFullscreenProgress =
-                XuiFindClass(L"CScene_FullscreenProgress");
+                XuiFindClass("CScene_FullscreenProgress");
             HXUICLASS hClassConnectingProgress =
-                XuiFindClass(L"CScene_ConnectingProgress");
+                XuiFindClass("CScene_ConnectingProgress");
 
             // If we are navigating back from a full screen progress scene, then
             // that means a connection attempt failed
@@ -350,8 +350,8 @@ void UIScene_LoadOrJoinMenu::handleLoseFocus() {
     killTimer(JOIN_LOAD_ONLINE_TIMER_ID);
 }
 
-std::wstring UIScene_LoadOrJoinMenu::getMoviePath() {
-    return L"LoadOrJoinMenu";
+std::string UIScene_LoadOrJoinMenu::getMoviePath() {
+    return "LoadOrJoinMenu";
 }
 
 void UIScene_LoadOrJoinMenu::tick() {
@@ -397,7 +397,7 @@ void UIScene_LoadOrJoinMenu::tick() {
                 m_iSaveDetailsCount = m_pSaveDetails->iSaveC;
                 for (unsigned int i = 0; i < m_pSaveDetails->iSaveC; ++i) {
                     m_buttonListSaves.addItem(
-                        m_pSaveDetails->SaveInfoA[i].UTF8SaveTitle, L"");
+                        m_pSaveDetails->SaveInfoA[i].UTF8SaveTitle, "");
 
                     m_saveDetails[i].saveId = i;
                     memcpy(m_saveDetails[i].UTF8SaveName,
@@ -449,9 +449,9 @@ void UIScene_LoadOrJoinMenu::tick() {
                     MAX_SAVEFILENAME_LENGTH,  // total length of source UTF-8
                                               // string,
                     // in char's (= bytes), including end-of-string \0
-                    (wchar_t*)u16Message,    // destination buffer
+                    (char*)u16Message,    // destination buffer
                     MAX_SAVEFILENAME_LENGTH  // size of destination buffer, in
-                                             // wchar_t's
+                                             // char's
                 );
 #else
                 std::uint32_t srcmax, dstmax;
@@ -470,14 +470,14 @@ void UIScene_LoadOrJoinMenu::tick() {
 #endif
                 if (m_saveDetails[m_iRequestingThumbnailId].pbThumbnailData) {
                     registerSubstitutionTexture(
-                        (wchar_t*)u16Message,
+                        (char*)u16Message,
                         m_saveDetails[m_iRequestingThumbnailId].pbThumbnailData,
                         m_saveDetails[m_iRequestingThumbnailId]
                             .dwThumbnailSize);
                 }
                 m_buttonListSaves.setTextureName(
                     m_iRequestingThumbnailId + m_iDefaultButtonsC,
-                    (wchar_t*)u16Message);
+                    (char*)u16Message);
 
                 ++m_iRequestingThumbnailId;
                 if (m_iRequestingThumbnailId <
@@ -564,7 +564,7 @@ void UIScene_LoadOrJoinMenu::GetSaveInfo() {
 
     if (app.DebugSettingsOn() && app.GetLoadSavesFromFolderEnabled()) {
         uiSaveC = 0;
-        File savesDir(L"Saves");
+        File savesDir("Saves");
         if (savesDir.exists()) {
             m_saves = savesDir.listFiles();
             uiSaveC = (unsigned int)m_saves->size();
@@ -578,13 +578,13 @@ void UIScene_LoadOrJoinMenu::GetSaveInfo() {
         AddDefaultButtons();
 
         for (unsigned int i = 0; i < listItems; i++) {
-            std::wstring wName = m_saves->at(i)->getName();
-            wchar_t* name = new wchar_t[wName.size() + 1];
+            std::string wName = m_saves->at(i)->getName();
+            char* name = new char[wName.size() + 1];
             for (unsigned int j = 0; j < wName.size(); ++j) {
                 name[j] = wName[j];
             }
             name[wName.size()] = 0;
-            m_buttonListSaves.addItem(name, L"");
+            m_buttonListSaves.addItem(name, "");
         }
         m_bSavesDisplayed = true;
         m_bAllLoaded = true;
@@ -644,7 +644,7 @@ void UIScene_LoadOrJoinMenu::AddDefaultButtons() {
         }
 
         // 4J-JEV: For debug. Ignore worlds with no name.
-        const wchar_t* wstr = levelGen->getWorldName();
+        const char* wstr = levelGen->getWorldName();
         m_buttonListSaves.addItem(wstr);
         m_generators.push_back(levelGen);
 
@@ -658,8 +658,8 @@ void UIScene_LoadOrJoinMenu::AddDefaultButtons() {
             std::uint8_t* imageData = tp->getPackIcon(imageBytes);
 
             if (imageBytes > 0 && imageData) {
-                wchar_t imageName[64];
-                swprintf(imageName, 64, L"tpack%08x", tp->getId());
+                char imageName[64];
+                snprintf(imageName, 64, "tpack%08x", tp->getId());
                 registerSubstitutionTexture(imageName, imageData, imageBytes);
                 m_buttonListSaves.setTextureName(
                     m_buttonListSaves.getItemCount() - 1, imageName);
@@ -1017,7 +1017,7 @@ void UIScene_LoadOrJoinMenu::CheckAndJoinGame(int gameIndex) {
 
 void UIScene_LoadOrJoinMenu::LoadLevelGen(LevelGenerationOptions* levelGen) {
     // Load data from disc
-    // File saveFile( L"Tutorial\\Tutorial" );
+    // File saveFile( "Tutorial\\Tutorial" );
     // LoadSaveFromDisk(&saveFile);
 
     // clear out the app's terrain features list
@@ -1159,7 +1159,7 @@ void UIScene_LoadOrJoinMenu::UpdateGamesList() {
              it < m_currentSessions->end(); ++it) {
             FriendSessionInfo* sessionInfo = *it;
 
-            wchar_t textureName[64] = L"\0";
+            char textureName[64] = "\0";
 
             // Is this a default game or a texture pack game?
             if (sessionInfo->data.texturePackParentId != 0) {
@@ -1184,7 +1184,7 @@ void UIScene_LoadOrJoinMenu::UpdateGamesList() {
                                        &imageData, &tpdImageBytes);
                     imageBytes = static_cast<std::uint32_t>(tpdImageBytes);
                     if (imageBytes > 0 && imageData) {
-                        swprintf(textureName, 64, L"%ls",
+                        snprintf(textureName, 64, "%s",
                                  sessionInfo->displayLabel);
                         registerSubstitutionTexture(textureName, imageData,
                                                     imageBytes);
@@ -1192,7 +1192,7 @@ void UIScene_LoadOrJoinMenu::UpdateGamesList() {
                 } else {
                     imageData = tp->getPackIcon(imageBytes);
                     if (imageBytes > 0 && imageData) {
-                        swprintf(textureName, 64, L"%ls",
+                        snprintf(textureName, 64, "%s",
                                  sessionInfo->displayLabel);
                         registerSubstitutionTexture(textureName, imageData,
                                                     imageBytes);
@@ -1207,7 +1207,7 @@ void UIScene_LoadOrJoinMenu::UpdateGamesList() {
                 std::uint8_t* imageData = tp->getPackIcon(imageBytes);
 
                 if (imageBytes > 0 && imageData) {
-                    swprintf(textureName, 64, L"%ls",
+                    snprintf(textureName, 64, "%s",
                              sessionInfo->displayLabel);
                     registerSubstitutionTexture(textureName, imageData,
                                                 imageBytes);
@@ -1341,8 +1341,8 @@ void UIScene_LoadOrJoinMenu::LoadSaveFromDisk(
 
 #if defined(SONY_REMOTE_STORAGE_DOWNLOAD)
 void UIScene_LoadOrJoinMenu::LoadSaveFromCloud() {
-    wchar_t wFileName[128];
-    mbstowcs(
+    char wFileName[128];
+    strncpy(
         wFileName, app.getRemoteStorage()->getLocalFilename(),
         strlen(app.getRemoteStorage()->getLocalFilename()) + 1);  // plus null
     File cloudFile(wFileName);
@@ -1350,8 +1350,8 @@ void UIScene_LoadOrJoinMenu::LoadSaveFromCloud() {
     PlatformStorage.ResetSaveData();
 
     // Make our next save default to the name of the level
-    wchar_t wSaveName[128];
-    mbstowcs(
+    char wSaveName[128];
+    strncpy(
         wSaveName, app.getRemoteStorage()->getSaveNameUTF8(),
         strlen(app.getRemoteStorage()->getSaveNameUTF8()) + 1);  // plus null
     PlatformStorage.SetSaveTitle(wSaveName);
@@ -1480,17 +1480,17 @@ int UIScene_LoadOrJoinMenu::SaveOptionsDialogReturned(
         {
             pClass->m_bIgnoreInput = true;
             // bring up a keyboard
-            wchar_t wSaveName[128];
+            char wSaveName[128];
             // CD - Fix - We must memset the SaveName
-            memset(wSaveName, 0, 128 * sizeof(wchar_t));
-            mbstowcs(
+            memset(wSaveName, 0, 128 * sizeof(char));
+            strncpy(
                 wSaveName,
                 pClass
                     ->m_saveDetails[pClass->m_iSaveListIndex -
                                     pClass->m_iDefaultButtonsC]
                     .UTF8SaveName,
                 strlen(pClass->m_saveDetails->UTF8SaveName) + 1);  // plus null
-            wchar_t* ptr = wSaveName;
+            char* ptr = wSaveName;
             PlatformInput.RequestKeyboard(
                 app.GetString(IDS_RENAME_WORLD_TITLE), wSaveName, 0, 25,
                 [pClass](bool bRes) -> int {
@@ -1638,7 +1638,7 @@ int UIScene_LoadOrJoinMenu::DownloadSonyCrossSaveThreadProc(void* lpParameter) {
     bool bAbortCalled = false;
     Minecraft* pMinecraft = Minecraft::GetInstance();
     bool bSaveFileCreated = false;
-    wchar_t wSaveName[128];
+    char wSaveName[128];
 
     // get the save file size
     pMinecraft->progressRenderer->progressStagePercentage(0);
@@ -1702,7 +1702,7 @@ int UIScene_LoadOrJoinMenu::DownloadSonyCrossSaveThreadProc(void* lpParameter) {
                 // Make our next save default to the name of the level
                 const char* pNameUTF8 =
                     app.getRemoteStorage()->getSaveNameUTF8();
-                mbstowcs(wSaveName, pNameUTF8,
+                strncpy(wSaveName, pNameUTF8,
                          strlen(pNameUTF8) + 1);  // plus null
                 PlatformStorage.SetSaveTitle(wSaveName);
                 std::uint8_t* pbThumbnailData = nullptr;
@@ -1755,8 +1755,8 @@ int UIScene_LoadOrJoinMenu::DownloadSonyCrossSaveThreadProc(void* lpParameter) {
                 // we can't cancel here, we need the saves info so we can delete
                 // the file
                 if (pClass->m_saveTransferDownloadCancelled) {
-                    wchar_t wcTemp[256];
-                    swprintf(
+                    char wcTemp[256];
+                    snprintf(
                         wcTemp, 256,
                         app.GetString(
                             IDS_CANCEL));  // MGH - should change this string to
@@ -1780,8 +1780,8 @@ int UIScene_LoadOrJoinMenu::DownloadSonyCrossSaveThreadProc(void* lpParameter) {
             } break;
             case eSaveTransfer_GettingSavesInfo:
                 if (pClass->m_saveTransferDownloadCancelled) {
-                    wchar_t wcTemp[256];
-                    swprintf(
+                    char wcTemp[256];
+                    snprintf(
                         wcTemp, 256,
                         app.GetString(
                             IDS_CANCEL));  // MGH - should change this string to
@@ -1818,15 +1818,15 @@ int UIScene_LoadOrJoinMenu::DownloadSonyCrossSaveThreadProc(void* lpParameter) {
             }
 
             case eSaveTransfer_GettingFileData: {
-                wchar_t wcTemp[256];
+                char wcTemp[256];
 
                 int dataProgress = app.getRemoteStorage()->getDataProgress();
                 pMinecraft->progressRenderer->progressStagePercentage(
                     dataProgress);
 
-                // swprintf(wcTemp, 256, L"Downloading data : %d",
+                // snprintf(wcTemp, 256, "Downloading data : %d",
                 // dataProgress);//app.GetString(IDS_SAVETRANSFER_STAGE_GET_DATA),0,pClass->m_ulFileSize);
-                swprintf(wcTemp, 256,
+                snprintf(wcTemp, 256,
                          app.GetString(IDS_SAVETRANSFER_STAGE_GET_DATA),
                          dataProgress);
                 m_wstrStageText = wcTemp;
@@ -2000,8 +2000,8 @@ int UIScene_LoadOrJoinMenu::DownloadSonyCrossSaveThreadProc(void* lpParameter) {
             case eSaveTransfer_Error: {
                 if (bSaveFileCreated) {
                     if (pClass->m_saveTransferDownloadCancelled) {
-                        wchar_t wcTemp[256];
-                        swprintf(wcTemp, 256,
+                        char wcTemp[256];
+                        snprintf(wcTemp, 256,
                                  app.GetString(
                                      IDS_CANCEL));  // MGH - should change this
                                                     // string to "cancelling

@@ -42,8 +42,8 @@ private:
     UI_MAP_ELEMENT(m_labelTitle, "Title")
     UI_MAP_ELEMENT(m_labelContent, "Content")
 
-    UI_MAP_NAME(m_funcInit, L"Init")
-    UI_MAP_NAME(m_funcAutoResize, L"AutoResize")
+    UI_MAP_NAME(m_funcInit, "Init")
+    UI_MAP_NAME(m_funcAutoResize, "AutoResize")
     UI_END_MAP_ELEMENTS_AND_NAMES()
 public:
     UIScene_MessageBox(int iPad, void* initData, UILayer* parentLayer);
@@ -58,7 +58,7 @@ public:
 
 protected:
     // TODO: This should be pure virtual in this class
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
 
     virtual void updateTooltips();
 

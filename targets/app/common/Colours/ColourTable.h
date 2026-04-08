@@ -9,8 +9,8 @@ class ColourTable {
 private:
     unsigned int m_colourValues[eMinecraftColour_COUNT];
 
-    static const wchar_t* ColourTableElements[eMinecraftColour_COUNT];
-    static std::unordered_map<std::wstring, eMinecraftColour> s_colourNamesMap;
+    static const char* ColourTableElements[eMinecraftColour_COUNT];
+    static std::unordered_map<std::string, eMinecraftColour> s_colourNamesMap;
 
 public:
     static void staticCtor();
@@ -23,6 +23,6 @@ public:
     unsigned int getColor(eMinecraftColour id) { return getColour(id); }
 
     void loadColoursFromData(std::uint8_t* pbData, std::uint32_t dataLength);
-    void setColour(const std::wstring& colourName, int value);
-    void setColour(const std::wstring& colourName, const std::wstring& value);
+    void setColour(const std::string& colourName, int value);
+    void setColour(const std::string& colourName, const std::string& value);
 };

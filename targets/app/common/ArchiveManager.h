@@ -17,9 +17,9 @@ public:
     void loadMediaArchive();
     ArchiveFile* getMediaArchive() const { return m_mediaArchive; }
 
-    int getArchiveFileSize(const std::wstring& filename);
-    bool hasArchiveFile(const std::wstring& filename);
-    std::vector<uint8_t> getArchiveFile(const std::wstring& filename);
+    int getArchiveFileSize(const std::string& filename);
+    bool hasArchiveFile(const std::string& filename);
+    std::vector<uint8_t> getArchiveFile(const std::string& filename);
 
     // Texture Pack Data files (icon, banner, comparison shot & text)
     void addMemoryTPDFile(int iConfig, std::uint8_t* pbData,
@@ -28,7 +28,7 @@ public:
     bool isFileInTPD(int iConfig);
     void getTPD(int iConfig, std::uint8_t** ppbData, unsigned int* pByteCount);
     int getTPDSize() { return m_MEM_TPD.size(); }
-    int getTPConfigVal(wchar_t* pwchDataFile);
+    int getTPConfigVal(char* pwchDataFile);
 
     void setRequiredTexturePackID(std::uint32_t texturePackId) {
         m_dwRequiredTexturePackID = texturePackId;

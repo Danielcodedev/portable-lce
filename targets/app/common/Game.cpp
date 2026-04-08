@@ -175,9 +175,9 @@ void Game::DebugPrintf(int user, const char* szFormat, ...) {
 #endif
 }
 
-const wchar_t* Game::GetString(int iID) {
-    // return L"Değişiklikler ve Yenilikler";
-    // return L"ÕÕÕÕÖÖÖÖ";
+const char* Game::GetString(int iID) {
+    // return "Değişiklikler ve Yenilikler";
+    // return "ÕÕÕÕÖÖÖÖ";
     return app.m_localizationManager.getString(iID);
 }
 
@@ -306,7 +306,7 @@ int Game::GetLocalPlayerCount(void) {
 // 		 // we only attempt to install the cape once per launch of the
 // game 		 m_bDefaultCapeInstallAttempted=true;
 //
-// 		 std::wstring wTemp=L"Default_Cape.png";
+// 		 std::string wTemp="Default_Cape.png";
 // 		 bool bRes=app.IsFileInMemoryTextures(wTemp);
 // 		 // if the file is not already in the memory textures, then read
 // it from TMS 		 if(!bRes)
@@ -317,7 +317,7 @@ int Game::GetLocalPlayerCount(void) {
 // birthday cape #ifdef _CONTENT_PACKAGE
 // IPlatformStorage::ETMSStatus eTMSStatus;
 // 			 eTMSStatus=PlatformStorage.ReadTMSFile(PlatformProfile.GetPrimaryPad(),IPlatformStorage::eGlobalStorage_Title,IPlatformStorage::eTMS_FileType_Graphic,
-// L"Default_Cape.png",&pBuffer, &dwSize);
+// "Default_Cape.png",&pBuffer, &dwSize);
 // 			 if(eTMSStatus==IPlatformStorage::ETMSStatus_Idle)
 // 			 {
 // 				 app.AddMemoryTextureFile(wTemp,pBuffer,dwSize);
@@ -438,7 +438,7 @@ void Game::setLevelGenerationOptions(
     m_gameRules.setLevelGenerationOptions(levelGen);
 }
 
-const wchar_t* Game::GetGameRulesString(const std::wstring& key) {
+const char* Game::GetGameRulesString(const std::string& key) {
     return m_gameRules.GetGameRulesString(key);
 }
 
@@ -453,7 +453,7 @@ const wchar_t* Game::GetGameRulesString(const std::wstring& key) {
 
 
 
-std::wstring Game::getEntityName(eINSTANCEOF type) {
+std::string Game::getEntityName(eINSTANCEOF type) {
     switch (type) {
         case eTYPE_WOLF:
             return app.GetString(IDS_WOLF);
@@ -502,7 +502,7 @@ std::wstring Game::getEntityName(eINSTANCEOF type) {
             break;
     };
 
-    return L"";
+    return "";
 }
 
 // m_dwContentTypeA moved to DLCController
@@ -511,18 +511,18 @@ std::wstring Game::getEntityName(eINSTANCEOF type) {
 
 
 
-int32_t Game::RegisterMojangData(wchar_t* pXuidName, PlayerUID xuid,
-                                          wchar_t* pSkin, wchar_t* pCape) {
+int32_t Game::RegisterMojangData(char* pXuidName, PlayerUID xuid,
+                                          char* pSkin, char* pCape) {
     int32_t hr = 0;
     eXUID eTempXuid = eXUID_Undefined;
     MOJANG_DATA* pMojangData = nullptr;
 
     // ignore the names if we don't recognize them
     if (pXuidName != nullptr) {
-        if (wcscmp(pXuidName, L"XUID_NOTCH") == 0) {
+        if (strcmp(pXuidName, "XUID_NOTCH") == 0) {
             eTempXuid =
                 eXUID_Notch;  // might be needed for the apple at some point
-        } else if (wcscmp(pXuidName, L"XUID_DEADMAU5") == 0) {
+        } else if (strcmp(pXuidName, "XUID_DEADMAU5") == 0) {
             eTempXuid = eXUID_Deadmau5;  // Needed for the deadmau5 ears
         } else {
             eTempXuid = eXUID_NoName;
@@ -534,8 +534,8 @@ int32_t Game::RegisterMojangData(wchar_t* pXuidName, PlayerUID xuid,
         memset(pMojangData, 0, sizeof(MOJANG_DATA));
         pMojangData->eXuid = eTempXuid;
 
-        wcsncpy(pMojangData->wchSkin, pSkin, MAX_CAPENAME_SIZE);
-        wcsncpy(pMojangData->wchCape, pCape, MAX_CAPENAME_SIZE);
+        strncpy(pMojangData->wchSkin, pSkin, MAX_CAPENAME_SIZE);
+        strncpy(pMojangData->wchCape, pCape, MAX_CAPENAME_SIZE);
         DLCController::MojangData[xuid] = pMojangData;
     }
 
@@ -546,13 +546,13 @@ MOJANG_DATA* Game::GetMojangDataForXuid(PlayerUID xuid) {
     return DLCController::MojangData[xuid];
 }
 
-int32_t Game::RegisterConfigValues(wchar_t* pType, int iValue) {
+int32_t Game::RegisterConfigValues(char* pType, int iValue) {
     int32_t hr = 0;
 
     // #ifdef 0
     // 	if(pType!=nullptr)
     // 	{
-    // 		if(wcscmp(pType,L"XboxOneTransfer")==0)
+    // 		if(strcmp(pType,"XboxOneTransfer")==0)
     // 		{
     // 			if(iValue>0)
     // 			{
@@ -563,7 +563,7 @@ int32_t Game::RegisterConfigValues(wchar_t* pType, int iValue) {
     // 				app.m_bTransferSavesToXboxOne=false;
     // 			}
     // 		}
-    // 		else if(wcscmp(pType,L"TransferSlotCount")==0)
+    // 		else if(strcmp(pType,"TransferSlotCount")==0)
     // 		{
     // 			app.m_uiTransferSlotC=iValue;
     // 		}
@@ -655,11 +655,11 @@ bool Game::IsLocalMultiplayerAvailable() {
 
 // (moved to manager class)
 
-std::wstring Game::getFilePath(std::uint32_t packId,
-                                        std::wstring filename,
+std::string Game::getFilePath(std::uint32_t packId,
+                                        std::string filename,
                                         bool bAddDataFolder,
-                                        std::wstring mountPoint) {
-    std::wstring path =
+                                        std::string mountPoint) {
+    std::string path =
         getRootPath(packId, true, bAddDataFolder, mountPoint) + filename;
     File f(path);
     if (f.exists()) {
@@ -685,19 +685,19 @@ enum ETitleUpdateTexturePacks {
 };
 
 #if defined(_WINDOWS64)
-std::wstring titleUpdateTexturePackRoot = L"Windows64\\DLC\\";
+std::string titleUpdateTexturePackRoot = "Windows64\\DLC\\";
 #else
-std::wstring titleUpdateTexturePackRoot = L"CU\\DLC\\";
+std::string titleUpdateTexturePackRoot = "CU\\DLC\\";
 #endif
 
-std::wstring Game::getRootPath(std::uint32_t packId,
+std::string Game::getRootPath(std::uint32_t packId,
                                         bool allowOverride, bool bAddDataFolder,
-                                        std::wstring mountPoint) {
-    std::wstring path = mountPoint;
+                                        std::string mountPoint) {
+    std::string path = mountPoint;
     if (allowOverride) {
         switch (packId) {
             case eTUTP_Halloween:
-                path = titleUpdateTexturePackRoot + L"Halloween Texture Pack";
+                path = titleUpdateTexturePackRoot + "Halloween Texture Pack";
                 break;
         };
         File folder(path);
@@ -707,8 +707,8 @@ std::wstring Game::getRootPath(std::uint32_t packId,
     }
 
     if (bAddDataFolder) {
-        return path + L"\\Data\\";
+        return path + "\\Data\\";
     } else {
-        return path + L"\\";
+        return path + "\\";
     }
 }

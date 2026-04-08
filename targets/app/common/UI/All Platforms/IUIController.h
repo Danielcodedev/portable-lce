@@ -55,7 +55,7 @@ public:
 
     virtual void DisplayGamertag(unsigned int iPad, bool show) = 0;
     virtual void SetSelectedItem(unsigned int iPad,
-                                 const std::wstring& name) = 0;
+                                 const std::string& name) = 0;
     virtual void UpdateSelectedItemPos(unsigned int iPad) = 0;
 
     virtual void HandleDLCMountingComplete() = 0;

@@ -10,8 +10,8 @@
 
 struct MOJANG_DATA {
     eXUID eXuid;
-    wchar_t wchCape[MAX_CAPENAME_SIZE];
-    wchar_t wchSkin[MAX_CAPENAME_SIZE];
+    char wchCape[MAX_CAPENAME_SIZE];
+    char wchSkin[MAX_CAPENAME_SIZE];
 };
 
 struct FEATURE_DATA {

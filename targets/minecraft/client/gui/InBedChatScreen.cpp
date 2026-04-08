@@ -19,20 +19,20 @@ void InBedChatScreen::init() {
 
     buttons.push_back(
         new Button(WAKE_UP_BUTTON, width / 2 - 100, height - 40,
-                   language->getElement(L"multiplayer.stopSleeping")));
+                   language->getElement("multiplayer.stopSleeping")));
 }
 
 void InBedChatScreen::removed() { Keyboard::enableRepeatEvents(false); }
 
-void InBedChatScreen::keyPressed(wchar_t ch, int eventKey) {
+void InBedChatScreen::keyPressed(char ch, int eventKey) {
     if (eventKey == Keyboard::KEY_ESCAPE) {
         sendWakeUp();
     } else if (eventKey == Keyboard::KEY_RETURN) {
-        std::wstring msg = trimString(message);
+        std::string msg = trimString(message);
         if (msg.length() > 0) {
             minecraft->player->chat(trimString(message));
         }
-        message = L"";
+        message = "";
     } else {
         ChatScreen::keyPressed(ch, eventKey);
     }

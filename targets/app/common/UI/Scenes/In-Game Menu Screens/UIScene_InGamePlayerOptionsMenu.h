@@ -70,7 +70,7 @@ private:
 
     UI_MAP_ELEMENT(m_labelGamertag, "Gamertag")
 
-    UI_MAP_NAME(m_funcSetPlayerIcon, L"SetPlayerIcon");
+    UI_MAP_NAME(m_funcSetPlayerIcon, "SetPlayerIcon");
     UI_END_MAP_ELEMENTS_AND_NAMES()
 
     bool m_bModeratorState;
@@ -86,7 +86,7 @@ public:
 
 protected:
     // TODO: This should be pure virtual in this class
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
     virtual void handleCheckboxToggled(F64 controlId, bool selected);
     virtual void handleTimerComplete(int id);
 

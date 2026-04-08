@@ -24,7 +24,7 @@ private:
     EState m_lastState;
     int m_lastCost;
     int m_index;
-    std::wstring m_enchantmentString;
+    std::string m_enchantmentString;
     bool m_bHasFocus;
 
     IggyName m_funcChangeState;
@@ -37,12 +37,12 @@ private:
 
     private:
         Random random;
-        std::vector<std::wstring> words;
+        std::vector<std::string> words;
 
         EnchantmentNames();
 
     public:
-        std::wstring getRandomName();
+        std::string getRandomName();
     };
 
 public:

@@ -40,13 +40,13 @@ protected:
         m_funcUpdateLayout;
 
     UI_BEGIN_MAP_ELEMENTS_AND_NAMES(UIScene)
-    UI_MAP_NAME(m_funcSetTooltip, L"SetToolTip")
-    UI_MAP_NAME(m_funcSetOpacity, L"SetOpacity")
-    UI_MAP_NAME(m_funcSetABSwap, L"SetABSwap")
-    UI_MAP_NAME(m_funcUpdateLayout, L"UpdateLayout")
+    UI_MAP_NAME(m_funcSetTooltip, "SetToolTip")
+    UI_MAP_NAME(m_funcSetOpacity, "SetOpacity")
+    UI_MAP_NAME(m_funcSetABSwap, "SetABSwap")
+    UI_MAP_NAME(m_funcUpdateLayout, "UpdateLayout")
     UI_END_MAP_ELEMENTS_AND_NAMES()
 
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
 
     virtual F64 getSafeZoneHalfWidth();
 

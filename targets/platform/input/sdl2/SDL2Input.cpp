@@ -645,7 +645,7 @@ void SDL2Input::SetDebugSequence(const char*, std::function<int()>) {}
 float SDL2Input::GetIdleSeconds(int) { return 0.f; }
 bool SDL2Input::IsPadConnected(int iPad) { return iPad == 0; }
 
-EKeyboardResult SDL2Input::RequestKeyboard(const wchar_t*, const wchar_t*, int,
+EKeyboardResult SDL2Input::RequestKeyboard(const char*, const char*, int,
                                            unsigned int,
                                            std::function<int(bool)> callback,
                                            SDL2Input::EKeyboardMode) {
@@ -660,7 +660,7 @@ bool SDL2Input::GetMenuDisplayed(int iPad) {
     return false;
 }
 const char* SDL2Input::GetText() { return s_textInputBuf.c_str(); }
-bool SDL2Input::VerifyStrings(wchar_t**, int,
+bool SDL2Input::VerifyStrings(char**, int,
                               std::function<int(STRING_VERIFY_RESPONSE*)>) {
     return true;
 }

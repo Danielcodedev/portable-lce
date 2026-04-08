@@ -53,18 +53,18 @@ UIScene_ContainerMenu::UIScene_ContainerMenu(int iPad, void* _initData,
     if (initData) delete initData;
 }
 
-std::wstring UIScene_ContainerMenu::getMoviePath() {
+std::string UIScene_ContainerMenu::getMoviePath() {
     if (m_bLargeChest) {
         if (app.GetLocalPlayerCount() > 1) {
-            return L"ChestLargeMenuSplit";
+            return "ChestLargeMenuSplit";
         } else {
-            return L"ChestLargeMenu";
+            return "ChestLargeMenu";
         }
     } else {
         if (app.GetLocalPlayerCount() > 1) {
-            return L"ChestMenuSplit";
+            return "ChestMenuSplit";
         } else {
-            return L"ChestMenu";
+            return "ChestMenu";
         }
     }
 }

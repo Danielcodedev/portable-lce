@@ -46,7 +46,7 @@ void WindowsGame::TemporaryCreateGameStart() {
     Minecraft* pMinecraft = Minecraft::GetInstance();
     app.ReleaseSaveThumbnail();
     PlatformProfile.SetLockedProfile(0);
-    pMinecraft->user->name = L"Windows";
+    pMinecraft->user->name = "Windows";
     app.ApplyGameSettingsChanged(0);
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -61,7 +61,7 @@ void WindowsGame::TemporaryCreateGameStart() {
     /// From CScene_MultiGameCreate::CreateGame
 
     app.ClearTerrainFeaturePosition();
-    std::wstring wWorldName = L"TestWorld";
+    std::string wWorldName = "TestWorld";
 
     PlatformStorage.ResetSaveData();
     PlatformStorage.SetSaveTitle(wWorldName.c_str());
@@ -112,15 +112,15 @@ void WindowsGame::TemporaryCreateGameStart() {
     thread->run();
 }
 
-int WindowsGame::GetLocalTMSFileIndex(wchar_t* wchTMSFile,
+int WindowsGame::GetLocalTMSFileIndex(char* wchTMSFile,
                                                bool bFilenameIncludesExtension,
                                                eFileExtensionType eEXT) {
     return -1;
 }
 
-int WindowsGame::LoadLocalTMSFile(wchar_t* wchTMSFile) { return -1; }
+int WindowsGame::LoadLocalTMSFile(char* wchTMSFile) { return -1; }
 
-int WindowsGame::LoadLocalTMSFile(wchar_t* wchTMSFile,
+int WindowsGame::LoadLocalTMSFile(char* wchTMSFile,
                                            eFileExtensionType eExt) {
     return -1;
 }

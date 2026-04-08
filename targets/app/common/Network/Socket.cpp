@@ -490,7 +490,7 @@ void Socket::SocketOutputStreamNetwork::writeWithFlags(
                            NON_QNET_SENDDATA_ACK_REQUIRED);
 
         if (m_queueIdx == SOCKET_SERVER_END) {
-            // printf( "Sent %u bytes of data from \"%ls\" to \"%ls\"\n",
+            // printf( "Sent %u bytes of data from \"%s\" to \"%s\"\n",
             // buffer.dwDataSize,
             // hostPlayer->GetGamertag(),
             // m_socket->networkPlayer->GetGamertag());
@@ -506,7 +506,7 @@ void Socket::SocketOutputStreamNetwork::writeWithFlags(
             // doWork()\n",queueSize); g_NetworkManager.DoWork();
             // 		}
         } else {
-            // printf( "Sent %u bytes of data from \"%ls\" to \"%ls\"\n",
+            // printf( "Sent %u bytes of data from \"%s\" to \"%s\"\n",
             // buffer.dwDataSize,
             // m_socket->networkPlayer->GetGamertag(),
             // hostPlayer->GetGamertag());

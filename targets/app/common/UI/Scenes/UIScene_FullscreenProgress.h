@@ -34,7 +34,7 @@ private:
     void* m_completeFuncParam;
     bool m_bWaitForThreadToDelete;
 
-    std::wstring m_titleText, m_statusText;
+    std::string m_titleText, m_statusText;
     int m_lastTitle, m_lastStatus, m_lastProgress;
     int m_cancelText;
     bool m_bWasCancelled;
@@ -62,7 +62,7 @@ public:
 
 protected:
     // TODO: This should be pure virtual in this class
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
 
     virtual long long getDefaultGtcButtons() { return 0; }
 

@@ -35,20 +35,20 @@ public:
     virtual ~GrSource() {}
     virtual bool requiresTexturePack() = 0;
     virtual std::uint32_t getRequiredTexturePackId() = 0;
-    virtual std::wstring getDefaultSaveName() = 0;
-    virtual const wchar_t* getWorldName() = 0;
-    virtual const wchar_t* getDisplayName() = 0;
-    virtual std::wstring getGrfPath() = 0;
+    virtual std::string getDefaultSaveName() = 0;
+    virtual const char* getWorldName() = 0;
+    virtual const char* getDisplayName() = 0;
+    virtual std::string getGrfPath() = 0;
     virtual bool requiresBaseSave() = 0;
-    virtual std::wstring getBaseSavePath() = 0;
+    virtual std::string getBaseSavePath() = 0;
 
     virtual void setRequiresTexturePack(bool) = 0;
     virtual void setRequiredTexturePackId(std::uint32_t) = 0;
-    virtual void setDefaultSaveName(const std::wstring&) = 0;
-    virtual void setWorldName(const std::wstring&) = 0;
-    virtual void setDisplayName(const std::wstring&) = 0;
-    virtual void setGrfPath(const std::wstring&) = 0;
-    virtual void setBaseSavePath(const std::wstring&) = 0;
+    virtual void setDefaultSaveName(const std::string&) = 0;
+    virtual void setWorldName(const std::string&) = 0;
+    virtual void setDisplayName(const std::string&) = 0;
+    virtual void setGrfPath(const std::string&) = 0;
+    virtual void setBaseSavePath(const std::string&) = 0;
 
     virtual bool ready() = 0;
 
@@ -57,32 +57,32 @@ public:
 
 class JustGrSource : public GrSource {
 protected:
-    std::wstring m_worldName;
-    std::wstring m_displayName;
-    std::wstring m_defaultSaveName;
+    std::string m_worldName;
+    std::string m_displayName;
+    std::string m_defaultSaveName;
     bool m_bRequiresTexturePack;
     std::uint32_t m_requiredTexturePackId;
-    std::wstring m_grfPath;
-    std::wstring m_baseSavePath;
+    std::string m_grfPath;
+    std::string m_baseSavePath;
     bool m_bRequiresBaseSave;
 
 public:
     virtual bool requiresTexturePack();
     virtual std::uint32_t getRequiredTexturePackId();
-    virtual std::wstring getDefaultSaveName();
-    virtual const wchar_t* getWorldName();
-    virtual const wchar_t* getDisplayName();
-    virtual std::wstring getGrfPath();
+    virtual std::string getDefaultSaveName();
+    virtual const char* getWorldName();
+    virtual const char* getDisplayName();
+    virtual std::string getGrfPath();
     virtual bool requiresBaseSave();
-    virtual std::wstring getBaseSavePath();
+    virtual std::string getBaseSavePath();
 
     virtual void setRequiresTexturePack(bool x);
     virtual void setRequiredTexturePackId(std::uint32_t x);
-    virtual void setDefaultSaveName(const std::wstring& x);
-    virtual void setWorldName(const std::wstring& x);
-    virtual void setDisplayName(const std::wstring& x);
-    virtual void setGrfPath(const std::wstring& x);
-    virtual void setBaseSavePath(const std::wstring& x);
+    virtual void setDefaultSaveName(const std::string& x);
+    virtual void setWorldName(const std::string& x);
+    virtual void setDisplayName(const std::string& x);
+    virtual void setGrfPath(const std::string& x);
+    virtual void setBaseSavePath(const std::string& x);
 
     virtual bool ready();
 
@@ -151,22 +151,22 @@ public:
 
     bool requiresTexturePack();
     std::uint32_t getRequiredTexturePackId();
-    std::wstring getDefaultSaveName();
-    const wchar_t* getWorldName();
-    const wchar_t* getDisplayName();
-    std::wstring getGrfPath();
+    std::string getDefaultSaveName();
+    const char* getWorldName();
+    const char* getDisplayName();
+    std::string getGrfPath();
     bool requiresBaseSave();
-    std::wstring getBaseSavePath();
+    std::string getBaseSavePath();
 
     void setGrSource(GrSource* grs);
 
     void setRequiresTexturePack(bool x);
     void setRequiredTexturePackId(std::uint32_t x);
-    void setDefaultSaveName(const std::wstring& x);
-    void setWorldName(const std::wstring& x);
-    void setDisplayName(const std::wstring& x);
-    void setGrfPath(const std::wstring& x);
-    void setBaseSavePath(const std::wstring& x);
+    void setDefaultSaveName(const std::string& x);
+    void setWorldName(const std::string& x);
+    void setDisplayName(const std::string& x);
+    void setGrfPath(const std::string& x);
+    void setBaseSavePath(const std::string& x);
 
     bool ready();
 
@@ -188,7 +188,7 @@ private:
     std::vector<ConsoleGenerateStructure*> m_structureRules;
     bool m_bHaveMinY;
     int m_minY;
-    std::unordered_map<std::wstring, ConsoleSchematicFile*> m_schematics;
+    std::unordered_map<std::string, ConsoleSchematicFile*> m_schematics;
     std::unordered_map<ChunkRuleCacheKey, ChunkRuleCacheEntry, ChunkRuleCacheKeyHash>
         m_chunkRuleCache;
     std::vector<BiomeOverride*> m_biomeOverrides;
@@ -213,8 +213,8 @@ public:
     virtual void getChildren(std::vector<GameRuleDefinition*>* children);
     virtual GameRuleDefinition* addChild(
         ConsoleGameRules::EGameRuleType ruleType);
-    virtual void addAttribute(const std::wstring& attributeName,
-                              const std::wstring& attributeValue);
+    virtual void addAttribute(const std::string& attributeName,
+                              const std::string& attributeValue);
 
     int64_t getLevelSeed();
     int getLevelHasBeenInCreative();
@@ -231,13 +231,13 @@ private:
     void clearSchematics();
 
 public:
-    ConsoleSchematicFile* loadSchematicFile(const std::wstring& filename,
+    ConsoleSchematicFile* loadSchematicFile(const std::string& filename,
                                             std::uint8_t* pbData,
                                             unsigned int dataLength);
 
 public:
-    ConsoleSchematicFile* getSchematicFile(const std::wstring& filename);
-    void releaseSchematicFile(const std::wstring& filename);
+    ConsoleSchematicFile* getSchematicFile(const std::string& filename);
+    void releaseSchematicFile(const std::string& filename);
 
     bool requiresGameRules();
     void setRequiredGameRules(LevelRuleset* rules);
@@ -250,9 +250,9 @@ public:
                         int* orientation = nullptr);
 
     void loadStringTable(StringTable* table);
-    const wchar_t* getString(const std::wstring& key);
+    const char* getString(const std::string& key);
 
-    std::unordered_map<std::wstring, ConsoleSchematicFile*>*
+    std::unordered_map<std::string, ConsoleSchematicFile*>*
     getUnfinishedSchematicFiles();
 
     void loadBaseSaveData();

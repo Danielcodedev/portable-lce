@@ -37,51 +37,51 @@ void BufferedImage::ByteFlip4(unsigned int& data) {
 // with a valid alpha channel.
 
 // 4jcraft: mostly rewrote this function
-BufferedImage::BufferedImage(const std::wstring& File,
+BufferedImage::BufferedImage(const std::string& File,
                              bool filenameHasExtension,
                              bool bTitleUpdateTexture,
-                             const std::wstring& drive) {
+                             const std::string& drive) {
     int32_t hr = -1;
-    std::wstring filePath = File;
+    std::string filePath = File;
 
     for (size_t i = 0; i < filePath.length(); ++i) {
-        if (filePath[i] == L'\\') filePath[i] = L'/';
+        if (filePath[i] == '\\') filePath[i] = '/';
     }
     for (int l = 0; l < 10; l++) data[l] = nullptr;
 
-    std::wstring baseName = filePath;
+    std::string baseName = filePath;
     if (!filenameHasExtension) {
         if (baseName.size() > 4 &&
-            baseName.substr(baseName.size() - 4) == L".png") {
+            baseName.substr(baseName.size() - 4) == ".png") {
             baseName = baseName.substr(0, baseName.size() - 4);
         }
     }
 
-    while (!baseName.empty() && (baseName[0] == L'/' || baseName[0] == L'\\'))
+    while (!baseName.empty() && (baseName[0] == '/' || baseName[0] == '\\'))
         baseName = baseName.substr(1);
-    if (baseName.find(L"res/") == 0) baseName = baseName.substr(4);
+    if (baseName.find("res/") == 0) baseName = baseName.substr(4);
 
-    std::wstring exeDir = PlatformFilesystem.getBasePath().wstring();
+    std::string exeDir = PlatformFilesystem.getBasePath().string();
 
     for (int l = 0; l < 10; l++) {
-        std::wstring mipSuffix =
-            (l != 0) ? L"MipMapLevel" + toWString<int>(l + 1) : L"";
-        std::wstring fileName = baseName + mipSuffix + L".png";
-        std::wstring finalPath;
+        std::string mipSuffix =
+            (l != 0) ? "MipMapLevel" + toWString<int>(l + 1) : "";
+        std::string fileName = baseName + mipSuffix + ".png";
+        std::string finalPath;
         bool foundOnDisk = false;
 
-        std::vector<std::wstring> searchPaths = {
-            exeDir + L"/Common/res/TitleUpdate/res/" + fileName,
-            exeDir + L"/Common/res/" + fileName,
-            exeDir + L"/Common/Media/Graphics/" + fileName,
-            exeDir + L"/Common/Media/font/" + fileName,
-            exeDir + L"/Common/res/font/" + fileName,
-            exeDir + L"/Common/Media/" + fileName};
+        std::vector<std::string> searchPaths = {
+            exeDir + "/Common/res/TitleUpdate/res/" + fileName,
+            exeDir + "/Common/res/" + fileName,
+            exeDir + "/Common/Media/Graphics/" + fileName,
+            exeDir + "/Common/Media/font/" + fileName,
+            exeDir + "/Common/res/font/" + fileName,
+            exeDir + "/Common/Media/" + fileName};
 
         for (auto& attempt : searchPaths) {
             size_t p;
-            while ((p = attempt.find(L"//")) != std::wstring::npos)
-                attempt.replace(p, 2, L"/");
+            while ((p = attempt.find("//")) != std::string::npos)
+                attempt.replace(p, 2, "/");
             if (PlatformFilesystem.exists(attempt)) {
                 finalPath = attempt;
                 foundOnDisk = true;
@@ -97,7 +97,7 @@ BufferedImage::BufferedImage(const std::wstring& File,
             hr = PlatformRenderer.LoadTextureData(nativePath.c_str(),
                                                &ImageInfo, &data[l]);
         } else {
-            std::wstring archiveKey = L"res/" + fileName;
+            std::string archiveKey = "res/" + fileName;
             if (gameServices().hasArchiveFile(archiveKey)) {
                 std::vector<uint8_t> ba = gameServices().getArchiveFile(archiveKey);
                 hr = PlatformRenderer.LoadTextureData(ba.data(), ba.size(),
@@ -122,22 +122,22 @@ BufferedImage::BufferedImage(const std::wstring& File,
         }
     }
 }
-BufferedImage::BufferedImage(DLCPack* dlcPack, const std::wstring& File,
+BufferedImage::BufferedImage(DLCPack* dlcPack, const std::string& File,
                              bool filenameHasExtension) {
     int32_t hr;
-    std::wstring filePath = File;
+    std::string filePath = File;
     std::uint8_t* pbData = nullptr;
     std::uint32_t dataBytes = 0;
     for (int l = 0; l < 10; l++) data[l] = nullptr;
 
     for (int l = 0; l < 10; l++) {
-        std::wstring name;
-        std::wstring mipMapPath =
-            (l != 0) ? L"MipMapLevel" + toWString<int>(l + 1) : L"";
-        name = L"res" + (filenameHasExtension
+        std::string name;
+        std::string mipMapPath =
+            (l != 0) ? "MipMapLevel" + toWString<int>(l + 1) : "";
+        name = "res" + (filenameHasExtension
                              ? filePath
                              : filePath.substr(0, filePath.length() - 4) +
-                                   mipMapPath + L".png");
+                                   mipMapPath + ".png");
 
         if (!dlcPack->doesPackContainFile(DLCManager::e_DLCType_All, name)) {
             if (l == 0) gameServices().fatalLoadError();

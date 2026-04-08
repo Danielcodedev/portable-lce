@@ -23,14 +23,14 @@ UIComponent_Chat::UIComponent_Chat(int iPad, void* initData,
     initialiseMovie();
 
     for (unsigned int i = 0; i < CHAT_LINES_COUNT; ++i) {
-        m_labelChatText[i].init(L"");
+        m_labelChatText[i].init("");
     }
-    m_labelJukebox.init(L"");
+    m_labelJukebox.init("");
 
     addTimer(0, 100);
 }
 
-std::wstring UIComponent_Chat::getMoviePath() {
+std::string UIComponent_Chat::getMoviePath() {
     switch (m_parentLayer->getViewport()) {
         case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_TOP:
         case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_BOTTOM:
@@ -41,12 +41,12 @@ std::wstring UIComponent_Chat::getMoviePath() {
         case IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_BOTTOM_LEFT:
         case IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_BOTTOM_RIGHT:
             m_bSplitscreen = true;
-            return L"ComponentChatSplit";
+            return "ComponentChatSplit";
             break;
         case IPlatformRenderer::VIEWPORT_TYPE_FULLSCREEN:
         default:
             m_bSplitscreen = false;
-            return L"ComponentChat";
+            return "ComponentChat";
             break;
     }
 }
@@ -70,7 +70,7 @@ void UIComponent_Chat::handleTimerComplete(int id) {
             } else {
                 m_controlLabelBackground[i].setOpacity(0);
                 m_labelChatText[i].setOpacity(0);
-                m_labelChatText[i].setLabel(L"");
+                m_labelChatText[i].setLabel("");
             }
         }
         if (pGui->getJukeboxOpacity(m_iPad) > 0) anyVisible = true;
@@ -80,7 +80,7 @@ void UIComponent_Chat::handleTimerComplete(int id) {
         for (unsigned int i = 0; i < CHAT_LINES_COUNT; ++i) {
             m_controlLabelBackground[i].setOpacity(0);
             m_labelChatText[i].setOpacity(0);
-            m_labelChatText[i].setLabel(L"");
+            m_labelChatText[i].setLabel("");
         }
         m_labelJukebox.setOpacity(0);
     }

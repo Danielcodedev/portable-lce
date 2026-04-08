@@ -18,11 +18,11 @@ bool UIControl_LeaderboardList::setupControl(UIScene* scene,
     bool success = UIControl_Base::setupControl(scene, parent, controlName);
 
     // UIControl_LeaderboardList specific initialisers
-    m_funcInitLeaderboard = registerFastName(L"InitLeaderboard");
-    m_funcAddDataSet = registerFastName(L"AddDataSet");
-    m_funcResetLeaderboard = registerFastName(L"ResetLeaderboard");
-    m_funcSetupTitles = registerFastName(L"SetupTitles");
-    m_funcSetColumnIcon = registerFastName(L"SetColumnIcon");
+    m_funcInitLeaderboard = registerFastName("InitLeaderboard");
+    m_funcAddDataSet = registerFastName("AddDataSet");
+    m_funcResetLeaderboard = registerFastName("ResetLeaderboard");
+    m_funcSetupTitles = registerFastName("SetupTitles");
+    m_funcSetColumnIcon = registerFastName("SetColumnIcon");
 
     return success;
 }
@@ -51,26 +51,22 @@ void UIControl_LeaderboardList::clearList() {
                                             m_funcResetLeaderboard, 0, nullptr);
 }
 
-void UIControl_LeaderboardList::setupTitles(const std::wstring& rank,
-                                            const std::wstring& gamertag) {
+void UIControl_LeaderboardList::setupTitles(const std::string& rank,
+                                            const std::string& gamertag) {
     IggyDataValue result;
     IggyDataValue value[2];
 
-    const std::u16string convRank = wstring_to_u16string(rank);
+    IggyStringUTF8 stringVal0;
+    stringVal0.string = const_cast<char*>(rank.c_str());
+    stringVal0.length = rank.length();
+    value[0].type = IGGY_DATATYPE_string_UTF8;
+    value[0].string8 = stringVal0;
 
-    IggyStringUTF16 stringVal0;
-    stringVal0.string = convRank.c_str();
-    stringVal0.length = convRank.length();
-    value[0].type = IGGY_DATATYPE_string_UTF16;
-    value[0].string16 = stringVal0;
-
-    const std::u16string convGamertag = wstring_to_u16string(gamertag);
-
-    IggyStringUTF16 stringVal1;
-    stringVal1.string = convGamertag.c_str();
-    stringVal1.length = convGamertag.length();
-    value[1].type = IGGY_DATATYPE_string_UTF16;
-    value[1].string16 = stringVal1;
+    IggyStringUTF8 stringVal1;
+    stringVal1.string = const_cast<char*>(gamertag.c_str());
+    stringVal1.length = gamertag.length();
+    value[1].type = IGGY_DATATYPE_string_UTF8;
+    value[1].string8 = stringVal1;
 
     IggyResult out =
         IggyPlayerCallMethodRS(m_parentScene->getMovie(), &result,
@@ -110,11 +106,11 @@ void UIControl_LeaderboardList::setColumnIcon(int iColumn, int iType) {
 }
 
 void UIControl_LeaderboardList::addDataSet(
-    bool bLast, int iId, int iRank, const std::wstring& gamertag,
-    bool bDisplayMessage, const std::wstring& col0, const std::wstring& col1,
-    const std::wstring& col2, const std::wstring& col3,
-    const std::wstring& col4, const std::wstring& col5,
-    const std::wstring& col6) {
+    bool bLast, int iId, int iRank, const std::string& gamertag,
+    bool bDisplayMessage, const std::string& col0, const std::string& col1,
+    const std::string& col2, const std::string& col3,
+    const std::string& col4, const std::string& col5,
+    const std::string& col6) {
     IggyDataValue result;
     IggyDataValue value[12];
 
@@ -127,95 +123,79 @@ void UIControl_LeaderboardList::addDataSet(
     value[2].type = IGGY_DATATYPE_number;
     value[2].number = iRank;
 
-    const std::u16string convGamertag = wstring_to_u16string(gamertag);
-
-    IggyStringUTF16 stringVal0;
-    stringVal0.string = convGamertag.c_str();
-    stringVal0.length = convGamertag.length();
-    value[3].type = IGGY_DATATYPE_string_UTF16;
-    value[3].string16 = stringVal0;
+    IggyStringUTF8 stringVal0;
+    stringVal0.string = const_cast<char*>(gamertag.c_str());
+    stringVal0.length = gamertag.length();
+    value[3].type = IGGY_DATATYPE_string_UTF8;
+    value[3].string8 = stringVal0;
 
     value[4].type = IGGY_DATATYPE_boolean;
     value[4].boolval = bDisplayMessage;
 
-    const std::u16string convCol0 = wstring_to_u16string(col0);
-
-    IggyStringUTF16 stringVal1;
-    stringVal1.string = convCol0.c_str();
-    stringVal1.length = convCol0.length();
-    value[5].type = IGGY_DATATYPE_string_UTF16;
-    value[5].string16 = stringVal1;
+    IggyStringUTF8 stringVal1;
+    stringVal1.string = const_cast<char*>(col0.c_str());
+    stringVal1.length = col0.length();
+    value[5].type = IGGY_DATATYPE_string_UTF8;
+    value[5].string8 = stringVal1;
 
     if (col1.empty()) {
         value[6].type = IGGY_DATATYPE_null;
     } else {
-        const std::u16string convCol1 = wstring_to_u16string(col1);
-
-        IggyStringUTF16 stringVal2;
-        stringVal2.string = convCol1.c_str();
-        stringVal2.length = convCol1.length();
-        value[6].type = IGGY_DATATYPE_string_UTF16;
-        value[6].string16 = stringVal2;
+        IggyStringUTF8 stringVal2;
+        stringVal2.string = const_cast<char*>(col1.c_str());
+        stringVal2.length = col1.length();
+        value[6].type = IGGY_DATATYPE_string_UTF8;
+        value[6].string8 = stringVal2;
     }
 
     if (col2.empty()) {
         value[7].type = IGGY_DATATYPE_null;
     } else {
-        const std::u16string convCol2 = wstring_to_u16string(col2);
-
-        IggyStringUTF16 stringVal3;
-        stringVal3.string = convCol2.c_str();
-        stringVal3.length = convCol2.length();
-        value[7].type = IGGY_DATATYPE_string_UTF16;
-        value[7].string16 = stringVal3;
+        IggyStringUTF8 stringVal3;
+        stringVal3.string = const_cast<char*>(col2.c_str());
+        stringVal3.length = col2.length();
+        value[7].type = IGGY_DATATYPE_string_UTF8;
+        value[7].string8 = stringVal3;
     }
 
     if (col3.empty()) {
         value[8].type = IGGY_DATATYPE_null;
     } else {
-        const std::u16string convCol3 = wstring_to_u16string(col3);
-
-        IggyStringUTF16 stringVal4;
-        stringVal4.string = convCol3.c_str();
-        stringVal4.length = convCol3.length();
-        value[8].type = IGGY_DATATYPE_string_UTF16;
-        value[8].string16 = stringVal4;
+        IggyStringUTF8 stringVal4;
+        stringVal4.string = const_cast<char*>(col3.c_str());
+        stringVal4.length = col3.length();
+        value[8].type = IGGY_DATATYPE_string_UTF8;
+        value[8].string8 = stringVal4;
     }
 
     if (col4.empty()) {
         value[9].type = IGGY_DATATYPE_null;
     } else {
-        const std::u16string convCol4 = wstring_to_u16string(col4);
-
-        IggyStringUTF16 stringVal5;
-        stringVal5.string = convCol4.c_str();
-        stringVal5.length = convCol4.length();
-        value[9].type = IGGY_DATATYPE_string_UTF16;
-        value[9].string16 = stringVal5;
+        IggyStringUTF8 stringVal5;
+        stringVal5.string = const_cast<char*>(col4.c_str());
+        stringVal5.length = col4.length();
+        value[9].type = IGGY_DATATYPE_string_UTF8;
+        value[9].string8 = stringVal5;
     }
 
     if (col5.empty()) {
         value[10].type = IGGY_DATATYPE_null;
     } else {
-        const std::u16string convCol5 = wstring_to_u16string(col5);
-
-        IggyStringUTF16 stringVal6;
-        stringVal6.string = convCol5.c_str();
-        stringVal6.length = convCol5.length();
-        value[10].type = IGGY_DATATYPE_string_UTF16;
-        value[10].string16 = stringVal6;
+        IggyStringUTF8 stringVal6;
+        stringVal6.string = const_cast<char*>(col5.c_str());
+        stringVal6.length = col5.length();
+        value[10].type = IGGY_DATATYPE_string_UTF8;
+        value[10].string8 = stringVal6;
     }
 
     if (col6.empty()) {
         value[11].type = IGGY_DATATYPE_null;
     } else {
-        const std::u16string convCol6 = wstring_to_u16string(col6);
-
-        IggyStringUTF16 stringVal7;
-        stringVal7.string = convCol6.c_str();
-        stringVal7.length = convCol6.length();
-        value[11].type = IGGY_DATATYPE_string_UTF16;
-        value[11].string16 = stringVal7;
+        IggyStringUTF8 stringVal7;
+        stringVal7.string = const_cast<char*>(col6.c_str());
+        stringVal7.length = col6.length();
+        value[11].type = IGGY_DATATYPE_string_UTF8;
+        value[11].string8 = stringVal7;
     }
     IggyResult out =
         IggyPlayerCallMethodRS(m_parentScene->getMovie(), &result,

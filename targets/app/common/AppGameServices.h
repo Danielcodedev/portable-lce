@@ -10,7 +10,7 @@ public:
     AppGameServices(Game& game, IMenuService& menus);
 
     // -- Strings --
-    const wchar_t* getString(int id) override;
+    const char* getString(int id) override;
 
     // -- Debug settings --
     bool debugSettingsOn() override;
@@ -30,12 +30,12 @@ public:
     LevelRuleset* getGameRuleDefinitions() override;
 
     // -- Texture cache --
-    void addMemoryTextureFile(const std::wstring& name, std::uint8_t* data,
+    void addMemoryTextureFile(const std::string& name, std::uint8_t* data,
                               unsigned int size) override;
-    void removeMemoryTextureFile(const std::wstring& name) override;
-    void getMemFileDetails(const std::wstring& name, std::uint8_t** data,
+    void removeMemoryTextureFile(const std::string& name) override;
+    void getMemFileDetails(const std::string& name, std::uint8_t** data,
                            unsigned int* size) override;
-    bool isFileInMemoryTextures(const std::wstring& name) override;
+    bool isFileInMemoryTextures(const std::string& name) override;
 
     // -- Player settings --
     unsigned char getGameSettings(int iPad, int setting) override;
@@ -86,9 +86,9 @@ public:
     void setTMSAction(int iPad, eTMSAction action) override;
 
     // -- Skin / cape / animation --
-    std::wstring getPlayerSkinName(int iPad) override;
+    std::string getPlayerSkinName(int iPad) override;
     std::uint32_t getPlayerSkinId(int iPad) override;
-    std::wstring getPlayerCapeName(int iPad) override;
+    std::string getPlayerCapeName(int iPad) override;
     std::uint32_t getPlayerCapeId(int iPad) override;
     std::uint32_t getAdditionalModelPartsForPad(int iPad) override;
     void setAdditionalSkinBoxes(std::uint32_t dwSkinID, SKIN_BOX* boxA,
@@ -102,8 +102,8 @@ public:
     void setAnimOverrideBitmask(std::uint32_t dwSkinID,
                                 unsigned int bitmask) override;
     unsigned int getAnimOverrideBitmask(std::uint32_t dwSkinID) override;
-    std::uint32_t getSkinIdFromPath(const std::wstring& skin) override;
-    std::wstring getSkinPathFromId(std::uint32_t skinId) override;
+    std::uint32_t getSkinIdFromPath(const std::string& skin) override;
+    std::string getSkinPathFromId(std::uint32_t skinId) override;
     bool defaultCapeExists() override;
     bool isXuidNotch(PlayerUID xuid) override;
     bool isXuidDeadmau5(PlayerUID xuid) override;
@@ -131,21 +131,21 @@ public:
     void loadDefaultGameRules() override;
 
     // -- Archive / resources --
-    bool hasArchiveFile(const std::wstring& filename) override;
+    bool hasArchiveFile(const std::string& filename) override;
     std::vector<std::uint8_t> getArchiveFile(
-        const std::wstring& filename) override;
+        const std::string& filename) override;
 
     // -- Strings / formatting / misc queries --
     int getHTMLColour(eMinecraftColour colour) override;
-    std::wstring getEntityName(EntityTypeId type) override;
-    const wchar_t* getGameRulesString(const std::wstring& key) override;
+    std::string getEntityName(EntityTypeId type) override;
+    const char* getGameRulesString(const std::string& key) override;
     unsigned int createImageTextData(std::uint8_t* textMetadata,
                                      int64_t seed, bool hasSeed,
                                      unsigned int uiHostOptions,
                                      unsigned int uiTexturePackId) override;
-    std::wstring getFilePath(std::uint32_t packId, std::wstring filename,
+    std::string getFilePath(std::uint32_t packId, std::string filename,
                              bool bAddDataFolder,
-                             std::wstring mountPoint) override;
+                             std::string mountPoint) override;
     char* getUniqueMapName() override;
     void setUniqueMapName(char* name) override;
     unsigned int getOpacityTimer(int iPad) override;
@@ -157,11 +157,11 @@ public:
     void debugPrintf(const char* msg) override;
 
     // -- DLC --
-    DLCSkinFile* getDLCSkinFile(const std::wstring& name) override;
+    DLCSkinFile* getDLCSkinFile(const std::string& name) override;
     bool dlcNeedsCorruptCheck() override;
     unsigned int dlcCheckForCorrupt(bool showMessage) override;
     bool dlcReadDataFile(unsigned int& filesProcessed,
-                         const std::wstring& path, DLCPack* pack,
+                         const std::string& path, DLCPack* pack,
                          bool fromArchive) override;
     void dlcRemovePack(DLCPack* pack) override;
 
@@ -173,7 +173,7 @@ public:
     void setLevelGenerationOptions(LevelGenerationOptions* levelGen) override;
 
     // -- Shared data --
-    std::vector<std::wstring>& getSkinNames() override;
+    std::vector<std::string>& getSkinNames() override;
     std::vector<FEATURE_DATA*>& getTerrainFeatures() override;
 
     // -- Menu service --

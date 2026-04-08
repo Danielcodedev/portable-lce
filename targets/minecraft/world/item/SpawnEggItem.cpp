@@ -34,17 +34,17 @@ SpawnEggItem::SpawnEggItem(int id) : Item(id) {
     overlay = nullptr;
 }
 
-std::wstring SpawnEggItem::getHoverName(
+std::string SpawnEggItem::getHoverName(
     std::shared_ptr<ItemInstance> itemInstance) {
-    std::wstring elementName = getDescription();
+    std::string elementName = getDescription();
 
     int nameId = EntityIO::getNameId(itemInstance->getAuxValue());
     if (nameId >= 0) {
         elementName =
-            replaceAll(elementName, L"{*CREATURE*}", gameServices().getString(nameId));
+            replaceAll(elementName, "{*CREATURE*}", gameServices().getString(nameId));
         // elementName += " " + I18n.get("entity." + encodeId + ".name");
     } else {
-        elementName = replaceAll(elementName, L"{*CREATURE*}", L"");
+        elementName = replaceAll(elementName, "{*CREATURE*}", "");
     }
 
     return elementName;
@@ -325,7 +325,7 @@ std::shared_ptr<Entity> SpawnEggItem::spawnMobAt(Level* level, int auxVal,
 
 void SpawnEggItem::registerIcons(IconRegister* iconRegister) {
     Item::registerIcons(iconRegister);
-    overlay = iconRegister->registerIcon(getIconName() + L"_overlay");
+    overlay = iconRegister->registerIcon(getIconName() + "_overlay");
 }
 
 void SpawnEggItem::DisplaySpawnError(std::shared_ptr<Player> player,

@@ -21,10 +21,10 @@ UIComponent_PressStartToPlay::UIComponent_PressStartToPlay(int iPad,
     for (unsigned int i = 0; i < XUSER_MAX_COUNT; ++i) {
         m_showingPressStart[i] = false;
     }
-    m_trialTimer = L"";
-    m_autosaveTimer = L"";
+    m_trialTimer = "";
+    m_autosaveTimer = "";
 
-    m_labelTrialTimer.init(L"");
+    m_labelTrialTimer.init("");
     m_labelTrialTimer.setVisible(false);
 
     // 4J-JEV: This object is persistent, so this string needs to be able to
@@ -36,8 +36,8 @@ UIComponent_PressStartToPlay::UIComponent_PressStartToPlay(int iPad,
     m_playerDisplayName.setVisible(false);
 }
 
-std::wstring UIComponent_PressStartToPlay::getMoviePath() {
-    return L"PressStartToPlay";
+std::string UIComponent_PressStartToPlay::getMoviePath() {
+    return "PressStartToPlay";
 }
 
 void UIComponent_PressStartToPlay::handleReload() {
@@ -98,7 +98,7 @@ void UIComponent_PressStartToPlay::showPressStart(int iPad, bool show) {
     }
 }
 
-void UIComponent_PressStartToPlay::setTrialTimer(const std::wstring& label) {
+void UIComponent_PressStartToPlay::setTrialTimer(const std::string& label) {
     m_trialTimer = label;
     if (!ui.IsExpectingOrReloadingSkin() && hasMovie()) {
         m_labelTrialTimer.setLabel(label);
@@ -112,7 +112,7 @@ void UIComponent_PressStartToPlay::showTrialTimer(bool show) {
     }
 }
 
-void UIComponent_PressStartToPlay::setAutosaveTimer(const std::wstring& label) {
+void UIComponent_PressStartToPlay::setAutosaveTimer(const std::string& label) {
     m_autosaveTimer = label;
     if (!ui.IsExpectingOrReloadingSkin() && hasMovie()) {
         m_labelTrialTimer.setLabel(label);

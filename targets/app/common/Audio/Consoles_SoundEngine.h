@@ -33,7 +33,7 @@ public:
     virtual void destroy() = 0;
     virtual void play(int iSound, float x, float y, float z, float volume,
                       float pitch) = 0;
-    virtual void playStreaming(const std::wstring& name, float x, float y,
+    virtual void playStreaming(const std::string& name, float x, float y,
                                float z, float volume, float pitch,
                                bool bMusicDelay = true) = 0;
     virtual void playUI(int iSound, float volume, float pitch) = 0;
@@ -41,10 +41,10 @@ public:
     virtual void updateSystemMusicPlaying(bool isPlaying) = 0;
     virtual void updateSoundEffectVolume(float fVal) = 0;
     virtual void init(Options*) = 0;
-    virtual void add(const std::wstring& name, File* file) = 0;
-    virtual void addMusic(const std::wstring& name, File* file) = 0;
-    virtual void addStreaming(const std::wstring& name, File* file) = 0;
-    virtual char* ConvertSoundPathToName(const std::wstring& name,
+    virtual void add(const std::string& name, File* file) = 0;
+    virtual void addMusic(const std::string& name, File* file) = 0;
+    virtual void addStreaming(const std::string& name, File* file) = 0;
+    virtual char* ConvertSoundPathToName(const std::string& name,
                                          bool bConvertSpaces) = 0;
     virtual void playMusicTick() = 0;
 
@@ -57,8 +57,8 @@ public:
     virtual void SetIsPlayingEndMusic(bool bVal);
     virtual void SetIsPlayingNetherMusic(bool bVal);
 
-    static const wchar_t* wchSoundNames[eSoundType_MAX];
-    static const wchar_t* wchUISoundNames[eSFX_MAX];
+    static const char* wchSoundNames[eSoundType_MAX];
+    static const char* wchUISoundNames[eSFX_MAX];
 
 public:
     void tick();

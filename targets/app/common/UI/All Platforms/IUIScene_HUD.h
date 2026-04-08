@@ -34,7 +34,7 @@ protected:
 
     unsigned int m_uiSelectedItemOpacityCountDown;
 
-    std::wstring m_displayName;
+    std::string m_displayName;
 
     IUIScene_HUD();
 
@@ -65,12 +65,12 @@ protected:
     virtual void SetFoodSaturationLevel(int iSaturation) = 0;
 
     virtual void SetDragonHealth(float health) = 0;
-    virtual void SetDragonLabel(const std::wstring& label) = 0;
+    virtual void SetDragonLabel(const std::string& label) = 0;
     virtual void ShowDragonHealth(bool show) = 0;
 
     virtual void HideSelectedLabel() = 0;
 
-    virtual void SetDisplayName(const std::wstring& displayName) = 0;
+    virtual void SetDisplayName(const std::string& displayName) = 0;
 
     virtual void SetTooltipsEnabled(bool bEnabled) = 0;
 
@@ -81,7 +81,7 @@ protected:
 
     virtual void SetHealthAbsorb(int healthAbsorb) = 0;
 
-    virtual void SetSelectedLabel(const std::wstring& label) = 0;
+    virtual void SetSelectedLabel(const std::string& label) = 0;
     virtual void ShowDisplayName(bool show) = 0;
 
 public:

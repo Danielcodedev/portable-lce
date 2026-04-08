@@ -131,7 +131,7 @@ void Minimap::render(std::shared_ptr<Player> player, Textures* textures,
     glDisable(GL_BLEND);
 
     textures->bind(
-        textures->loadTexture(TN_MISC_MAPICONS));  // L"/misc/mapicons.png"));
+        textures->loadTexture(TN_MISC_MAPICONS));  // "/misc/mapicons.png"));
 
     auto itEnd = data->decorations.end();
 
@@ -253,12 +253,12 @@ void Minimap::render(std::shared_ptr<Player> player, Textures* textures,
     // 4J Stu - TU-1 hotfix
     // DCR: Render the players current position here instead
     if (player != nullptr) {
-        wchar_t playerPosText[32];
-        memset(&playerPosText, 0, sizeof(wchar_t) * 32);
+        char playerPosText[32];
+        memset(&playerPosText, 0, sizeof(char) * 32);
         int posx = floor(player->x);
         int posy = floor(player->y);
         int posz = floor(player->z);
-        swprintf(playerPosText, 32, L"X: %d, Y: %d, Z: %d", posx, posy, posz);
+        snprintf(playerPosText, 32, "X: %d, Y: %d, Z: %d", posx, posy, posz);
 
         font->draw(playerPosText, x, y,
                    Minecraft::GetInstance()->getColourTable()->getColour(

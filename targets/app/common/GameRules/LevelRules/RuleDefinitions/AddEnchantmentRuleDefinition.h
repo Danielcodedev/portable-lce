@@ -22,8 +22,8 @@ public:
 
     virtual void writeAttributes(DataOutputStream*, unsigned int numAttrs);
 
-    virtual void addAttribute(const std::wstring& attributeName,
-                              const std::wstring& attributeValue);
+    virtual void addAttribute(const std::string& attributeName,
+                              const std::string& attributeValue);
 
     bool enchantItem(std::shared_ptr<ItemInstance> item);
 };

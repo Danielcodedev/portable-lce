@@ -209,7 +209,7 @@ class Packet;
 class TexturePack;
 class UIScene;
 
-ClientConnection::ClientConnection(Minecraft* minecraft, const std::wstring& ip,
+ClientConnection::ClientConnection(Minecraft* minecraft, const std::string& ip,
                                    int port) {
     // 4J Stu - No longer used as we use the socket version below.
     assert(false);
@@ -239,7 +239,7 @@ ClientConnection::ClientConnection(Minecraft* minecraft, Socket* socket,
 
     createdOk = socket->createdOk;
     if (createdOk) {
-        connection = new Connection(socket, L"Client", this);
+        connection = new Connection(socket, "Client", this);
     } else {
         connection = nullptr;
         // TODO 4J Stu - This will cause issues since the session player owns
@@ -314,7 +314,7 @@ void ClientConnection::handleLogin(std::shared_ptr<LoginPacket> packet) {
         if (pMojangData) {
             // a skin?
             if (pMojangData->wchSkin[0] != 0L) {
-                std::wstring wstr = pMojangData->wchSkin;
+                std::string wstr = pMojangData->wchSkin;
                 // check the file is not already in
                 bRes = gameServices().isFileInMemoryTextures(wstr);
                 if (!bRes) {
@@ -327,7 +327,7 @@ void ClientConnection::handleLogin(std::shared_ptr<LoginPacket> packet) {
 
             // a cloak?
             if (pMojangData->wchCape[0] != 0L) {
-                std::wstring wstr = pMojangData->wchCape;
+                std::string wstr = pMojangData->wchCape;
                 // check the file is not already in
                 bRes = gameServices().isFileInMemoryTextures(wstr);
                 if (!bRes) {
@@ -919,13 +919,13 @@ void ClientConnection::handleAddPlayer(
                                    packet->m_uiGamePrivileges);
 
     if (!player->customTextureUrl.empty() &&
-        player->customTextureUrl.substr(0, 3).compare(L"def") != 0 &&
+        player->customTextureUrl.substr(0, 3).compare("def") != 0 &&
         !gameServices().isFileInMemoryTextures(player->customTextureUrl)) {
         if (minecraft->addPendingClientTextureRequest(
                 player->customTextureUrl)) {
             Log::info(
                 "Client sending TextureAndGeometryPacket to get custom skin "
-                "%ls for player %ls\n",
+                "%s for player %s\n",
                 player->customTextureUrl.c_str(), player->name.c_str());
 
             send(std::shared_ptr<TextureAndGeometryPacket>(
@@ -938,17 +938,17 @@ void ClientConnection::handleAddPlayer(
         gameServices().addMemoryTextureFile(player->customTextureUrl, nullptr, 0);
     }
 
-    Log::info("Custom skin for player %ls is %ls\n", player->name.c_str(),
+    Log::info("Custom skin for player %s is %s\n", player->name.c_str(),
                     player->customTextureUrl.c_str());
 
     if (!player->customTextureUrl2.empty() &&
-        player->customTextureUrl2.substr(0, 3).compare(L"def") != 0 &&
+        player->customTextureUrl2.substr(0, 3).compare("def") != 0 &&
         !gameServices().isFileInMemoryTextures(player->customTextureUrl2)) {
         if (minecraft->addPendingClientTextureRequest(
                 player->customTextureUrl2)) {
             Log::info(
-                "Client sending texture packet to get custom cape %ls for "
-                "player %ls\n",
+                "Client sending texture packet to get custom cape %s for "
+                "player %s\n",
                 player->customTextureUrl2.c_str(), player->name.c_str());
             send(std::shared_ptr<TexturePacket>(
                 new TexturePacket(player->customTextureUrl2, nullptr, 0)));
@@ -959,7 +959,7 @@ void ClientConnection::handleAddPlayer(
         gameServices().addMemoryTextureFile(player->customTextureUrl2, nullptr, 0);
     }
 
-    Log::info("Custom cape for player %ls is %ls\n", player->name.c_str(),
+    Log::info("Custom cape for player %s is %s\n", player->name.c_str(),
                     player->customTextureUrl2.c_str());
 
     level->putEntity(packet->id, player);
@@ -1343,8 +1343,8 @@ void ClientConnection::handleDisconnect(
 
     gameServices().setAction(m_userIndex, eAppAction_ExitWorld, (void*)true);
     // minecraft->setLevel(nullptr);
-    // minecraft->setScreen(new DisconnectedScreen(L"disconnect.disconnected",
-    // L"disconnect.genericReason", &packet->reason));
+    // minecraft->setScreen(new DisconnectedScreen("disconnect.disconnected",
+    // "disconnect.genericReason", &packet->reason));
 }
 
 void ClientConnection::onDisconnect(DisconnectPacket::eDisconnectReason reason,
@@ -1375,7 +1375,7 @@ void ClientConnection::onDisconnect(DisconnectPacket::eDisconnectReason reason,
     }
 
     // minecraft->setLevel(nullptr);
-    // minecraft->setScreen(new DisconnectedScreen(L"disconnect.lost", reason,
+    // minecraft->setScreen(new DisconnectedScreen("disconnect.lost", reason,
     // reasonObjects));
 }
 
@@ -1477,7 +1477,7 @@ void ClientConnection::handleTakeItemEntity(
 }
 
 void ClientConnection::handleChat(std::shared_ptr<ChatPacket> packet) {
-    std::wstring message;
+    std::string message;
     int iPos;
     bool displayOnGui = true;
 
@@ -1485,8 +1485,8 @@ void ClientConnection::handleChat(std::shared_ptr<ChatPacket> packet) {
     bool replaceEntitySource = false;
     bool replaceItem = false;
 
-    std::wstring playerDisplayName = L"";
-    std::wstring sourceDisplayName = L"";
+    std::string playerDisplayName = "";
+    std::string sourceDisplayName = "";
 
     // On platforms other than Xbox One this just sets display name to gamertag
     if (packet->m_stringArgs.size() >= 1)
@@ -1509,7 +1509,7 @@ void ClientConnection::handleChat(std::shared_ptr<ChatPacket> packet) {
             break;
         case ChatPacket::e_ChatBedPlayerSleep:
             message = gameServices().getString(IDS_TILE_BED_PLAYERSLEEP);
-            iPos = message.find(L"%s");
+            iPos = message.find("%s");
             message.replace(iPos, 2, playerDisplayName);
             break;
         case ChatPacket::e_ChatBedMeSleep:
@@ -1517,17 +1517,17 @@ void ClientConnection::handleChat(std::shared_ptr<ChatPacket> packet) {
             break;
         case ChatPacket::e_ChatPlayerJoinedGame:
             message = gameServices().getString(IDS_PLAYER_JOINED);
-            iPos = message.find(L"%s");
+            iPos = message.find("%s");
             message.replace(iPos, 2, playerDisplayName);
             break;
         case ChatPacket::e_ChatPlayerLeftGame:
             message = gameServices().getString(IDS_PLAYER_LEFT);
-            iPos = message.find(L"%s");
+            iPos = message.find("%s");
             message.replace(iPos, 2, playerDisplayName);
             break;
         case ChatPacket::e_ChatPlayerKickedFromGame:
             message = gameServices().getString(IDS_PLAYER_KICKED);
-            iPos = message.find(L"%s");
+            iPos = message.find("%s");
             message.replace(iPos, 2, playerDisplayName);
             break;
         case ChatPacket::e_ChatCannotPlaceLava:
@@ -1746,12 +1746,12 @@ void ClientConnection::handleChat(std::shared_ptr<ChatPacket> packet) {
 
         case ChatPacket::e_ChatPlayerEnteredEnd:
             message = gameServices().getString(IDS_PLAYER_ENTERED_END);
-            iPos = message.find(L"%s");
+            iPos = message.find("%s");
             message.replace(iPos, 2, playerDisplayName);
             break;
         case ChatPacket::e_ChatPlayerLeftEnd:
             message = gameServices().getString(IDS_PLAYER_LEFT_END);
-            iPos = message.find(L"%s");
+            iPos = message.find("%s");
             message.replace(iPos, 2, playerDisplayName);
             break;
 
@@ -1820,10 +1820,10 @@ void ClientConnection::handleChat(std::shared_ptr<ChatPacket> packet) {
             replacePlayer = true;
             if (packet->m_intArgs[0] == eTYPE_SERVERPLAYER) {
                 message =
-                    replaceAll(message, L"{*DESTINATION*}", sourceDisplayName);
+                    replaceAll(message, "{*DESTINATION*}", sourceDisplayName);
             } else {
                 message = replaceAll(
-                    message, L"{*DESTINATION*}",
+                    message, "{*DESTINATION*}",
                     gameServices().getEntityName((EntityTypeId)packet->m_intArgs[0]));
             }
             break;
@@ -1842,14 +1842,14 @@ void ClientConnection::handleChat(std::shared_ptr<ChatPacket> packet) {
     }
 
     if (replacePlayer) {
-        message = replaceAll(message, L"{*PLAYER*}", playerDisplayName);
+        message = replaceAll(message, "{*PLAYER*}", playerDisplayName);
     }
 
     if (replaceEntitySource) {
         if (packet->m_intArgs[0] == eTYPE_SERVERPLAYER) {
-            message = replaceAll(message, L"{*SOURCE*}", sourceDisplayName);
+            message = replaceAll(message, "{*SOURCE*}", sourceDisplayName);
         } else {
-            std::wstring entityName;
+            std::string entityName;
 
             // Check for a custom mob name
             if (packet->m_stringArgs.size() >= 2 &&
@@ -1860,12 +1860,12 @@ void ClientConnection::handleChat(std::shared_ptr<ChatPacket> packet) {
                     gameServices().getEntityName((EntityTypeId)packet->m_intArgs[0]);
             }
 
-            message = replaceAll(message, L"{*SOURCE*}", entityName);
+            message = replaceAll(message, "{*SOURCE*}", entityName);
         }
     }
 
     if (replaceItem) {
-        message = replaceAll(message, L"{*ITEM*}", packet->m_stringArgs[2]);
+        message = replaceAll(message, "{*ITEM*}", packet->m_stringArgs[2]);
     }
 
     // flag that a message is a death message
@@ -2058,7 +2058,7 @@ void ClientConnection::handlePreLogin(std::shared_ptr<PreLoginPacket> packet) {
         PlatformProfile.AllowedPlayerCreatedContent(
             m_userIndex, true, &allAllowed, &friendsAllowed);
         fprintf(stderr,
-                "[LOGIN] Sending LoginPacket: user=%ls netVer=%d userIdx=%d "
+                "[LOGIN] Sending LoginPacket: user=%s netVer=%d userIdx=%d "
                 "isHost=%d\n",
                 minecraft->user->name.c_str(),
                 SharedConstants::NETWORK_PROTOCOL_VERSION, m_userIndex,
@@ -2263,7 +2263,7 @@ void ClientConnection::handleTexture(std::shared_ptr<TexturePacket> packet) {
     if (packet->dataBytes == 0) {
         // Request for texture
 #if !defined(_CONTENT_PACKAGE)
-        wprintf(L"Client received request for custom texture %ls\n",
+        printf("Client received request for custom texture %s\n",
                 packet->textureName.c_str());
 #endif
         std::uint8_t* pbData = nullptr;
@@ -2277,7 +2277,7 @@ void ClientConnection::handleTexture(std::shared_ptr<TexturePacket> packet) {
     } else {
         // Response with texture data
 #if !defined(_CONTENT_PACKAGE)
-        wprintf(L"Client received custom texture %ls\n",
+        printf("Client received custom texture %s\n",
                 packet->textureName.c_str());
 #endif
         gameServices().addMemoryTextureFile(packet->textureName, packet->pbData,
@@ -2297,8 +2297,8 @@ void ClientConnection::handleTextureAndGeometry(
     if (packet->dwTextureBytes == 0) {
         // Request for texture
 #if !defined(_CONTENT_PACKAGE)
-        wprintf(
-            L"Client received request for custom texture and geometry %ls\n",
+        printf(
+            "Client received request for custom texture and geometry %s\n",
             packet->textureName.c_str());
 #endif
         std::uint8_t* pbData = nullptr;
@@ -2333,7 +2333,7 @@ void ClientConnection::handleTextureAndGeometry(
     } else {
         // Response with texture data
 #if !defined(_CONTENT_PACKAGE)
-        wprintf(L"Client received custom TextureAndGeometry %ls\n",
+        printf("Client received custom TextureAndGeometry %s\n",
                 packet->textureName.c_str());
 #endif
         // Add the texture data
@@ -2375,7 +2375,7 @@ void ClientConnection::handleTextureChange(
         case TextureChangePacket::e_TextureChange_Skin:
             player->setCustomSkin(gameServices().getSkinIdFromPath(packet->path));
 #if !defined(_CONTENT_PACKAGE)
-            wprintf(L"Skin for remote player %ls has changed to %ls (%d)\n",
+            printf("Skin for remote player %s has changed to %s (%d)\n",
                     player->name.c_str(), player->customTextureUrl.c_str(),
                     player->getPlayerDefaultSkin());
 #endif
@@ -2384,20 +2384,20 @@ void ClientConnection::handleTextureChange(
             player->setCustomCape(Player::getCapeIdFromPath(packet->path));
             // player->customTextureUrl2 = packet->path;
 #if !defined(_CONTENT_PACKAGE)
-            wprintf(L"Cape for remote player %ls has changed to %ls\n",
+            printf("Cape for remote player %s has changed to %s\n",
                     player->name.c_str(), player->customTextureUrl2.c_str());
 #endif
             break;
     }
 
     if (!packet->path.empty() &&
-        packet->path.substr(0, 3).compare(L"def") != 0 &&
+        packet->path.substr(0, 3).compare("def") != 0 &&
         !gameServices().isFileInMemoryTextures(packet->path)) {
         if (minecraft->addPendingClientTextureRequest(packet->path)) {
 #if !defined(_CONTENT_PACKAGE)
-            wprintf(
-                L"handleTextureChange - Client sending texture packet to get "
-                L"custom skin %ls for player %ls\n",
+            printf(
+                "handleTextureChange - Client sending texture packet to get "
+                "custom skin %s for player %s\n",
                 packet->path.c_str(), player->name.c_str());
 #endif
             send(std::shared_ptr<TexturePacket>(
@@ -2431,20 +2431,20 @@ void ClientConnection::handleTextureAndGeometryChange(
     player->setCustomSkin(gameServices().getSkinIdFromPath(packet->path));
 
 #if !defined(_CONTENT_PACKAGE)
-    wprintf(L"Skin for remote player %ls has changed to %ls (%d)\n",
+    printf("Skin for remote player %s has changed to %s (%d)\n",
             player->name.c_str(), player->customTextureUrl.c_str(),
             player->getPlayerDefaultSkin());
 #endif
 
     if (!packet->path.empty() &&
-        packet->path.substr(0, 3).compare(L"def") != 0 &&
+        packet->path.substr(0, 3).compare("def") != 0 &&
         !gameServices().isFileInMemoryTextures(packet->path)) {
         if (minecraft->addPendingClientTextureRequest(packet->path)) {
 #if !defined(_CONTENT_PACKAGE)
-            wprintf(
-                L"handleTextureAndGeometryChange - Client sending "
-                L"TextureAndGeometryPacket to get custom skin %ls for player "
-                L"%ls\n",
+            printf(
+                "handleTextureAndGeometryChange - Client sending "
+                "TextureAndGeometryPacket to get custom skin %s for player "
+                "%s\n",
                 packet->path.c_str(), player->name.c_str());
 #endif
             send(std::shared_ptr<TextureAndGeometryPacket>(
@@ -2710,7 +2710,7 @@ void ClientConnection::handleContainerOpen(
             if (player->startEnchanting(
                     std::floor(player->x), std::floor(player->y),
                     std::floor(player->z),
-                    packet->customName ? packet->title : L"")) {
+                    packet->customName ? packet->title : "")) {
                 player->containerMenu->containerId = packet->containerId;
             } else {
                 failed = true;
@@ -2722,7 +2722,7 @@ void ClientConnection::handleContainerOpen(
                     new ClientSideMerchant(player, packet->title));
             csm->createContainer();
             if (player->openTrading(csm,
-                                    packet->customName ? packet->title : L"")) {
+                                    packet->customName ? packet->title : "")) {
                 player->containerMenu->containerId = packet->containerId;
             } else {
                 failed = true;
@@ -3162,7 +3162,7 @@ void ClientConnection::displayPrivilegeChanges(
         if (Player::getPlayerGamePrivilege(newPrivileges, priv) !=
             Player::getPlayerGamePrivilege(oldPrivileges, priv)) {
             privOn = Player::getPlayerGamePrivilege(newPrivileges, priv);
-            std::wstring message = L"";
+            std::string message = "";
             if (gameServices().getGameHostOption(eGameHostOption_TrustPlayers) == 0) {
                 switch (priv) {
                     case Player::ePlayerGamePrivilege_CannotMine:
@@ -3402,9 +3402,9 @@ void ClientConnection::handleUpdateProgress(
 
 void ClientConnection::handleUpdateGameRuleProgressPacket(
     std::shared_ptr<UpdateGameRuleProgressPacket> packet) {
-    const wchar_t* string = gameServices().getGameRulesString(packet->m_messageId);
+    const char* string = gameServices().getGameRulesString(packet->m_messageId);
     if (string != nullptr) {
-        std::wstring message(string);
+        std::string message(string);
         message = GameRuleDefinition::generateDescriptionString(
             packet->m_definitionType, message, packet->m_data.data(),
             packet->m_data.size());
@@ -3437,7 +3437,7 @@ int ClientConnection::HostDisconnectReturned(
 
         DLCPack* pDLCPack =
             pDLCTexPack->getDLCInfoParentPack();  // tPack->getDLCPack();
-        if (!pDLCPack->hasPurchasedFile(DLCManager::e_DLCType_Texture, L"")) {
+        if (!pDLCPack->hasPurchasedFile(DLCManager::e_DLCType_Texture, "")) {
             // no upsell, we're about to quit
             MinecraftServer::getInstance()->setSaveOnExit(false);
             // flag a app action of exit game
@@ -3487,7 +3487,7 @@ int ClientConnection::ExitGameAndSaveReturned(
 }
 
 //
-std::wstring ClientConnection::GetDisplayNameByGamertag(std::wstring gamertag) {
+std::string ClientConnection::GetDisplayNameByGamertag(std::string gamertag) {
     return gamertag;
 }
 

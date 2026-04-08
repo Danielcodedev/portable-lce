@@ -130,7 +130,7 @@ private:
     UI_MAP_ELEMENT(m_labels[eHowToPlay_LabelDropperText], "Label1_28")
     UI_MAP_ELEMENT(m_labels[eHowToPlay_LabelDropperInventory], "Label2_28")
 
-    UI_MAP_NAME(m_funcLoadPage, L"LoadHowToPlayPage")
+    UI_MAP_NAME(m_funcLoadPage, "LoadHowToPlayPage")
     UI_END_MAP_ELEMENTS_AND_NAMES()
 public:
     UIScene_HowToPlay(int iPad, void* initData, UILayer* parentLayer);
@@ -140,7 +140,7 @@ public:
 
 protected:
     // TODO: This should be pure virtual in this class
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
 
 public:
     virtual void handleReload();

@@ -81,7 +81,7 @@ private:
 
     std::uint8_t* m_pbThumbnailData;
     unsigned int m_uiThumbnailSize;
-    std::wstring m_thumbnailName;
+    std::string m_thumbnailName;
 
     bool m_bRebuildTouchBoxes;
 
@@ -101,7 +101,7 @@ public:
 
 protected:
     // TODO: This should be pure virtual in this class
-    virtual std::wstring getMoviePath();
+    virtual std::string getMoviePath();
 
 public:
     // INPUT

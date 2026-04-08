@@ -23,8 +23,8 @@ public:
 
     virtual void writeAttributes(DataOutputStream* dos,
                                  unsigned int numAttributes);
-    virtual void addAttribute(const std::wstring& attributeName,
-                              const std::wstring& attributeValue);
+    virtual void addAttribute(const std::string& attributeName,
+                              const std::string& attributeValue);
 
     virtual bool onUseTile(GameRule* rule, int tileId, int x, int y, int z);
 };

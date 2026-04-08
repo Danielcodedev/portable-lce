@@ -65,8 +65,8 @@ void ApplySchematicRuleDefinition::writeAttributes(DataOutputStream* dos,
 }
 
 void ApplySchematicRuleDefinition::addAttribute(
-    const std::wstring& attributeName, const std::wstring& attributeValue) {
-    if (attributeName.compare(L"filename") == 0) {
+    const std::string& attributeName, const std::string& attributeValue) {
+    if (attributeName.compare("filename") == 0) {
         m_schematicName = attributeValue;
         // app.DebugPrintf("ApplySchematicRuleDefinition: Adding parameter
         // filename=%s\n",m_schematicName.c_str());
@@ -75,28 +75,28 @@ void ApplySchematicRuleDefinition::addAttribute(
             if (m_schematicName
                     .substr(m_schematicName.length() - 4,
                             m_schematicName.length())
-                    .compare(L".sch") != 0) {
-                m_schematicName.append(L".sch");
+                    .compare(".sch") != 0) {
+                m_schematicName.append(".sch");
             }
             m_schematic = m_levelGenOptions->getSchematicFile(m_schematicName);
         }
-    } else if (attributeName.compare(L"x") == 0) {
+    } else if (attributeName.compare("x") == 0) {
         m_location.x = fromWString<int>(attributeValue);
         if (((int)std::abs(m_location.x)) % 2 != 0) m_location.x -= 1;
         // app.DebugPrintf("ApplySchematicRuleDefinition: Adding parameter
         // x=%f\n",m_location->x);
-    } else if (attributeName.compare(L"y") == 0) {
+    } else if (attributeName.compare("y") == 0) {
         m_location.y = fromWString<int>(attributeValue);
         if (((int)std::abs(m_location.y)) % 2 != 0) m_location.y -= 1;
         if (m_location.y < 0) m_location.y = 0;
         // app.DebugPrintf("ApplySchematicRuleDefinition: Adding parameter
         // y=%f\n",m_location->y);
-    } else if (attributeName.compare(L"z") == 0) {
+    } else if (attributeName.compare("z") == 0) {
         m_location.z = fromWString<int>(attributeValue);
         if (((int)std::abs(m_location.z)) % 2 != 0) m_location.z -= 1;
         // app.DebugPrintf("ApplySchematicRuleDefinition: Adding parameter
         // z=%f\n",m_location->z);
-    } else if (attributeName.compare(L"rot") == 0) {
+    } else if (attributeName.compare("rot") == 0) {
         int degrees = fromWString<int>(attributeValue);
 
         while (degrees < 0) degrees += 360;
@@ -122,7 +122,7 @@ void ApplySchematicRuleDefinition::addAttribute(
 
         // app.DebugPrintf("ApplySchematicRuleDefinition: Adding parameter
         // rot=%d\n",m_rotation);
-    } else if (attributeName.compare(L"dim") == 0) {
+    } else if (attributeName.compare("dim") == 0) {
         m_dimension = fromWString<int>(attributeValue);
         if (m_dimension > 1 || m_dimension < -1) m_dimension = 0;
         // app.DebugPrintf("ApplySchematicRuleDefinition: Adding parameter
@@ -173,7 +173,7 @@ void ApplySchematicRuleDefinition::processSchematic(AABB* chunkBox,
             std::min((double)Level::maxBuildHeight, m_locationBox->y1);
 
 #ifdef _DEBUG
-        app.DebugPrintf("Applying schematic %ls to chunk (%d,%d)\n",
+        app.DebugPrintf("Applying schematic %s to chunk (%d,%d)\n",
                         m_schematicName.c_str(), chunk->x, chunk->z);
 #endif
         m_totalBlocksChanged += m_schematic->applyBlocksAndData(
@@ -211,7 +211,7 @@ void ApplySchematicRuleDefinition::processSchematicLighting(AABB* chunkBox,
             std::min((double)Level::maxBuildHeight, m_locationBox->y1);
 
 #ifdef _DEBUG
-        app.DebugPrintf("Applying schematic %ls to chunk (%d,%d)\n",
+        app.DebugPrintf("Applying schematic %s to chunk (%d,%d)\n",
                         m_schematicName.c_str(), chunk->x, chunk->z);
 #endif
         m_totalBlocksChangedLighting += m_schematic->applyLighting(

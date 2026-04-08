@@ -18,13 +18,13 @@ UIScene_SettingsAudioMenu::UIScene_SettingsAudioMenu(int iPad, void* initData,
     // Setup all the Iggy references we need for this scene
     initialiseMovie();
 
-    wchar_t TempString[256];
-    swprintf(TempString, 256, L"%ls: %d%%", app.GetString(IDS_SLIDER_MUSIC),
+    char TempString[256];
+    snprintf(TempString, 256, "%s: %d%%", app.GetString(IDS_SLIDER_MUSIC),
              app.GetGameSettings(m_iPad, eGameSetting_MusicVolume));
     m_sliderMusic.init(TempString, eControl_Music, 0, 100,
                        app.GetGameSettings(m_iPad, eGameSetting_MusicVolume));
 
-    swprintf(TempString, 256, L"%ls: %d%%", app.GetString(IDS_SLIDER_SOUND),
+    snprintf(TempString, 256, "%s: %d%%", app.GetString(IDS_SLIDER_SOUND),
              app.GetGameSettings(m_iPad, eGameSetting_SoundFXVolume));
     m_sliderSound.init(TempString, eControl_Sound, 0, 100,
                        app.GetGameSettings(m_iPad, eGameSetting_SoundFXVolume));
@@ -40,11 +40,11 @@ UIScene_SettingsAudioMenu::UIScene_SettingsAudioMenu(int iPad, void* initData,
 
 UIScene_SettingsAudioMenu::~UIScene_SettingsAudioMenu() {}
 
-std::wstring UIScene_SettingsAudioMenu::getMoviePath() {
+std::string UIScene_SettingsAudioMenu::getMoviePath() {
     if (app.GetLocalPlayerCount() > 1) {
-        return L"SettingsAudioMenuSplit";
+        return "SettingsAudioMenuSplit";
     } else {
-        return L"SettingsAudioMenu";
+        return "SettingsAudioMenu";
     }
 }
 
@@ -95,14 +95,14 @@ void UIScene_SettingsAudioMenu::handleInput(int iPad, int key, bool repeat,
 
 void UIScene_SettingsAudioMenu::handleSliderMove(F64 sliderId,
                                                  F64 currentValue) {
-    wchar_t TempString[256];
+    char TempString[256];
     int value = (int)currentValue;
     switch ((int)sliderId) {
         case eControl_Music:
             m_sliderMusic.handleSliderMove(value);
 
             app.SetGameSettings(m_iPad, eGameSetting_MusicVolume, value);
-            swprintf(TempString, 256, L"%ls: %d%%",
+            snprintf(TempString, 256, "%s: %d%%",
                      app.GetString(IDS_SLIDER_MUSIC), value);
             m_sliderMusic.setLabel(TempString);
 
@@ -111,7 +111,7 @@ void UIScene_SettingsAudioMenu::handleSliderMove(F64 sliderId,
             m_sliderSound.handleSliderMove(value);
 
             app.SetGameSettings(m_iPad, eGameSetting_SoundFXVolume, value);
-            swprintf(TempString, 256, L"%ls: %d%%",
+            snprintf(TempString, 256, "%s: %d%%",
                      app.GetString(IDS_SLIDER_SOUND), value);
             m_sliderSound.setLabel(TempString);
 

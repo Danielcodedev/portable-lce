@@ -13,10 +13,10 @@
 #include "minecraft/world/scores/PlayerTeam.h"
 
 SetPlayerTeamPacket::SetPlayerTeamPacket() {
-    name = L"";
-    displayName = L"";
-    prefix = L"";
-    suffix = L"";
+    name = "";
+    displayName = "";
+    prefix = "";
+    suffix = "";
     method = 0;
     options = 0;
 }
@@ -32,13 +32,13 @@ SetPlayerTeamPacket::SetPlayerTeamPacket(PlayerTeam* team, int method) {
         options = team->packOptions();
     }
     if (method == METHOD_ADD) {
-        std::unordered_set<std::wstring>* playerNames = team->getPlayers();
+        std::unordered_set<std::string>* playerNames = team->getPlayers();
         players.insert(players.end(), playerNames->begin(), playerNames->end());
     }
 }
 
 SetPlayerTeamPacket::SetPlayerTeamPacket(PlayerTeam* team,
-                                         std::vector<std::wstring>* playerNames,
+                                         std::vector<std::string>* playerNames,
                                          int method) {
     if (method != METHOD_JOIN && method != METHOD_LEAVE) {
         Log::info("Method must be join or leave for player constructor");

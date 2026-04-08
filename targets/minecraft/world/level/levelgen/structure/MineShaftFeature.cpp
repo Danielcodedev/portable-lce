@@ -16,14 +16,14 @@
 #include "minecraft/util/Mth.h"
 #include "minecraft/world/level/levelgen/structure/MineShaftStart.h"
 
-const std::wstring MineShaftFeature::OPTION_CHANCE = L"chance";
+const std::string MineShaftFeature::OPTION_CHANCE = "chance";
 
 MineShaftFeature::MineShaftFeature() { chance = 0.01; }
 
-std::wstring MineShaftFeature::getFeatureName() { return L"Mineshaft"; }
+std::string MineShaftFeature::getFeatureName() { return "Mineshaft"; }
 
 MineShaftFeature::MineShaftFeature(
-    std::unordered_map<std::wstring, std::wstring> options) {
+    std::unordered_map<std::string, std::string> options) {
     chance = 0.01;
 
     for (auto it = options.begin(); it != options.end(); ++it) {

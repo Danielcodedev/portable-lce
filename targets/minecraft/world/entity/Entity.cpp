@@ -51,7 +51,7 @@
 
 thread_local bool Entity::m_tlsUseSmallIds = false;
 
-const std::wstring Entity::RIDING_TAG = L"Riding";
+const std::string Entity::RIDING_TAG = "Riding";
 int Entity::entityCounter =
     2048;  // 4J - changed initialiser to 2048, as we are using range 0 - 2047
            // as special unique smaller ids for things that need network tracked
@@ -353,7 +353,7 @@ void Entity::_init(bool useSmallId, Level* level) {
     portalEntranceDir = 0;
     invulnerable = false;
     if (useSmallId) {
-        uuid = L"ent" + Mth::createInsecureUUID(random);
+        uuid = "ent" + Mth::createInsecureUUID(random);
     }
 
     // 4J Added
@@ -1233,56 +1233,56 @@ bool Entity::shouldRenderAtSqrDistance(double distance) {
 bool Entity::isCreativeModeAllowed() { return false; }
 
 bool Entity::saveAsMount(CompoundTag* entityTag) {
-    std::wstring id = getEncodeId();
+    std::string id = getEncodeId();
     if (removed || id.empty()) {
         return false;
     }
     // TODO Is this fine to be casting to a non-const char pointer?
-    entityTag->putString(L"id", id);
+    entityTag->putString("id", id);
     saveWithoutId(entityTag);
     return true;
 }
 
 bool Entity::save(CompoundTag* entityTag) {
-    std::wstring id = getEncodeId();
+    std::string id = getEncodeId();
     if (removed || id.empty() || (rider.lock() != nullptr)) {
         return false;
     }
     // TODO Is this fine to be casting to a non-const char pointer?
-    entityTag->putString(L"id", id);
+    entityTag->putString("id", id);
     saveWithoutId(entityTag);
     return true;
 }
 
 void Entity::saveWithoutId(CompoundTag* entityTag) {
-    entityTag->put(L"Pos", newDoubleList(3, x, y + ySlideOffset, z));
-    entityTag->put(L"Motion", newDoubleList(3, xd, yd, zd));
-    entityTag->put(L"Rotation", newFloatList(2, yRot, xRot));
+    entityTag->put("Pos", newDoubleList(3, x, y + ySlideOffset, z));
+    entityTag->put("Motion", newDoubleList(3, xd, yd, zd));
+    entityTag->put("Rotation", newFloatList(2, yRot, xRot));
 
-    entityTag->putFloat(L"FallDistance", fallDistance);
-    entityTag->putShort(L"Fire", (short)onFire);
-    entityTag->putShort(L"Air", (short)getAirSupply());
-    entityTag->putBoolean(L"OnGround", onGround);
-    entityTag->putInt(L"Dimension", dimension);
-    entityTag->putBoolean(L"Invulnerable", invulnerable);
-    entityTag->putInt(L"PortalCooldown", changingDimensionDelay);
+    entityTag->putFloat("FallDistance", fallDistance);
+    entityTag->putShort("Fire", (short)onFire);
+    entityTag->putShort("Air", (short)getAirSupply());
+    entityTag->putBoolean("OnGround", onGround);
+    entityTag->putInt("Dimension", dimension);
+    entityTag->putBoolean("Invulnerable", invulnerable);
+    entityTag->putInt("PortalCooldown", changingDimensionDelay);
 
-    entityTag->putString(L"UUID", uuid);
+    entityTag->putString("UUID", uuid);
 
     addAdditonalSaveData(entityTag);
 
     if (riding != nullptr) {
         CompoundTag* ridingTag = new CompoundTag(RIDING_TAG);
         if (riding->saveAsMount(ridingTag)) {
-            entityTag->put(L"Riding", ridingTag);
+            entityTag->put("Riding", ridingTag);
         }
     }
 }
 
 void Entity::load(CompoundTag* tag) {
-    ListTag<DoubleTag>* pos = (ListTag<DoubleTag>*)tag->getList(L"Pos");
-    ListTag<DoubleTag>* motion = (ListTag<DoubleTag>*)tag->getList(L"Motion");
-    ListTag<FloatTag>* rotation = (ListTag<FloatTag>*)tag->getList(L"Rotation");
+    ListTag<DoubleTag>* pos = (ListTag<DoubleTag>*)tag->getList("Pos");
+    ListTag<DoubleTag>* motion = (ListTag<DoubleTag>*)tag->getList("Motion");
+    ListTag<FloatTag>* rotation = (ListTag<FloatTag>*)tag->getList("Rotation");
 
     xd = motion->get(0)->data;
     yd = motion->get(1)->data;
@@ -1305,16 +1305,16 @@ void Entity::load(CompoundTag* tag) {
     yRotO = yRot = rotation->get(0)->data;
     xRotO = xRot = rotation->get(1)->data;
 
-    fallDistance = tag->getFloat(L"FallDistance");
-    onFire = tag->getShort(L"Fire");
-    setAirSupply(tag->getShort(L"Air"));
-    onGround = tag->getBoolean(L"OnGround");
-    dimension = tag->getInt(L"Dimension");
-    invulnerable = tag->getBoolean(L"Invulnerable");
-    changingDimensionDelay = tag->getInt(L"PortalCooldown");
+    fallDistance = tag->getFloat("FallDistance");
+    onFire = tag->getShort("Fire");
+    setAirSupply(tag->getShort("Air"));
+    onGround = tag->getBoolean("OnGround");
+    dimension = tag->getInt("Dimension");
+    invulnerable = tag->getBoolean("Invulnerable");
+    changingDimensionDelay = tag->getInt("PortalCooldown");
 
-    if (tag->contains(L"UUID")) {
-        uuid = tag->getString(L"UUID");
+    if (tag->contains("UUID")) {
+        uuid = tag->getString("UUID");
     }
 
     setPos(x, y, z);
@@ -1328,7 +1328,7 @@ void Entity::load(CompoundTag* tag) {
 
 bool Entity::repositionEntityAfterLoad() { return true; }
 
-const std::wstring Entity::getEncodeId() {
+const std::string Entity::getEncodeId() {
     return EntityIO::getEncodeId(shared_from_this());
 }
 
@@ -1343,7 +1343,7 @@ ListTag<DoubleTag>* Entity::newDoubleList(unsigned int number,
     ListTag<DoubleTag>* res = new ListTag<DoubleTag>();
 
     // Add the first parameter to the ListTag
-    res->add(new DoubleTag(L"", firstValue));
+    res->add(new DoubleTag("", firstValue));
 
     va_list vl;
     va_start(vl, firstValue);
@@ -1352,7 +1352,7 @@ ListTag<DoubleTag>* Entity::newDoubleList(unsigned int number,
 
     for (unsigned int i = 1; i < number; i++) {
         val = va_arg(vl, double);
-        res->add(new DoubleTag(L"", val));
+        res->add(new DoubleTag("", val));
     }
 
     va_end(vl);
@@ -1365,12 +1365,12 @@ ListTag<FloatTag>* Entity::newFloatList(unsigned int number, float firstValue,
     ListTag<FloatTag>* res = new ListTag<FloatTag>();
 
     // Add the first parameter to the ListTag
-    res->add(new FloatTag(L"", firstValue));
+    res->add(new FloatTag("", firstValue));
 
     // TODO - 4J Stu For some reason the va_list wasn't working correctly here
     // We only make a list of two floats so just overriding and not using
     // va_list
-    res->add(new FloatTag(L"", secondValue));
+    res->add(new FloatTag("", secondValue));
 
     /*
     va_list vl;
@@ -1728,13 +1728,13 @@ void Entity::makeStuckInWeb() {
     fallDistance = 0;
 }
 
-std::wstring Entity::getAName() {
+std::string Entity::getAName() {
 #ifdef _DEBUG
-    std::wstring id = EntityIO::getEncodeId(shared_from_this());
-    if (id.empty()) id = L"generic";
-    return L"entity." + id + toWString(entityId);
+    std::string id = EntityIO::getEncodeId(shared_from_this());
+    if (id.empty()) id = "generic";
+    return "entity." + id + toWString(entityId);
 #else
-    return L"";
+    return "";
 #endif
 }
 
@@ -1850,17 +1850,17 @@ bool Entity::isIgnoringTileTriggers() { return false; }
 
 bool Entity::displayFireAnimation() { return isOnFire(); }
 
-void Entity::setUUID(const std::wstring& UUID) { uuid = UUID; }
+void Entity::setUUID(const std::string& UUID) { uuid = UUID; }
 
-std::wstring Entity::getUUID() { return uuid; }
+std::string Entity::getUUID() { return uuid; }
 
 bool Entity::isPushedByWater() { return true; }
 
-std::wstring Entity::getDisplayName() { return getAName(); }
+std::string Entity::getDisplayName() { return getAName(); }
 
 // 4J: Added to retrieve name that should be sent in ChatPackets (important on
 // Xbox One for players)
-std::wstring Entity::getNetworkName() { return getDisplayName(); }
+std::string Entity::getNetworkName() { return getDisplayName(); }
 
 void Entity::setAnimOverrideBitmask(unsigned int uiBitmask) {
     m_uiAnimOverrideBitmask = uiBitmask;

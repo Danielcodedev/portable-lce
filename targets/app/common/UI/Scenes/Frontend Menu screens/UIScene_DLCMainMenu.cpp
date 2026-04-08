@@ -27,7 +27,7 @@ UIScene_DLCMainMenu::UIScene_DLCMainMenu(int iPad, void* initData,
     m_buttonListOffers.init(eControl_OffersList);
 
     if (m_loadedResolution == eSceneResolution_1080) {
-        m_labelXboxStore.init(L"");
+        m_labelXboxStore.init("");
     }
 }
 
@@ -37,7 +37,7 @@ UIScene_DLCMainMenu::~UIScene_DLCMainMenu() {
     app.SetLiveLinkRequired(false);
 }
 
-std::wstring UIScene_DLCMainMenu::getMoviePath() { return L"DLCMainMenu"; }
+std::string UIScene_DLCMainMenu::getMoviePath() { return "DLCMainMenu"; }
 
 void UIScene_DLCMainMenu::updateTooltips() {
     ui.SetTooltips(m_iPad, IDS_TOOLTIPS_SELECT, IDS_TOOLTIPS_BACK);

@@ -32,8 +32,8 @@ public:
     virtual int GetUserIndex() = 0;
     virtual void SetSocket(Socket* pSocket) = 0;
     virtual Socket* GetSocket() = 0;
-    virtual const wchar_t* GetOnlineName() = 0;
-    virtual std::wstring GetDisplayName() = 0;
+    virtual const char* GetOnlineName() = 0;
+    virtual std::string GetDisplayName() = 0;
     virtual unsigned long long GetUID() = 0;
     virtual void SentChunkPacket() = 0;
     virtual int GetTimeSinceLastChunkPacket_ms() = 0;

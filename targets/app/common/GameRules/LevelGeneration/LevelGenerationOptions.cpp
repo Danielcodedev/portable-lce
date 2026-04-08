@@ -37,12 +37,12 @@
 #include "util/StringHelpers.h"
 
 JustGrSource::JustGrSource() {
-    m_displayName = L"Default_DisplayName";
-    m_worldName = L"Default_WorldName";
-    m_defaultSaveName = L"Default_DefaultSaveName";
+    m_displayName = "Default_DisplayName";
+    m_worldName = "Default_WorldName";
+    m_defaultSaveName = "Default_DefaultSaveName";
     m_bRequiresTexturePack = false;
     m_requiredTexturePackId = 0;
-    m_grfPath = L"__NO_GRF_PATH__";
+    m_grfPath = "__NO_GRF_PATH__";
     m_bRequiresBaseSave = false;
 }
 
@@ -50,12 +50,12 @@ bool JustGrSource::requiresTexturePack() { return m_bRequiresTexturePack; }
 std::uint32_t JustGrSource::getRequiredTexturePackId() {
     return m_requiredTexturePackId;
 }
-std::wstring JustGrSource::getDefaultSaveName() { return m_defaultSaveName; }
-const wchar_t* JustGrSource::getWorldName() { return m_worldName.c_str(); }
-const wchar_t* JustGrSource::getDisplayName() { return m_displayName.c_str(); }
-std::wstring JustGrSource::getGrfPath() { return m_grfPath; }
+std::string JustGrSource::getDefaultSaveName() { return m_defaultSaveName; }
+const char* JustGrSource::getWorldName() { return m_worldName.c_str(); }
+const char* JustGrSource::getDisplayName() { return m_displayName.c_str(); }
+std::string JustGrSource::getGrfPath() { return m_grfPath; }
 bool JustGrSource::requiresBaseSave() { return m_bRequiresBaseSave; };
-std::wstring JustGrSource::getBaseSavePath() { return m_baseSavePath; };
+std::string JustGrSource::getBaseSavePath() { return m_baseSavePath; };
 
 void JustGrSource::setRequiresTexturePack(bool x) {
     m_bRequiresTexturePack = x;
@@ -63,13 +63,13 @@ void JustGrSource::setRequiresTexturePack(bool x) {
 void JustGrSource::setRequiredTexturePackId(std::uint32_t x) {
     m_requiredTexturePackId = x;
 }
-void JustGrSource::setDefaultSaveName(const std::wstring& x) {
+void JustGrSource::setDefaultSaveName(const std::string& x) {
     m_defaultSaveName = x;
 }
-void JustGrSource::setWorldName(const std::wstring& x) { m_worldName = x; }
-void JustGrSource::setDisplayName(const std::wstring& x) { m_displayName = x; }
-void JustGrSource::setGrfPath(const std::wstring& x) { m_grfPath = x; }
-void JustGrSource::setBaseSavePath(const std::wstring& x) {
+void JustGrSource::setWorldName(const std::string& x) { m_worldName = x; }
+void JustGrSource::setDisplayName(const std::string& x) { m_displayName = x; }
+void JustGrSource::setGrfPath(const std::string& x) { m_grfPath = x; }
+void JustGrSource::setBaseSavePath(const std::string& x) {
     m_baseSavePath = x;
     m_bRequiresBaseSave = true;
 }
@@ -179,88 +179,88 @@ GameRuleDefinition* LevelGenerationOptions::addChild(
         m_features.push_back((StartFeature*)rule);
     } else {
 #if !defined(_CONTENT_PACKAGE)
-        wprintf(
-            L"LevelGenerationOptions: Attempted to add invalid child rule - "
-            L"%d\n",
+        printf(
+            "LevelGenerationOptions: Attempted to add invalid child rule - "
+            "%d\n",
             ruleType);
 #endif
     }
     return rule;
 }
 
-void LevelGenerationOptions::addAttribute(const std::wstring& attributeName,
-                                          const std::wstring& attributeValue) {
-    if (attributeName.compare(L"seed") == 0) {
+void LevelGenerationOptions::addAttribute(const std::string& attributeName,
+                                          const std::string& attributeValue) {
+    if (attributeName.compare("seed") == 0) {
         m_seed = fromWString<int64_t>(attributeValue);
         app.DebugPrintf(
             "LevelGenerationOptions: Adding parameter m_seed=%I64d\n", m_seed);
-    } else if (attributeName.compare(L"spawnX") == 0) {
+    } else if (attributeName.compare("spawnX") == 0) {
         if (m_spawnPos == nullptr) m_spawnPos = new Pos();
         int value = fromWString<int>(attributeValue);
         m_spawnPos->x = value;
         app.DebugPrintf("LevelGenerationOptions: Adding parameter spawnX=%d\n",
                         value);
-    } else if (attributeName.compare(L"spawnY") == 0) {
+    } else if (attributeName.compare("spawnY") == 0) {
         if (m_spawnPos == nullptr) m_spawnPos = new Pos();
         int value = fromWString<int>(attributeValue);
         m_spawnPos->y = value;
         app.DebugPrintf("LevelGenerationOptions: Adding parameter spawnY=%d\n",
                         value);
-    } else if (attributeName.compare(L"spawnZ") == 0) {
+    } else if (attributeName.compare("spawnZ") == 0) {
         if (m_spawnPos == nullptr) m_spawnPos = new Pos();
         int value = fromWString<int>(attributeValue);
         m_spawnPos->z = value;
         app.DebugPrintf("LevelGenerationOptions: Adding parameter spawnZ=%d\n",
                         value);
-    } else if (attributeName.compare(L"flatworld") == 0) {
-        if (attributeValue.compare(L"true") == 0) m_useFlatWorld = true;
+    } else if (attributeName.compare("flatworld") == 0) {
+        if (attributeValue.compare("true") == 0) m_useFlatWorld = true;
         app.DebugPrintf(
             "LevelGenerationOptions: Adding parameter flatworld=%s\n",
             m_useFlatWorld ? "true" : "false");
-    } else if (attributeName.compare(L"saveName") == 0) {
-        std::wstring string(getString(attributeValue));
+    } else if (attributeName.compare("saveName") == 0) {
+        std::string string(getString(attributeValue));
         if (!string.empty())
             setDefaultSaveName(string);
         else
             setDefaultSaveName(attributeValue);
         app.DebugPrintf(
-            "LevelGenerationOptions: Adding parameter saveName=%ls\n",
+            "LevelGenerationOptions: Adding parameter saveName=%s\n",
             getDefaultSaveName().c_str());
-    } else if (attributeName.compare(L"worldName") == 0) {
-        std::wstring string(getString(attributeValue));
+    } else if (attributeName.compare("worldName") == 0) {
+        std::string string(getString(attributeValue));
         if (!string.empty())
             setWorldName(string);
         else
             setWorldName(attributeValue);
         app.DebugPrintf(
-            "LevelGenerationOptions: Adding parameter worldName=%ls\n",
+            "LevelGenerationOptions: Adding parameter worldName=%s\n",
             getWorldName());
-    } else if (attributeName.compare(L"displayName") == 0) {
-        std::wstring string(getString(attributeValue));
+    } else if (attributeName.compare("displayName") == 0) {
+        std::string string(getString(attributeValue));
         if (!string.empty())
             setDisplayName(string);
         else
             setDisplayName(attributeValue);
         app.DebugPrintf(
-            "LevelGenerationOptions: Adding parameter displayName=%ls\n",
+            "LevelGenerationOptions: Adding parameter displayName=%s\n",
             getDisplayName());
-    } else if (attributeName.compare(L"texturePackId") == 0) {
+    } else if (attributeName.compare("texturePackId") == 0) {
         setRequiredTexturePackId(fromWString<unsigned int>(attributeValue));
         setRequiresTexturePack(true);
         app.DebugPrintf(
             "LevelGenerationOptions: Adding parameter texturePackId=%0x\n",
             getRequiredTexturePackId());
-    } else if (attributeName.compare(L"isTutorial") == 0) {
-        if (attributeValue.compare(L"true") == 0) setSrc(eSrc_tutorial);
+    } else if (attributeName.compare("isTutorial") == 0) {
+        if (attributeValue.compare("true") == 0) setSrc(eSrc_tutorial);
         app.DebugPrintf(
             "LevelGenerationOptions: Adding parameter isTutorial=%s\n",
             isTutorial() ? "true" : "false");
-    } else if (attributeName.compare(L"baseSaveName") == 0) {
+    } else if (attributeName.compare("baseSaveName") == 0) {
         setBaseSavePath(attributeValue);
         app.DebugPrintf(
-            "LevelGenerationOptions: Adding parameter baseSaveName=%ls\n",
+            "LevelGenerationOptions: Adding parameter baseSaveName=%s\n",
             getBaseSavePath().c_str());
-    } else if (attributeName.compare(L"hasBeenInCreative") == 0) {
+    } else if (attributeName.compare("hasBeenInCreative") == 0) {
         bool value = fromWString<bool>(attributeValue);
         m_bHasBeenInCreative = value;
         app.DebugPrintf(
@@ -435,13 +435,13 @@ void LevelGenerationOptions::clearSchematics() {
 void LevelGenerationOptions::clearChunkRuleCache() { m_chunkRuleCache.clear(); }
 
 ConsoleSchematicFile* LevelGenerationOptions::loadSchematicFile(
-    const std::wstring& filename, std::uint8_t* pbData,
+    const std::string& filename, std::uint8_t* pbData,
     unsigned int dataLength) {
     // If we have already loaded this, just return
     auto it = m_schematics.find(filename);
     if (it != m_schematics.end()) {
 #if !defined(_CONTENT_PACKAGE)
-        wprintf(L"We have already loaded schematic file %ls\n",
+        printf("We have already loaded schematic file %s\n",
                 filename.c_str());
 #endif
         it->second->incrementRefCount();
@@ -461,7 +461,7 @@ ConsoleSchematicFile* LevelGenerationOptions::loadSchematicFile(
 }
 
 ConsoleSchematicFile* LevelGenerationOptions::getSchematicFile(
-    const std::wstring& filename) {
+    const std::string& filename) {
     ConsoleSchematicFile* schematic = nullptr;
     // If we have already loaded this, just return
     auto it = m_schematics.find(filename);
@@ -472,7 +472,7 @@ ConsoleSchematicFile* LevelGenerationOptions::getSchematicFile(
 }
 
 void LevelGenerationOptions::releaseSchematicFile(
-    const std::wstring& filename) {
+    const std::string& filename) {
     // 4J Stu - We don't want to delete them when done, but probably want to
     // keep a set of active schematics for the current world
     // auto it = m_schematics.find(filename);
@@ -492,9 +492,9 @@ void LevelGenerationOptions::loadStringTable(StringTable* table) {
     m_stringTable = table;
 }
 
-const wchar_t* LevelGenerationOptions::getString(const std::wstring& key) {
+const char* LevelGenerationOptions::getString(const std::string& key) {
     if (m_stringTable == nullptr) {
-        return L"";
+        return "";
     } else {
         return m_stringTable->getString(key);
     }
@@ -527,19 +527,19 @@ bool LevelGenerationOptions::isFeatureChunk(
     return isFeature;
 }
 
-std::unordered_map<std::wstring, ConsoleSchematicFile*>*
+std::unordered_map<std::string, ConsoleSchematicFile*>*
 LevelGenerationOptions::getUnfinishedSchematicFiles() {
     // Clean schematic rules.
-    std::unordered_set<std::wstring> usedFiles =
-        std::unordered_set<std::wstring>();
+    std::unordered_set<std::string> usedFiles =
+        std::unordered_set<std::string>();
     for (auto it = m_schematicRules.begin(); it != m_schematicRules.end(); it++)
         if (!(*it)->isComplete()) usedFiles.insert((*it)->getSchematicName());
 
     // Clean schematic files.
-    std::unordered_map<std::wstring, ConsoleSchematicFile*>* out =
-        new std::unordered_map<std::wstring, ConsoleSchematicFile*>();
+    std::unordered_map<std::string, ConsoleSchematicFile*>* out =
+        new std::unordered_map<std::string, ConsoleSchematicFile*>();
     for (auto it = usedFiles.begin(); it != usedFiles.end(); it++)
-        out->insert(std::pair<std::wstring, ConsoleSchematicFile*>(
+        out->insert(std::pair<std::string, ConsoleSchematicFile*>(
             *it, getSchematicFile(*it)));
 
     return out;
@@ -594,7 +594,7 @@ int LevelGenerationOptions::onPackMounted(int iPad, uint32_t dwErr,
             if (!dlcFile->getGrfPath().empty()) {
                 File grf(app.getFilePath(lgo->m_parentDLCPack->GetPackID(),
                                          dlcFile->getGrfPath(), true,
-                                         L"WPACK:"));
+                                         "WPACK:"));
                 if (grf.exists()) {
                     uint32_t dwFileSize = grf.length();
                     if (dwFileSize > 0) {
@@ -620,7 +620,7 @@ int LevelGenerationOptions::onPackMounted(int iPad, uint32_t dwErr,
         }
         if (lgo->requiresBaseSave() && !lgo->getBaseSavePath().empty()) {
             File save(app.getFilePath(lgo->m_parentDLCPack->GetPackID(),
-                                      lgo->getBaseSavePath(), true, L"WPACK:"));
+                                      lgo->getBaseSavePath(), true, "WPACK:"));
             if (save.exists()) {
                 std::size_t dwFileSize =
                     PlatformFilesystem.fileSize(save.getPath());
@@ -679,7 +679,7 @@ bool LevelGenerationOptions::requiresTexturePack() {
 std::uint32_t LevelGenerationOptions::getRequiredTexturePackId() {
     return info()->getRequiredTexturePackId();
 }
-std::wstring LevelGenerationOptions::getDefaultSaveName() {
+std::string LevelGenerationOptions::getDefaultSaveName() {
     switch (getSrc()) {
         case eSrc_fromSave:
             return getString(info()->getDefaultSaveName());
@@ -690,9 +690,9 @@ std::wstring LevelGenerationOptions::getDefaultSaveName() {
         default:
             break;
     }
-    return L"";
+    return "";
 }
-const wchar_t* LevelGenerationOptions::getWorldName() {
+const char* LevelGenerationOptions::getWorldName() {
     switch (getSrc()) {
         case eSrc_fromSave:
             return getString(info()->getWorldName());
@@ -703,28 +703,28 @@ const wchar_t* LevelGenerationOptions::getWorldName() {
         default:
             break;
     }
-    return L"";
+    return "";
 }
-const wchar_t* LevelGenerationOptions::getDisplayName() {
+const char* LevelGenerationOptions::getDisplayName() {
     switch (getSrc()) {
         case eSrc_fromSave:
             return getString(info()->getDisplayName());
         case eSrc_fromDLC:
             return getString(info()->getDisplayName());
         case eSrc_tutorial:
-            return L"";
+            return "";
         default:
             break;
     }
-    return L"";
+    return "";
 }
-std::wstring LevelGenerationOptions::getGrfPath() {
+std::string LevelGenerationOptions::getGrfPath() {
     return info()->getGrfPath();
 }
 bool LevelGenerationOptions::requiresBaseSave() {
     return info()->requiresBaseSave();
 }
-std::wstring LevelGenerationOptions::getBaseSavePath() {
+std::string LevelGenerationOptions::getBaseSavePath() {
     return info()->getBaseSavePath();
 }
 
@@ -736,19 +736,19 @@ void LevelGenerationOptions::setRequiresTexturePack(bool x) {
 void LevelGenerationOptions::setRequiredTexturePackId(std::uint32_t x) {
     info()->setRequiredTexturePackId(x);
 }
-void LevelGenerationOptions::setDefaultSaveName(const std::wstring& x) {
+void LevelGenerationOptions::setDefaultSaveName(const std::string& x) {
     info()->setDefaultSaveName(x);
 }
-void LevelGenerationOptions::setWorldName(const std::wstring& x) {
+void LevelGenerationOptions::setWorldName(const std::string& x) {
     info()->setWorldName(x);
 }
-void LevelGenerationOptions::setDisplayName(const std::wstring& x) {
+void LevelGenerationOptions::setDisplayName(const std::string& x) {
     info()->setDisplayName(x);
 }
-void LevelGenerationOptions::setGrfPath(const std::wstring& x) {
+void LevelGenerationOptions::setGrfPath(const std::string& x) {
     info()->setGrfPath(x);
 }
-void LevelGenerationOptions::setBaseSavePath(const std::wstring& x) {
+void LevelGenerationOptions::setBaseSavePath(const std::string& x) {
     info()->setBaseSavePath(x);
 }
 

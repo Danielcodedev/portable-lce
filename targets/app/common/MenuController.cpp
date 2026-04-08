@@ -179,7 +179,7 @@ bool MenuController::loadFireworksMenu(int iPad,
 bool MenuController::loadEnchantingMenu(int iPad,
                                         std::shared_ptr<Inventory> inventory,
                                         int x, int y, int z, Level* level,
-                                        const std::wstring& name) {
+                                        const std::string& name) {
     bool success = true;
 
     EnchantingScreenInput* initData = new EnchantingScreenInput();
@@ -335,7 +335,7 @@ bool MenuController::loadRepairingMenu(int iPad,
 bool MenuController::loadTradingMenu(int iPad,
                                      std::shared_ptr<Inventory> inventory,
                                      std::shared_ptr<Merchant> trader,
-                                     Level* level, const std::wstring& name) {
+                                     Level* level, const std::string& name) {
     bool success = true;
 
     TradingScreenInput* initData = new TradingScreenInput();

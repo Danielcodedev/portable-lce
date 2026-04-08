@@ -117,7 +117,7 @@ bool FlatLevelSource::tick() { return false; }
 
 bool FlatLevelSource::shouldSave() { return true; }
 
-std::wstring FlatLevelSource::gatherStats() { return L"FlatLevelSource"; }
+std::string FlatLevelSource::gatherStats() { return "FlatLevelSource"; }
 
 std::vector<Biome::MobSpawnerData*>* FlatLevelSource::getMobsAt(
     MobCategory* mobCategory, int x, int y, int z) {
@@ -129,7 +129,7 @@ std::vector<Biome::MobSpawnerData*>* FlatLevelSource::getMobsAt(
 }
 
 TilePos* FlatLevelSource::findNearestMapFeature(Level* level,
-                                                const std::wstring& featureName,
+                                                const std::string& featureName,
                                                 int x, int y, int z) {
     return nullptr;
 }
