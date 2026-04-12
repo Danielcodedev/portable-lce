@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stack>
+#include <unordered_map>
 #include <vector>
 
 #include <glm/glm.hpp>
@@ -237,5 +238,6 @@ private:
     std::vector<TextureSlot> textures_;
 
     // GL texture ID to our handle map (for legacy TextureCreate/Bind)
-    std::vector<bgfx::TextureHandle> gl_tex_map_;
+    std::unordered_map<int, bgfx::TextureHandle> gl_tex_to_bgfx_;
+    int next_gl_tex_id_ = 1;
 };

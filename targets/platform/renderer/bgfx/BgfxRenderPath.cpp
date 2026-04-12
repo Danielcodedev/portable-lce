@@ -257,8 +257,17 @@ void BgfxRenderPath::DrawVertices(int, int count, void* data, int, int) {
     float lmt[4] = { 1, 1, 0, 0 };
     bgfx::setUniform(u_lmTransform_, lmt);
     bgfx::setUniform(u_globalLM_, global_lm_);
+    // Bind texture if available
+    bool hasTexture = false;
+    if (texture_enabled_ && bound_texture_ >= 0) {
+        auto it = gl_tex_to_bgfx_.find(bound_texture_);
+        if (it != gl_tex_to_bgfx_.end()) {
+            bgfx::setTexture(0, s_tex0_, it->second);
+            hasTexture = true;
+        }
+    }
     // Fragment uniforms
-    float fragP[4] = { texture_enabled_ ? 1.0f : 0.0f, 0.0f, alpha_ref_, fog_enabled_ ? 1.0f : 0.0f };
+    float fragP[4] = { hasTexture ? 1.0f : 0.0f, 0.0f, alpha_ref_, fog_enabled_ ? 1.0f : 0.0f };
     bgfx::setUniform(u_fragParams_, fragP);
     bgfx::setUniform(u_fogColor_, fog_color_);
 
@@ -380,13 +389,47 @@ void BgfxRenderPath::CBuffDeferredModeEnd() {}
 
 // -- Texture legacy stubs ---------------------------------------------------
 
-int  BgfxRenderPath::TextureCreate() { return -1; }
-void BgfxRenderPath::TextureFree(int) {}
-void BgfxRenderPath::TextureBind(int idx) { bound_texture_ = idx; }
+int BgfxRenderPath::TextureCreate() {
+    int id = next_gl_tex_id_++;
+    return id;
+}
+
+void BgfxRenderPath::TextureFree(int idx) {
+    auto it = gl_tex_to_bgfx_.find(idx);
+    if (it != gl_tex_to_bgfx_.end()) {
+        bgfx::destroy(it->second);
+        gl_tex_to_bgfx_.erase(it);
+    }
+}
+
+void BgfxRenderPath::TextureBind(int idx) {
+    bound_texture_ = idx;
+}
+
 void BgfxRenderPath::TextureBindVertex(int, bool) {}
 void BgfxRenderPath::TextureSetTextureLevels(int) {}
-void BgfxRenderPath::TextureData(int, int, void*, int, int) {}
-void BgfxRenderPath::TextureDataUpdate(int, int, int, int, void*, int) {}
+
+void BgfxRenderPath::TextureData(int width, int height, void* data, int, int) {
+    if (bound_texture_ < 0 || !data || width <= 0 || height <= 0) return;
+    auto it = gl_tex_to_bgfx_.find(bound_texture_);
+    if (it != gl_tex_to_bgfx_.end()) {
+        bgfx::destroy(it->second);
+    }
+    const bgfx::Memory* mem = bgfx::copy(data, width * height * 4);
+    bgfx::TextureHandle th = bgfx::createTexture2D(
+        width, height, false, 1, bgfx::TextureFormat::RGBA8,
+        BGFX_SAMPLER_MIN_POINT | BGFX_SAMPLER_MAG_POINT, mem);
+    gl_tex_to_bgfx_[bound_texture_] = th;
+}
+
+void BgfxRenderPath::TextureDataUpdate(int xoff, int yoff, int w, int h, void* data, int) {
+    if (bound_texture_ < 0 || !data) return;
+    auto it = gl_tex_to_bgfx_.find(bound_texture_);
+    if (it == gl_tex_to_bgfx_.end()) return;
+    const bgfx::Memory* mem = bgfx::copy(data, w * h * 4);
+    bgfx::updateTexture2D(it->second, 0, 0, xoff, yoff, w, h, mem);
+}
+
 void BgfxRenderPath::TextureSetParam(int, int) {}
 int  BgfxRenderPath::TextureGetTextureLevels() { return 1; }
 void BgfxRenderPath::ReadPixels(int, int, int, int, void*) {}
