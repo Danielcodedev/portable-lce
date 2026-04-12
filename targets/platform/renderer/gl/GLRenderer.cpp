@@ -53,6 +53,10 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include "platform/renderer/IRenderPath.h"
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
 namespace platform_internal {
 IPlatformRenderer& PlatformRenderer_get() {
@@ -1432,14 +1436,14 @@ void glGenTextures_4J(IntBuffer* buf) {
     if (!buf) return;
     int n = buf->limit() - buf->position();
     int* dst = getIntPtr(buf);
-    for (int i = 0; i < n; i++) dst[i] = PlatformRenderer.TextureCreate();
+    for (int i = 0; i < n; i++) dst[i] = RenderPath.TextureCreate();
 }
 
 void glDeleteTextures_4J(IntBuffer* buf) {
     if (!buf) return;
     int n = buf->limit() - buf->position();
     int* src = getIntPtr(buf);
-    for (int i = 0; i < n; i++) PlatformRenderer.TextureFree(src[i]);
+    for (int i = 0; i < n; i++) RenderPath.TextureFree(src[i]);
 }
 
 void glTexImage2D_4J(int target, int level, int internalformat, int width,
@@ -1450,7 +1454,7 @@ void glTexImage2D_4J(int target, int level, int internalformat, int width,
     (void)border;
     (void)format;
     (void)type;
-    PlatformRenderer.TextureData(width, height, getBytePtr(pixels), level,
+    RenderPath.TextureData(width, height, getBytePtr(pixels), level,
                                  IPlatformRenderer::TEXTURE_FORMAT_RxGyBzAw);
 }
 
@@ -1458,27 +1462,27 @@ void glLight_4J(int light, int pname, FloatBuffer* params) {
     const float* p = params->_getDataPointer();
     int idx = (light == 0x4001) ? 1 : 0;
     if (pname == 0x1203)
-        PlatformRenderer.StateSetLightDirection(idx, p[0], p[1], p[2]);
+        RenderPath.StateSetLightDirection(idx, p[0], p[1], p[2]);
     else if (pname == 0x1201)
-        PlatformRenderer.StateSetLightColour(idx, p[0], p[1], p[2]);
+        RenderPath.StateSetLightColour(idx, p[0], p[1], p[2]);
     else if (pname == 0x1200)
-        PlatformRenderer.StateSetLightAmbientColour(p[0], p[1], p[2]);
+        RenderPath.StateSetLightAmbientColour(p[0], p[1], p[2]);
 }
 
 void glLightModel_4J(int pname, FloatBuffer* params) {
     if (pname == 0x0B53) {
         const float* p = params->_getDataPointer();
-        PlatformRenderer.StateSetLightAmbientColour(p[0], p[1], p[2]);
+        RenderPath.StateSetLightAmbientColour(p[0], p[1], p[2]);
     }
 }
 
 void glFog_4J(int pname, FloatBuffer* params) {
     const float* p = params->_getDataPointer();
-    if (pname == 0x0B66) PlatformRenderer.StateSetFogColour(p[0], p[1], p[2]);
+    if (pname == 0x0B66) RenderPath.StateSetFogColour(p[0], p[1], p[2]);
 }
 
 void glGetFloat_4J(int pname, FloatBuffer* params) {
-    const float* m = PlatformRenderer.MatrixGet(pname);
+    const float* m = RenderPath.MatrixGet(pname);
     if (m) memcpy(params->_getDataPointer(), m, 16 * sizeof(float));
 }
 
@@ -1487,13 +1491,13 @@ void glCallLists_4J(IntBuffer* lists) {
     int count = lists->limit() - lists->position();
     int* ids = getIntPtr(lists);
     for (int i = 0; i < count; i++)
-        (void)PlatformRenderer.CBuffCall(ids[i], false);
+        (void)RenderPath.CBuffCall(ids[i], false);
 }
 
 void glReadPixels_4J(int x, int y, int w, int h, int f, int t, ByteBuffer* p) {
     (void)f;
     (void)t;
-    PlatformRenderer.ReadPixels(x, y, w, h, getBytePtr(p));
+    RenderPath.ReadPixels(x, y, w, h, getBytePtr(p));
 }
 
 // dead stubs
