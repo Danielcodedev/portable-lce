@@ -26,10 +26,12 @@ void main()
     vec2 lm = (a_texcoord1.x <= -1.9) ? u_globalLM.xy : a_texcoord1;
     v_uv1 = (lm / 256.0) * u_lmTransform.xy + u_lmTransform.zw;
 
-    // Color: zero vertex color = use base color uniform
-    bool sentinel = (a_color0.r + a_color0.g + a_color0.b) < 0.004;
-    // bgfx delivers color as RGBA normalized; the original GL had ABGR swizzle
-    vec4 col = sentinel ? u_baseColor : a_color0;
+    // Game packs color as (R<<24|G<<16|B<<8|A). In little-endian memory
+    // that's bytes [A,B,G,R]. bgfx reads Color0 as [R,G,B,A] from bytes,
+    // so we get R=A, G=B, B=G, A=R. Swizzle to correct order.
+    vec4 vertColor = a_color0.abgr;
+    bool sentinel = (vertColor.r + vertColor.g + vertColor.b) < 0.004;
+    vec4 col = sentinel ? u_baseColor : vertColor;
 
     if (u_lightParams.x > 0.5) {
         vec3 n = normalize(mul(u_modelView, vec4(a_normal.xyz * 2.0 - 1.0, 0.0)).xyz) * u_lightParams.y;

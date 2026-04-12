@@ -228,18 +228,45 @@ void BgfxRenderPath::StateSetVertexTextureUV(float, float) {}
 
 // -- DrawVertices -----------------------------------------------------------
 
-void BgfxRenderPath::DrawVertices(int, int count, void* data, int, int) {
+void BgfxRenderPath::DrawVertices(int primType, int count, void* data, int, int) {
     if (count <= 0 || !data) return;
 
-    if (bgfx::getAvailTransientVertexBuffer(count, vl_world_standard_) < (uint32_t)count)
+    uint32_t stride = vl_world_standard_.getStride();
+
+    // Convert triangle fan to triangle list (bgfx doesn't support fans)
+    // Fan: v0,v1,v2,v3 -> Triangles: v0,v1,v2, v0,v2,v3
+    int submitCount = count;
+    bool isFan = (primType == 0x0006); // GL_TRIANGLE_FAN
+    if (isFan && count >= 3) {
+        submitCount = (count - 2) * 3;
+    }
+
+    if (bgfx::getAvailTransientVertexBuffer(submitCount, vl_world_standard_) < (uint32_t)submitCount)
         return;
     bgfx::TransientVertexBuffer tvb;
-    bgfx::allocTransientVertexBuffer(&tvb, count, vl_world_standard_);
-    memcpy(tvb.data, data, count * vl_world_standard_.getStride());
+    bgfx::allocTransientVertexBuffer(&tvb, submitCount, vl_world_standard_);
+
+    if (isFan && count >= 3) {
+        const uint8_t* src = (const uint8_t*)data;
+        uint8_t* dst = tvb.data;
+        for (int i = 1; i < count - 1; i++) {
+            memcpy(dst, src, stride); dst += stride;                    // v0
+            memcpy(dst, src + i * stride, stride); dst += stride;      // vi
+            memcpy(dst, src + (i+1) * stride, stride); dst += stride;  // vi+1
+        }
+    } else {
+        memcpy(tvb.data, data, count * stride);
+    }
+
+    // Set primitive type in bgfx state
+    uint64_t primState = 0;
+    if (primType == 0x0005) primState = BGFX_STATE_PT_TRISTRIP;      // GL_TRIANGLE_STRIP
+    else if (primType == 0x0001) primState = BGFX_STATE_PT_LINES;    // GL_LINES
+    else if (primType == 0x0003) primState = BGFX_STATE_PT_LINESTRIP; // GL_LINE_STRIP
 
     glm::mat4 mvp = projection_stack_.top() * modelview_stack_.top();
     bgfx::setTransform(glm::value_ptr(mvp));
-    bgfx::setState(bgfx_state_ | (blend_enabled_ ? BGFX_STATE_BLEND_ALPHA : 0));
+    bgfx::setState(bgfx_state_ | (blend_enabled_ ? BGFX_STATE_BLEND_ALPHA : 0) | primState);
     bgfx::setVertexBuffer(0, &tvb);
 
     // Vertex uniforms
