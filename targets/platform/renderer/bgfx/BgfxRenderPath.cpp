@@ -74,8 +74,7 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
     fb_.is_hi_def = height_ >= 720;
 
     bgfx_state_ = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A |
-                   BGFX_STATE_WRITE_Z | BGFX_STATE_DEPTH_TEST_LEQUAL |
-                   BGFX_STATE_CULL_CCW;
+                   BGFX_STATE_WRITE_Z | BGFX_STATE_DEPTH_TEST_LEQUAL;
 
     // Load shaders
     bgfx::ShaderHandle vsh = bgfx::createShader(
@@ -177,8 +176,10 @@ void BgfxRenderPath::StateSetDepthFunc(rp::DepthTest) {
 
 void BgfxRenderPath::StateSetFaceCull(bool e) {
     cull_enabled_ = e;
-    bgfx_state_ = (bgfx_state_ & ~BGFX_STATE_CULL_MASK) |
-                   (e ? BGFX_STATE_CULL_CCW : 0);
+    bgfx_state_ &= ~BGFX_STATE_CULL_MASK;
+    // Don't add cull state - the quad-to-triangle expansion in Tesselator
+    // produces alternating winding. Culling will be re-enabled once
+    // the vertex winding is fixed.
 }
 
 void BgfxRenderPath::StateSetLineWidth(float) {}
