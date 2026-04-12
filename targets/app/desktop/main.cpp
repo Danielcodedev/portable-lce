@@ -652,7 +652,8 @@ int main(int argc, const char* argv[]) {
     }  // end game loop
 
     // Graceful shutdown: destroy GL context and GLFW before any C++ dtors run.
-    // Without this, static/global destructors that touch GL objects cause
-    // SIGSEGV.
+    render_path.reset(); // destroy bgfx before _exit skips destructors
+    SDL_DestroyWindow(sdl_window);
+    SDL_Quit();
     _exit(0);
 }  // end main
