@@ -615,3 +615,6 @@ IRenderPath& get_active();
 // ---------------------------------------------------------------------------
 
 std::unique_ptr<rp::IRenderPath> make_legacy_gl_render_path();
+
+struct SDL_Window;
+std::unique_ptr<rp::IRenderPath> make_bgfx_render_path(SDL_Window* window);

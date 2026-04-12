@@ -2,6 +2,9 @@
 #include "app/common/GameMenuService.h"
 #include "minecraft/client/renderer/GameRenderer.h"
 #include "platform/renderer/IRenderPath.h"
+#ifdef RENDERER_BGFX
+#include <SDL.h>
+#endif
 // Minecraft.cpp : Defines the entry point for the application.
 //
 
@@ -421,26 +424,33 @@ int main(int argc, const char* argv[]) {
     // Usage: Minecraft.Client [--width W] [--height H] [--fullscreen]
     // If --width/--height are omitted the primary monitor's native resolution
     // is used automatically.
-    {
-        int reqW = 0, reqH = 0;
-        bool fs = false;
-        for (int i = 1; i < argc; i++) {
-            if (strcmp(argv[i], "--fullscreen") == 0) {
-                fs = true;
-            } else if (strcmp(argv[i], "--width") == 0 && i + 1 < argc) {
-                reqW = atoi(argv[++i]);
-            } else if (strcmp(argv[i], "--height") == 0 && i + 1 < argc) {
-                reqH = atoi(argv[++i]);
-            }
+    int reqW = 0, reqH = 0;
+    bool fs = false;
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "--fullscreen") == 0) {
+            fs = true;
+        } else if (strcmp(argv[i], "--width") == 0 && i + 1 < argc) {
+            reqW = atoi(argv[++i]);
+        } else if (strcmp(argv[i], "--height") == 0 && i + 1 < argc) {
+            reqH = atoi(argv[++i]);
         }
-        if (reqW > 0 && reqH > 0) PlatformRenderer.SetWindowSize(reqW, reqH);
-        if (fs) PlatformRenderer.SetFullscreen(true);
     }
 
     static bool bTrialTimerDisplayed = true;
 
+#ifdef RENDERER_BGFX
+    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Window* sdl_window = SDL_CreateWindow(
+        "4jcraft", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+        reqW > 0 ? reqW : 1280, reqH > 0 ? reqH : 720,
+        SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+    auto render_path = make_bgfx_render_path(sdl_window);
+#else
+    if (reqW > 0 && reqH > 0) PlatformRenderer.SetWindowSize(reqW, reqH);
+    if (fs) PlatformRenderer.SetFullscreen(true);
     PlatformRenderer.Initialise();
     auto render_path = make_legacy_gl_render_path();
+#endif
     rp::render_path_internal::set_active(render_path.get());
 
     // Read the file containing the product codes
@@ -653,6 +663,8 @@ int main(int argc, const char* argv[]) {
     // Graceful shutdown: destroy GL context and GLFW before any C++ dtors run.
     // Without this, static/global destructors that touch GL objects cause
     // SIGSEGV.
+#ifndef RENDERER_BGFX
     PlatformRenderer.Shutdown();
+#endif
     _exit(0);
 }  // end main
