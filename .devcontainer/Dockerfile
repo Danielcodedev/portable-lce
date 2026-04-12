@@ -48,6 +48,7 @@ RUN apt-get update \
         libpthread-stubs0-dev \
         libssl-dev \
         gcc-15 g++-15 \
+        git \
     && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-15 100 \
     && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-15 100 \
     && apt-get autoremove -y \
