@@ -110,7 +110,7 @@ void Tesselator::end() {
                 pColData += 8;
             }
         }
-        if (mode == GL_QUADS && TRIANGLE_MODE) {
+        if (mode == 0x0007 && TRIANGLE_MODE) {
             submit_draw(
                 0, vertices,
                 _array->data(),
@@ -165,7 +165,7 @@ void Tesselator::clear() {
 }
 
 void Tesselator::begin() {
-    begin(GL_QUADS);
+    begin(0x0007);
     bounds.reset();  // 4J MGH - added
 }
 
@@ -492,7 +492,7 @@ void Tesselator::vertex(float x, float y, float z) {
             tesselating = true;
         }
     } else {
-        if (mode == GL_QUADS && TRIANGLE_MODE && count % 4 == 0) {
+        if (mode == 0x0007 && TRIANGLE_MODE && count % 4 == 0) {
             for (int i = 0; i < 2; i++) {
                 int offs = 8 * (3 - i);
                 if (hasTexture) {

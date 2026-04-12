@@ -197,7 +197,7 @@ void Chunk::setPos(int x, int y, int z) {
 }
 
 void Chunk::translateToPos() {
-    glTranslatef((float)xRenderOffs, (float)yRenderOffs, (float)zRenderOffs);
+    RenderPath.MatrixTranslate((float)xRenderOffs, (float)yRenderOffs, (float)zRenderOffs);
 }
 
 Chunk::Chunk() {}
@@ -478,8 +478,8 @@ void Chunk::rebuild() {
                         if (!started) {
                             started = true;
 
-                            glNewList(lists + currentLayer, GL_COMPILE);
-                            glDepthMask(true);            // 4J added
+                            RenderPath.CBuffStart(lists + currentLayer);
+                            RenderPath.StateSetDepthMask(true);            // 4J added
                             t->useCompactVertices(true);  // 4J added
                             t->begin();
                             t->offset((float)(-this->x), (float)(-this->y),
@@ -511,7 +511,7 @@ void Chunk::rebuild() {
         if (started) {
             t->end();
             bounds.addBounds(t->bounds);  // 4J MGH - added
-            glEndList();
+            RenderPath.CBuffEnd();
             t->useCompactVertices(false);  // 4J added
             t->offset(0, 0, 0);
         } else {
@@ -793,7 +793,7 @@ void Chunk::cull(Culler* culler) {
 }
 
 void Chunk::renderBB() {
-    //	glCallList(lists + 2);	// 4J - removed - TODO put back in
+    //	((void)RenderPath.CBuffCall(lists + 2));	// 4J - removed - TODO put back in
 }
 
 bool Chunk::isEmpty() {

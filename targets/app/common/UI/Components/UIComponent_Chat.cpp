@@ -89,7 +89,7 @@ void UIComponent_Chat::handleTimerComplete(int id) {
 }
 
 void UIComponent_Chat::render(S32 width, S32 height,
-                              eViewportType viewport) {
+                              int viewport) {
     if (m_bSplitscreen) {
         S32 xPos = 0;
         S32 yPos = 0;

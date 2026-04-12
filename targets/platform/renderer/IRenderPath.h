@@ -141,6 +141,12 @@ enum class FogMode : uint8_t {
     exponential_sq,
 };
 
+enum class MatrixStack : uint8_t {
+    modelview,
+    projection,
+    texture,
+};
+
 enum class ViewportLayout : uint8_t {
     fullscreen,
     split_top,
@@ -435,7 +441,7 @@ public:
     // =======================================================================
 
     // Matrix stack
-virtual void MatrixMode(int type) = 0;
+virtual void MatrixMode(MatrixStack stack) = 0;
 virtual void MatrixSetIdentity() = 0;
 virtual void MatrixTranslate(float x, float y, float z) = 0;
 virtual void MatrixRotate(float angle, float x, float y, float z) = 0;
@@ -445,7 +451,7 @@ virtual void MatrixOrthogonal(float left, float right, float bottom, float top, 
 virtual void MatrixPop() = 0;
 virtual void MatrixPush() = 0;
 virtual void MatrixMult(float* mat) = 0;
-[[nodiscard]] virtual const float* MatrixGet(int type) = 0;
+[[nodiscard]] virtual const float* MatrixGet(MatrixStack stack) = 0;
 
     // Draw
 virtual void DrawVertices(int primitiveType, int count, void* data,
@@ -477,10 +483,10 @@ virtual void TextureSetParam(int param, int value) = 0;
 virtual void StateSetColour(float r, float g, float b, float a) = 0;
 virtual void StateSetDepthMask(bool enable) = 0;
 virtual void StateSetBlendEnable(bool enable) = 0;
-virtual void StateSetBlendFunc(int src, int dst) = 0;
+virtual void StateSetBlendFunc(BlendFactor src, BlendFactor dst) = 0;
 virtual void StateSetBlendFactor(unsigned int colour) = 0;
-virtual void StateSetAlphaFunc(int func, float param) = 0;
-virtual void StateSetDepthFunc(int func) = 0;
+virtual void StateSetAlphaFunc(AlphaTest func, float param) = 0;
+virtual void StateSetDepthFunc(DepthTest func) = 0;
 virtual void StateSetFaceCull(bool enable) = 0;
 virtual void StateSetLineWidth(float width) = 0;
 virtual void StateSetWriteEnable(bool r, bool g, bool b, bool a) = 0;
@@ -490,7 +496,7 @@ virtual void StateSetDepthSlopeAndBias(float slope, float bias) = 0;
 
     // Fog
 virtual void StateSetFogEnable(bool enable) = 0;
-virtual void StateSetFogMode(int mode) = 0;
+virtual void StateSetFogMode(FogMode mode) = 0;
 virtual void StateSetFogNearDistance(float dist) = 0;
 virtual void StateSetFogFarDistance(float dist) = 0;
 virtual void StateSetFogDensity(float density) = 0;

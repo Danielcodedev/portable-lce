@@ -879,7 +879,7 @@ void UIController::renderScenes() {
 }
 
 void UIController::getRenderDimensions(
-    eViewportType viewport, S32& width, S32& height) {
+    int viewport, S32& width, S32& height) {
     switch (viewport) {
         case 0:
             width = (S32)(getScreenWidth());
@@ -908,7 +908,7 @@ void UIController::getRenderDimensions(
 }
 
 void UIController::setupRenderPosition(
-    eViewportType viewport) {
+    int viewport) {
     if (m_bCustomRenderPosition || m_currentRenderViewport != viewport) {
         m_currentRenderViewport = viewport;
         m_bCustomRenderPosition = false;
@@ -970,18 +970,18 @@ void UIController::setupCustomDrawGameState() {
     // 4J Stu - We don't need to clear this here as iggy hasn't written anything
     // to the depth buffer. We DO however clear after we render which is why we
     // still setup the rectangle here
-    // RenderPath.Clear(GL_DEPTH_BUFFER_BIT, &m_customRenderingClearRect);
-    // glClear(GL_DEPTH_BUFFER_BIT);
+    // RenderPath.Clear(rp::CLEAR_DEPTH, &m_customRenderingClearRect);
+    // RenderPath.Clear(rp::CLEAR_DEPTH);
 
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(0, m_fScreenWidth, m_fScreenHeight, 0, 1000, 3000);
-    glMatrixMode(GL_MODELVIEW);
-    glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.1f);
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LEQUAL);
-    glDepthMask(true);
+    RenderPath.MatrixMode(rp::MatrixStack::projection);
+    RenderPath.MatrixSetIdentity();
+    RenderPath.MatrixOrthogonal(0, m_fScreenWidth, m_fScreenHeight, 0, 1000, 3000);
+    RenderPath.MatrixMode(rp::MatrixStack::modelview);
+    RenderPath.StateSetAlphaTestEnable(true);
+    RenderPath.StateSetAlphaFunc(rp::AlphaTest::greater, 0.1f);
+    RenderPath.StateSetDepthTestEnable(true);
+    RenderPath.StateSetDepthFunc(rp::DepthTest::less_equal);
+    RenderPath.StateSetDepthMask(true);
 }
 
 void UIController::setupCustomDrawMatrices(UIScene* scene,
@@ -1025,11 +1025,11 @@ void UIController::setupCustomDrawMatrices(UIScene* scene,
         }
     }
 
-    glLoadIdentity();
-    glTranslatef(0, 0, -2000);
+    RenderPath.MatrixSetIdentity();
+    RenderPath.MatrixTranslate(0, 0, -2000);
     // Iggy translations are based on a double-size target, with the origin in
     // the centre
-    glTranslatef(
+    RenderPath.MatrixTranslate(
         (m_fScreenWidth + customDrawRegion->mat[(0 * 4) + 3] * m_fScreenWidth) /
             2,
         (m_fScreenHeight -
@@ -1037,7 +1037,7 @@ void UIController::setupCustomDrawMatrices(UIScene* scene,
             2,
         0);
     // Iggy scales are based on a double-size target
-    glScalef((m_fScreenWidth * customDrawRegion->mat[0]) / 2,
+    RenderPath.MatrixScale((m_fScreenWidth * customDrawRegion->mat[0]) / 2,
              (m_fScreenHeight * -customDrawRegion->mat[(1 * 4) + 1]) / 2, 1.0f);
 }
 
@@ -1048,10 +1048,10 @@ void UIController::setupCustomDrawGameStateAndMatrices(
 }
 
 void UIController::endCustomDrawGameState() {
-    RenderPath.Clear(GL_DEPTH_BUFFER_BIT);
-    // glClear(GL_DEPTH_BUFFER_BIT);
-    glDepthMask(false);
-    glDisable(GL_ALPHA_TEST);
+    RenderPath.Clear(rp::CLEAR_DEPTH);
+    // RenderPath.Clear(rp::CLEAR_DEPTH);
+    RenderPath.StateSetDepthMask(false);
+    RenderPath.StateSetAlphaTestEnable(false);
 }
 
 void UIController::endCustomDrawMatrices() {}

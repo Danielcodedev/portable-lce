@@ -44,7 +44,7 @@ public:
 
     // RENDERING
     virtual void render(S32 width, S32 height,
-                        eViewportType viewport);
+                        int viewport);
 
 private:
     void setPanorama(bool isDay);

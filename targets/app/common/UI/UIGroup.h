@@ -24,7 +24,7 @@ private:
     UIComponent_PressStartToPlay* m_pressStartToPlay;
     UIScene_HUD* m_hud;
 
-    eViewportType m_viewportType;
+    int m_viewportType;
 
     EUIGroup m_group;
     int m_iPad;
@@ -97,8 +97,8 @@ public:
     UIScene* addComponent(int iPad, EUIScene scene, EUILayer layer);
     void removeComponent(EUIScene scene, EUILayer layer);
 
-    void SetViewportType(eViewportType type);
-    eViewportType GetViewportType();
+    void SetViewportType(int type);
+    int GetViewportType();
 
     virtual void HandleDLCMountingComplete();
     virtual void HandleDLCInstalled();

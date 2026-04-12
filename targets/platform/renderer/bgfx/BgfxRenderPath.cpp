@@ -79,10 +79,10 @@ BgfxRenderPath::~BgfxRenderPath() {
 // -- Matrix stack -----------------------------------------------------------
 
 std::stack<glm::mat4>& BgfxRenderPath::current_stack() {
-    return (matrix_mode_ == 0x1701) ? projection_stack_ : modelview_stack_;
+    return (matrix_mode_ == rp::MatrixStack::projection) ? projection_stack_ : modelview_stack_;
 }
 
-void BgfxRenderPath::MatrixMode(int type)     { matrix_mode_ = type; }
+void BgfxRenderPath::MatrixMode(rp::MatrixStack stack)     { matrix_mode_ = stack; }
 void BgfxRenderPath::MatrixSetIdentity()      { current_stack().top() = glm::mat4(1.0f); }
 void BgfxRenderPath::MatrixPush()             { current_stack().push(current_stack().top()); }
 void BgfxRenderPath::MatrixPop()              { if (current_stack().size() > 1) current_stack().pop(); }
@@ -111,8 +111,8 @@ void BgfxRenderPath::MatrixMult(float* m) {
     current_stack().top() *= glm::make_mat4(m);
 }
 
-const float* BgfxRenderPath::MatrixGet(int type) {
-    if (type == 0x0BA7) return glm::value_ptr(projection_stack_.top());
+const float* BgfxRenderPath::MatrixGet(rp::MatrixStack stack) {
+    if (stack == rp::MatrixStack::projection) return glm::value_ptr(projection_stack_.top());
     return glm::value_ptr(modelview_stack_.top());
 }
 
@@ -129,16 +129,16 @@ void BgfxRenderPath::StateSetDepthMask(bool e) {
 
 void BgfxRenderPath::StateSetBlendEnable(bool e) { blend_enabled_ = e; }
 
-void BgfxRenderPath::StateSetBlendFunc(int, int) {
+void BgfxRenderPath::StateSetBlendFunc(rp::BlendFactor, rp::BlendFactor) {
     // Simplified: most common is src_alpha/one_minus_src_alpha
     bgfx_state_ = (bgfx_state_ & ~BGFX_STATE_BLEND_MASK) |
                    (blend_enabled_ ? BGFX_STATE_BLEND_ALPHA : 0);
 }
 
 void BgfxRenderPath::StateSetBlendFactor(unsigned int) {}
-void BgfxRenderPath::StateSetAlphaFunc(int, float) {}
+void BgfxRenderPath::StateSetAlphaFunc(rp::AlphaTest, float) {}
 
-void BgfxRenderPath::StateSetDepthFunc(int) {
+void BgfxRenderPath::StateSetDepthFunc(rp::DepthTest) {
     bgfx_state_ = (bgfx_state_ & ~BGFX_STATE_DEPTH_TEST_MASK) |
                    (depth_test_enabled_ ? BGFX_STATE_DEPTH_TEST_LEQUAL : 0);
 }
@@ -168,7 +168,7 @@ void BgfxRenderPath::StateSetDepthSlopeAndBias(float, float) {}
 
 // Fog (stored but not applied - needs shader support)
 void BgfxRenderPath::StateSetFogEnable(bool) {}
-void BgfxRenderPath::StateSetFogMode(int) {}
+void BgfxRenderPath::StateSetFogMode(rp::FogMode) {}
 void BgfxRenderPath::StateSetFogNearDistance(float) {}
 void BgfxRenderPath::StateSetFogFarDistance(float) {}
 void BgfxRenderPath::StateSetFogDensity(float) {}

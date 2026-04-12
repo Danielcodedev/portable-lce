@@ -105,7 +105,7 @@ void Screen::updateEvents() {
 #if (defined(ENABLE_JAVA_GUIS))
     int fbw, fbh;
     fbw = RenderPath.framebuffer().width; fbh = RenderPath.framebuffer().height;
-    glViewport(0, 0, fbw, fbh);
+    (void)0;
     ScreenSizeCalculator ssc(minecraft->options, minecraft->width,
                              minecraft->height);
     int screenWidth = ssc.getWidth();
@@ -188,12 +188,11 @@ void Screen::renderBackground(int vo) {
 
 void Screen::renderDirtBackground(int vo) {
 #ifdef ENABLE_JAVA_GUIS
-    glDisable(GL_LIGHTING);
-    glDisable(GL_FOG);
+    RenderPath.StateSetLightingEnable(false);
+    RenderPath.StateSetFogEnable(false);
     Tesselator* t = Tesselator::getInstance();
-    glBindTexture(GL_TEXTURE_2D,
-                  minecraft->textures->loadTexture(TN_GUI_BACKGROUND));
-    glColor4f(1, 1, 1, 1);
+    RenderPath.TextureBind(                  minecraft->textures->loadTexture(TN_GUI_BACKGROUND));
+    RenderPath.StateSetColour(1, 1, 1, 1);
     float s = 32;
     t->begin();
     t->color(0x404040);

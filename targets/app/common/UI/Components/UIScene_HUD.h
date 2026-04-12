@@ -186,7 +186,7 @@ public:
 
     // RENDERING
     virtual void render(S32 width, S32 height,
-                        eViewportType viewport);
+                        int viewport);
 
 protected:
     void handleTimerComplete(int id);

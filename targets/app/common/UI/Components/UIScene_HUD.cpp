@@ -668,7 +668,7 @@ void UIScene_HUD::SetHealthAbsorb(int healthAbsorb) {
 }
 
 void UIScene_HUD::render(S32 width, S32 height,
-                         eViewportType viewport) {
+                         int viewport) {
     if (m_bSplitscreen) {
         S32 xPos = 0;
         S32 yPos = 0;

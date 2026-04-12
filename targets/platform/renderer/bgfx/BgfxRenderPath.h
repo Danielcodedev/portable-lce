@@ -48,7 +48,7 @@ public:
 
     // -- Legacy state methods (software emulation) --------------------------
 
-    void MatrixMode(int type) override;
+    void MatrixMode(rp::MatrixStack stack) override;
     void MatrixSetIdentity() override;
     void MatrixTranslate(float x, float y, float z) override;
     void MatrixRotate(float angle, float x, float y, float z) override;
@@ -58,7 +58,7 @@ public:
     void MatrixPop() override;
     void MatrixPush() override;
     void MatrixMult(float* mat) override;
-    [[nodiscard]] const float* MatrixGet(int type) override;
+    [[nodiscard]] const float* MatrixGet(rp::MatrixStack stack) override;
 
     void DrawVertices(int primitiveType, int count, void* data,
                       int vertexType, int shaderType) override;
@@ -86,10 +86,10 @@ public:
     void StateSetColour(float r, float g, float b, float a) override;
     void StateSetDepthMask(bool enable) override;
     void StateSetBlendEnable(bool enable) override;
-    void StateSetBlendFunc(int src, int dst) override;
+    void StateSetBlendFunc(rp::BlendFactor src, rp::BlendFactor dst) override;
     void StateSetBlendFactor(unsigned int colour) override;
-    void StateSetAlphaFunc(int func, float param) override;
-    void StateSetDepthFunc(int func) override;
+    void StateSetAlphaFunc(rp::AlphaTest func, float param) override;
+    void StateSetDepthFunc(rp::DepthTest func) override;
     void StateSetFaceCull(bool enable) override;
     void StateSetLineWidth(float width) override;
     void StateSetWriteEnable(bool r, bool g, bool b, bool a) override;
@@ -98,7 +98,7 @@ public:
     void StateSetDepthSlopeAndBias(float slope, float bias) override;
 
     void StateSetFogEnable(bool enable) override;
-    void StateSetFogMode(int mode) override;
+    void StateSetFogMode(rp::FogMode mode) override;
     void StateSetFogNearDistance(float dist) override;
     void StateSetFogFarDistance(float dist) override;
     void StateSetFogDensity(float density) override;
@@ -160,7 +160,7 @@ private:
     bool should_close_ = false;
 
     // Software matrix stack
-    int matrix_mode_ = 0x1700; // GL_MODELVIEW
+    rp::MatrixStack matrix_mode_ = rp::MatrixStack::modelview; // GL_MODELVIEW
     std::stack<glm::mat4> projection_stack_;
     std::stack<glm::mat4> modelview_stack_;
     glm::mat4 projection_top_{1.0f};

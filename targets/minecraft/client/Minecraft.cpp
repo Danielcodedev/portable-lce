@@ -291,7 +291,7 @@ void Minecraft::connectTo(const std::string& server, int port) {
 }
 
 void Minecraft::init() {
-    // glClearColor(0.2f, 0.2f, 0.2f, 1);
+    // {float cc__[]={0.2f,0.2f,0.2f,1};RenderPath.SetClearColour(cc__);};
 
     workingDirectory = getWorkingDirectory();
     levelSource =
@@ -348,18 +348,18 @@ void Minecraft::init() {
     // width = Display.getDisplayMode().getWidth();
     // height = Display.getDisplayMode().getHeight();
 
-    glEnable(GL_TEXTURE_2D);
-    glShadeModel(GL_SMOOTH);
-    glClearDepth(1.0);
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LEQUAL);
-    glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.1f);
-    glCullFace(GL_BACK);
+    RenderPath.StateSetTextureEnable(true);
+    (void)0;
+    (void)0;
+    RenderPath.StateSetDepthTestEnable(true);
+    RenderPath.StateSetDepthFunc(rp::DepthTest::less_equal);
+    RenderPath.StateSetAlphaTestEnable(true);
+    RenderPath.StateSetAlphaFunc(rp::AlphaTest::greater, 0.1f);
+    (void)0;
 
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glMatrixMode(GL_MODELVIEW);
+    RenderPath.MatrixMode(rp::MatrixStack::projection);
+    RenderPath.MatrixSetIdentity();
+    RenderPath.MatrixMode(rp::MatrixStack::modelview);
     checkGlError("Startup");
 
     //    openGLCapabilities = new OpenGLCapabilities();	// 4J - removed
@@ -371,7 +371,7 @@ void Minecraft::init() {
     // TextureAtlas(Icon::TYPE_ITEM, TN_GUI_ITEMS));
     textures->stitch();
 
-    glViewport(0, 0, width, height);
+    (void)0;
 
     particleEngine = new ParticleEngine(level, textures);
     //    try {	// 4J - removed try/catch
@@ -403,23 +403,23 @@ void Minecraft::renderLoadingScreen() {
 
     // xxx
     RenderPath.StartFrame();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(0, (float)ssc.rawWidth, (float)ssc.rawHeight, 0, 1000, 3000);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glTranslatef(0, 0, -2000);
-    glViewport(0, 0, width, height);
-    glClearColor(0, 0, 0, 0);
+    RenderPath.Clear(rp::CLEAR_COLOR | rp::CLEAR_DEPTH);
+    RenderPath.MatrixMode(rp::MatrixStack::projection);
+    RenderPath.MatrixSetIdentity();
+    RenderPath.MatrixOrthogonal(0, (float)ssc.rawWidth, (float)ssc.rawHeight, 0, 1000, 3000);
+    RenderPath.MatrixMode(rp::MatrixStack::modelview);
+    RenderPath.MatrixSetIdentity();
+    RenderPath.MatrixTranslate(0, 0, -2000);
+    (void)0;
+    {float cc__[]={0,0,0,0};RenderPath.SetClearColour(cc__);};
 
     Tesselator* t = Tesselator::getInstance();
 
-    glDisable(GL_LIGHTING);
-    glEnable(GL_TEXTURE_2D);
-    glDisable(GL_FOG);
+    RenderPath.StateSetLightingEnable(false);
+    RenderPath.StateSetTextureEnable(true);
+    RenderPath.StateSetFogEnable(false);
     // xxx
-    glBindTexture(GL_TEXTURE_2D, textures->loadTexture(TN_MOB_PIG));
+    RenderPath.TextureBind(textures->loadTexture(TN_MOB_PIG));
     t->begin();
     t->color(0xffffff);
     t->vertexUV((float)(0), (float)(height), (float)(0), (float)(0),
@@ -432,14 +432,14 @@ void Minecraft::renderLoadingScreen() {
 
     int lw = 256;
     int lh = 256;
-    glColor4f(1, 1, 1, 1);
+    RenderPath.StateSetColour(1, 1, 1, 1);
     t->color(0xffffff);
     blit((ssc.getWidth() - lw) / 2, (ssc.getHeight() - lh) / 2, 0, 0, lw, lh);
-    glDisable(GL_LIGHTING);
-    glDisable(GL_FOG);
+    RenderPath.StateSetLightingEnable(false);
+    RenderPath.StateSetFogEnable(false);
 
-    glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.1f);
+    RenderPath.StateSetAlphaTestEnable(true);
+    RenderPath.StateSetAlphaFunc(rp::AlphaTest::greater, 0.1f);
 
     // Display::swapBuffers();
     // xxx
@@ -737,11 +737,11 @@ void Minecraft::updatePlayerViewportAssignments() {
                          5) &&
                         (localplayers[i]->m_iScreenSection <=
                          
-                             VIEWPORT_TYPE_QUADRANT_BOTTOM_RIGHT)) {
+                             static_cast<int>(8))) {
                         quadrantsAllocated
                             [localplayers[i]->m_iScreenSection -
                              
-                                 VIEWPORT_TYPE_QUADRANT_TOP_LEFT] = true;
+                                 static_cast<int>(5)] = true;
                     }
                 } else {
                     // Reset the viewport so that it can be assigned in the next
@@ -764,7 +764,7 @@ void Minecraft::updatePlayerViewportAssignments() {
                         if (!quadrantsAllocated[j]) {
                             localplayers[i]->m_iScreenSection =
                                 
-                                    VIEWPORT_TYPE_QUADRANT_TOP_LEFT +
+                                    static_cast<int>(5) +
                                 j;
                             quadrantsAllocated[j] = true;
                             break;
@@ -1617,7 +1617,7 @@ void Minecraft::run_middle() {
                                   timer->a);
 
                 // if (level != nullptr) level->updateLights();
-                glEnable(GL_TEXTURE_2D);
+                RenderPath.StateSetTextureEnable(true);
 
                 //        if (!Keyboard::isKeyDown(Keyboard.KEY_F7))
                 //        Display.update();		// 4J - removed
@@ -1633,12 +1633,9 @@ void Minecraft::run_middle() {
                     int iPrimaryPad = PlatformInput.GetPrimaryPad();
                     for (int i = 0; i < XUSER_MAX_COUNT; i++) {
                         if (setLocalPlayerIdx(i)) {
-                            RenderPath.StateSetViewport(
-                                
-                                    player->m_iScreenSection);
+                            RenderPath.StateSetViewport(static_cast<int>(                                    player->m_iScreenSection));
                             gameRenderer->current_view.viewport_layout =
-                                static_cast<rp::ViewportLayout>(
-                                    player->m_iScreenSection);
+                                static_cast<rp::ViewportLayout>(player->m_iScreenSection);
                             gameRenderer->render(timer->a, bFirst);
                             bFirst = false;
 
@@ -1665,8 +1662,7 @@ void Minecraft::run_middle() {
                     // GameRenderer directly so mc->screen draws.
                     if (bFirst) {
                         localPlayerIdx = 0;
-                        RenderPath.StateSetViewport(
-                            0);
+                        RenderPath.StateSetViewport(0);
                         gameRenderer->render(timer->a, true);
                     }
 #endif
@@ -1675,23 +1671,19 @@ void Minecraft::run_middle() {
                     // black
                     if (unoccupiedQuadrant > -1) {
                         // render a logo
-                        RenderPath.StateSetViewport((
-                            
-                                eViewportType)(
-                                                   VIEWPORT_TYPE_QUADRANT_TOP_LEFT +
-                                               unoccupiedQuadrant));
-                        glClearColor(0, 0, 0, 0);
-                        glClear(GL_COLOR_BUFFER_BIT);
+                        RenderPath.StateSetViewport(static_cast<int>(                            static_cast<int>(5) +
+                            unoccupiedQuadrant));
+                        {float cc__[]={0,0,0,0};RenderPath.SetClearColour(cc__);};
+                        RenderPath.Clear(rp::CLEAR_COLOR);
 
                         ui.SetEmptyQuadrantLogo(
                             5 +
                             unoccupiedQuadrant);
                     }
                     setLocalPlayerIdx(iPrimaryPad);
-                    RenderPath.StateSetViewport(
-                        0);
+                    RenderPath.StateSetViewport(0);
                 }
-                glFlush();
+                (void)0;
 
                 /*	4J - removed
                 if (!Display::isActive())
@@ -1822,19 +1814,19 @@ void Minecraft::renderFpsMeter(int64_t tickTime) {
                           (Minecraft::frameTimes_length - 1)] = now - lastTimer;
     lastTimer = now;
 
-    glClear(GL_DEPTH_BUFFER_BIT);
-    glMatrixMode(GL_PROJECTION);
-    glEnable(GL_COLOR_MATERIAL);
-    glLoadIdentity();
-    glOrtho(0, (float)width, (float)height, 0, 1000, 3000);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glTranslatef(0, 0, -2000);
+    RenderPath.Clear(rp::CLEAR_DEPTH);
+    RenderPath.MatrixMode(rp::MatrixStack::projection);
+    (void)0;
+    RenderPath.MatrixSetIdentity();
+    RenderPath.MatrixOrthogonal(0, (float)width, (float)height, 0, 1000, 3000);
+    RenderPath.MatrixMode(rp::MatrixStack::modelview);
+    RenderPath.MatrixSetIdentity();
+    RenderPath.MatrixTranslate(0, 0, -2000);
 
-    glLineWidth(1);
-    glDisable(GL_TEXTURE_2D);
+    RenderPath.StateSetLineWidth(1);
+    RenderPath.StateSetTextureEnable(false);
     Tesselator* t = Tesselator::getInstance();
-    t->begin(GL_QUADS);
+    t->begin(0x0007);
     int hh1 = (int)(nsPer60Fps / 200000);
     t->color(0x20000000);
     t->vertex((float)(0), (float)(height - hh1), (float)(0));
@@ -1858,7 +1850,7 @@ void Minecraft::renderFpsMeter(int64_t tickTime) {
         totalTime += Minecraft::frameTimes[i];
     }
     int hh = (int)(totalTime / 200000 / Minecraft::frameTimes_length);
-    t->begin(GL_QUADS);
+    t->begin(0x0007);
     t->color(0x20400000);
     t->vertex((float)(0), (float)(height - hh), (float)(0));
     t->vertex((float)(0), (float)(height), (float)(0));
@@ -1867,7 +1859,7 @@ void Minecraft::renderFpsMeter(int64_t tickTime) {
     t->vertex((float)(Minecraft::frameTimes_length), (float)(height - hh),
               (float)(0));
     t->end();
-    t->begin(GL_LINES);
+    t->begin(0x0001);
     for (int i = 0; i < Minecraft::frameTimes_length; i++) {
         int col = ((i - Minecraft::frameTimePos) &
                    (Minecraft::frameTimes_length - 1)) *
@@ -1899,7 +1891,7 @@ void Minecraft::renderFpsMeter(int64_t tickTime) {
     }
     t->end();
 
-    glEnable(GL_TEXTURE_2D);
+    RenderPath.StateSetTextureEnable(true);
 }
 
 void Minecraft::stop() {
@@ -2009,8 +2001,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures) {
     // soundEngine.playMusicTick();
 
     if (!pause && level != nullptr) gameMode->tick();
-    glBindTexture(GL_TEXTURE_2D,
-                  textures->loadTexture(TN_TERRAIN));  // "/terrain.png"));
+    RenderPath.TextureBind(                  textures->loadTexture(TN_TERRAIN));  // "/terrain.png"));
     if (bFirst) {
         if (!pause) textures->tick(bUpdateTextures);
     }
@@ -4258,8 +4249,8 @@ int Minecraft::maxSupportedTextureSize() {
     return 1024;
 
     // for (int texSize = 16384; texSize > 0; texSize >>= 1) {
-    //	GL11.glTexImage2D(GL11.GL_PROXY_TEXTURE_2D, 0, GL11.GL_RGBA, texSize,
-    // texSize, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
+    //	GL11.glTexImage2D(GL11.GL_PROXY_TEXTURE_2D, 0, GL11.0x1908, texSize,
+    // texSize, 0, GL11.0x1908, GL11.0x1401, (ByteBuffer) null);
     // final int width = GL11.glGetTexLevelParameteri(GL11.GL_PROXY_TEXTURE_2D,
     // 0, GL11.GL_TEXTURE_WIDTH); 	if (width != 0) { 		return
     // texSize;

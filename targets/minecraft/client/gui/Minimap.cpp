@@ -110,10 +110,10 @@ void Minimap::render(std::shared_ptr<Player> player, Textures* textures,
 
     float vo = 0;
 
-    glBindTexture(GL_TEXTURE_2D, mapTexture);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-    glDisable(GL_ALPHA_TEST);
+    RenderPath.TextureBind(mapTexture);
+    RenderPath.StateSetBlendEnable(true);
+    RenderPath.StateSetBlendFunc(rp::BlendFactor::one, rp::BlendFactor::one_minus_src_alpha);
+    RenderPath.StateSetAlphaTestEnable(false);
     t->begin();
     // 4J - moved to -0.02 to stop z fighting ( was -0.01)
     // AP - Vita still has issues so push it a bit more
@@ -127,8 +127,8 @@ void Minimap::render(std::shared_ptr<Player> player, Textures* textures,
     t->vertexUV((float)(x + 0 + vo), (float)(y + 0 + vo), (float)(Offset),
                 (float)(0), (float)(0));
     t->end();
-    glEnable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
+    RenderPath.StateSetAlphaTestEnable(true);
+    RenderPath.StateSetBlendEnable(false);
 
     textures->bind(
         textures->loadTexture(TN_MISC_MAPICONS));  // "/misc/mapicons.png"));
@@ -168,12 +168,12 @@ void Minimap::render(std::shared_ptr<Player> player, Textures* textures,
         else if (imgIndex == 12 && dec->entityId != entityId)
             continue;
 
-        glPushMatrix();
-        glTranslatef(x + dec->x / 2.0f + w / 2, y + dec->y / 2.0f + h / 2,
+        RenderPath.MatrixPush();
+        RenderPath.MatrixTranslate(x + dec->x / 2.0f + w / 2, y + dec->y / 2.0f + h / 2,
                      fIconZ);
-        glRotatef(dec->rot * 360 / 16.0f, 0, 0, 1);
-        glScalef(4, 4, 3);
-        glTranslatef(-1.0f / 8.0f, +1.0f / 8.0f, 0);
+        RenderPath.MatrixRotate((dec->rot * 360 / 16.0f)*(3.14159265358979f/180.f), 0, 0, 1);
+        RenderPath.MatrixScale(4, 4, 3);
+        RenderPath.MatrixTranslate(-1.0f / 8.0f, +1.0f / 8.0f, 0);
 
         float u0 = (imgIndex % 4 + 0) / 4.0f;
         float v0 = (imgIndex / 4 + 0) / 4.0f;
@@ -190,7 +190,7 @@ void Minimap::render(std::shared_ptr<Player> player, Textures* textures,
         t->vertexUV((float)(-1), (float)(-1), (float)(0), (float)(u0),
                     (float)(v1));
         t->end();
-        glPopMatrix();
+        RenderPath.MatrixPop();
         fIconZ -= 0.01f;
     }
 
@@ -214,12 +214,12 @@ void Minimap::render(std::shared_ptr<Player> player, Textures* textures,
         else if (imgIndex == 12 && dec->entityId != entityId)
             continue;
 
-        glPushMatrix();
-        glTranslatef(x + dec->x / 2.0f + w / 2, y + dec->y / 2.0f + h / 2,
+        RenderPath.MatrixPush();
+        RenderPath.MatrixTranslate(x + dec->x / 2.0f + w / 2, y + dec->y / 2.0f + h / 2,
                      fIconZ);
-        glRotatef(dec->rot * 360 / 16.0f, 0, 0, 1);
-        glScalef(4, 4, 3);
-        glTranslatef(-1.0f / 8.0f, +1.0f / 8.0f, 0);
+        RenderPath.MatrixRotate((dec->rot * 360 / 16.0f)*(3.14159265358979f/180.f), 0, 0, 1);
+        RenderPath.MatrixScale(4, 4, 3);
+        RenderPath.MatrixTranslate(-1.0f / 8.0f, +1.0f / 8.0f, 0);
 
         float u0 = (imgIndex % 4 + 0) / 4.0f;
         float v0 = (imgIndex / 4 + 0) / 4.0f;
@@ -236,15 +236,15 @@ void Minimap::render(std::shared_ptr<Player> player, Textures* textures,
         t->vertexUV((float)(-1), (float)(-1), (float)(0), (float)(u0),
                     (float)(v1));
         t->end();
-        glPopMatrix();
+        RenderPath.MatrixPop();
         fIconZ -= 0.01f;
     }
 #endif
 
-    glPushMatrix();
-    //        glRotatef(0, 1, 0, 0);
-    glTranslatef(0, 0, -0.06f);
-    glScalef(1, 1, 1);
+    RenderPath.MatrixPush();
+    //        RenderPath.MatrixRotate((0)*(3.14159265358979f/180.f), 1, 0, 0);
+    RenderPath.MatrixTranslate(0, 0, -0.06f);
+    RenderPath.MatrixScale(1, 1, 1);
     // 4J Stu - Don't render the text name, except in debug
     // #if 1
     // #ifdef _DEBUG
@@ -265,5 +265,5 @@ void Minimap::render(std::shared_ptr<Player> player, Textures* textures,
                        eMinecraftColour_Map_Text));
     }
     // #endif
-    glPopMatrix();
+    RenderPath.MatrixPop();
 }

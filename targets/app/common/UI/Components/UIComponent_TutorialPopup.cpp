@@ -442,7 +442,7 @@ void UIComponent_TutorialPopup::UpdateInteractScenePosition(bool visible) {
 }
 
 void UIComponent_TutorialPopup::render(
-    S32 width, S32 height, eViewportType viewport) {
+    S32 width, S32 height, int viewport) {
     if (viewport != 0) {
         S32 xPos = 0;
         S32 yPos = 0;

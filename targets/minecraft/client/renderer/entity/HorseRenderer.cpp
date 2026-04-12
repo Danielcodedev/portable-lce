@@ -33,7 +33,7 @@ HorseRenderer::HorseRenderer(Model* model, float f) : MobRenderer(model, f) {}
 
 void HorseRenderer::adjustHeight(std::shared_ptr<PathfinderMob> mob,
                                  float FHeight) {
-    glTranslatef(0.0F, FHeight, 0.0F);
+    RenderPath.MatrixTranslate(0.0F, FHeight, 0.0F);
 }
 
 void HorseRenderer::scale(std::shared_ptr<LivingEntity> entityliving, float f) {
@@ -45,7 +45,7 @@ void HorseRenderer::scale(std::shared_ptr<LivingEntity> entityliving, float f) {
     } else if (type == EntityHorse::TYPE_MULE) {
         sizeFactor *= 0.92F;
     }
-    glScalef(sizeFactor, sizeFactor, sizeFactor);
+    RenderPath.MatrixScale(sizeFactor, sizeFactor, sizeFactor);
     MobRenderer::scale(entityliving, f);
 }
 

@@ -168,7 +168,7 @@ void UIComponent_Tooltips::tick() {
 }
 
 void UIComponent_Tooltips::render(S32 width, S32 height,
-                                  eViewportType viewport) {
+                                  int viewport) {
     if ((PlatformProfile.GetLockedProfile() != -1) &&
         !ui.GetMenuDisplayed(m_iPad) &&
         (app.GetGameSettings(m_iPad, eGameSetting_Tooltips) == 0 ||

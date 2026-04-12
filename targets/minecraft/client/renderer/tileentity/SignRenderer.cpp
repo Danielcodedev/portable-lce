@@ -35,12 +35,12 @@ void SignRenderer::render(std::shared_ptr<TileEntity> _sign, double x, double y,
 
     Tile* tile = sign->getTile();
 
-    glPushMatrix();
+    RenderPath.MatrixPush();
     float size = 16 / 24.0f;
     if (tile == Tile::sign) {
-        glTranslatef((float)x + 0.5f, (float)y + 0.75f * size, (float)z + 0.5f);
+        RenderPath.MatrixTranslate((float)x + 0.5f, (float)y + 0.75f * size, (float)z + 0.5f);
         float rot = sign->getData() * 360 / 16.0f;
-        glRotatef(-rot, 0, 1, 0);
+        RenderPath.MatrixRotate((-rot)*(3.14159265358979f/180.f), 0, 1, 0);
         signModel->cube2->visible = true;
     } else {
         int face = sign->getData();
@@ -50,26 +50,26 @@ void SignRenderer::render(std::shared_ptr<TileEntity> _sign, double x, double y,
         if (face == 4) rot = 90;
         if (face == 5) rot = -90;
 
-        glTranslatef((float)x + 0.5f, (float)y + 0.75f * size, (float)z + 0.5f);
-        glRotatef(-rot, 0, 1, 0);
-        glTranslatef(0, -5 / 16.0f, -7 / 16.0f);
+        RenderPath.MatrixTranslate((float)x + 0.5f, (float)y + 0.75f * size, (float)z + 0.5f);
+        RenderPath.MatrixRotate((-rot)*(3.14159265358979f/180.f), 0, 1, 0);
+        RenderPath.MatrixTranslate(0, -5 / 16.0f, -7 / 16.0f);
 
         signModel->cube2->visible = false;
     }
 
     bindTexture(&SIGN_LOCATION);  // 4J was "/item/sign.png"
 
-    glPushMatrix();
-    glScalef(size, -size, -size);
+    RenderPath.MatrixPush();
+    RenderPath.MatrixScale(size, -size, -size);
     signModel->render(true);
-    glPopMatrix();
+    RenderPath.MatrixPop();
     Font* font = getFont();
 
     float s = 1 / 60.0f * size;
-    glTranslatef(0, 0.5f * size, 0.07f * size);
-    glScalef(s, -s, s);
-    glNormal3f(0, 0, -1 * s);
-    glDepthMask(false);
+    RenderPath.MatrixTranslate(0, 0.5f * size, 0.07f * size);
+    RenderPath.MatrixScale(s, -s, s);
+    (void)0;
+    RenderPath.StateSetDepthMask(false);
 
     int col = Minecraft::GetInstance()->getColourTable()->getColor(
         eMinecraftColour_Sign_Text);
@@ -121,7 +121,7 @@ void SignRenderer::render(std::shared_ptr<TileEntity> _sign, double x, double y,
                        col);  // 4J - (MAX_SIGN_LINES) was sign.messages.size()
         }
     }
-    glDepthMask(true);
-    glColor4f(1, 1, 1, 1);
-    glPopMatrix();
+    RenderPath.StateSetDepthMask(true);
+    RenderPath.StateSetColour(1, 1, 1, 1);
+    RenderPath.MatrixPop();
 }

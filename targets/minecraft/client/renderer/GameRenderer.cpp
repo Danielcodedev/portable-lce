@@ -184,13 +184,13 @@ GameRenderer::GameRenderer(Minecraft* mc) {
     // 4J-PB - set up the local players iteminhand renderers here - needs to be
     // done with lighting enabled so that the render geometry gets compiled
     // correctly
-    glEnable(GL_LIGHTING);
+    RenderPath.StateSetLightingEnable(true);
     mc->localitemInHandRenderers[0] =
         new ItemInHandRenderer(mc);  // itemInHandRenderer;
     mc->localitemInHandRenderers[1] = new ItemInHandRenderer(mc);
     mc->localitemInHandRenderers[2] = new ItemInHandRenderer(mc);
     mc->localitemInHandRenderers[3] = new ItemInHandRenderer(mc);
-    glDisable(GL_LIGHTING);
+    RenderPath.StateSetLightingEnable(false);
 
     // 4J - changes brought forward from 1.8.2
     BufferedImage* img = new BufferedImage(16, 16, BufferedImage::TYPE_INT_RGB);
@@ -435,7 +435,7 @@ void GameRenderer::bobHurt(float a) {
     if (player->getHealth() <= 0) {
         float duration = player->deathTime + a;
 
-        glRotatef(40 - (40 * 200) / (duration + 200), 0, 0, 1);
+        RenderPath.MatrixRotate((40 - (40 * 200) / (duration + 200))*(3.14159265358979f/180.f), 0, 0, 1);
     }
 
     if (hurt < 0) return;
@@ -444,9 +444,9 @@ void GameRenderer::bobHurt(float a) {
 
     float rr = player->hurtDir;
 
-    glRotatef(-rr, 0, 1, 0);
-    glRotatef(-hurt * 14, 0, 0, 1);
-    glRotatef(+rr, 0, 1, 0);
+    RenderPath.MatrixRotate((-rr)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((-hurt * 14)*(3.14159265358979f/180.f), 0, 0, 1);
+    RenderPath.MatrixRotate((+rr)*(3.14159265358979f/180.f), 0, 1, 0);
 }
 
 void GameRenderer::bobView(float a) {
@@ -459,12 +459,12 @@ void GameRenderer::bobView(float a) {
     float b = -(player->walkDist + wda * a);
     float bob = player->oBob + (player->bob - player->oBob) * a;
     float tilt = player->oTilt + (player->tilt - player->oTilt) * a;
-    glTranslatef((float)sinf(b * std::numbers::pi) * bob * 0.5f,
+    RenderPath.MatrixTranslate((float)sinf(b * std::numbers::pi) * bob * 0.5f,
                  -(float)std::abs(cosf(b * std::numbers::pi) * bob), 0);
-    glRotatef((float)sinf(b * std::numbers::pi) * bob * 3, 0, 0, 1);
-    glRotatef((float)std::abs(cosf(b * std::numbers::pi - 0.2f) * bob) * 5, 1,
+    RenderPath.MatrixRotate(((float)sinf(b * std::numbers::pi) * bob * 3)*(3.14159265358979f/180.f), 0, 0, 1);
+    RenderPath.MatrixRotate(((float)std::abs(cosf(b * std::numbers::pi - 0.2f) * bob) * 5)*(3.14159265358979f/180.f), 1,
               0, 0);
-    glRotatef((float)tilt, 1, 0, 0);
+    RenderPath.MatrixRotate(((float)tilt)*(3.14159265358979f/180.f), 1, 0, 0);
 }
 
 void GameRenderer::moveCameraToPlayer(float a) {
@@ -477,11 +477,11 @@ void GameRenderer::moveCameraToPlayer(float a) {
     double y = player->yo + (player->y - player->yo) * a - heightOffset;
     double z = player->zo + (player->z - player->zo) * a;
 
-    glRotatef(cameraRollO + (cameraRoll - cameraRollO) * a, 0, 0, 1);
+    RenderPath.MatrixRotate((cameraRollO + (cameraRoll - cameraRollO) * a)*(3.14159265358979f/180.f), 0, 0, 1);
 
     if (player->isSleeping()) {
         heightOffset += 1.0;
-        glTranslatef(0.0f, 0.3f, 0);
+        RenderPath.MatrixTranslate(0.0f, 0.3f, 0);
         if (!mc->options->fixedCamera) {
             int t =
                 mc->level->getTile(std::floor(player->x), std::floor(player->y),
@@ -492,11 +492,11 @@ void GameRenderer::moveCameraToPlayer(float a) {
                                               std::floor(player->z));
 
                 int direction = data & 3;
-                glRotatef((float)direction * 90, 0.0f, 1.0f, 0.0f);
+                RenderPath.MatrixRotate(((float)direction * 90)*(3.14159265358979f/180.f), 0.0f, 1.0f, 0.0f);
             }
-            glRotatef(player->yRotO + (player->yRot - player->yRotO) * a + 180,
+            RenderPath.MatrixRotate((player->yRotO + (player->yRot - player->yRotO) * a + 180)*(3.14159265358979f/180.f),
                       0, -1, 0);
-            glRotatef(player->xRotO + (player->xRot - player->xRotO) * a, -1, 0,
+            RenderPath.MatrixRotate((player->xRotO + (player->xRot - player->xRotO) * a)*(3.14159265358979f/180.f), -1, 0,
                       0);
         }
     }
@@ -511,9 +511,9 @@ void GameRenderer::moveCameraToPlayer(float a) {
                 thirdRotationO + (thirdRotation - thirdRotationO) * a;
             float xRot = thirdTiltO + (thirdTilt - thirdTiltO) * a;
 
-            glTranslatef(0, 0, (float)-cameraDist);
-            glRotatef(xRot, 1, 0, 0);
-            glRotatef(rotationY, 0, 1, 0);
+            RenderPath.MatrixTranslate(0, 0, (float)-cameraDist);
+            RenderPath.MatrixRotate((xRot)*(3.14159265358979f/180.f), 1, 0, 0);
+            RenderPath.MatrixRotate((rotationY)*(3.14159265358979f/180.f), 0, 1, 0);
         } else {
             // 4J - corrected bug where this used to just take player->xRot &
             // yRot directly and so wasn't taking into account interpolation,
@@ -563,26 +563,26 @@ void GameRenderer::moveCameraToPlayer(float a) {
             }
 
             if (localplayer->ThirdPersonView() == 2) {
-                glRotatef(180, 0, 1, 0);
+                RenderPath.MatrixRotate((180)*(3.14159265358979f/180.f), 0, 1, 0);
             }
 
-            glRotatef(playerXRot - xRot, 1, 0, 0);
-            glRotatef(playerYRot - yRot, 0, 1, 0);
-            glTranslatef(0, 0, (float)-cameraDist);
-            glRotatef(yRot - playerYRot, 0, 1, 0);
-            glRotatef(xRot - playerXRot, 1, 0, 0);
+            RenderPath.MatrixRotate((playerXRot - xRot)*(3.14159265358979f/180.f), 1, 0, 0);
+            RenderPath.MatrixRotate((playerYRot - yRot)*(3.14159265358979f/180.f), 0, 1, 0);
+            RenderPath.MatrixTranslate(0, 0, (float)-cameraDist);
+            RenderPath.MatrixRotate((yRot - playerYRot)*(3.14159265358979f/180.f), 0, 1, 0);
+            RenderPath.MatrixRotate((xRot - playerXRot)*(3.14159265358979f/180.f), 1, 0, 0);
         }
     } else {
-        glTranslatef(0, 0, -0.1f);
+        RenderPath.MatrixTranslate(0, 0, -0.1f);
     }
 
     if (!mc->options->fixedCamera) {
-        glRotatef(player->xRotO + (player->xRot - player->xRotO) * a, 1, 0, 0);
-        glRotatef(player->yRotO + (player->yRot - player->yRotO) * a + 180, 0,
+        RenderPath.MatrixRotate((player->xRotO + (player->xRot - player->xRotO) * a)*(3.14159265358979f/180.f), 1, 0, 0);
+        RenderPath.MatrixRotate((player->yRotO + (player->yRot - player->yRotO) * a + 180)*(3.14159265358979f/180.f), 0,
                   1, 0);
     }
 
-    glTranslatef(0, heightOffset, 0);
+    RenderPath.MatrixTranslate(0, heightOffset, 0);
 
     x = player->xo + (player->x - player->xo) * a;
     y = player->yo + (player->y - player->yo) * a - heightOffset;
@@ -628,12 +628,12 @@ void GameRenderer::getFovAndAspect(float& fov, float& aspect, float a,
 
 void GameRenderer::setupCamera(float a, int eye) {
     renderDistance = (float)(16 * 16 >> (mc->options->viewDistance));
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
+    RenderPath.MatrixMode(rp::MatrixStack::projection);
+    RenderPath.MatrixSetIdentity();
 
     float stereoScale = 0.07f;
     if (mc->options->anaglyph3d)
-        glTranslatef(-(eye * 2 - 1) * stereoScale, 0, 0);
+        RenderPath.MatrixTranslate(-(eye * 2 - 1) * stereoScale, 0, 0);
 
     // 4J - have split out fov & aspect calculation so we can take into account
     // viewports
@@ -641,19 +641,19 @@ void GameRenderer::setupCamera(float a, int eye) {
     getFovAndAspect(fov, aspect, a, true);
 
     if (zoom != 1) {
-        glTranslatef((float)zoom_x, (float)-zoom_y, 0);
-        glScaled(zoom, zoom, 1);
+        RenderPath.MatrixTranslate((float)zoom_x, (float)-zoom_y, 0);
+        RenderPath.MatrixScale((float)(zoom),(float)(zoom),(float)(1));
     }
     RenderPath.MatrixPerspective(fov, aspect, 0.05f, renderDistance * 2);
 
     if (mc->gameMode->isCutScene()) {
         float s = 1 / 1.5f;
-        glScalef(1, s, 1);
+        RenderPath.MatrixScale(1, s, 1);
     }
 
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    if (mc->options->anaglyph3d) glTranslatef((eye * 2 - 1) * 0.10f, 0, 0);
+    RenderPath.MatrixMode(rp::MatrixStack::modelview);
+    RenderPath.MatrixSetIdentity();
+    if (mc->options->anaglyph3d) RenderPath.MatrixTranslate((eye * 2 - 1) * 0.10f, 0, 0);
 
     bobHurt(a);
 
@@ -680,20 +680,20 @@ void GameRenderer::setupCamera(float a, int eye) {
 
         float skew = 5 / (pt * pt + 5) - pt * 0.04f;
         skew *= skew;
-        glRotatef((_tick + a) * multiplier, 0, 1, 1);
-        glScalef(1 / skew, 1, 1);
-        glRotatef(-(_tick + a) * multiplier, 0, 1, 1);
+        RenderPath.MatrixRotate(((_tick + a) * multiplier)*(3.14159265358979f/180.f), 0, 1, 1);
+        RenderPath.MatrixScale(1 / skew, 1, 1);
+        RenderPath.MatrixRotate((-(_tick + a) * multiplier)*(3.14159265358979f/180.f), 0, 1, 1);
     }
 
     moveCameraToPlayer(a);
 
     if (cameraFlip > 0) {
         int i = cameraFlip - 1;
-        if (i == 1) glRotatef(90, 0, 1, 0);
-        if (i == 2) glRotatef(180, 0, 1, 0);
-        if (i == 3) glRotatef(-90, 0, 1, 0);
-        if (i == 4) glRotatef(90, 1, 0, 0);
-        if (i == 5) glRotatef(-90, 1, 0, 0);
+        if (i == 1) RenderPath.MatrixRotate((90)*(3.14159265358979f/180.f), 0, 1, 0);
+        if (i == 2) RenderPath.MatrixRotate((180)*(3.14159265358979f/180.f), 0, 1, 0);
+        if (i == 3) RenderPath.MatrixRotate((-90)*(3.14159265358979f/180.f), 0, 1, 0);
+        if (i == 4) RenderPath.MatrixRotate((90)*(3.14159265358979f/180.f), 1, 0, 0);
+        if (i == 5) RenderPath.MatrixRotate((-90)*(3.14159265358979f/180.f), 1, 0, 0);
     }
 }
 
@@ -725,12 +725,12 @@ void GameRenderer::renderItemInHand(float a, int eye) {
             renderHand = false;
     }
 
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
+    RenderPath.MatrixMode(rp::MatrixStack::projection);
+    RenderPath.MatrixSetIdentity();
 
     float stereoScale = 0.07f;
     if (mc->options->anaglyph3d)
-        glTranslatef(-(eye * 2 - 1) * stereoScale, 0, 0);
+        RenderPath.MatrixTranslate(-(eye * 2 - 1) * stereoScale, 0, 0);
 
     // 4J - have split out fov & aspect calculation so we can take into account
     // viewports
@@ -738,22 +738,22 @@ void GameRenderer::renderItemInHand(float a, int eye) {
     getFovAndAspect(fov, aspect, a, false);
 
     if (zoom != 1) {
-        glTranslatef((float)zoom_x, (float)-zoom_y, 0);
-        glScaled(zoom, zoom, 1);
+        RenderPath.MatrixTranslate((float)zoom_x, (float)-zoom_y, 0);
+        RenderPath.MatrixScale((float)(zoom),(float)(zoom),(float)(1));
     }
     RenderPath.MatrixPerspective(fov, aspect, 0.05f, renderDistance * 2);
 
     if (mc->gameMode->isCutScene()) {
         float s = 1 / 1.5f;
-        glScalef(1, s, 1);
+        RenderPath.MatrixScale(1, s, 1);
     }
 
-    glMatrixMode(GL_MODELVIEW);
+    RenderPath.MatrixMode(rp::MatrixStack::modelview);
 
-    glLoadIdentity();
-    if (mc->options->anaglyph3d) glTranslatef((eye * 2 - 1) * 0.10f, 0, 0);
+    RenderPath.MatrixSetIdentity();
+    if (mc->options->anaglyph3d) RenderPath.MatrixTranslate((eye * 2 - 1) * 0.10f, 0, 0);
 
-    glPushMatrix();
+    RenderPath.MatrixPush();
     bobHurt(a);
 
     // 4J-PB - changing this to be per player
@@ -781,7 +781,7 @@ void GameRenderer::renderItemInHand(float a, int eye) {
             }
         }
     }
-    glPopMatrix();
+    RenderPath.MatrixPop();
 
     // 4J-PB - changing this to be per player
     // if (!mc->options->thirdPersonView &&
@@ -813,15 +813,15 @@ void GameRenderer::turnOffLightLayer(double alpha) {  // 4J - TODO
     // is
     // // turned off correctly
     // if (SharedConstants::TEXTURE_LIGHTING) {
-    //     glClientActiveTexture(GL_TEXTURE1);
-    //     glActiveTexture(GL_TEXTURE1);
-    //     glMatrixMode(GL_TEXTURE);
-    //     glLoadIdentity();
-    //     glMatrixMode(GL_MODELVIEW);
-    //     glDisable(GL_TEXTURE_2D);
-    //     glBindTexture(GL_TEXTURE_2D, 0);
-    //     glClientActiveTexture(GL_TEXTURE0);
-    //     glActiveTexture(GL_TEXTURE0);
+    //     RenderPath.StateSetActiveTexture(0x84C1);
+    //     RenderPath.StateSetActiveTexture(0x84C1);
+    //     RenderPath.MatrixMode(rp::MatrixStack::texture);
+    //     RenderPath.MatrixSetIdentity();
+    //     RenderPath.MatrixMode(rp::MatrixStack::modelview);
+    //     RenderPath.StateSetTextureEnable(false);
+    //     RenderPath.TextureBind(0);
+    //     RenderPath.StateSetActiveTexture(0x84C0);
+    //     RenderPath.StateSetActiveTexture(0x84C0);
     // }
 }
 
@@ -1043,7 +1043,7 @@ void GameRenderer::render(float a, bool bFirst) {
     if (mc->noRender) return;
     GameRenderer::anaglyph3d = mc->options->anaglyph3d;
 
-    glViewport(0, 0, mc->width, mc->height);  // 4J - added
+    (void)0;  // 4J - added
     ScreenSizeCalculator ssc(mc->options, mc->width, mc->height);
     int screenWidth = ssc.getWidth();
     int screenHeight = ssc.getHeight();
@@ -1070,11 +1070,11 @@ void GameRenderer::render(float a, bool bFirst) {
             mc->gui->render(a, mc->screen != nullptr, xMouse, yMouse);
         }
     } else {
-        glViewport(0, 0, mc->width, mc->height);
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
+        (void)0;
+        RenderPath.MatrixMode(rp::MatrixStack::projection);
+        RenderPath.MatrixSetIdentity();
+        RenderPath.MatrixMode(rp::MatrixStack::modelview);
+        RenderPath.MatrixSetIdentity();
         setupGuiScreen();
 
         lastNsTime = System::nanoTime();
@@ -1082,7 +1082,7 @@ void GameRenderer::render(float a, bool bFirst) {
 
     if (mc->screen != nullptr) {
         FRAME_PROFILE_SCOPE(UIHud);
-        glClear(GL_DEPTH_BUFFER_BIT);
+        RenderPath.Clear(rp::CLEAR_DEPTH);
         mc->screen->render(xMouse, yMouse, a);
         if (mc->screen != nullptr && mc->screen->particles != nullptr)
             mc->screen->particles->render(a);
@@ -1239,8 +1239,8 @@ void GameRenderer::renderLevel(float a, int64_t until) {
     // Java 1.0.1 has this line enabled, should check why - don't want to put it
     // in now in case it breaks split-screen
 
-    glEnable(GL_CULL_FACE);
-    glEnable(GL_DEPTH_TEST);
+    RenderPath.StateSetFaceCull(true);
+    RenderPath.StateSetDepthTestEnable(true);
 
     // Is this the primary player? Only do the updating of chunks if it is. This
     // controls the creation of render data for each chunk - all of this we are
@@ -1282,10 +1282,10 @@ void GameRenderer::renderLevel(float a, int64_t until) {
             }
         }
 
-        glViewport(0, 0, mc->width, mc->height);
+        (void)0;
         setupClearColor(a);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glEnable(GL_CULL_FACE);
+        RenderPath.Clear(rp::CLEAR_COLOR | rp::CLEAR_DEPTH);
+        RenderPath.StateSetFaceCull(true);
 
         setupCamera(a, i);
         Camera::prepare(mc->player, mc->player->ThirdPersonView() == 2);
@@ -1309,12 +1309,12 @@ void GameRenderer::renderLevel(float a, int64_t until) {
         // render dists this was done in renderSky() for the far and normal
         // dists but was missing here, UPDATE: Also needed for the nether, so
         // just enable it unconditionally
-        glEnable(GL_ALPHA_TEST);
-        glEnable(GL_FOG);
+        RenderPath.StateSetAlphaTestEnable(true);
+        RenderPath.StateSetFogEnable(true);
         setupFog(1, a);
 
         if (mc->options->ambientOcclusion) {
-            glShadeModel(GL_SMOOTH);
+            (void)0;
         }
 
         //		Culler *frustum = new FrustumCuller();
@@ -1356,13 +1356,13 @@ void GameRenderer::renderLevel(float a, int64_t until) {
                                 // rendering
 
         setupFog(0, a);
-        glEnable(GL_FOG);
+        RenderPath.StateSetFogEnable(true);
         mc->textures->bindTexture(
             &TextureAtlas::LOCATION_BLOCKS);  // 4J was "/terrain.png"
         Lighting::turnOff();
         levelRenderer->render(cameraEntity, 0, a, updateChunks);
 
-        glShadeModel(GL_FLAT);
+        (void)0;
 
         if (cameraFlip == 0) {
             Lighting::turnOn();
@@ -1410,21 +1410,21 @@ void GameRenderer::renderLevel(float a, int64_t until) {
             {
                 std::shared_ptr<Player> player =
                     std::dynamic_pointer_cast<Player>(cameraEntity);
-                glDisable(GL_ALPHA_TEST);
+                RenderPath.StateSetAlphaTestEnable(false);
                 levelRenderer->renderHit(player, mc->hitResult, 0,
                                          player->inventory->getSelected(), a);
-                glEnable(GL_ALPHA_TEST);
+                RenderPath.StateSetAlphaTestEnable(true);
             }
         }
 
-        glDisable(GL_BLEND);
-        glEnable(GL_CULL_FACE);
-        RenderPath.StateSetBlendFunc(GL_SRC_ALPHA,
-                                           GL_ONE_MINUS_SRC_ALPHA);
+        RenderPath.StateSetBlendEnable(false);
+        RenderPath.StateSetFaceCull(true);
+        RenderPath.StateSetBlendFunc(rp::BlendFactor::src_alpha,
+                                           rp::BlendFactor::one_minus_src_alpha);
         RenderPath.StateSetDepthMask(true);
         setupFog(0, a);
-        glEnable(GL_BLEND);
-        glDisable(GL_CULL_FACE);
+        RenderPath.StateSetBlendEnable(true);
+        RenderPath.StateSetFaceCull(false);
         mc->textures->bindTexture(
             &TextureAtlas::LOCATION_BLOCKS);  // 4J was "/terrain.png"
         // 4J - have changed this fancy rendering option to work with our
@@ -1435,15 +1435,15 @@ void GameRenderer::renderLevel(float a, int64_t until) {
         if (true)  // (mc->options->fancyGraphics)
         {
             if (mc->options->ambientOcclusion) {
-                glShadeModel(GL_SMOOTH);
+                (void)0;
             }
 
-            RenderPath.StateSetBlendFunc(GL_ZERO, GL_ONE);
+            RenderPath.StateSetBlendFunc(rp::BlendFactor::zero, rp::BlendFactor::one);
             int visibleWaterChunks =
                 levelRenderer->render(cameraEntity, 1, a, updateChunks);
 
-            RenderPath.StateSetBlendFunc(GL_SRC_ALPHA,
-                                               GL_ONE_MINUS_SRC_ALPHA);
+            RenderPath.StateSetBlendFunc(rp::BlendFactor::src_alpha,
+                                               rp::BlendFactor::one_minus_src_alpha);
 
             if (visibleWaterChunks > 0) {
                 levelRenderer->render(
@@ -1453,7 +1453,7 @@ void GameRenderer::renderLevel(float a, int64_t until) {
                                     // that anymore
             }
 
-            glShadeModel(GL_FLAT);
+            (void)0;
         } else {
             levelRenderer->render(cameraEntity, 1, a, updateChunks);
         }
@@ -1479,8 +1479,8 @@ void GameRenderer::renderLevel(float a, int64_t until) {
         ////////////////////////// End of 4J added section
 
         RenderPath.StateSetDepthMask(true);
-        glEnable(GL_CULL_FACE);
-        glDisable(GL_BLEND);
+        RenderPath.StateSetFaceCull(true);
+        RenderPath.StateSetBlendEnable(false);
 
         if ((zoom == 1) &&
             cameraEntity->instanceof(eTYPE_PLAYER))  //&& !mc->options.hideGui)
@@ -1489,27 +1489,27 @@ void GameRenderer::renderLevel(float a, int64_t until) {
                 !cameraEntity->isUnderLiquid(Material::water)) {
                 std::shared_ptr<Player> player =
                     std::dynamic_pointer_cast<Player>(cameraEntity);
-                glDisable(GL_ALPHA_TEST);
+                RenderPath.StateSetAlphaTestEnable(false);
                 levelRenderer->renderHitOutline(player, mc->hitResult, 0, a);
-                glEnable(GL_ALPHA_TEST);
+                RenderPath.StateSetAlphaTestEnable(true);
             }
         }
 
         /* 4J - moved rain rendering to after clouds so that it alpha blends
         onto them properly         renderSnowAndRain(a);
 
-        glDisable(GL_FOG);
+        RenderPath.StateSetFogEnable(false);
         */
 
-        glEnable(GL_BLEND);
-        RenderPath.StateSetBlendFunc(GL_SRC_ALPHA, GL_ONE);
+        RenderPath.StateSetBlendEnable(true);
+        RenderPath.StateSetBlendFunc(rp::BlendFactor::src_alpha, rp::BlendFactor::one);
         {
             FRAME_PROFILE_SCOPE(WeatherSky);
             levelRenderer->renderDestroyAnimation(
                 Tesselator::getInstance(),
                 std::dynamic_pointer_cast<Player>(cameraEntity), a);
         }
-        glDisable(GL_BLEND);
+        RenderPath.StateSetBlendEnable(false);
 
         if (cameraEntity->y >= Level::genDepth) {
             FRAME_PROFILE_SCOPE(WeatherSky);
@@ -1519,16 +1519,16 @@ void GameRenderer::renderLevel(float a, int64_t until) {
         // 4J - rain rendering moved here so that it renders after clouds & can
         // blend properly onto them
         setupFog(0, a);
-        glEnable(GL_FOG);
+        RenderPath.StateSetFogEnable(true);
         {
             FRAME_PROFILE_SCOPE(WeatherSky);
             renderSnowAndRain(a);
         }
 
-        glDisable(GL_FOG);
+        RenderPath.StateSetFogEnable(false);
 
         if (zoom == 1) {
-            glClear(GL_DEPTH_BUFFER_BIT);
+            RenderPath.Clear(rp::CLEAR_DEPTH);
             renderItemInHand(a, i);
         }
 
@@ -1542,14 +1542,14 @@ void GameRenderer::renderLevel(float a, int64_t until) {
 void GameRenderer::prepareAndRenderClouds(LevelRenderer* levelRenderer,
                                           float a) {
     if (mc->options->isCloudsOn()) {
-        glPushMatrix();
+        RenderPath.MatrixPush();
         setupFog(0, a);
-        glEnable(GL_FOG);
+        RenderPath.StateSetFogEnable(true);
         levelRenderer->renderClouds(a);
 
-        glDisable(GL_FOG);
+        RenderPath.StateSetFogEnable(false);
         setupFog(1, a);
-        glPopMatrix();
+        RenderPath.MatrixPop();
     }
 }
 
@@ -1662,11 +1662,11 @@ void GameRenderer::renderSnowAndRain(float a) {
     int z0 = std::floor(player->z);
 
     Tesselator* t = Tesselator::getInstance();
-    glDisable(GL_CULL_FACE);
-    glNormal3f(0, 1, 0);
-    glEnable(GL_BLEND);
-    RenderPath.StateSetBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glAlphaFunc(GL_GREATER, 0.01f);
+    RenderPath.StateSetFaceCull(false);
+    (void)0;
+    RenderPath.StateSetBlendEnable(true);
+    RenderPath.StateSetBlendFunc(rp::BlendFactor::src_alpha, rp::BlendFactor::one_minus_src_alpha);
+    RenderPath.StateSetAlphaFunc(rp::AlphaTest::greater, 0.01f);
 
     mc->textures->bindTexture(
         &SNOW_LOCATION);  // 4J was "/environment/snow.png"
@@ -1701,7 +1701,7 @@ void GameRenderer::renderSnowAndRain(float a) {
     int mode = -1;
     float time = _tick + a;
 
-    glColor4f(1, 1, 1, 1);
+    RenderPath.StateSetColour(1, 1, 1, 1);
 
     // two snow/rain rendering
     mc->textures->bindTexture(&RAIN_LOCATION);
@@ -1830,9 +1830,9 @@ void GameRenderer::renderSnowAndRain(float a) {
     }
     t->end();  // single submit for all snow geometry
 
-    glEnable(GL_CULL_FACE);
-    glDisable(GL_BLEND);
-    glAlphaFunc(GL_GREATER, 0.1f);
+    RenderPath.StateSetFaceCull(true);
+    RenderPath.StateSetBlendEnable(false);
+    RenderPath.StateSetAlphaFunc(rp::AlphaTest::greater, 0.1f);
     turnOffLightLayer(a);
 
     RenderPath.StateSetEnableViewportClipPlanes(false);
@@ -1850,38 +1850,38 @@ void GameRenderer::setupGuiScreen(int forceScale /*=-1*/) {
     // 4jcraft: Java GUI screens still assume a clean 2D fixed-function style
     // state.
     RenderPath.StateSetFaceCull(false);
-    glDisable(GL_LIGHTING);
-    glDisable(GL_FOG);
-    glColor4f(1, 1, 1, 1);
-    glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.1f);
-    glEnable(GL_DEPTH_TEST);
-    RenderPath.StateSetDepthFunc(GL_LEQUAL);
+    RenderPath.StateSetLightingEnable(false);
+    RenderPath.StateSetFogEnable(false);
+    RenderPath.StateSetColour(1, 1, 1, 1);
+    RenderPath.StateSetAlphaTestEnable(true);
+    RenderPath.StateSetAlphaFunc(rp::AlphaTest::greater, 0.1f);
+    RenderPath.StateSetDepthTestEnable(true);
+    RenderPath.StateSetDepthFunc(rp::DepthTest::less_equal);
     RenderPath.StateSetDepthMask(true);
 
     RenderPath.TextureBindVertex(-1);
 
-    glClientActiveTexture(GL_TEXTURE1);
-    glActiveTexture(GL_TEXTURE1);
-    glDisable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glMatrixMode(GL_TEXTURE);
-    glLoadIdentity();
+    RenderPath.StateSetActiveTexture(0x84C1);
+    RenderPath.StateSetActiveTexture(0x84C1);
+    RenderPath.StateSetTextureEnable(false);
+    RenderPath.TextureBind(0);
+    RenderPath.MatrixMode(rp::MatrixStack::texture);
+    RenderPath.MatrixSetIdentity();
 
-    glClientActiveTexture(GL_TEXTURE0);
-    glActiveTexture(GL_TEXTURE0);
-    glEnable(GL_TEXTURE_2D);
-    glMatrixMode(GL_TEXTURE);
-    glLoadIdentity();
-    glMatrixMode(GL_MODELVIEW);
+    RenderPath.StateSetActiveTexture(0x84C0);
+    RenderPath.StateSetActiveTexture(0x84C0);
+    RenderPath.StateSetTextureEnable(true);
+    RenderPath.MatrixMode(rp::MatrixStack::texture);
+    RenderPath.MatrixSetIdentity();
+    RenderPath.MatrixMode(rp::MatrixStack::modelview);
 
-    glClear(GL_DEPTH_BUFFER_BIT);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(0, (float)ssc.rawWidth, (float)ssc.rawHeight, 0, 1000, 3000);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glTranslatef(0, 0, -2000);
+    RenderPath.Clear(rp::CLEAR_DEPTH);
+    RenderPath.MatrixMode(rp::MatrixStack::projection);
+    RenderPath.MatrixSetIdentity();
+    RenderPath.MatrixOrthogonal(0, (float)ssc.rawWidth, (float)ssc.rawHeight, 0, 1000, 3000);
+    RenderPath.MatrixMode(rp::MatrixStack::modelview);
+    RenderPath.MatrixSetIdentity();
+    RenderPath.MatrixTranslate(0, 0, -2000);
 }
 
 void GameRenderer::setupClearColor(float a) {
@@ -2034,7 +2034,7 @@ void GameRenderer::setupClearColor(float a) {
         fb = fbb;
     }
 
-    glClearColor(fr, fg, fb, 0.0f);
+    {float cc__[]={fr,fg,fb,0.0f};RenderPath.SetClearColour(cc__);};
 }
 
 void GameRenderer::captureFogProfile(int pass_index, float) {
@@ -2090,23 +2090,22 @@ void GameRenderer::setupFog(int i, float alpha) {
         // 4J TODO
         /*
         glFog(GL_FOG_COLOR, getBuffer(0, 0, 0, 1));
-        glFogi(GL_FOG_MODE, GL_LINEAR);
-        glFogf(GL_FOG_START, 0);
-        glFogf(GL_FOG_END, 8);
+        RenderPath.StateSetFogMode(rp::FogMode::linear);
+        RenderPath.StateSetFogNearDistance(0);
+        RenderPath.StateSetFogFarDistance(8);
 
         if (GLContext.getCapabilities().GL_NV_fog_distance) {
         glFogi(NVFogDistance.GL_FOG_DISTANCE_MODE_NV,
         NVFogDistance.GL_EYE_RADIAL_NV);
         }
 
-        glFogf(GL_FOG_START, 0);
+        RenderPath.StateSetFogNearDistance(0);
         */
         return;
     }
 
-    glFog(GL_FOG_COLOR, getBuffer(fr, fg, fb, 1));
-    glNormal3f(0, -1, 0);
-    glColor4f(1, 1, 1, 1);
+    RenderPath.StateSetFogColour(fr, fg, fb);
+    RenderPath.StateSetColour(1, 1, 1, 1);
 
     int t = Camera::getBlockAt(mc->level, player, alpha);
 
@@ -2118,13 +2117,13 @@ void GameRenderer::setupFog(int i, float alpha) {
                                   (1.0f - (float)duration / 20.0f);
         }
 
-        glFogi(GL_FOG_MODE, GL_LINEAR);
+        RenderPath.StateSetFogMode(rp::FogMode::linear);
         if (i < 0) {
-            glFogf(GL_FOG_START, 0);
-            glFogf(GL_FOG_END, distance * 0.8f);
+            RenderPath.StateSetFogNearDistance(0);
+            RenderPath.StateSetFogFarDistance(distance * 0.8f);
         } else {
-            glFogf(GL_FOG_START, distance * 0.25f);
-            glFogf(GL_FOG_END, distance);
+            RenderPath.StateSetFogNearDistance(distance * 0.25f);
+            RenderPath.StateSetFogFarDistance(distance);
         }
         // 4J - TODO investigate implementing this
         //        if (GLContext.getCapabilities().GL_NV_fog_distance)
@@ -2133,20 +2132,20 @@ void GameRenderer::setupFog(int i, float alpha) {
         //            NVFogDistance.GL_EYE_RADIAL_NV);
         //        }
     } else if (isInClouds) {
-        glFogi(GL_FOG_MODE, GL_EXP);
-        glFogf(GL_FOG_DENSITY, 0.1f);  // was 0.06
+        RenderPath.StateSetFogMode(rp::FogMode::exponential);
+        RenderPath.StateSetFogDensity(0.1f);  // was 0.06
     } else if (t > 0 && Tile::tiles[t]->material == Material::water) {
-        glFogi(GL_FOG_MODE, GL_EXP);
+        RenderPath.StateSetFogMode(rp::FogMode::exponential);
         if (player->hasEffect(MobEffect::waterBreathing)) {
-            glFogf(GL_FOG_DENSITY, 0.05f);  // was 0.06
+            RenderPath.StateSetFogDensity(0.05f);  // was 0.06
         } else {
-            glFogf(GL_FOG_DENSITY,
+            RenderPath.StateSetFogDensity(
                    0.1f - (EnchantmentHelper::getOxygenBonus(player) *
-                           0.03f));  // was 0.06
+                           0.03f));
         }
     } else if (t > 0 && Tile::tiles[t]->material == Material::lava) {
-        glFogi(GL_FOG_MODE, GL_EXP);
-        glFogf(GL_FOG_DENSITY, 2.0f);  // was 0.06
+        RenderPath.StateSetFogMode(rp::FogMode::exponential);
+        RenderPath.StateSetFogDensity(2.0f);  // was 0.06
     } else {
         float distance = renderDistance;
         if (!mc->level->dimension->hasCeiling) {
@@ -2166,15 +2165,15 @@ void GameRenderer::setupFog(int i, float alpha) {
             }
         }
 
-        glFogi(GL_FOG_MODE, GL_LINEAR);
-        glFogf(GL_FOG_START, distance * 0.25f);
-        glFogf(GL_FOG_END, distance);
+        RenderPath.StateSetFogMode(rp::FogMode::linear);
+        RenderPath.StateSetFogNearDistance(distance * 0.25f);
+        RenderPath.StateSetFogFarDistance(distance);
         if (i < 0) {
-            glFogf(GL_FOG_START, 0);
-            glFogf(GL_FOG_END, distance * 0.8f);
+            RenderPath.StateSetFogNearDistance(0);
+            RenderPath.StateSetFogFarDistance(distance * 0.8f);
         } else {
-            glFogf(GL_FOG_START, distance * 0.25f);
-            glFogf(GL_FOG_END, distance);
+            RenderPath.StateSetFogNearDistance(distance * 0.25f);
+            RenderPath.StateSetFogFarDistance(distance);
         }
         /* 4J - removed - TODO investigate
         if (GLContext.getCapabilities().GL_NV_fog_distance)
@@ -2185,13 +2184,13 @@ void GameRenderer::setupFog(int i, float alpha) {
         */
 
         if (mc->level->dimension->isFoggyAt((int)player->x, (int)player->z)) {
-            glFogf(GL_FOG_START, distance * 0.05f);
-            glFogf(GL_FOG_END, std::min(distance, 16 * 16 * .75f) * .5f);
+            RenderPath.StateSetFogNearDistance(distance * 0.05f);
+            RenderPath.StateSetFogFarDistance(std::min(distance, 16 * 16 * .75f) * .5f);
         }
     }
 
-    glEnable(GL_COLOR_MATERIAL);
-    glColorMaterial(GL_FRONT, GL_AMBIENT);
+    (void)0;
+    (void)0;
 
     captureFogProfile(i, alpha);
 }

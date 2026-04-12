@@ -242,7 +242,7 @@ void UIGroup::removeComponent(EUIScene scene, EUILayer layer) {
     m_layers[layer]->removeComponent(scene);
 }
 
-void UIGroup::SetViewportType(eViewportType type) {
+void UIGroup::SetViewportType(int type) {
     if (m_viewportType != type) {
         m_viewportType = type;
         for (unsigned int i = 0; i < eUILayer_COUNT; ++i) {
@@ -251,7 +251,7 @@ void UIGroup::SetViewportType(eViewportType type) {
     }
 }
 
-eViewportType UIGroup::GetViewportType() {
+int UIGroup::GetViewportType() {
     return m_viewportType;
 }
 

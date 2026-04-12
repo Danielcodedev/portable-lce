@@ -79,7 +79,7 @@ void UIComponent_Panorama::tick() {
 }
 
 void UIComponent_Panorama::render(S32 width, S32 height,
-                                  eViewportType viewport) {
+                                  int viewport) {
     bool specialViewport =
         (viewport == 1) ||
         (viewport == 2) ||

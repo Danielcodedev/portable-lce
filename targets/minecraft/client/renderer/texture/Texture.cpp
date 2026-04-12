@@ -51,15 +51,15 @@ void Texture::_init(const std::string& name, int mode, int width, int height,
     //}
     // else if(depth == 1)
     //{
-    type = GL_TEXTURE_2D;
+    type = 0x0DE1;
     //}
     // else
     //{
     //	type = GL_TEXTURE_3D;
     //}
 
-    mipmapped = mipMap || (minFilter != GL_NEAREST && minFilter != GL_LINEAR) ||
-                (magFilter != GL_NEAREST && magFilter != GL_LINEAR);
+    mipmapped = mipMap || (minFilter != 0x2600 && minFilter != 0x2601) ||
+                (magFilter != 0x2600 && magFilter != 0x2601);
     m_iMipLevels = 1;
 
     if (mipmapped) {
@@ -79,11 +79,11 @@ void Texture::_init(const std::string& name, int mode, int width, int height,
     if (mode != TM_CONTAINER) {
         glId = glGenTextures();
 
-        glBindTexture(type, glId);
-        glTexParameteri(type, GL_TEXTURE_MIN_FILTER, minFilter);
-        glTexParameteri(type, GL_TEXTURE_MAG_FILTER, magFilter);
-        glTexParameteri(type, GL_TEXTURE_WRAP_S, wrapMode);
-        glTexParameteri(type, GL_TEXTURE_WRAP_T, wrapMode);
+        RenderPath.TextureBind(glId);
+        RenderPath.TextureSetParam(0x2801, minFilter);
+        RenderPath.TextureSetParam(0x2800, magFilter);
+        RenderPath.TextureSetParam(0x2802, wrapMode);
+        RenderPath.TextureSetParam(0x2803, wrapMode);
     } else {
         glId = -1;
     }
@@ -541,15 +541,15 @@ void Texture::bind(int mipMapIndex) {
     // 4J Removed 3D
     // if (depth == 1)
     //{
-    glEnable(GL_TEXTURE_2D);
+    RenderPath.StateSetTextureEnable(true);
     //}
     // else
     //{
     //	glEnable(GL_TEXTURE_3D);
     //}
 
-    glActiveTexture(GL_TEXTURE0 + mipMapIndex);
-    glBindTexture(type, glId);
+    RenderPath.StateSetActiveTexture(0x84C0 + mipMapIndex);
+    RenderPath.TextureBind(glId);
     if (!updated) {
         updateOnGPU();
     }
@@ -568,7 +568,7 @@ void Texture::updateOnGPU() {
     // if (height != 1 && depth != 1)
     //{
     //	glTexImage3D(type, 0, format, width, height, depth, 0, format,
-    // GL_UNSIGNED_BYTE, data);
+    // 0x1401, data);
     //}
     // else if(height != 1)
     //{
@@ -610,12 +610,12 @@ void Texture::updateOnGPU() {
             }
         }
     }
-    // glTexImage2D(type, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE,
+    // glTexImage2D(type, 0, format, width, height, 0, format, 0x1401,
     // data);
     //}
     // else
     //{
-    //	glTexImage1D(type, 0, format, width, 0, format, GL_UNSIGNED_BYTE, data);
+    //	glTexImage1D(type, 0, format, width, 0, format, 0x1401, data);
     //}
     updated = true;
 }

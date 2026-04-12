@@ -499,7 +499,7 @@ void UIScene::doHorizontalResizeCheck() {
 }
 
 void UIScene::render(S32 width, S32 height,
-                     eViewportType viewport) {
+                     int viewport) {
     if (m_bIsReloading) return;
     if (!m_hasTickedOnce || !swf) return;
     ui.setupRenderPosition(viewport);
@@ -652,32 +652,32 @@ void UIScene::_customDrawSlotControl(CustomDrawData* region, int iPad,
 
     // 4jcraft: make sure we cull the back to not make transparent blocks (like
     // leaves) look weird
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
+    RenderPath.StateSetFaceCull(true);
+    (void)0;
 
     // 4jcraft: needed for transparency in the item renders (like in the
     // crafting menu)
     if (fAlpha < 1) {
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        RenderPath.StateSetBlendEnable(true);
+        RenderPath.StateSetBlendFunc(rp::BlendFactor::src_alpha, rp::BlendFactor::one_minus_src_alpha);
     }
-    glEnable(GL_RESCALE_NORMAL);
-    glPushMatrix();
+    (void)0;
+    RenderPath.MatrixPush();
     Lighting::turnOn();
-    glRotatef(120, 1, 0, 0);
-    glPopMatrix();
+    RenderPath.MatrixRotate((120)*(3.14159265358979f/180.f), 1, 0, 0);
+    RenderPath.MatrixPop();
 
     float pop = item->popTime;
     if (pop > 0) {
-        glPushMatrix();
+        RenderPath.MatrixPush();
         float squeeze = 1 + pop / (float)Inventory::POP_TIME_DURATION;
         float sx = x;
         float sy = y;
         float sxoffs = 8 * scaleX;
         float syoffs = 12 * scaleY;
-        glTranslatef((float)(sx + sxoffs), (float)(sy + syoffs), 0);
-        glScalef(1 / squeeze, (squeeze + 1) / 2, 1);
-        glTranslatef((float)-(sx + sxoffs), (float)-(sy + syoffs), 0);
+        RenderPath.MatrixTranslate((float)(sx + sxoffs), (float)(sy + syoffs), 0);
+        RenderPath.MatrixScale(1 / squeeze, (squeeze + 1) / 2, 1);
+        RenderPath.MatrixTranslate((float)-(sx + sxoffs), (float)-(sy + syoffs), 0);
     }
 
     if (m_pItemRenderer == nullptr) m_pItemRenderer = new ItemRenderer();
@@ -686,19 +686,19 @@ void UIScene::_customDrawSlotControl(CustomDrawData* region, int iPad,
         fAlpha, isFoil, false, !usingCommandBuffer);
 
     if (pop > 0) {
-        glPopMatrix();
+        RenderPath.MatrixPop();
     }
 
     if (bDecorations) {
         if ((scaleX != 1.0f) || (scaleY != 1.0f)) {
-            glPushMatrix();
-            glScalef(scaleX, scaleY, 1.0f);
+            RenderPath.MatrixPush();
+            RenderPath.MatrixScale(scaleX, scaleY, 1.0f);
             int iX = (int)(0.5f + ((float)x) / scaleX);
             int iY = (int)(0.5f + ((float)y) / scaleY);
 
             m_pItemRenderer->renderGuiItemDecorations(
                 pMinecraft->font, pMinecraft->textures, item, iX, iY, fAlpha);
-            glPopMatrix();
+            RenderPath.MatrixPop();
         } else {
             m_pItemRenderer->renderGuiItemDecorations(
                 pMinecraft->font, pMinecraft->textures, item, (int)x, (int)y,
@@ -707,10 +707,10 @@ void UIScene::_customDrawSlotControl(CustomDrawData* region, int iPad,
     }
 
     Lighting::turnOff();
-    glDisable(GL_RESCALE_NORMAL);
-    glDisable(GL_CULL_FACE);
+    (void)0;
+    RenderPath.StateSetFaceCull(false);
     if (fAlpha < 1) {
-        glDisable(GL_BLEND);
+        RenderPath.StateSetBlendEnable(false);
     }
 }
 

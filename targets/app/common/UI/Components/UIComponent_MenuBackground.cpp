@@ -42,7 +42,7 @@ std::string UIComponent_MenuBackground::getMoviePath() {
 }
 
 void UIComponent_MenuBackground::render(
-    S32 width, S32 height, eViewportType viewport) {
+    S32 width, S32 height, int viewport) {
     if (m_bSplitscreen) {
         S32 xPos = 0;
         S32 yPos = 0;

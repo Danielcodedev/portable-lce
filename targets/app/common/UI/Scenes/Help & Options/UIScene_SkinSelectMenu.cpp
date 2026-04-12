@@ -528,7 +528,7 @@ void UIScene_SkinSelectMenu::customDraw(IggyCustomDrawCallbackRegion* region) {
         // %d, stencil write= %d\n", region->stencil_func_mask,
         // region->stencil_func_ref, region->stencil_write_mask);
         if (region->stencil_func_ref != 0)
-            RenderPath.StateSetStencil(GL_EQUAL, region->stencil_func_ref,
+            RenderPath.StateSetStencil(0x0202, region->stencil_func_ref,
                                              region->stencil_func_mask,
                                              region->stencil_write_mask);
         m_characters[characterId].render(region);

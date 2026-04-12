@@ -65,12 +65,12 @@ void GuiComponent::fill(int x0, int y0, int x1, int y1, int col) {
     dc.tint_color[2] = b;
     dc.tint_color[3] = a;
 
-    glEnable(GL_BLEND);
-    glDisable(GL_TEXTURE_2D);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    RenderPath.StateSetBlendEnable(true);
+    RenderPath.StateSetTextureEnable(false);
+    RenderPath.StateSetBlendFunc(rp::BlendFactor::src_alpha, rp::BlendFactor::one_minus_src_alpha);
     RenderPath.submit_immediate(dc);
-    glEnable(GL_TEXTURE_2D);
-    glDisable(GL_BLEND);
+    RenderPath.StateSetTextureEnable(true);
+    RenderPath.StateSetBlendEnable(false);
 }
 
 static uint32_t pack_color(float r, float g, float b, float a) {
@@ -108,16 +108,16 @@ void GuiComponent::fillGradient(int x0, int y0, int x1, int y1, int col1,
     dc.transient = tvb;
     dc.material = Gui::gui_mat_untextured_alpha_;
 
-    glDisable(GL_TEXTURE_2D);
-    glEnable(GL_BLEND);
-    glDisable(GL_ALPHA_TEST);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glShadeModel(GL_SMOOTH);
+    RenderPath.StateSetTextureEnable(false);
+    RenderPath.StateSetBlendEnable(true);
+    RenderPath.StateSetAlphaTestEnable(false);
+    RenderPath.StateSetBlendFunc(rp::BlendFactor::src_alpha, rp::BlendFactor::one_minus_src_alpha);
+    (void)0;
     RenderPath.submit_immediate(dc);
-    glShadeModel(GL_FLAT);
-    glDisable(GL_BLEND);
-    glEnable(GL_ALPHA_TEST);
-    glEnable(GL_TEXTURE_2D);
+    (void)0;
+    RenderPath.StateSetBlendEnable(false);
+    RenderPath.StateSetAlphaTestEnable(true);
+    RenderPath.StateSetTextureEnable(true);
 }
 
 GuiComponent::GuiComponent() { blitOffset = 0; }

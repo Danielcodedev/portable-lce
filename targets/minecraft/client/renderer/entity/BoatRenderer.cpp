@@ -28,26 +28,26 @@ void BoatRenderer::render(std::shared_ptr<Entity> _boat, double x, double y,
     // around instead
     std::shared_ptr<Boat> boat = std::dynamic_pointer_cast<Boat>(_boat);
 
-    glPushMatrix();
+    RenderPath.MatrixPush();
 
-    glTranslatef((float)x, (float)y, (float)z);
+    RenderPath.MatrixTranslate((float)x, (float)y, (float)z);
 
-    glRotatef(180 - rot, 0, 1, 0);
+    RenderPath.MatrixRotate((180 - rot)*(3.14159265358979f/180.f), 0, 1, 0);
     float hurt = boat->getHurtTime() - a;
     float dmg = boat->getDamage() - a;
     if (dmg < 0) dmg = 0;
     if (hurt > 0) {
-        glRotatef(sinf(hurt) * hurt * dmg / 10 * boat->getHurtDir(), 1, 0, 0);
+        RenderPath.MatrixRotate((sinf(hurt) * hurt * dmg / 10 * boat->getHurtDir())*(3.14159265358979f/180.f), 1, 0, 0);
     }
 
     float ss = 12 / 16.0f;
-    glScalef(ss, ss, ss);
-    glScalef(1 / ss, 1 / ss, 1 / ss);
+    RenderPath.MatrixScale(ss, ss, ss);
+    RenderPath.MatrixScale(1 / ss, 1 / ss, 1 / ss);
 
     bindTexture(boat);
-    glScalef(-1, -1, 1);
+    RenderPath.MatrixScale(-1, -1, 1);
     model->render(boat, 0, 0, -0.1f, 0, 0, 1 / 16.0f, true);
-    glPopMatrix();
+    RenderPath.MatrixPop();
 }
 
 ResourceLocation* BoatRenderer::getTextureLocation(

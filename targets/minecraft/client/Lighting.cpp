@@ -8,38 +8,33 @@
 FloatBuffer* Lighting::lb = new FloatBuffer(16);
 
 void Lighting::turnOff() {
-    glDisable(GL_LIGHTING);
-    glDisable(GL_LIGHT0);
-    glDisable(GL_LIGHT1);
-    glDisable(GL_COLOR_MATERIAL);
+    RenderPath.StateSetLightingEnable(false);
+    RenderPath.StateSetLightEnable(0, false);
+    RenderPath.StateSetLightEnable(1, false);
+    (void)0;
 }
 
 void Lighting::turnOn() {
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-    glEnable(GL_LIGHT1);
-    glEnable(GL_COLOR_MATERIAL);
-    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+    RenderPath.StateSetLightingEnable(true);
+    RenderPath.StateSetLightEnable(0, true);
+    RenderPath.StateSetLightEnable(1, true);
+    (void)0;
+    (void)0;
     float a = 0.4f;
     float d = 0.6f;
     float s = 0.0f;
 
     Vec3 l(0.2f, 1.0f, -0.7f);
     l = l.normalize();
-    glLight(GL_LIGHT0, GL_POSITION, getBuffer(l.x, l.y, l.z, 0));
-    glLight(GL_LIGHT0, GL_DIFFUSE, getBuffer(d, d, d, 1));
-    glLight(GL_LIGHT0, GL_AMBIENT, getBuffer(0.0f, 0.0f, 0.0f, 1.0f));
-    glLight(GL_LIGHT0, GL_SPECULAR, getBuffer(s, s, s, 1.0f));
+    RenderPath.StateSetLightDirection(0, l.x, l.y, l.z);
+    RenderPath.StateSetLightColour(0, d, d, d);
 
     l = Vec3(-0.2f, 1.0f, 0.7f);
     l = l.normalize();
-    glLight(GL_LIGHT1, GL_POSITION, getBuffer(l.x, l.y, l.z, 0));
-    glLight(GL_LIGHT1, GL_DIFFUSE, getBuffer(d, d, d, 1));
-    glLight(GL_LIGHT1, GL_AMBIENT, getBuffer(0.0f, 0.0f, 0.0f, 1.0f));
-    glLight(GL_LIGHT1, GL_SPECULAR, getBuffer(s, s, s, 1.0f));
+    RenderPath.StateSetLightDirection(1, l.x, l.y, l.z);
+    RenderPath.StateSetLightColour(1, d, d, d);
 
-    glShadeModel(GL_FLAT);
-    glLightModel(GL_LIGHT_MODEL_AMBIENT, getBuffer(a, a, a, 1));
+    RenderPath.StateSetLightAmbientColour(a, a, a);
 }
 
 FloatBuffer* Lighting::getBuffer(double a, double b, double c, double d) {
@@ -54,9 +49,9 @@ FloatBuffer* Lighting::getBuffer(float a, float b, float c, float d) {
 }
 
 void Lighting::turnOnGui() {
-    glPushMatrix();
-    glRotatef(-30, 0, 1, 0);
-    glRotatef(165, 1, 0, 0);
+    RenderPath.MatrixPush();
+    RenderPath.MatrixRotate((-30)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((165)*(3.14159265358979f/180.f), 1, 0, 0);
     turnOn();
-    glPopMatrix();
+    RenderPath.MatrixPop();
 }
