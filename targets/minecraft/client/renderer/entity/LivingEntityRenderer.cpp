@@ -148,7 +148,7 @@ void LivingEntityRenderer::render(std::shared_ptr<Entity> _mob, double x,
                             float uo = time * (0.001f + j * 0.003f) * 20;
                             float ss = 1 / 3.0f;
                             RenderPath.MatrixScale(ss, ss, ss);
-                            RenderPath.MatrixRotate((30 - (j) * 60.0f)*(3.14159265358979f/180.f), 0, 0, 1);
+                            RenderPath.MatrixRotate((30 - (j) * 60.0f)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
                             RenderPath.MatrixTranslate(0, uo, 0);
                             RenderPath.MatrixMode(rp::MatrixStack::modelview);
                             armor->render(mob, wp, ws, bob, headRot - bodyRot,
@@ -277,19 +277,19 @@ void LivingEntityRenderer::setupPosition(std::shared_ptr<LivingEntity> mob,
 
 void LivingEntityRenderer::setupRotations(std::shared_ptr<LivingEntity> mob,
                                           float bob, float bodyRot, float a) {
-    RenderPath.MatrixRotate((180 - bodyRot)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((180 - bodyRot)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
     if (mob->deathTime > 0) {
         float fall = (mob->deathTime + a - 1) / 20.0f * 1.6f;
         fall = sqrt(fall);
         if (fall > 1) fall = 1;
-        RenderPath.MatrixRotate((fall * getFlipDegrees(mob))*(3.14159265358979f/180.f), 0, 0, 1);
+        RenderPath.MatrixRotate((fall * getFlipDegrees(mob))*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
     } else {
         std::string name = mob->getAName();
         if (name == "Dinnerbone" || name == "Grumm") {
             if (!mob->instanceof(eTYPE_PLAYER) ||
                 !std::dynamic_pointer_cast<Player>(mob)->isCapeHidden()) {
                 RenderPath.MatrixTranslate(0, mob->bbHeight + 0.1f, 0);
-                RenderPath.MatrixRotate((180)*(3.14159265358979f/180.f), 0, 0, 1);
+                RenderPath.MatrixRotate((180)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
             }
         }
     }
@@ -408,8 +408,8 @@ void LivingEntityRenderer::renderName(std::shared_ptr<LivingEntity> mob,
                                  (float)z);
                     (void)0;
 
-                    RenderPath.MatrixRotate((-entityRenderDispatcher->playerRotY)*(3.14159265358979f/180.f), 0, 1, 0);
-                    RenderPath.MatrixRotate((entityRenderDispatcher->playerRotX)*(3.14159265358979f/180.f), 1, 0, 0);
+                    RenderPath.MatrixRotate((-entityRenderDispatcher->playerRotY)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+                    RenderPath.MatrixRotate((entityRenderDispatcher->playerRotX)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
 
                     RenderPath.MatrixScale(-s, -s, s);
                     RenderPath.StateSetLightingEnable(false);
@@ -492,8 +492,8 @@ void LivingEntityRenderer::renderNameTag(std::shared_ptr<LivingEntity> mob,
     RenderPath.MatrixTranslate((float)x + 0, (float)y + 2.3f, (float)z);
     (void)0;
 
-    RenderPath.MatrixRotate((-this->entityRenderDispatcher->playerRotY)*(3.14159265358979f/180.f), 0, 1, 0);
-    RenderPath.MatrixRotate((this->entityRenderDispatcher->playerRotX)*(3.14159265358979f/180.f), 1, 0, 0);
+    RenderPath.MatrixRotate((-this->entityRenderDispatcher->playerRotY)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((this->entityRenderDispatcher->playerRotX)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
 
     RenderPath.MatrixScale(-s, -s, s);
     RenderPath.StateSetLightingEnable(false);

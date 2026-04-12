@@ -31,18 +31,18 @@ void EnderCrystalModel::render(std::shared_ptr<Entity> entity, float time,
     RenderPath.MatrixScale(2, 2, 2);
     RenderPath.MatrixTranslate(0, -0.5f, 0);
     base->render(scale, usecompiled);
-    RenderPath.MatrixRotate((r)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((r)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
     RenderPath.MatrixTranslate(0, 0.8f + bob, 0);
-    RenderPath.MatrixRotate((60)*(3.14159265358979f/180.f), 0.7071f, 0, 0.7071f);
+    RenderPath.MatrixRotate((60)*(std::numbers::pi_v<float>/180.f), 0.7071f, 0, 0.7071f);
     glass->render(scale, usecompiled);
     float ss = 14 / 16.0f;
     RenderPath.MatrixScale(ss, ss, ss);
-    RenderPath.MatrixRotate((60)*(3.14159265358979f/180.f), 0.7071f, 0, 0.7071f);
-    RenderPath.MatrixRotate((r)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((60)*(std::numbers::pi_v<float>/180.f), 0.7071f, 0, 0.7071f);
+    RenderPath.MatrixRotate((r)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
     glass->render(scale, usecompiled);
     RenderPath.MatrixScale(ss, ss, ss);
-    RenderPath.MatrixRotate((60)*(3.14159265358979f/180.f), 0.7071f, 0, 0.7071f);
-    RenderPath.MatrixRotate((r)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((60)*(std::numbers::pi_v<float>/180.f), 0.7071f, 0, 0.7071f);
+    RenderPath.MatrixRotate((r)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
     cube->render(scale, usecompiled);
     RenderPath.MatrixPop();
 }

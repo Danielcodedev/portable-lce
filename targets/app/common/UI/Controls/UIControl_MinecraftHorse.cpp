@@ -59,7 +59,7 @@ void UIControl_MinecraftHorse::render(IggyCustomDrawCallbackRegion* region) {
     float ss = width / (m_fScreenWidth / m_fScreenHeight) * 0.71f;
 
     RenderPath.MatrixScale(-ss, ss, ss);
-    RenderPath.MatrixRotate((180)*(3.14159265358979f/180.f), 0, 0, 1);
+    RenderPath.MatrixRotate((180)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
 
     float oybr = entityHorse->yBodyRot;
     float oyr = entityHorse->yRot;
@@ -74,11 +74,11 @@ void UIControl_MinecraftHorse::render(IggyCustomDrawCallbackRegion* region) {
     // m_pointerPos.y;
     float yd = (m_y + m_height / 2 - 40) - containerMenu->m_pointerPos.y;
 
-    RenderPath.MatrixRotate((45 + 90)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((45 + 90)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
     Lighting::turnOn();
-    RenderPath.MatrixRotate((-45 - 90)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((-45 - 90)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
 
-    RenderPath.MatrixRotate((-(float)atan(yd / 40.0f) * 20)*(3.14159265358979f/180.f), 1, 0, 0);
+    RenderPath.MatrixRotate((-(float)atan(yd / 40.0f) * 20)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
 
     entityHorse->yBodyRot = (float)atan(xd / 40.0f) * 20;
     entityHorse->yRot = (float)atan(xd / 40.0f) * 40;

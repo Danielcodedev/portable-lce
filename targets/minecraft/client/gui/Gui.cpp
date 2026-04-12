@@ -819,7 +819,7 @@ void Gui::render(float a, bool mouseFree, int xMouse, int yMouse) {
                 RenderPath.MatrixTranslate((float)xo, (float)yo, 50);
                 float ss = 12;
                 RenderPath.MatrixScale(-ss, ss, ss);
-                RenderPath.MatrixRotate((180)*(3.14159265358979f/180.f), 0, 0, 1);
+                RenderPath.MatrixRotate((180)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
 
                 float oyr = minecraft->player->yRot;
                 float oyrO = minecraft->player->yRotO;
@@ -836,11 +836,11 @@ void Gui::render(float a, bool mouseFree, int xMouse, int yMouse) {
                 // minimising the changes to member variables of the player
                 // which are all related
 
-                RenderPath.MatrixRotate((45 + 90)*(3.14159265358979f/180.f), 0, 1, 0);
+                RenderPath.MatrixRotate((45 + 90)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
                 Lighting::turnOn();
-                RenderPath.MatrixRotate((-45 - 90)*(3.14159265358979f/180.f), 0, 1, 0);
+                RenderPath.MatrixRotate((-45 - 90)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
 
-                RenderPath.MatrixRotate((-(float)atan(yd / 40.0f) * 20)*(3.14159265358979f/180.f), 1, 0, 0);
+                RenderPath.MatrixRotate((-(float)atan(yd / 40.0f) * 20)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
                 float bodyRot = (minecraft->player->yBodyRotO +
                                  (minecraft->player->yBodyRot -
                                   minecraft->player->yBodyRotO));
@@ -851,7 +851,7 @@ void Gui::render(float a, bool mouseFree, int xMouse, int yMouse) {
                 // EntityRenderDispatcher::instance->playerRotY that we set
                 // below and (180 - bodyRot) is the angle of rotation that is
                 // performed within the mob renderer
-                RenderPath.MatrixRotate((bodyRot - ((float)atan(xd / 40.0f) * 20))*(3.14159265358979f/180.f), 0, 1, 0);
+                RenderPath.MatrixRotate((bodyRot - ((float)atan(xd / 40.0f) * 20))*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
                 RenderPath.StateSetColour(1.0f, 1.0f, 1.0f, 1.0f);
 
                 // Set head rotation to body rotation to make head static

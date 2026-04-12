@@ -169,16 +169,16 @@ void EnchantmentScreen::renderBg(float a) {
 
     RenderPath.MatrixTranslate(0.0f, 3.3f, -16.0f);
     RenderPath.MatrixScale(5.0f, 5.0f, 5.0f);
-    RenderPath.MatrixRotate((180.0f)*(3.14159265358979f/180.f), 0.0f, 0.0f, 1.0f);
+    RenderPath.MatrixRotate((180.0f)*(std::numbers::pi_v<float>/180.f), 0.0f, 0.0f, 1.0f);
 
     Minecraft::GetInstance()->textures->bindTexture(&ITEM_BOOK_LOCATION);
-    RenderPath.MatrixRotate((20.0f)*(3.14159265358979f/180.f), 1.0f, 0.0f, 0.0f);
+    RenderPath.MatrixRotate((20.0f)*(std::numbers::pi_v<float>/180.f), 1.0f, 0.0f, 0.0f);
 
     // 4jcraft: brought over from UIControl_EnchantmentBook
     float o = oOpen + (open - oOpen) * a;
     RenderPath.MatrixTranslate((1 - o) * 0.2f, (1 - o) * 0.1f, (1 - o) * 0.25f);
-    RenderPath.MatrixRotate((-(1 - o) * 90 - 90)*(3.14159265358979f/180.f), 0, 1, 0);
-    RenderPath.MatrixRotate((180)*(3.14159265358979f/180.f), 1, 0, 0);
+    RenderPath.MatrixRotate((-(1 - o) * 90 - 90)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((180)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
 
     float ff1 = oFlip + (flip - oFlip) * a + 0.25f;
     float ff2 = oFlip + (flip - oFlip) * a + 0.75f;

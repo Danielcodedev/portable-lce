@@ -197,7 +197,7 @@ void TitleScreen::renderPanorama(float a) {
     RenderPath.MatrixPush();
     RenderPath.MatrixSetIdentity();
     RenderPath.StateSetColour(1.0f, 1.0f, 1.0f, 1.0f);
-    RenderPath.MatrixRotate((180.0f)*(3.14159265358979f/180.f), 1.0f, 0.0f, 0.0f);
+    RenderPath.MatrixRotate((180.0f)*(std::numbers::pi_v<float>/180.f), 1.0f, 0.0f, 0.0f);
     RenderPath.StateSetBlendEnable(true);
     RenderPath.StateSetAlphaTestEnable(false);
     RenderPath.StateSetFaceCull(false);
@@ -213,27 +213,27 @@ void TitleScreen::renderPanorama(float a) {
             ((float)(i / offsetPasses) / (float)offsetPasses - 0.5f) / 64.0f;
         float z = 0.0f;
         RenderPath.MatrixTranslate(x, y, z);
-        RenderPath.MatrixRotate((sin((vo + a) / 400.0f) * 25.0f + 20.0f)*(3.14159265358979f/180.f), 1.0f, 0.0f, 0.0f);
-        RenderPath.MatrixRotate((-(vo + a) * 0.1f)*(3.14159265358979f/180.f), 0.0f, 1.0f, 0.0f);
+        RenderPath.MatrixRotate((sin((vo + a) / 400.0f) * 25.0f + 20.0f)*(std::numbers::pi_v<float>/180.f), 1.0f, 0.0f, 0.0f);
+        RenderPath.MatrixRotate((-(vo + a) * 0.1f)*(std::numbers::pi_v<float>/180.f), 0.0f, 1.0f, 0.0f);
 
         for (int j = 0; j < 6; j++) {
             RenderPath.MatrixPush();
 
             switch (j) {
                 case 1:
-                    RenderPath.MatrixRotate((90.0f)*(3.14159265358979f/180.f), 0.0f, 1.0f, 0.0f);
+                    RenderPath.MatrixRotate((90.0f)*(std::numbers::pi_v<float>/180.f), 0.0f, 1.0f, 0.0f);
                     break;
                 case 2:
-                    RenderPath.MatrixRotate((180.0f)*(3.14159265358979f/180.f), 0.0f, 1.0f, 0.0f);
+                    RenderPath.MatrixRotate((180.0f)*(std::numbers::pi_v<float>/180.f), 0.0f, 1.0f, 0.0f);
                     break;
                 case 3:
-                    RenderPath.MatrixRotate((-90.0f)*(3.14159265358979f/180.f), 0.0f, 1.0f, 0.0f);
+                    RenderPath.MatrixRotate((-90.0f)*(std::numbers::pi_v<float>/180.f), 0.0f, 1.0f, 0.0f);
                     break;
                 case 4:
-                    RenderPath.MatrixRotate((90.0f)*(3.14159265358979f/180.f), 1.0f, 0.0f, 0.0f);
+                    RenderPath.MatrixRotate((90.0f)*(std::numbers::pi_v<float>/180.f), 1.0f, 0.0f, 0.0f);
                     break;
                 case 5:
-                    RenderPath.MatrixRotate((-90.0f)*(3.14159265358979f/180.f), 1.0f, 0.0f, 0.0f);
+                    RenderPath.MatrixRotate((-90.0f)*(std::numbers::pi_v<float>/180.f), 1.0f, 0.0f, 0.0f);
                     break;
                 default:
                     break;
@@ -410,7 +410,7 @@ void TitleScreen::render(int xm, int ym, float a) {
     RenderPath.MatrixPush();
     RenderPath.MatrixTranslate((float)width / 2 + 90, 70, 0);
 
-    RenderPath.MatrixRotate((-20)*(3.14159265358979f/180.f), 0, 0, 1);
+    RenderPath.MatrixRotate((-20)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
     float sss = 1.8f - std::abs(sinf(System::currentTimeMillis() % 1000 /
                                      1000.0f * std::numbers::pi * 2) *
                                 0.1f);

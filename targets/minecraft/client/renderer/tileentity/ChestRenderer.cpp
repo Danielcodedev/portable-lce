@@ -117,7 +117,7 @@ void ChestRenderer::render(std::shared_ptr<TileEntity> _chest, double x,
     if (data == 5 && chest->s.lock() != nullptr) {
         RenderPath.MatrixTranslate(0, 0, -1);
     }
-    RenderPath.MatrixRotate((rot)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((rot)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
     RenderPath.MatrixTranslate(-0.5f, -0.5f, -0.5f);
 
     float open = chest->oOpenness + (chest->openness - chest->oOpenness) * a;

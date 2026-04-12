@@ -30,9 +30,9 @@ void MobSpawnerRenderer::render(BaseMobSpawner* spawner, double x, double y,
         float s = 7 / 16.0f;
         RenderPath.MatrixTranslate(0, 0.4f, 0);
         RenderPath.MatrixRotate(
-            ((float)(spawner->oSpin + (spawner->spin - spawner->oSpin) * a) * 10) * (3.14159265358979f/180.f),
+            ((float)(spawner->oSpin + (spawner->spin - spawner->oSpin) * a) * 10) * (std::numbers::pi_v<float>/180.f),
             0, 1, 0);
-        RenderPath.MatrixRotate((-30)*(3.14159265358979f/180.f), 1, 0, 0);
+        RenderPath.MatrixRotate((-30)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
         RenderPath.MatrixTranslate(0, -0.4f, 0);
         RenderPath.MatrixScale(s, s, s);
         e->moveTo(x, y, z, 0, 0);

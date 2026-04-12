@@ -99,7 +99,7 @@ void EntityRenderer::renderFlame(std::shared_ptr<Entity> e, double x, double y,
     float h = e->bbHeight / s;
     float yo = (float)(e->y - e->bb.y0);
 
-    RenderPath.MatrixRotate((-entityRenderDispatcher->playerRotY)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((-entityRenderDispatcher->playerRotY)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
 
     RenderPath.MatrixTranslate(0, 0, -0.3f + ((int)h) * 0.02f);
     RenderPath.StateSetColour(1, 1, 1, 1);

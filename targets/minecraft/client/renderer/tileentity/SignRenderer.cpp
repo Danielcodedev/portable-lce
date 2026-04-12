@@ -40,7 +40,7 @@ void SignRenderer::render(std::shared_ptr<TileEntity> _sign, double x, double y,
     if (tile == Tile::sign) {
         RenderPath.MatrixTranslate((float)x + 0.5f, (float)y + 0.75f * size, (float)z + 0.5f);
         float rot = sign->getData() * 360 / 16.0f;
-        RenderPath.MatrixRotate((-rot)*(3.14159265358979f/180.f), 0, 1, 0);
+        RenderPath.MatrixRotate((-rot)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
         signModel->cube2->visible = true;
     } else {
         int face = sign->getData();
@@ -51,7 +51,7 @@ void SignRenderer::render(std::shared_ptr<TileEntity> _sign, double x, double y,
         if (face == 5) rot = -90;
 
         RenderPath.MatrixTranslate((float)x + 0.5f, (float)y + 0.75f * size, (float)z + 0.5f);
-        RenderPath.MatrixRotate((-rot)*(3.14159265358979f/180.f), 0, 1, 0);
+        RenderPath.MatrixRotate((-rot)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
         RenderPath.MatrixTranslate(0, -5 / 16.0f, -7 / 16.0f);
 
         signModel->cube2->visible = false;

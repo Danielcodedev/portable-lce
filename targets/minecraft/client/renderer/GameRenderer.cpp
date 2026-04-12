@@ -435,7 +435,7 @@ void GameRenderer::bobHurt(float a) {
     if (player->getHealth() <= 0) {
         float duration = player->deathTime + a;
 
-        RenderPath.MatrixRotate((40 - (40 * 200) / (duration + 200))*(3.14159265358979f/180.f), 0, 0, 1);
+        RenderPath.MatrixRotate((40 - (40 * 200) / (duration + 200))*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
     }
 
     if (hurt < 0) return;
@@ -444,9 +444,9 @@ void GameRenderer::bobHurt(float a) {
 
     float rr = player->hurtDir;
 
-    RenderPath.MatrixRotate((-rr)*(3.14159265358979f/180.f), 0, 1, 0);
-    RenderPath.MatrixRotate((-hurt * 14)*(3.14159265358979f/180.f), 0, 0, 1);
-    RenderPath.MatrixRotate((+rr)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((-rr)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((-hurt * 14)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
+    RenderPath.MatrixRotate((+rr)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
 }
 
 void GameRenderer::bobView(float a) {
@@ -461,10 +461,10 @@ void GameRenderer::bobView(float a) {
     float tilt = player->oTilt + (player->tilt - player->oTilt) * a;
     RenderPath.MatrixTranslate((float)sinf(b * std::numbers::pi) * bob * 0.5f,
                  -(float)std::abs(cosf(b * std::numbers::pi) * bob), 0);
-    RenderPath.MatrixRotate(((float)sinf(b * std::numbers::pi) * bob * 3)*(3.14159265358979f/180.f), 0, 0, 1);
-    RenderPath.MatrixRotate(((float)std::abs(cosf(b * std::numbers::pi - 0.2f) * bob) * 5)*(3.14159265358979f/180.f), 1,
+    RenderPath.MatrixRotate(((float)sinf(b * std::numbers::pi) * bob * 3)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
+    RenderPath.MatrixRotate(((float)std::abs(cosf(b * std::numbers::pi - 0.2f) * bob) * 5)*(std::numbers::pi_v<float>/180.f), 1,
               0, 0);
-    RenderPath.MatrixRotate(((float)tilt)*(3.14159265358979f/180.f), 1, 0, 0);
+    RenderPath.MatrixRotate(((float)tilt)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
 }
 
 void GameRenderer::moveCameraToPlayer(float a) {
@@ -477,7 +477,7 @@ void GameRenderer::moveCameraToPlayer(float a) {
     double y = player->yo + (player->y - player->yo) * a - heightOffset;
     double z = player->zo + (player->z - player->zo) * a;
 
-    RenderPath.MatrixRotate((cameraRollO + (cameraRoll - cameraRollO) * a)*(3.14159265358979f/180.f), 0, 0, 1);
+    RenderPath.MatrixRotate((cameraRollO + (cameraRoll - cameraRollO) * a)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
 
     if (player->isSleeping()) {
         heightOffset += 1.0;
@@ -492,11 +492,11 @@ void GameRenderer::moveCameraToPlayer(float a) {
                                               std::floor(player->z));
 
                 int direction = data & 3;
-                RenderPath.MatrixRotate(((float)direction * 90)*(3.14159265358979f/180.f), 0.0f, 1.0f, 0.0f);
+                RenderPath.MatrixRotate(((float)direction * 90)*(std::numbers::pi_v<float>/180.f), 0.0f, 1.0f, 0.0f);
             }
-            RenderPath.MatrixRotate((player->yRotO + (player->yRot - player->yRotO) * a + 180)*(3.14159265358979f/180.f),
+            RenderPath.MatrixRotate((player->yRotO + (player->yRot - player->yRotO) * a + 180)*(std::numbers::pi_v<float>/180.f),
                       0, -1, 0);
-            RenderPath.MatrixRotate((player->xRotO + (player->xRot - player->xRotO) * a)*(3.14159265358979f/180.f), -1, 0,
+            RenderPath.MatrixRotate((player->xRotO + (player->xRot - player->xRotO) * a)*(std::numbers::pi_v<float>/180.f), -1, 0,
                       0);
         }
     }
@@ -512,8 +512,8 @@ void GameRenderer::moveCameraToPlayer(float a) {
             float xRot = thirdTiltO + (thirdTilt - thirdTiltO) * a;
 
             RenderPath.MatrixTranslate(0, 0, (float)-cameraDist);
-            RenderPath.MatrixRotate((xRot)*(3.14159265358979f/180.f), 1, 0, 0);
-            RenderPath.MatrixRotate((rotationY)*(3.14159265358979f/180.f), 0, 1, 0);
+            RenderPath.MatrixRotate((xRot)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+            RenderPath.MatrixRotate((rotationY)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
         } else {
             // 4J - corrected bug where this used to just take player->xRot &
             // yRot directly and so wasn't taking into account interpolation,
@@ -563,22 +563,22 @@ void GameRenderer::moveCameraToPlayer(float a) {
             }
 
             if (localplayer->ThirdPersonView() == 2) {
-                RenderPath.MatrixRotate((180)*(3.14159265358979f/180.f), 0, 1, 0);
+                RenderPath.MatrixRotate((180)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
             }
 
-            RenderPath.MatrixRotate((playerXRot - xRot)*(3.14159265358979f/180.f), 1, 0, 0);
-            RenderPath.MatrixRotate((playerYRot - yRot)*(3.14159265358979f/180.f), 0, 1, 0);
+            RenderPath.MatrixRotate((playerXRot - xRot)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+            RenderPath.MatrixRotate((playerYRot - yRot)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
             RenderPath.MatrixTranslate(0, 0, (float)-cameraDist);
-            RenderPath.MatrixRotate((yRot - playerYRot)*(3.14159265358979f/180.f), 0, 1, 0);
-            RenderPath.MatrixRotate((xRot - playerXRot)*(3.14159265358979f/180.f), 1, 0, 0);
+            RenderPath.MatrixRotate((yRot - playerYRot)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+            RenderPath.MatrixRotate((xRot - playerXRot)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
         }
     } else {
         RenderPath.MatrixTranslate(0, 0, -0.1f);
     }
 
     if (!mc->options->fixedCamera) {
-        RenderPath.MatrixRotate((player->xRotO + (player->xRot - player->xRotO) * a)*(3.14159265358979f/180.f), 1, 0, 0);
-        RenderPath.MatrixRotate((player->yRotO + (player->yRot - player->yRotO) * a + 180)*(3.14159265358979f/180.f), 0,
+        RenderPath.MatrixRotate((player->xRotO + (player->xRot - player->xRotO) * a)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+        RenderPath.MatrixRotate((player->yRotO + (player->yRot - player->yRotO) * a + 180)*(std::numbers::pi_v<float>/180.f), 0,
                   1, 0);
     }
 
@@ -680,20 +680,20 @@ void GameRenderer::setupCamera(float a, int eye) {
 
         float skew = 5 / (pt * pt + 5) - pt * 0.04f;
         skew *= skew;
-        RenderPath.MatrixRotate(((_tick + a) * multiplier)*(3.14159265358979f/180.f), 0, 1, 1);
+        RenderPath.MatrixRotate(((_tick + a) * multiplier)*(std::numbers::pi_v<float>/180.f), 0, 1, 1);
         RenderPath.MatrixScale(1 / skew, 1, 1);
-        RenderPath.MatrixRotate((-(_tick + a) * multiplier)*(3.14159265358979f/180.f), 0, 1, 1);
+        RenderPath.MatrixRotate((-(_tick + a) * multiplier)*(std::numbers::pi_v<float>/180.f), 0, 1, 1);
     }
 
     moveCameraToPlayer(a);
 
     if (cameraFlip > 0) {
         int i = cameraFlip - 1;
-        if (i == 1) RenderPath.MatrixRotate((90)*(3.14159265358979f/180.f), 0, 1, 0);
-        if (i == 2) RenderPath.MatrixRotate((180)*(3.14159265358979f/180.f), 0, 1, 0);
-        if (i == 3) RenderPath.MatrixRotate((-90)*(3.14159265358979f/180.f), 0, 1, 0);
-        if (i == 4) RenderPath.MatrixRotate((90)*(3.14159265358979f/180.f), 1, 0, 0);
-        if (i == 5) RenderPath.MatrixRotate((-90)*(3.14159265358979f/180.f), 1, 0, 0);
+        if (i == 1) RenderPath.MatrixRotate((90)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+        if (i == 2) RenderPath.MatrixRotate((180)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+        if (i == 3) RenderPath.MatrixRotate((-90)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+        if (i == 4) RenderPath.MatrixRotate((90)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+        if (i == 5) RenderPath.MatrixRotate((-90)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
     }
 }
 

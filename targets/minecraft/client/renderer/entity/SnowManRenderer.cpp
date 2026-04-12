@@ -44,7 +44,7 @@ void SnowManRenderer::additionalRendering(std::shared_ptr<LivingEntity> _mob,
                 Tile::tiles[headGear->id]->getRenderShape())) {
             float s = 10 / 16.0f;
             RenderPath.MatrixTranslate(-0 / 16.0f, -5.5f / 16.0f, 0 / 16.0f);
-            RenderPath.MatrixRotate((90)*(3.14159265358979f/180.f), 0, 1, 0);
+            RenderPath.MatrixRotate((90)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
             RenderPath.MatrixScale(s, -s, s);
         }
 

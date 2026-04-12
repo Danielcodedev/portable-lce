@@ -48,7 +48,7 @@ void AbstractContainerScreen::render(int xm, int ym, float a) {
     renderBg(a);
 
     RenderPath.MatrixPush();
-    RenderPath.MatrixRotate((120)*(3.14159265358979f/180.f), 1, 0, 0);
+    RenderPath.MatrixRotate((120)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
     RenderPath.MatrixPop();
 
     RenderPath.MatrixPush();

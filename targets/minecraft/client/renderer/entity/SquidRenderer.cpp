@@ -32,9 +32,9 @@ void SquidRenderer::setupRotations(std::shared_ptr<LivingEntity> _mob,
     float bodyZRot = (mob->zBodyRotO + (mob->zBodyRot - mob->zBodyRotO) * a);
 
     RenderPath.MatrixTranslate(0, 0.5f, 0);
-    RenderPath.MatrixRotate((180 - bodyRot)*(3.14159265358979f/180.f), 0, 1, 0);
-    RenderPath.MatrixRotate((bodyXRot)*(3.14159265358979f/180.f), 1, 0, 0);
-    RenderPath.MatrixRotate((bodyZRot)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((180 - bodyRot)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((bodyXRot)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+    RenderPath.MatrixRotate((bodyZRot)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
     RenderPath.MatrixTranslate(0, -1.2f, 0);
 }
 

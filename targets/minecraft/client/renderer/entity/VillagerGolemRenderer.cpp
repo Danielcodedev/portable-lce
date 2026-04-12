@@ -46,7 +46,7 @@ void VillagerGolemRenderer::setupRotations(std::shared_ptr<LivingEntity> _mob,
     float wp = mob->walkAnimPos - mob->walkAnimSpeed * (1 - a) + 6;
     float triangleWave =
         (std::abs(std::fmod(wp, p) - p * 0.5f) - p * 0.25f) / (p * 0.25f);
-    RenderPath.MatrixRotate((6.5f * triangleWave)*(3.14159265358979f/180.f), 0, 0, 1);
+    RenderPath.MatrixRotate((6.5f * triangleWave)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
 }
 
 ResourceLocation* VillagerGolemRenderer::getTextureLocation(
@@ -68,9 +68,9 @@ void VillagerGolemRenderer::additionalRendering(
     RenderPath.MatrixPush();
 
     // dont ask me how I got the flower into his hand.
-    RenderPath.MatrixRotate((5 + 180 * golemModel->arm0->xRot / std::numbers::pi)*(3.14159265358979f/180.f), 1, 0, 0);
+    RenderPath.MatrixRotate((5 + 180 * golemModel->arm0->xRot / std::numbers::pi)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
     RenderPath.MatrixTranslate(-11 / 16.0f, 20 / 16.0f, -15 / 16.0f);
-    RenderPath.MatrixRotate((90)*(3.14159265358979f/180.f), 1, 0, 0);
+    RenderPath.MatrixRotate((90)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
     float s = 0.8f;
     RenderPath.MatrixScale(s, -s, s);
 

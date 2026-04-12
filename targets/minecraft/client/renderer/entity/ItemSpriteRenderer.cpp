@@ -75,8 +75,8 @@ void ItemSpriteRenderer::renderIcon(Tesselator* t, Icon* icon) {
     float xo = 0.5f;
     float yo = 0.25f;
 
-    RenderPath.MatrixRotate((180 - entityRenderDispatcher->playerRotY)*(3.14159265358979f/180.f), 0, 1, 0);
-    RenderPath.MatrixRotate((-entityRenderDispatcher->playerRotX)*(3.14159265358979f/180.f), 1, 0, 0);
+    RenderPath.MatrixRotate((180 - entityRenderDispatcher->playerRotY)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((-entityRenderDispatcher->playerRotX)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
     t->begin();
     t->normal(0, 1, 0);
     t->vertexUV((float)(0 - xo), (float)(0 - yo), (float)(0), (float)(u0),

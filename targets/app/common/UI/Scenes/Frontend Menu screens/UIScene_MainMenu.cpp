@@ -377,7 +377,7 @@ void UIScene_MainMenu::customDrawSplash(IggyCustomDrawCallbackRegion* region) {
 
     RenderPath.MatrixTranslate(xo, yo, 0);
 
-    RenderPath.MatrixRotate((-17)*(3.14159265358979f/180.f), 0, 0, 1);
+    RenderPath.MatrixRotate((-17)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
     float sss = 1.8f - std::abs(sinf(System::currentTimeMillis() % 1000 /
                                      1000.0f * std::numbers::pi * 2) *
                                 0.1f);

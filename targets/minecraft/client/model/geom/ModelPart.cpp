@@ -151,9 +151,9 @@ void ModelPart::render(float scale, bool usecompiled,
     if (xRot != 0 || yRot != 0 || zRot != 0) {
         RenderPath.MatrixPush();
         RenderPath.MatrixTranslate(x * scale, y * scale, z * scale);
-        if (zRot != 0) RenderPath.MatrixRotate((zRot * RAD)*(3.14159265358979f/180.f), 0, 0, 1);
-        if (yRot != 0) RenderPath.MatrixRotate((yRot * RAD)*(3.14159265358979f/180.f), 0, 1, 0);
-        if (xRot != 0) RenderPath.MatrixRotate((xRot * RAD)*(3.14159265358979f/180.f), 1, 0, 0);
+        if (zRot != 0) RenderPath.MatrixRotate((zRot * RAD)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
+        if (yRot != 0) RenderPath.MatrixRotate((yRot * RAD)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+        if (xRot != 0) RenderPath.MatrixRotate((xRot * RAD)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
 
         if (!bHideParentBodyPart) {
             if (usecompiled) {
@@ -221,9 +221,9 @@ void ModelPart::renderRollable(float scale, bool usecompiled) {
 
     RenderPath.MatrixPush();
     RenderPath.MatrixTranslate(x * scale, y * scale, z * scale);
-    if (yRot != 0) RenderPath.MatrixRotate((yRot * RAD)*(3.14159265358979f/180.f), 0, 1, 0);
-    if (xRot != 0) RenderPath.MatrixRotate((xRot * RAD)*(3.14159265358979f/180.f), 1, 0, 0);
-    if (zRot != 0) RenderPath.MatrixRotate((zRot * RAD)*(3.14159265358979f/180.f), 0, 0, 1);
+    if (yRot != 0) RenderPath.MatrixRotate((yRot * RAD)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+    if (xRot != 0) RenderPath.MatrixRotate((xRot * RAD)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+    if (zRot != 0) RenderPath.MatrixRotate((zRot * RAD)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
     ((void)RenderPath.CBuffCall(list));
     RenderPath.MatrixPop();
 }
@@ -235,9 +235,9 @@ void ModelPart::translateTo(float scale) {
 
     if (xRot != 0 || yRot != 0 || zRot != 0) {
         RenderPath.MatrixTranslate(x * scale, y * scale, z * scale);
-        if (zRot != 0) RenderPath.MatrixRotate((zRot * RAD)*(3.14159265358979f/180.f), 0, 0, 1);
-        if (yRot != 0) RenderPath.MatrixRotate((yRot * RAD)*(3.14159265358979f/180.f), 0, 1, 0);
-        if (xRot != 0) RenderPath.MatrixRotate((xRot * RAD)*(3.14159265358979f/180.f), 1, 0, 0);
+        if (zRot != 0) RenderPath.MatrixRotate((zRot * RAD)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
+        if (yRot != 0) RenderPath.MatrixRotate((yRot * RAD)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+        if (xRot != 0) RenderPath.MatrixRotate((xRot * RAD)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
     } else if (x != 0 || y != 0 || z != 0) {
         RenderPath.MatrixTranslate(x * scale, y * scale, z * scale);
     } else {

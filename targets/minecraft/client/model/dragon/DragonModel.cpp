@@ -136,7 +136,7 @@ void DragonModel::render(std::shared_ptr<Entity> entity, float time, float r,
     yo = (yo * yo * 1 + yo * 2) * 0.05f;
 
     RenderPath.MatrixTranslate(0, yo - 2.0f, -3);
-    RenderPath.MatrixRotate((yo * 2)*(3.14159265358979f/180.f), 1, 0, 0);
+    RenderPath.MatrixRotate((yo * 2)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
 
     float yy = -30.0f;
     float zz = 22.0f;
@@ -206,7 +206,7 @@ void DragonModel::render(std::shared_ptr<Entity> entity, float time, float r,
     head->render(scale, usecompiled);
     RenderPath.MatrixPush();
     RenderPath.MatrixTranslate(0, 1, 0);
-    RenderPath.MatrixRotate((-(float)(rot2)*rotScale * 1)*(3.14159265358979f/180.f), 0, 0, 1);
+    RenderPath.MatrixRotate((-(float)(rot2)*rotScale * 1)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
     RenderPath.MatrixTranslate(0, -1, 0);
     body->zRot = 0;
     body->render(scale, usecompiled);

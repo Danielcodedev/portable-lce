@@ -94,7 +94,7 @@ void TheEndPortalRenderer::render(std::shared_ptr<TileEntity> _table, double x,
         RenderPath.MatrixTranslate(0, System::currentTimeMillis() % 700000 / 700000.0f, 0);
         RenderPath.MatrixScale(sscale, sscale, sscale);
         RenderPath.MatrixTranslate(0.5f, 0.5f, 0);
-        RenderPath.MatrixRotate(((i * i * 4321 + i * 9) * 2.0f)*(3.14159265358979f/180.f), 0, 0, 1);
+        RenderPath.MatrixRotate(((i * i * 4321 + i * 9) * 2.0f)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
         RenderPath.MatrixTranslate(-0.5f, -0.5f, 0);
         RenderPath.MatrixTranslate(-xx, -zz, -yy);
         float ss1 = (float)(dd + Camera::yPlayerOffs);

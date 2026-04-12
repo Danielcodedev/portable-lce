@@ -56,17 +56,17 @@ void EnderDragonRenderer::setupRotations(std::shared_ptr<LivingEntity> _mob,
     // rot2 -= lp[1];
     float rot2 = mob->getTilt(a);
 
-    RenderPath.MatrixRotate((-yr)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((-yr)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
 
-    RenderPath.MatrixRotate((rot2)*(3.14159265358979f/180.f), 1, 0, 0);
-    // RenderPath.MatrixRotate((rot2 * 10)*(3.14159265358979f/180.f), 1, 0, 0);
+    RenderPath.MatrixRotate((rot2)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+    // RenderPath.MatrixRotate((rot2 * 10)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
 
     RenderPath.MatrixTranslate(0, 0, 1);
     if (mob->deathTime > 0) {
         float fall = (mob->deathTime + a - 1) / 20.0f * 1.6f;
         fall = sqrt(fall);
         if (fall > 1) fall = 1;
-        RenderPath.MatrixRotate((fall * getFlipDegrees(mob))*(3.14159265358979f/180.f), 0, 0, 1);
+        RenderPath.MatrixRotate((fall * getFlipDegrees(mob))*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
     }
 }
 
@@ -140,14 +140,14 @@ void EnderDragonRenderer::render(std::shared_ptr<Entity> _mob, double x,
 
         RenderPath.MatrixPush();
         RenderPath.MatrixTranslate((float)x, (float)y + 2, (float)z);
-        RenderPath.MatrixRotate((float)(-atan2(zd, xd)) - (90.0f * 3.14159265358979f / 180.f),
+        RenderPath.MatrixRotate((float)(-atan2(zd, xd)) - (90.0f * std::numbers::pi_v<float> / 180.f),
                   0, 1, 0);
-        RenderPath.MatrixRotate((float)(-atan2(sdd, yd)) - (90.0f * 3.14159265358979f / 180.f),
+        RenderPath.MatrixRotate((float)(-atan2(sdd, yd)) - (90.0f * std::numbers::pi_v<float> / 180.f),
                   1, 0, 0);
 
         // 4J-PB - Rotating the healing beam too
         static float fRot = 0.0f;
-        RenderPath.MatrixRotate((fRot)*(3.14159265358979f/180.f), 0, 0, 1);
+        RenderPath.MatrixRotate((fRot)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
         fRot += 0.5f;  // 4J - rate of rotation changed from 5.0 to 0.5 for
                        // photosensitivity reasons
         if (fRot >= 360.0f) {
@@ -229,12 +229,12 @@ void EnderDragonRenderer::additionalRendering(
         RenderPath.MatrixPush();
         RenderPath.MatrixTranslate(0, -1, -2);
         for (int i = 0; i < (tt + tt * tt) / 2 * 60; i++) {
-            RenderPath.MatrixRotate((random.nextFloat() * 360)*(3.14159265358979f/180.f), 1, 0, 0);
-            RenderPath.MatrixRotate((random.nextFloat() * 360)*(3.14159265358979f/180.f), 0, 1, 0);
-            RenderPath.MatrixRotate((random.nextFloat() * 360)*(3.14159265358979f/180.f), 0, 0, 1);
-            RenderPath.MatrixRotate((random.nextFloat() * 360)*(3.14159265358979f/180.f), 1, 0, 0);
-            RenderPath.MatrixRotate((random.nextFloat() * 360)*(3.14159265358979f/180.f), 0, 1, 0);
-            RenderPath.MatrixRotate((random.nextFloat() * 360 + tt * 90)*(3.14159265358979f/180.f), 0, 0, 1);
+            RenderPath.MatrixRotate((random.nextFloat() * 360)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+            RenderPath.MatrixRotate((random.nextFloat() * 360)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+            RenderPath.MatrixRotate((random.nextFloat() * 360)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
+            RenderPath.MatrixRotate((random.nextFloat() * 360)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+            RenderPath.MatrixRotate((random.nextFloat() * 360)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+            RenderPath.MatrixRotate((random.nextFloat() * 360 + tt * 90)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
             t->begin(0x0006);
             float dist = random.nextFloat() * 20 + 5 + overDrive * 10;
             float w = random.nextFloat() * 2 + 1 + overDrive * 2;

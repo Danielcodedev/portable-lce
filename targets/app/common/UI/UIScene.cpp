@@ -664,7 +664,7 @@ void UIScene::_customDrawSlotControl(CustomDrawData* region, int iPad,
     (void)0;
     RenderPath.MatrixPush();
     Lighting::turnOn();
-    RenderPath.MatrixRotate((120)*(3.14159265358979f/180.f), 1, 0, 0);
+    RenderPath.MatrixRotate((120)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
     RenderPath.MatrixPop();
 
     float pop = item->popTime;

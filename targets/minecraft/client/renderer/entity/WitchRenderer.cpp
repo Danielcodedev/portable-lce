@@ -62,7 +62,7 @@ void WitchRenderer::additionalRendering(std::shared_ptr<LivingEntity> entity,
         if (model->young) {
             float s = 0.5f;
             RenderPath.MatrixTranslate(0 / 16.0f, 10 / 16.0f, 0 / 16.0f);
-            RenderPath.MatrixRotate((-20)*(3.14159265358979f/180.f), -1, 0, 0);
+            RenderPath.MatrixRotate((-20)*(std::numbers::pi_v<float>/180.f), -1, 0, 0);
             RenderPath.MatrixScale(s, s, s);
         }
 
@@ -74,37 +74,37 @@ void WitchRenderer::additionalRendering(std::shared_ptr<LivingEntity> entity,
             float s = 8 / 16.0f;
             RenderPath.MatrixTranslate(-0 / 16.0f, 3 / 16.0f, -5 / 16.0f);
             s *= 0.75f;
-            RenderPath.MatrixRotate((20)*(3.14159265358979f/180.f), 1, 0, 0);
-            RenderPath.MatrixRotate((45)*(3.14159265358979f/180.f), 0, 1, 0);
+            RenderPath.MatrixRotate((20)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+            RenderPath.MatrixRotate((45)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
             RenderPath.MatrixScale(s, -s, s);
         } else if (item->id == Item::bow->id) {
             float s = 10 / 16.0f;
             RenderPath.MatrixTranslate(0 / 16.0f, 2 / 16.0f, 5 / 16.0f);
-            RenderPath.MatrixRotate((-20)*(3.14159265358979f/180.f), 0, 1, 0);
+            RenderPath.MatrixRotate((-20)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
             RenderPath.MatrixScale(s, -s, s);
-            RenderPath.MatrixRotate((-100)*(3.14159265358979f/180.f), 1, 0, 0);
-            RenderPath.MatrixRotate((45)*(3.14159265358979f/180.f), 0, 1, 0);
+            RenderPath.MatrixRotate((-100)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+            RenderPath.MatrixRotate((45)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
         } else if (Item::items[item->id]->isHandEquipped()) {
             float s = 10 / 16.0f;
             if (Item::items[item->id]->isMirroredArt()) {
-                RenderPath.MatrixRotate((180)*(3.14159265358979f/180.f), 0, 0, 1);
+                RenderPath.MatrixRotate((180)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
                 RenderPath.MatrixTranslate(0, -2 / 16.0f, 0);
             }
             translateWeaponItem();
             RenderPath.MatrixScale(s, -s, s);
-            RenderPath.MatrixRotate((-100)*(3.14159265358979f/180.f), 1, 0, 0);
-            RenderPath.MatrixRotate((45)*(3.14159265358979f/180.f), 0, 1, 0);
+            RenderPath.MatrixRotate((-100)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+            RenderPath.MatrixRotate((45)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
         } else {
             float s = 6 / 16.0f;
             RenderPath.MatrixTranslate(+4 / 16.0f, +3 / 16.0f, -3 / 16.0f);
             RenderPath.MatrixScale(s, s, s);
-            RenderPath.MatrixRotate((60)*(3.14159265358979f/180.f), 0, 0, 1);
-            RenderPath.MatrixRotate((-90)*(3.14159265358979f/180.f), 1, 0, 0);
-            RenderPath.MatrixRotate((20)*(3.14159265358979f/180.f), 0, 0, 1);
+            RenderPath.MatrixRotate((60)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
+            RenderPath.MatrixRotate((-90)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+            RenderPath.MatrixRotate((20)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
         }
 
-        RenderPath.MatrixRotate((-15)*(3.14159265358979f/180.f), 1, 0, 0);
-        RenderPath.MatrixRotate((40)*(3.14159265358979f/180.f), 0, 0, 1);
+        RenderPath.MatrixRotate((-15)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+        RenderPath.MatrixRotate((40)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
 
         entityRenderDispatcher->itemInHandRenderer->renderItem(mob, item, 0);
         if (item->getItem()->hasMultipleSpriteLayers()) {

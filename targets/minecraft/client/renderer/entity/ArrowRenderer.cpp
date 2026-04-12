@@ -39,8 +39,8 @@ void ArrowRenderer::render(std::shared_ptr<Entity> _arrow, double x, double y,
         xRot += 360.0f;
 
     RenderPath.MatrixTranslate((float)x, (float)y, (float)z);
-    RenderPath.MatrixRotate((yRotO + (yRot - yRotO) * a - 90)*(3.14159265358979f/180.f), 0, 1, 0);
-    RenderPath.MatrixRotate((xRotO + (xRot - xRotO) * a)*(3.14159265358979f/180.f), 0, 0, 1);
+    RenderPath.MatrixRotate((yRotO + (yRot - yRotO) * a - 90)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((xRotO + (xRot - xRotO) * a)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
 
     Tesselator* t = Tesselator::getInstance();
     int type = 0;
@@ -59,9 +59,9 @@ void ArrowRenderer::render(std::shared_ptr<Entity> _arrow, double x, double y,
     float shake = arrow->shakeTime - a;
     if (shake > 0) {
         float pow = -sinf(shake * 3) * shake;
-        RenderPath.MatrixRotate((pow)*(3.14159265358979f/180.f), 0, 0, 1);
+        RenderPath.MatrixRotate((pow)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
     }
-    RenderPath.MatrixRotate((45)*(3.14159265358979f/180.f), 1, 0, 0);
+    RenderPath.MatrixRotate((45)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
     RenderPath.MatrixScale(ss, ss, ss);
 
     RenderPath.MatrixTranslate(-4, 0, 0);
@@ -93,7 +93,7 @@ void ArrowRenderer::render(std::shared_ptr<Entity> _arrow, double x, double y,
     t->end();
 
     for (int i = 0; i < 4; i++) {
-        RenderPath.MatrixRotate((90)*(3.14159265358979f/180.f), 1, 0, 0);
+        RenderPath.MatrixRotate((90)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
         //        (void)0;		// 4J - changed to use
         //        tesselator
         t->begin();

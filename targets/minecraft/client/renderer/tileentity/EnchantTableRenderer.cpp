@@ -39,8 +39,8 @@ void EnchantTableRenderer::render(std::shared_ptr<TileEntity> _table, double x,
 
     float yRot = table->oRot + orot * a;
 
-    RenderPath.MatrixRotate((-yRot * 180 / std::numbers::pi)*(3.14159265358979f/180.f), 0, 1, 0);
-    RenderPath.MatrixRotate((80)*(3.14159265358979f/180.f), 0, 0, 1);
+    RenderPath.MatrixRotate((-yRot * 180 / std::numbers::pi)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((80)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
     bindTexture(&BOOK_LOCATION);  // 4J was "/item/book.png"
 
     float ff1 = table->oFlip + (table->flip - table->oFlip) * a + 0.25f;

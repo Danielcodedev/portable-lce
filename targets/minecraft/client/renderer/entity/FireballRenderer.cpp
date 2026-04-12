@@ -45,8 +45,8 @@ void FireballRenderer::render(std::shared_ptr<Entity> _fireball, double x,
     float xo = 0.5f;
     float yo = 0.25f;
 
-    RenderPath.MatrixRotate((180 - entityRenderDispatcher->playerRotY)*(3.14159265358979f/180.f), 0, 1, 0);
-    RenderPath.MatrixRotate((-entityRenderDispatcher->playerRotX)*(3.14159265358979f/180.f), 1, 0, 0);
+    RenderPath.MatrixRotate((180 - entityRenderDispatcher->playerRotY)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((-entityRenderDispatcher->playerRotX)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
     t->begin();
     t->normal(0, 1, 0);
     t->vertexUV((float)(0 - xo), (float)(0 - yo), (float)(0), (float)(u0),
@@ -84,14 +84,14 @@ void FireballRenderer::renderFlame(std::shared_ptr<Entity> e, double x,
     float h = e->bbHeight / s;
     float yo = (float)(e->y - e->bb.y0);
 
-    // RenderPath.MatrixRotate((-entityRenderDispatcher->playerRotY)*(3.14159265358979f/180.f), 0, 1, 0);
+    // RenderPath.MatrixRotate((-entityRenderDispatcher->playerRotY)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
 
-    RenderPath.MatrixRotate((180 - entityRenderDispatcher->playerRotY)*(3.14159265358979f/180.f), 0, 1, 0);
-    RenderPath.MatrixRotate((-entityRenderDispatcher->playerRotX)*(3.14159265358979f/180.f), 1, 0, 0);
+    RenderPath.MatrixRotate((180 - entityRenderDispatcher->playerRotY)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((-entityRenderDispatcher->playerRotX)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
     RenderPath.MatrixTranslate(0, 0, 0.1f);
     // RenderPath.MatrixTranslate(0, 0, -0.3f + ((int) h) * 0.02f);
     RenderPath.StateSetColour(1, 1, 1, 1);
-    // RenderPath.MatrixRotate((-playerRotX)*(3.14159265358979f/180.f), 1, 0, 0);
+    // RenderPath.MatrixRotate((-playerRotX)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
     float zo = 0;
     t->begin();
     t->normal(0, 1, 0);

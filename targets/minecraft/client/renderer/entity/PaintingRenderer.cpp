@@ -28,7 +28,7 @@ void PaintingRenderer::render(std::shared_ptr<Entity> _painting, double x,
 
     RenderPath.MatrixPush();
     RenderPath.MatrixTranslate((float)x, (float)y, (float)z);
-    RenderPath.MatrixRotate((rot)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((rot)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
     (void)0;
     bindTexture(painting);  // 4J was "/art/kz.png"
 

@@ -7837,7 +7837,7 @@ void TileRenderer::renderTile(Tile* tile, int data, float brightness,
 
         tile->updateDefaultShape();
         setShape(tile);
-        RenderPath.MatrixRotate((90)*(3.14159265358979f/180.f), 0, 1, 0);
+        RenderPath.MatrixRotate((90)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
 
         RenderPath.MatrixTranslate(-0.5f, -0.5f, -0.5f);
         t->begin();
@@ -8008,7 +8008,7 @@ void TileRenderer::renderTile(Tile* tile, int data, float brightness,
 
         RenderPath.MatrixTranslate(0.5f, 0.5f, 0.5f);
     } else if (shape == Tile::SHAPE_ENTITYTILE_ANIMATED) {
-        RenderPath.MatrixRotate((90)*(3.14159265358979f/180.f), 0, 1, 0);
+        RenderPath.MatrixRotate((90)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
         RenderPath.MatrixTranslate(-0.5f, -0.5f, -0.5f);
         EntityTileRenderer::instance->render(tile, data, brightness, fAlpha,
                                              setColor, useCompiled);

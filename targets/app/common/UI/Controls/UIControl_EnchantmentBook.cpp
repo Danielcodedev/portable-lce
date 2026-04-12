@@ -46,9 +46,9 @@ void UIControl_EnchantmentBook::render(IggyCustomDrawCallbackRegion* region) {
     // Add a uniform scale
     RenderPath.MatrixScale(-57 / ssX, 57 / ssX, 360.0f);
 
-    RenderPath.MatrixRotate((45 + 90)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((45 + 90)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
     Lighting::turnOn();
-    RenderPath.MatrixRotate((-45 - 90)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((-45 - 90)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
 
     // float sss = 4;
 
@@ -60,13 +60,13 @@ void UIControl_EnchantmentBook::render(IggyCustomDrawCallbackRegion* region) {
         TN_ITEM_BOOK);  // 4J was "/1_2_2/item/book.png"
     pMinecraft->textures->bind(tex);
 
-    RenderPath.MatrixRotate((20)*(3.14159265358979f/180.f), 1, 0, 0);
+    RenderPath.MatrixRotate((20)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
 
     float a = 1;
     float o = oOpen + (open - oOpen) * a;
     RenderPath.MatrixTranslate((1 - o) * 0.2f, (1 - o) * 0.1f, (1 - o) * 0.25f);
-    RenderPath.MatrixRotate((-(1 - o) * 90 - 90)*(3.14159265358979f/180.f), 0, 1, 0);
-    RenderPath.MatrixRotate((180)*(3.14159265358979f/180.f), 1, 0, 0);
+    RenderPath.MatrixRotate((-(1 - o) * 90 - 90)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((180)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
 
     float ff1 = oFlip + (flip - oFlip) * a + 0.25f;
     float ff2 = oFlip + (flip - oFlip) * a + 0.75f;

@@ -32,12 +32,12 @@ void BoatRenderer::render(std::shared_ptr<Entity> _boat, double x, double y,
 
     RenderPath.MatrixTranslate((float)x, (float)y, (float)z);
 
-    RenderPath.MatrixRotate((180 - rot)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((180 - rot)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
     float hurt = boat->getHurtTime() - a;
     float dmg = boat->getDamage() - a;
     if (dmg < 0) dmg = 0;
     if (hurt > 0) {
-        RenderPath.MatrixRotate((sinf(hurt) * hurt * dmg / 10 * boat->getHurtDir())*(3.14159265358979f/180.f), 1, 0, 0);
+        RenderPath.MatrixRotate((sinf(hurt) * hurt * dmg / 10 * boat->getHurtDir())*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
     }
 
     float ss = 12 / 16.0f;

@@ -44,7 +44,7 @@ void EnderChestRenderer::render(std::shared_ptr<TileEntity> _chest, double x,
     if (data == 4) rot = 90;
     if (data == 5) rot = -90;
 
-    RenderPath.MatrixRotate((rot)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((rot)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
     RenderPath.MatrixTranslate(-0.5f, -0.5f, -0.5f);
 
     float open = chest->oOpenness + (chest->openness - chest->oOpenness) * a;

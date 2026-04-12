@@ -66,8 +66,8 @@ void EndermanRenderer::additionalRendering(std::shared_ptr<LivingEntity> _mob,
         float s = 8 / 16.0f;
         RenderPath.MatrixTranslate(-0 / 16.0f, 11 / 16.0f, -12 / 16.0f);
         s *= 1.00f;
-        RenderPath.MatrixRotate((20)*(3.14159265358979f/180.f), 1, 0, 0);
-        RenderPath.MatrixRotate((45)*(3.14159265358979f/180.f), 0, 1, 0);
+        RenderPath.MatrixRotate((20)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+        RenderPath.MatrixRotate((45)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
         RenderPath.MatrixScale(-s, -s, s);
 
         if (SharedConstants::TEXTURE_LIGHTING) {

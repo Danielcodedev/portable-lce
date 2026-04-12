@@ -50,10 +50,10 @@ void MushroomCowRenderer::additionalRendering(
     RenderPath.MatrixPush();
     RenderPath.MatrixScale(1, -1, 1);
     RenderPath.MatrixTranslate(0.2f, 0.4f, 0.5f);
-    RenderPath.MatrixRotate((42)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((42)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
     tileRenderer->renderTile(Tile::mushroom_red, 0, 1);
     RenderPath.MatrixTranslate(0.1f, 0, -0.6f);
-    RenderPath.MatrixRotate((42)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((42)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
     tileRenderer->renderTile(Tile::mushroom_red, 0, 1);
     RenderPath.MatrixPop();
 
@@ -61,7 +61,7 @@ void MushroomCowRenderer::additionalRendering(
     ((QuadrupedModel*)model)->head->translateTo(1 / 16.0f);
     RenderPath.MatrixScale(1, -1, 1);
     RenderPath.MatrixTranslate(0, 0.75f, -0.2f);
-    RenderPath.MatrixRotate((12)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((12)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
     tileRenderer->renderTile(Tile::mushroom_red, 0, 1);
     RenderPath.MatrixPop();
 

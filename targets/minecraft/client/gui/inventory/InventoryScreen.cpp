@@ -57,7 +57,7 @@ void InventoryScreen::renderBg(float a) {
     RenderPath.MatrixTranslate((float)xo + 51, (float)yo + 75, 50);
     float ss = 30;
     RenderPath.MatrixScale(-ss, ss, ss);
-    RenderPath.MatrixRotate((180)*(3.14159265358979f/180.f), 0, 0, 1);
+    RenderPath.MatrixRotate((180)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
 
     float oybr = minecraft->player->yBodyRot;
     float oyr = minecraft->player->yRot;
@@ -68,11 +68,11 @@ void InventoryScreen::renderBg(float a) {
     float xd = (xo + 51) - xMouse;
     float yd = (yo + 75 - 50) - yMouse;
 
-    RenderPath.MatrixRotate((45 + 90)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((45 + 90)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
     Lighting::turnOn();
-    RenderPath.MatrixRotate((-45 - 90)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((-45 - 90)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
 
-    RenderPath.MatrixRotate((-(float)atan(yd / 40.0f) * 20)*(3.14159265358979f/180.f), 1, 0, 0);
+    RenderPath.MatrixRotate((-(float)atan(yd / 40.0f) * 20)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
 
     minecraft->player->yBodyRot = (float)atan(xd / 40.0f) * 20;
     minecraft->player->yRot = (float)atan(xd / 40.0f) * 40;

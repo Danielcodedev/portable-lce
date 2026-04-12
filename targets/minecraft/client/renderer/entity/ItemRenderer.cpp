@@ -93,12 +93,12 @@ void ItemRenderer::render(std::shared_ptr<Entity> _itemEntity, double x,
 
     if (item->getIconType() == Icon::TYPE_TERRAIN && tile != nullptr &&
         TileRenderer::canRender(tile->getRenderShape())) {
-        RenderPath.MatrixRotate((spin)*(3.14159265358979f/180.f), 0, 1, 0);
+        RenderPath.MatrixRotate((spin)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
 
         if (m_bItemFrame) {
             RenderPath.MatrixScale(1.25f, 1.25f, 1.25f);
             RenderPath.MatrixTranslate(0, 0.05f, 0);
-            RenderPath.MatrixRotate((-90)*(3.14159265358979f/180.f), 0, 1, 0);
+            RenderPath.MatrixRotate((-90)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
         }
 
         float s = 1 / 4.0f;
@@ -228,7 +228,7 @@ void ItemRenderer::renderItemBillboard(std::shared_ptr<ItemEntity> entity,
 
         RenderPath.MatrixPush();
         if (m_bItemFrame) {
-            RenderPath.MatrixRotate((180)*(3.14159265358979f/180.f), 0, 1, 0);
+            RenderPath.MatrixRotate((180)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
         } else {
             RenderPath.MatrixRotate(
                 (entity->age + a) / 20.0f + entity->bobOffs,
@@ -290,7 +290,7 @@ void ItemRenderer::renderItemBillboard(std::shared_ptr<ItemEntity> entity,
                 float sx =
                     Minecraft::currentTimeMillis() % (3000) / (3000.0f) * 8;
                 RenderPath.MatrixTranslate(sx, 0, 0);
-                RenderPath.MatrixRotate((-50)*(3.14159265358979f/180.f), 0, 0, 1);
+                RenderPath.MatrixRotate((-50)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
 
                 ItemInHandRenderer::renderItem3D(t, 0, 0, 1, 1, 255, 255, width,
                                                  true, bIsTerrain);
@@ -300,7 +300,7 @@ void ItemRenderer::renderItemBillboard(std::shared_ptr<ItemEntity> entity,
                 sx = Minecraft::currentTimeMillis() % (3000 + 1873) /
                      (3000 + 1873.0f) * 8;
                 RenderPath.MatrixTranslate(-sx, 0, 0);
-                RenderPath.MatrixRotate((10)*(3.14159265358979f/180.f), 0, 0, 1);
+                RenderPath.MatrixRotate((10)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
                 ItemInHandRenderer::renderItem3D(t, 0, 0, 1, 1, 255, 255, width,
                                                  true, bIsTerrain);
                 RenderPath.MatrixPop();
@@ -324,7 +324,7 @@ void ItemRenderer::renderItemBillboard(std::shared_ptr<ItemEntity> entity,
                 RenderPath.MatrixTranslate(_xo, _yo, _zo);
             }
             if (!m_bItemFrame)
-                RenderPath.MatrixRotate((180 - entityRenderDispatcher->playerRotY)*(3.14159265358979f/180.f), 0, 1, 0);
+                RenderPath.MatrixRotate((180 - entityRenderDispatcher->playerRotY)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
             RenderPath.StateSetColour(red, green, blue, 1);
             t->begin();
             t->normal(0, 1, 0);
@@ -373,12 +373,12 @@ void ItemRenderer::renderGuiItem(Font* font, Textures* textures,
         RenderPath.MatrixScale(10.0f, 10.0f, 10.0f);
         RenderPath.MatrixTranslate(1.0f, 0.5f, 8.0f);
         RenderPath.MatrixScale(1.0f, 1.0f, -1.0f);
-        RenderPath.MatrixRotate((180.0f + 30.0f)*(3.14159265358979f/180.f), 1.0f, 0.0f, 0.0f);
-        RenderPath.MatrixRotate((45.0f)*(3.14159265358979f/180.f), 0.0f, 1.0f, 0.0f);
+        RenderPath.MatrixRotate((180.0f + 30.0f)*(std::numbers::pi_v<float>/180.f), 1.0f, 0.0f, 0.0f);
+        RenderPath.MatrixRotate((45.0f)*(std::numbers::pi_v<float>/180.f), 0.0f, 1.0f, 0.0f);
         // 4J-PB - pass the alpha value in - the grass block
         // render has the top surface coloured differently to
         // the rest of the block
-        RenderPath.MatrixRotate((-90.0f)*(3.14159265358979f/180.f), 0.0f, 1.0f, 0.0f);
+        RenderPath.MatrixRotate((-90.0f)*(std::numbers::pi_v<float>/180.f), 0.0f, 1.0f, 0.0f);
 
         tileRenderer->renderTile(tile, itemAuxValue, 1, fAlpha, useCompiled);
 

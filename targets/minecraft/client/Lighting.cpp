@@ -50,8 +50,8 @@ FloatBuffer* Lighting::getBuffer(float a, float b, float c, float d) {
 
 void Lighting::turnOnGui() {
     RenderPath.MatrixPush();
-    RenderPath.MatrixRotate((-30)*(3.14159265358979f/180.f), 0, 1, 0);
-    RenderPath.MatrixRotate((165)*(3.14159265358979f/180.f), 1, 0, 0);
+    RenderPath.MatrixRotate((-30)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((165)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
     turnOn();
     RenderPath.MatrixPop();
 }

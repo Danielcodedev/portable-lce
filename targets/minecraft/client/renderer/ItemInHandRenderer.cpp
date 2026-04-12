@@ -321,8 +321,8 @@ void ItemInHandRenderer::renderItem(std::shared_ptr<LivingEntity> mob,
         float s = 1.5f;
         RenderPath.MatrixScale(s, s, s);
 
-        RenderPath.MatrixRotate((50)*(3.14159265358979f/180.f), 0, 1, 0);
-        RenderPath.MatrixRotate((45 + 290)*(3.14159265358979f/180.f), 0, 0, 1);
+        RenderPath.MatrixRotate((50)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+        RenderPath.MatrixRotate((45 + 290)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
         RenderPath.MatrixTranslate(-15 / 16.0f, -1 / 16.0f, 0);
         float dd = 1 / 16.0f;
 
@@ -346,7 +346,7 @@ void ItemInHandRenderer::renderItem(std::shared_ptr<LivingEntity> mob,
             RenderPath.MatrixScale(ss, ss, ss);
             float sx = Minecraft::currentTimeMillis() % (3000) / (3000.0f) * 8;
             RenderPath.MatrixTranslate(sx, 0, 0);
-            RenderPath.MatrixRotate((-50)*(3.14159265358979f/180.f), 0, 0, 1);
+            RenderPath.MatrixRotate((-50)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
 
             renderItem3D(t, 0, 0, 1, 1, 256, 256, 1 / 16.0f, true, bIsTerrain);
             RenderPath.MatrixPop();
@@ -355,7 +355,7 @@ void ItemInHandRenderer::renderItem(std::shared_ptr<LivingEntity> mob,
             sx = System::currentTimeMillis() % (3000 + 1873) /
                  (3000 + 1873.0f) * 8;
             RenderPath.MatrixTranslate(-sx, 0, 0);
-            RenderPath.MatrixRotate((10)*(3.14159265358979f/180.f), 0, 0, 1);
+            RenderPath.MatrixRotate((10)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
             renderItem3D(t, 0, 0, 1, 1, 256, 256, 1 / 16.0f, true, bIsTerrain);
             RenderPath.MatrixPop();
             RenderPath.MatrixMode(rp::MatrixStack::modelview);
@@ -433,8 +433,8 @@ void ItemInHandRenderer::render(float a) {
     float xr = player->xRotO + (player->xRot - player->xRotO) * a;
 
     RenderPath.MatrixPush();
-    RenderPath.MatrixRotate((xr)*(3.14159265358979f/180.f), 1, 0, 0);
-    RenderPath.MatrixRotate((player->yRotO + (player->yRot - player->yRotO) * a)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((xr)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+    RenderPath.MatrixRotate((player->yRotO + (player->yRot - player->yRotO) * a)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
     Lighting::turnOn();
     RenderPath.MatrixPop();
 
@@ -446,8 +446,8 @@ void ItemInHandRenderer::render(float a) {
         // 4J - was using player->xRot and yRot directly here rather than
         // interpolating between old & current with a
         float yr = player->yRotO + (player->yRot - player->yRotO) * a;
-        RenderPath.MatrixRotate(((xr - xrr) * 0.1f)*(3.14159265358979f/180.f), 1, 0, 0);
-        RenderPath.MatrixRotate(((yr - yrr) * 0.1f)*(3.14159265358979f/180.f), 0, 1, 0);
+        RenderPath.MatrixRotate(((xr - xrr) * 0.1f)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+        RenderPath.MatrixRotate(((yr - yrr) * 0.1f)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
     }
 
     std::shared_ptr<ItemInstance> item = selectedItem;
@@ -513,8 +513,8 @@ void ItemInHandRenderer::render(float a) {
         RenderPath.MatrixTranslate(0.0f, 0.0f * d - (1 - h) * 1.2f - tilt * 0.5f + 0.04f,
                      -0.9f * d);
 
-        RenderPath.MatrixRotate((90)*(3.14159265358979f/180.f), 0, 1, 0);
-        RenderPath.MatrixRotate(((tilt) * -85)*(3.14159265358979f/180.f), 0, 0, 1);
+        RenderPath.MatrixRotate((90)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+        RenderPath.MatrixRotate(((tilt) * -85)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
         (void)0;
 
         {
@@ -530,10 +530,10 @@ void ItemInHandRenderer::render(float a) {
                 RenderPath.MatrixPush();
 
                 RenderPath.MatrixTranslate(-0.0f, -0.6f, 1.1f * flip);
-                RenderPath.MatrixRotate(((float)(-45 * flip))*(3.14159265358979f/180.f), 1, 0, 0);
-                RenderPath.MatrixRotate((-90)*(3.14159265358979f/180.f), 0, 0, 1);
-                RenderPath.MatrixRotate((59)*(3.14159265358979f/180.f), 0, 0, 1);
-                RenderPath.MatrixRotate(((float)(-65 * flip))*(3.14159265358979f/180.f), 0, 1, 0);
+                RenderPath.MatrixRotate(((float)(-45 * flip))*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+                RenderPath.MatrixRotate((-90)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
+                RenderPath.MatrixRotate((59)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
+                RenderPath.MatrixRotate(((float)(-65 * flip))*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
 
                 EntityRenderer* er =
                     EntityRenderDispatcher::instance->getRenderer(
@@ -560,16 +560,16 @@ void ItemInHandRenderer::render(float a) {
             float swing = player->getAttackAnim(a);
             float swing3 = sinf(swing * swing * std::numbers::pi);
             float swing2 = sinf(sqrt(swing) * std::numbers::pi);
-            RenderPath.MatrixRotate((-swing3 * 20)*(3.14159265358979f/180.f), 0, 1, 0);
-            RenderPath.MatrixRotate((-swing2 * 20)*(3.14159265358979f/180.f), 0, 0, 1);
-            RenderPath.MatrixRotate((-swing2 * 80)*(3.14159265358979f/180.f), 1, 0, 0);
+            RenderPath.MatrixRotate((-swing3 * 20)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+            RenderPath.MatrixRotate((-swing2 * 20)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
+            RenderPath.MatrixRotate((-swing2 * 80)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
         }
 
         float ss = 0.38f;
         RenderPath.MatrixScale(ss, ss, ss);
 
-        RenderPath.MatrixRotate((90)*(3.14159265358979f/180.f), 0, 1, 0);
-        RenderPath.MatrixRotate((180)*(3.14159265358979f/180.f), 0, 0, 1);
+        RenderPath.MatrixRotate((90)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+        RenderPath.MatrixRotate((180)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
 
         RenderPath.MatrixTranslate(-1, -1, +0);
 
@@ -624,9 +624,9 @@ void ItemInHandRenderer::render(float a) {
                                  (swing > 0.2 ? 1 : 0),
                              0);
                 RenderPath.MatrixTranslate(iss * 0.6f, -iss * 0.5f, 0);
-                RenderPath.MatrixRotate((iss * 90)*(3.14159265358979f/180.f), 0, 1, 0);
-                RenderPath.MatrixRotate((iss * 10)*(3.14159265358979f/180.f), 1, 0, 0);
-                RenderPath.MatrixRotate((iss * 30)*(3.14159265358979f/180.f), 0, 0, 1);
+                RenderPath.MatrixRotate((iss * 90)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+                RenderPath.MatrixRotate((iss * 10)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+                RenderPath.MatrixRotate((iss * 30)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
             }
         } else {
             float swing = powf(player->getAttackAnim(a), swingPowFactor);
@@ -641,15 +641,15 @@ void ItemInHandRenderer::render(float a) {
         RenderPath.MatrixTranslate(0.7f * d, -0.65f * d - (1 - h) * 0.6f, -0.9f * d);
         RenderPath.MatrixTranslate(fudgeX, fudgeY, fudgeZ);  // 4J added
 
-        RenderPath.MatrixRotate((45)*(3.14159265358979f/180.f), 0, 1, 0);
+        RenderPath.MatrixRotate((45)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
         (void)0;
 
         float swing = powf(player->getAttackAnim(a), swingPowFactor);
         float swing3 = sinf(swing * swing * std::numbers::pi);
         float swing2 = sinf(sqrt(swing) * std::numbers::pi);
-        RenderPath.MatrixRotate((-swing3 * 20)*(3.14159265358979f/180.f), 0, 1, 0);
-        RenderPath.MatrixRotate((-swing2 * 20)*(3.14159265358979f/180.f), 0, 0, 1);
-        RenderPath.MatrixRotate((-swing2 * 80)*(3.14159265358979f/180.f), 1, 0, 0);
+        RenderPath.MatrixRotate((-swing3 * 20)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+        RenderPath.MatrixRotate((-swing2 * 20)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
+        RenderPath.MatrixRotate((-swing2 * 80)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
 
         float ss = 0.4f;
         RenderPath.MatrixScale(ss, ss, ss);
@@ -658,13 +658,13 @@ void ItemInHandRenderer::render(float a) {
             UseAnim anim = item->getUseAnimation();
             if (anim == UseAnim_block) {
                 RenderPath.MatrixTranslate(-0.5f, 0.2f, 0.0f);
-                RenderPath.MatrixRotate((30)*(3.14159265358979f/180.f), 0, 1, 0);
-                RenderPath.MatrixRotate((-80)*(3.14159265358979f/180.f), 1, 0, 0);
-                RenderPath.MatrixRotate((60)*(3.14159265358979f/180.f), 0, 1, 0);
+                RenderPath.MatrixRotate((30)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+                RenderPath.MatrixRotate((-80)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+                RenderPath.MatrixRotate((60)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
             } else if (anim == UseAnim_bow) {
-                RenderPath.MatrixRotate((-18)*(3.14159265358979f/180.f), 0, 0, 1);
-                RenderPath.MatrixRotate((-12)*(3.14159265358979f/180.f), 0, 1, 0);
-                RenderPath.MatrixRotate((-8)*(3.14159265358979f/180.f), 1, 0, 0);
+                RenderPath.MatrixRotate((-18)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
+                RenderPath.MatrixRotate((-12)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+                RenderPath.MatrixRotate((-8)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
                 RenderPath.MatrixTranslate(-0.9f, 0.2f, 0.0f);
                 float timeHeld = (item->getUseDuration() -
                                   (player->getUseItemDuration() - a + 1));
@@ -679,19 +679,19 @@ void ItemInHandRenderer::render(float a) {
                 }
                 RenderPath.MatrixTranslate(0, 0, pow * 0.1f);
 
-                RenderPath.MatrixRotate((-45 - 290)*(3.14159265358979f/180.f), 0, 0, 1);
-                RenderPath.MatrixRotate((-50)*(3.14159265358979f/180.f), 0, 1, 0);
+                RenderPath.MatrixRotate((-45 - 290)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
+                RenderPath.MatrixRotate((-50)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
                 RenderPath.MatrixTranslate(0, 0.5f, 0);
                 float ys = 1 + pow * 0.2f;
                 RenderPath.MatrixScale(1, 1, ys);
                 RenderPath.MatrixTranslate(0, -0.5f, 0);
-                RenderPath.MatrixRotate((50)*(3.14159265358979f/180.f), 0, 1, 0);
-                RenderPath.MatrixRotate((45 + 290)*(3.14159265358979f/180.f), 0, 0, 1);
+                RenderPath.MatrixRotate((50)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+                RenderPath.MatrixRotate((45 + 290)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
             }
         }
 
         if (item->getItem()->isMirroredArt()) {
-            RenderPath.MatrixRotate((180)*(3.14159265358979f/180.f), 0, 1, 0);
+            RenderPath.MatrixRotate((180)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
         }
 
         if (item->getItem()->hasMultipleSpriteLayers()) {
@@ -728,14 +728,14 @@ void ItemInHandRenderer::render(float a) {
         RenderPath.MatrixTranslate(0.8f * d, -0.75f * d - (1 - h) * 0.6f, -0.9f * d);
         RenderPath.MatrixTranslate(fudgeX, fudgeY, fudgeZ);  // 4J added
 
-        RenderPath.MatrixRotate((45)*(3.14159265358979f/180.f), 0, 1, 0);
+        RenderPath.MatrixRotate((45)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
         (void)0;
         {
             float swing = player->getAttackAnim(a);
             float swing3 = sinf(swing * swing * std::numbers::pi);
             float swing2 = sinf(sqrt(swing) * std::numbers::pi);
-            RenderPath.MatrixRotate((swing2 * 70)*(3.14159265358979f/180.f), 0, 1, 0);
-            RenderPath.MatrixRotate((-swing3 * 20)*(3.14159265358979f/180.f), 0, 0, 1);
+            RenderPath.MatrixRotate((swing2 * 70)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+            RenderPath.MatrixRotate((-swing3 * 20)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
         }
 
         // 4J-PB - if we've got a player texture, use that
@@ -748,9 +748,9 @@ void ItemInHandRenderer::render(float a) {
                                          minecraft->player->getTexture()));
         minecraft->textures->clearLastBoundId();
         RenderPath.MatrixTranslate(-1.0f, +3.6f, +3.5f);
-        RenderPath.MatrixRotate((120)*(3.14159265358979f/180.f), 0, 0, 1);
-        RenderPath.MatrixRotate((180 + 20)*(3.14159265358979f/180.f), 1, 0, 0);
-        RenderPath.MatrixRotate((-90 - 45)*(3.14159265358979f/180.f), 0, 1, 0);
+        RenderPath.MatrixRotate((120)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
+        RenderPath.MatrixRotate((180 + 20)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+        RenderPath.MatrixRotate((-90 - 45)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
         RenderPath.MatrixScale(1.5f / 24.0f * 16, 1.5f / 24.0f * 16, 1.5f / 24.0f * 16);
         RenderPath.MatrixTranslate(5.6f, 0, 0);
 
@@ -929,7 +929,7 @@ void ItemInHandRenderer::renderFire(float a) {
         float y1 = y0 + size;
         float z0 = -0.5f;
         RenderPath.MatrixTranslate(-(i * 2 - 1) * 0.24f, -0.3f, 0);
-        RenderPath.MatrixRotate(((i * 2 - 1) * 10.0f)*(3.14159265358979f/180.f), 0, 1, 0);
+        RenderPath.MatrixRotate(((i * 2 - 1) * 10.0f)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
 
         t->begin();
         t->vertexUV((float)(x0), (float)(y0), (float)(z0), (float)(u1),

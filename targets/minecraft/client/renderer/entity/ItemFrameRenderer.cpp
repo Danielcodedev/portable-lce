@@ -69,7 +69,7 @@ void ItemFrameRenderer::drawFrame(std::shared_ptr<ItemFrame> itemFrame) {
     RenderPath.MatrixPush();
     entityRenderDispatcher->textures->bindTexture(
         &TextureAtlas::LOCATION_BLOCKS);
-    RenderPath.MatrixRotate((itemFrame->yRot)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((itemFrame->yRot)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
 
     Tile* wood = Tile::wood;
     float depth = 1.0f / 16.0f;
@@ -143,8 +143,8 @@ void ItemFrameRenderer::drawItem(std::shared_ptr<ItemFrame> entity) {
 
     RenderPath.MatrixTranslate((-7.25f / 16.0f) * Direction::STEP_X[entity->dir], -0.18f,
                  (-7.25f / 16.0f) * Direction::STEP_Z[entity->dir]);
-    RenderPath.MatrixRotate((180 + entity->yRot)*(3.14159265358979f/180.f), 0, 1, 0);
-    RenderPath.MatrixRotate((-90 * entity->getRotation())*(3.14159265358979f/180.f), 0, 0, 1);
+    RenderPath.MatrixRotate((180 + entity->yRot)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((-90 * entity->getRotation())*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
 
     switch (entity->getRotation()) {
         case 1:
@@ -162,8 +162,8 @@ void ItemFrameRenderer::drawItem(std::shared_ptr<ItemFrame> entity) {
         entityRenderDispatcher->textures->bindTexture(&MAP_BACKGROUND_LOCATION);
         Tesselator* t = Tesselator::getInstance();
 
-        RenderPath.MatrixRotate((180)*(3.14159265358979f/180.f), 0, 1, 0);
-        RenderPath.MatrixRotate((180)*(3.14159265358979f/180.f), 0, 0, 1);
+        RenderPath.MatrixRotate((180)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+        RenderPath.MatrixRotate((180)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
         RenderPath.MatrixScale(1.0f / 256.0f, 1.0f / 256.0f, 1.0f / 256.0f);
         RenderPath.MatrixTranslate(-65, -107, -3);
         (void)0;

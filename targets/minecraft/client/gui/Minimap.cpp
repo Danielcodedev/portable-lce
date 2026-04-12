@@ -171,7 +171,7 @@ void Minimap::render(std::shared_ptr<Player> player, Textures* textures,
         RenderPath.MatrixPush();
         RenderPath.MatrixTranslate(x + dec->x / 2.0f + w / 2, y + dec->y / 2.0f + h / 2,
                      fIconZ);
-        RenderPath.MatrixRotate((dec->rot * 360 / 16.0f)*(3.14159265358979f/180.f), 0, 0, 1);
+        RenderPath.MatrixRotate((dec->rot * 360 / 16.0f)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
         RenderPath.MatrixScale(4, 4, 3);
         RenderPath.MatrixTranslate(-1.0f / 8.0f, +1.0f / 8.0f, 0);
 
@@ -217,7 +217,7 @@ void Minimap::render(std::shared_ptr<Player> player, Textures* textures,
         RenderPath.MatrixPush();
         RenderPath.MatrixTranslate(x + dec->x / 2.0f + w / 2, y + dec->y / 2.0f + h / 2,
                      fIconZ);
-        RenderPath.MatrixRotate((dec->rot * 360 / 16.0f)*(3.14159265358979f/180.f), 0, 0, 1);
+        RenderPath.MatrixRotate((dec->rot * 360 / 16.0f)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
         RenderPath.MatrixScale(4, 4, 3);
         RenderPath.MatrixTranslate(-1.0f / 8.0f, +1.0f / 8.0f, 0);
 
@@ -242,7 +242,7 @@ void Minimap::render(std::shared_ptr<Player> player, Textures* textures,
 #endif
 
     RenderPath.MatrixPush();
-    //        RenderPath.MatrixRotate((0)*(3.14159265358979f/180.f), 1, 0, 0);
+    //        RenderPath.MatrixRotate((0)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
     RenderPath.MatrixTranslate(0, 0, -0.06f);
     RenderPath.MatrixScale(1, 1, 1);
     // 4J Stu - Don't render the text name, except in debug

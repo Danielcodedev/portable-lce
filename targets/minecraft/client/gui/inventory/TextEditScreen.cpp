@@ -79,13 +79,13 @@ void TextEditScreen::render(int xm, int ym, float a) {
     RenderPath.MatrixTranslate((float)width / 2, (float)height / 2, 50);
     float ss = 60 / (16 / 25.0f);
     RenderPath.MatrixScale(-ss, -ss, -ss);
-    RenderPath.MatrixRotate((180)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((180)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
 
     Tile* tile = sign->getTile();
 
     if (tile == Tile::sign) {
         float rot = sign->getData() * 360 / 16.0f;
-        RenderPath.MatrixRotate((rot)*(3.14159265358979f/180.f), 0, 1, 0);
+        RenderPath.MatrixRotate((rot)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
         RenderPath.MatrixTranslate(0, 5 / 16.0f, 0);
     } else {
         int face = sign->getData();
@@ -94,7 +94,7 @@ void TextEditScreen::render(int xm, int ym, float a) {
         if (face == 2) rot = 180;
         if (face == 4) rot = 90;
         if (face == 5) rot = -90;
-        RenderPath.MatrixRotate((rot)*(3.14159265358979f/180.f), 0, 1, 0);
+        RenderPath.MatrixRotate((rot)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
         RenderPath.MatrixTranslate(0, 5 / 16.0f, 0);
     }
 

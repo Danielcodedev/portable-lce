@@ -80,13 +80,13 @@ void MinecartRenderer::render(std::shared_ptr<Entity> _cart, double x, double y,
     }
     RenderPath.MatrixTranslate((float)x, (float)y, (float)z);
 
-    RenderPath.MatrixRotate((180 - rot)*(3.14159265358979f/180.f), 0, 1, 0);
-    RenderPath.MatrixRotate((-xRot)*(3.14159265358979f/180.f), 0, 0, 1);
+    RenderPath.MatrixRotate((180 - rot)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((-xRot)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
     float hurt = cart->getHurtTime() - a;
     float dmg = cart->getDamage() - a;
     if (dmg < 0) dmg = 0;
     if (hurt > 0) {
-        RenderPath.MatrixRotate((sinf(hurt) * hurt * dmg / 10 * cart->getHurtDir())*(3.14159265358979f/180.f), 1, 0, 0);
+        RenderPath.MatrixRotate((sinf(hurt) * hurt * dmg / 10 * cart->getHurtDir())*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
     }
 
     int yOffset = cart->getDisplayOffset();

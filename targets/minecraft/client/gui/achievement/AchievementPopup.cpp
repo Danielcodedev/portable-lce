@@ -132,7 +132,7 @@ void AchievementPopup::render() {
     // }
 
     RenderPath.MatrixPush();
-    RenderPath.MatrixRotate((180)*(3.14159265358979f/180.f), 1, 0, 0);
+    RenderPath.MatrixRotate((180)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
     Lighting::turnOn();
     RenderPath.MatrixPop();
     RenderPath.StateSetLightingEnable(false);

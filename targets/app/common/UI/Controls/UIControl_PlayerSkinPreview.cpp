@@ -206,13 +206,13 @@ void UIControl_PlayerSkinPreview::render(IggyCustomDrawCallbackRegion* region) {
     ss = width / (m_fScreenWidth / m_fScreenHeight);
 
     RenderPath.MatrixScale(-ss, ss, ss);
-    RenderPath.MatrixRotate((180)*(3.14159265358979f/180.f), 0, 0, 1);
+    RenderPath.MatrixRotate((180)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
 
-    // RenderPath.MatrixRotate((45 + 90)*(3.14159265358979f/180.f), 0, 1, 0);
+    // RenderPath.MatrixRotate((45 + 90)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
     Lighting::turnOn();
-    // RenderPath.MatrixRotate((-45 - 90)*(3.14159265358979f/180.f), 0, 1, 0);
+    // RenderPath.MatrixRotate((-45 - 90)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
 
-    RenderPath.MatrixRotate((-(float)m_xRot)*(3.14159265358979f/180.f), 1, 0, 0);
+    RenderPath.MatrixRotate((-(float)m_xRot)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
 
     // 4J Stu - Turning on hideGui while we do this stops the name rendering in
     // split-screen
@@ -329,7 +329,7 @@ void UIControl_PlayerSkinPreview::render(EntityRenderer* renderer, double x,
 
     // setupRotations(mob, bob, bodyRot, a);
     //  is equivalent to
-    RenderPath.MatrixRotate((180 - bodyRot)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((180 - bodyRot)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
 
     float _scale = 1 / 16.0f;
     (void)0;
@@ -405,10 +405,10 @@ void UIControl_PlayerSkinPreview::render(EntityRenderer* renderer, double x,
             flap += 25;
         }
 
-        RenderPath.MatrixRotate((6.0f + lean / 2 + flap)*(3.14159265358979f/180.f), 1, 0, 0);
-        RenderPath.MatrixRotate((lean2 / 2)*(3.14159265358979f/180.f), 0, 0, 1);
-        RenderPath.MatrixRotate((-lean2 / 2)*(3.14159265358979f/180.f), 0, 1, 0);
-        RenderPath.MatrixRotate((180)*(3.14159265358979f/180.f), 0, 1, 0);
+        RenderPath.MatrixRotate((6.0f + lean / 2 + flap)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+        RenderPath.MatrixRotate((lean2 / 2)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
+        RenderPath.MatrixRotate((-lean2 / 2)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+        RenderPath.MatrixRotate((180)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
         model->renderCloak(1 / 16.0f, true);
         RenderPath.MatrixPop();
     }

@@ -58,8 +58,8 @@ void ExperienceOrbRenderer::render(std::shared_ptr<Entity> _orb, double x,
     int gc = (int)(br);
     int bc = (int)((sinf(rr + 2 * std::numbers::pi * 2 / 3) + 1) * 0.1f * br);
     int col = rc << 16 | gc << 8 | bc;
-    RenderPath.MatrixRotate((180 - entityRenderDispatcher->playerRotY)*(3.14159265358979f/180.f), 0, 1, 0);
-    RenderPath.MatrixRotate((-entityRenderDispatcher->playerRotX)*(3.14159265358979f/180.f), 1, 0, 0);
+    RenderPath.MatrixRotate((180 - entityRenderDispatcher->playerRotY)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((-entityRenderDispatcher->playerRotX)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
     float s = 0.3f;
     RenderPath.MatrixScale(s, s, s);
     Tesselator* t = Tesselator::getInstance();

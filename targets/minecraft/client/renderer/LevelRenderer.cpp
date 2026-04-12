@@ -920,11 +920,11 @@ void LevelRenderer::renderSky(float alpha) {
         t->setMipmapEnable(false);
         for (int i = 0; i < 6; i++) {
             RenderPath.MatrixPush();
-            if (i == 1) RenderPath.MatrixRotate((90)*(3.14159265358979f/180.f), 1, 0, 0);
-            if (i == 2) RenderPath.MatrixRotate((-90)*(3.14159265358979f/180.f), 1, 0, 0);
-            if (i == 3) RenderPath.MatrixRotate((180)*(3.14159265358979f/180.f), 1, 0, 0);
-            if (i == 4) RenderPath.MatrixRotate((90)*(3.14159265358979f/180.f), 0, 0, 1);
-            if (i == 5) RenderPath.MatrixRotate((-90)*(3.14159265358979f/180.f), 0, 0, 1);
+            if (i == 1) RenderPath.MatrixRotate((90)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+            if (i == 2) RenderPath.MatrixRotate((-90)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+            if (i == 3) RenderPath.MatrixRotate((180)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+            if (i == 4) RenderPath.MatrixRotate((90)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
+            if (i == 5) RenderPath.MatrixRotate((-90)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
             t->begin();
             t->color(0x282828);
             t->vertexUV(-100, -100, -100, 0, 0);
@@ -986,11 +986,11 @@ void LevelRenderer::renderSky(float alpha) {
 
         RenderPath.MatrixPush();
         {
-            RenderPath.MatrixRotate((90)*(3.14159265358979f/180.f), 1, 0, 0);
+            RenderPath.MatrixRotate((90)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
             RenderPath.MatrixRotate(
-                (sinf(level[playerIndex]->getSunAngle(alpha)) < 0 ? 180.f : 0.f)*(3.14159265358979f/180.f), 0,
+                (sinf(level[playerIndex]->getSunAngle(alpha)) < 0 ? 180.f : 0.f)*(std::numbers::pi_v<float>/180.f), 0,
                 0, 1);
-            RenderPath.MatrixRotate((90)*(3.14159265358979f/180.f), 0, 0, 1);
+            RenderPath.MatrixRotate((90)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
 
             float r = c[0];
             float g = c[1];
@@ -1034,8 +1034,8 @@ void LevelRenderer::renderSky(float alpha) {
         float zp = 0;
         RenderPath.StateSetColour(1, 1, 1, rainBrightness);
         RenderPath.MatrixTranslate(xp, yp, zp);
-        RenderPath.MatrixRotate((-90)*(3.14159265358979f/180.f), 0, 1, 0);
-        RenderPath.MatrixRotate((level[playerIndex]->getTimeOfDay(alpha) * 360)*(3.14159265358979f/180.f), 1, 0, 0);
+        RenderPath.MatrixRotate((-90)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+        RenderPath.MatrixRotate((level[playerIndex]->getTimeOfDay(alpha) * 360)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
         float ss = 30;
 
         textures->bindTexture(&SUN_LOCATION);
@@ -1148,8 +1148,8 @@ void LevelRenderer::renderHaloRing(float alpha) {
     bool prev = t->setMipmapEnable(true);
 
     RenderPath.MatrixPush();
-    RenderPath.MatrixRotate((-90)*(3.14159265358979f/180.f), 1, 0, 0);
-    RenderPath.MatrixRotate((90)*(3.14159265358979f/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((-90)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+    RenderPath.MatrixRotate((90)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
     ((void)RenderPath.CBuffCall(haloRingList));
     RenderPath.MatrixPop();
     t->setMipmapEnable(prev);

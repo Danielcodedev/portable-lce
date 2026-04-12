@@ -277,7 +277,7 @@ void PlayerRenderer::additionalRendering(std::shared_ptr<LivingEntity> _mob,
                         Tile::tiles[headGear->id]->getRenderShape())) {
                     float s = 10 / 16.0f;
                     RenderPath.MatrixTranslate(-0 / 16.0f, -4 / 16.0f, 0 / 16.0f);
-                    RenderPath.MatrixRotate((90)*(3.14159265358979f/180.f), 0, 1, 0);
+                    RenderPath.MatrixRotate((90)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
                     RenderPath.MatrixScale(s, -s, s);
                 }
 
@@ -309,12 +309,12 @@ void PlayerRenderer::additionalRendering(std::shared_ptr<LivingEntity> _mob,
                        (mob->yBodyRotO + (mob->yBodyRot - mob->yBodyRotO) * a);
             float xr = mob->xRotO + (mob->xRot - mob->xRotO) * a;
             RenderPath.MatrixPush();
-            RenderPath.MatrixRotate((yr)*(3.14159265358979f/180.f), 0, 1, 0);
-            RenderPath.MatrixRotate((xr)*(3.14159265358979f/180.f), 1, 0, 0);
+            RenderPath.MatrixRotate((yr)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+            RenderPath.MatrixRotate((xr)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
             RenderPath.MatrixTranslate((6 / 16.0f) * (i * 2 - 1), 0, 0);
             RenderPath.MatrixTranslate(0, -6 / 16.0f, 0);
-            RenderPath.MatrixRotate((-xr)*(3.14159265358979f/180.f), 1, 0, 0);
-            RenderPath.MatrixRotate((-yr)*(3.14159265358979f/180.f), 0, 1, 0);
+            RenderPath.MatrixRotate((-xr)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+            RenderPath.MatrixRotate((-yr)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
 
             float s = 8 / 6.0f;
             RenderPath.MatrixScale(s, s, s);
@@ -364,10 +364,10 @@ bool b2 = !mob->isCapeHidden();*/
         float xRot = 6.0f + lean / 2 + flap;
         if (xRot > 64.0f) xRot = 64.0f;
 
-        RenderPath.MatrixRotate((xRot)*(3.14159265358979f/180.f), 1, 0, 0);
-        RenderPath.MatrixRotate((lean2 / 2)*(3.14159265358979f/180.f), 0, 0, 1);
-        RenderPath.MatrixRotate((-lean2 / 2)*(3.14159265358979f/180.f), 0, 1, 0);
-        RenderPath.MatrixRotate((180)*(3.14159265358979f/180.f), 0, 1, 0);
+        RenderPath.MatrixRotate((xRot)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+        RenderPath.MatrixRotate((lean2 / 2)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
+        RenderPath.MatrixRotate((-lean2 / 2)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+        RenderPath.MatrixRotate((180)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
         humanoidModel->renderCloak(1 / 16.0f, true);
         RenderPath.MatrixPop();
     }
@@ -393,41 +393,41 @@ bool b2 = !mob->isCapeHidden();*/
             float s = 8 / 16.0f;
             RenderPath.MatrixTranslate(-0 / 16.0f, 3 / 16.0f, -5 / 16.0f);
             s *= 0.75f;
-            RenderPath.MatrixRotate((20)*(3.14159265358979f/180.f), 1, 0, 0);
-            RenderPath.MatrixRotate((45)*(3.14159265358979f/180.f), 0, 1, 0);
+            RenderPath.MatrixRotate((20)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+            RenderPath.MatrixRotate((45)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
             RenderPath.MatrixScale(-s, -s, s);
         } else if (item->id == Item::bow->id) {
             float s = 10 / 16.0f;
             RenderPath.MatrixTranslate(0 / 16.0f, 2 / 16.0f, 5 / 16.0f);
-            RenderPath.MatrixRotate((-20)*(3.14159265358979f/180.f), 0, 1, 0);
+            RenderPath.MatrixRotate((-20)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
             RenderPath.MatrixScale(s, -s, s);
-            RenderPath.MatrixRotate((-100)*(3.14159265358979f/180.f), 1, 0, 0);
-            RenderPath.MatrixRotate((45)*(3.14159265358979f/180.f), 0, 1, 0);
+            RenderPath.MatrixRotate((-100)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+            RenderPath.MatrixRotate((45)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
         } else if (Item::items[item->id]->isHandEquipped()) {
             float s = 10 / 16.0f;
             if (Item::items[item->id]->isMirroredArt()) {
-                RenderPath.MatrixRotate((180)*(3.14159265358979f/180.f), 0, 0, 1);
+                RenderPath.MatrixRotate((180)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
                 RenderPath.MatrixTranslate(0, -2 / 16.0f, 0);
             }
             if (mob->getUseItemDuration() > 0) {
                 if (anim == UseAnim_block) {
                     RenderPath.MatrixTranslate(0.05f, 0, -0.1f);
-                    RenderPath.MatrixRotate((-50)*(3.14159265358979f/180.f), 0, 1, 0);
-                    RenderPath.MatrixRotate((-10)*(3.14159265358979f/180.f), 1, 0, 0);
-                    RenderPath.MatrixRotate((-60)*(3.14159265358979f/180.f), 0, 0, 1);
+                    RenderPath.MatrixRotate((-50)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+                    RenderPath.MatrixRotate((-10)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+                    RenderPath.MatrixRotate((-60)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
                 }
             }
             RenderPath.MatrixTranslate(0, 3 / 16.0f, 0);
             RenderPath.MatrixScale(s, -s, s);
-            RenderPath.MatrixRotate((-100)*(3.14159265358979f/180.f), 1, 0, 0);
-            RenderPath.MatrixRotate((45)*(3.14159265358979f/180.f), 0, 1, 0);
+            RenderPath.MatrixRotate((-100)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+            RenderPath.MatrixRotate((45)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
         } else {
             float s = 6 / 16.0f;
             RenderPath.MatrixTranslate(+4 / 16.0f, +3 / 16.0f, -3 / 16.0f);
             RenderPath.MatrixScale(s, s, s);
-            RenderPath.MatrixRotate((60)*(3.14159265358979f/180.f), 0, 0, 1);
-            RenderPath.MatrixRotate((-90)*(3.14159265358979f/180.f), 1, 0, 0);
-            RenderPath.MatrixRotate((20)*(3.14159265358979f/180.f), 0, 0, 1);
+            RenderPath.MatrixRotate((60)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
+            RenderPath.MatrixRotate((-90)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+            RenderPath.MatrixRotate((20)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
         }
 
         if (item->getItem()->hasMultipleSpriteLayers()) {
@@ -511,9 +511,9 @@ void PlayerRenderer::setupRotations(std::shared_ptr<LivingEntity> _mob,
     std::shared_ptr<Player> mob = std::dynamic_pointer_cast<Player>(_mob);
 
     if (mob->isAlive() && mob->isSleeping()) {
-        RenderPath.MatrixRotate((mob->getSleepRotation())*(3.14159265358979f/180.f), 0, 1, 0);
-        RenderPath.MatrixRotate((getFlipDegrees(mob))*(3.14159265358979f/180.f), 0, 0, 1);
-        RenderPath.MatrixRotate((270)*(3.14159265358979f/180.f), 0, 1, 0);
+        RenderPath.MatrixRotate((mob->getSleepRotation())*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+        RenderPath.MatrixRotate((getFlipDegrees(mob))*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
+        RenderPath.MatrixRotate((270)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
     } else {
         LivingEntityRenderer::setupRotations(mob, bob, bodyRot, a);
     }
