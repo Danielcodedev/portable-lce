@@ -17,6 +17,9 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+#include "vs_drawstress.bin.h"
+#include "fs_drawstress.bin.h"
+
 using namespace rp;
 
 static constexpr uint32_t TRANSIENT_ARENA_SIZE = 16 * 1024 * 1024;
@@ -73,6 +76,13 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
     bgfx_state_ = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A |
                    BGFX_STATE_WRITE_Z | BGFX_STATE_DEPTH_TEST_LEQUAL |
                    BGFX_STATE_CULL_CCW;
+
+    // Load shaders
+    bgfx::ShaderHandle vsh = bgfx::createShader(
+        bgfx::makeRef(vs_drawstress_glsl, sizeof(vs_drawstress_glsl)));
+    bgfx::ShaderHandle fsh = bgfx::createShader(
+        bgfx::makeRef(fs_drawstress_glsl, sizeof(fs_drawstress_glsl)));
+    program_ = bgfx::createProgram(vsh, fsh, true);
 }
 
 BgfxRenderPath::~BgfxRenderPath() {
