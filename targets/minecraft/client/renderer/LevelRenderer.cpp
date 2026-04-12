@@ -104,7 +104,11 @@
 #include "platform/PlatformTypes.h"
 #include "platform/input/input.h"
 #include "platform/renderer/renderer.h"
+#include "platform/renderer/IRenderPath.h"
 #include "platform/stubs.h"
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #include "util/FrameProfiler.h"
 #include "util/StringHelpers.h"
 
@@ -438,7 +442,7 @@ void LevelRenderer::setLevel(int playerIndex, MultiPlayerLevel* level) {
         // actually exiting the game, so only when the primary player sets there
         // level to nullptr
         if (playerIndex == PlatformInput.GetPrimaryPad()) {
-            PlatformRenderer.CBuffDeleteAll();
+            RenderPath.CBuffDeleteAll();
             {
                 std::lock_guard<std::mutex> lock(m_csRenderableTileEntities);
                 renderableTileEntities.clear();
@@ -858,18 +862,16 @@ int LevelRenderer::renderChunks(int from, int to, int layer, double alpha) {
             int list = chunk->globalIdx * 2 + layer;
             list += chunkLists;
 
-            // 4jcraft: replaced glPushMatrix/glTranslatef/glPopMatrix per chunk
-            // no more full MVP upload per chunk, can also be bkwards compat
-            PlatformRenderer.SetChunkOffset((float)chunk->chunk->x,
-                                            (float)chunk->chunk->y,
-                                            (float)chunk->chunk->z);
+            RenderPath.SetChunkOffset((float)chunk->chunk->x,
+                                      (float)chunk->chunk->y,
+                                      (float)chunk->chunk->z);
 
-            if (PlatformRenderer.CBuffCall(list, first)) {
+            if (RenderPath.CBuffCall(list, first)) {
                 first = false;
             }
             count++;
         }
-        PlatformRenderer.SetChunkOffset(0.f, 0.f, 0.f);
+        RenderPath.SetChunkOffset(0.f, 0.f, 0.f);
     }
 
     glPopMatrix();
@@ -1433,7 +1435,7 @@ void LevelRenderer::renderAdvancedClouds(float alpha) {
     // stencilling to limit the area drawn to. Clouds have a relatively large
     // fill area compared to the number of vertices that they have, and so
     // enabling clipping here to try and reduce fill rate cost.
-    PlatformRenderer.StateSetEnableViewportClipPlanes(true);
+    RenderPath.StateSetEnableViewportClipPlanes(true);
     float yOffs =
         (float)(mc->cameraTargetPlayer->yOld +
                 (mc->cameraTargetPlayer->y - mc->cameraTargetPlayer->yOld) *
@@ -1696,7 +1698,7 @@ void LevelRenderer::renderAdvancedClouds(float alpha) {
             m_freezeticks = iTicks;
         }
     }
-    PlatformRenderer.StateSetEnableViewportClipPlanes(false);
+    RenderPath.StateSetEnableViewportClipPlanes(false);
 }
 
 bool LevelRenderer::updateDirtyChunks() {
@@ -1747,7 +1749,7 @@ bool LevelRenderer::updateDirtyChunks() {
     {
         FRAME_PROFILE_SCOPE(ChunkDirtyScan);
 
-        unsigned int memAlloc = PlatformRenderer.CBuffSize(-1);
+        unsigned int memAlloc = RenderPath.CBuffSize(-1);
         /*
         static int throttle = 0;
         if( ( throttle % 100 ) == 0 )
@@ -1962,7 +1964,7 @@ bool LevelRenderer::updateDirtyChunks() {
                 // exactly the same thing would happen further away, but we just
                 // don't care about it so much from terms of visual impact.
                 if (veryNearCount > 0) {
-                    PlatformRenderer.CBuffDeferredModeStart();
+                    RenderPath.CBuffDeferredModeStart();
                 }
                 // Build this chunk & return false to continue processing
                 chunk->clearDirty();
@@ -2054,7 +2056,7 @@ bool LevelRenderer::updateDirtyChunks() {
             // happen further away, but we just don't care about it so much from
             // terms of visual impact.
             if (veryNearCount > 0) {
-                PlatformRenderer.CBuffDeferredModeStart();
+                RenderPath.CBuffDeferredModeStart();
             }
             // Build this chunk & return false to continue processing
             chunk->clearDirty();
@@ -2224,12 +2226,12 @@ void LevelRenderer::renderHitOutline(std::shared_ptr<Player> player,
         // 4J-PB - If Display HUD is false, don't render the hit outline
         if (gameServices().getGameSettings(iPad, eGameSetting_DisplayHUD) == 0)
             return;
-        PlatformRenderer.StateSetLightingEnable(false);
+        RenderPath.StateSetLightingEnable(false);
         glDisable(GL_TEXTURE_2D);
 
         // draw hit outline
-        PlatformRenderer.StateSetColour(0.0f, 0.0f, 0.0f, 0.4f);
-        PlatformRenderer.StateSetLineWidth(1.0f);
+        RenderPath.StateSetColour(0.0f, 0.0f, 0.0f, 0.4f);
+        RenderPath.StateSetLineWidth(1.0f);
 
         // hack
         glDepthFunc(GL_LEQUAL);
@@ -2254,17 +2256,17 @@ void LevelRenderer::renderHitOutline(std::shared_ptr<Player> player,
 
         // restore
         glDisable(GL_POLYGON_OFFSET_LINE);
-        PlatformRenderer.StateSetColour(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderPath.StateSetColour(1.0f, 1.0f, 1.0f, 1.0f);
         glEnable(GL_TEXTURE_2D);
-        PlatformRenderer.StateSetLightingEnable(true);
+        RenderPath.StateSetLightingEnable(true);
     }
 }
 
 void LevelRenderer::render(AABB* b) {
     Tesselator* t = Tesselator::getInstance();
-    PlatformRenderer.StateSetLightingEnable(false);
+    RenderPath.StateSetLightingEnable(false);
     glDisable(GL_TEXTURE_2D);
-    PlatformRenderer.StateSetColour(0.0f, 0.0f, 0.0f, 0.4f);
+    RenderPath.StateSetColour(0.0f, 0.0f, 0.0f, 0.4f);
 
     // prevent zfight
     glEnable(GL_POLYGON_OFFSET_LINE);
@@ -2305,9 +2307,9 @@ void LevelRenderer::render(AABB* b) {
 
     t->end();
     glDisable(GL_POLYGON_OFFSET_LINE);
-    PlatformRenderer.StateSetLightingEnable(true);
+    RenderPath.StateSetLightingEnable(true);
     glEnable(GL_TEXTURE_2D);
-    PlatformRenderer.StateSetColour(1.0f, 1.0f, 1.0f, 1.0f);
+    RenderPath.StateSetColour(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 void LevelRenderer::setDirty(int x0, int y0, int z0, int x1, int y1, int z1,
