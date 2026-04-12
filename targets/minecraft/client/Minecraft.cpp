@@ -700,7 +700,7 @@ void Minecraft::updatePlayerViewportAssignments() {
         for (int i = 0; i < XUSER_MAX_COUNT; i++) {
             if (localplayers[i] != nullptr)
                 localplayers[i]->m_iScreenSection =
-                    IPlatformRenderer::VIEWPORT_TYPE_FULLSCREEN;
+                    0;
         }
     } else if (viewportsRequired == 2) {
         // Split screen - TODO - option for vertical/horizontal split
@@ -712,10 +712,10 @@ void Minecraft::updatePlayerViewportAssignments() {
                         PlatformInput.GetPrimaryPad(),
                         eGameSetting_SplitScreenVertical)) {
                     localplayers[i]->m_iScreenSection =
-                        IPlatformRenderer::VIEWPORT_TYPE_SPLIT_LEFT + found;
+                        3 + found;
                 } else {
                     localplayers[i]->m_iScreenSection =
-                        IPlatformRenderer::VIEWPORT_TYPE_SPLIT_TOP + found;
+                        1 + found;
                 }
                 found++;
             }
@@ -734,20 +734,20 @@ void Minecraft::updatePlayerViewportAssignments() {
                 // quadrant, but ending up in the 3rd viewport.
                 if (gameServices().getGameStarted()) {
                     if ((localplayers[i]->m_iScreenSection >=
-                         IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_TOP_LEFT) &&
+                         5) &&
                         (localplayers[i]->m_iScreenSection <=
-                         IPlatformRenderer::
+                         
                              VIEWPORT_TYPE_QUADRANT_BOTTOM_RIGHT)) {
                         quadrantsAllocated
                             [localplayers[i]->m_iScreenSection -
-                             IPlatformRenderer::
+                             
                                  VIEWPORT_TYPE_QUADRANT_TOP_LEFT] = true;
                     }
                 } else {
                     // Reset the viewport so that it can be assigned in the next
                     // loop
                     localplayers[i]->m_iScreenSection =
-                        IPlatformRenderer::VIEWPORT_TYPE_FULLSCREEN;
+                        0;
                 }
             }
         }
@@ -757,13 +757,13 @@ void Minecraft::updatePlayerViewportAssignments() {
         for (int i = 0; i < XUSER_MAX_COUNT; i++) {
             if (localplayers[i] != nullptr) {
                 if ((localplayers[i]->m_iScreenSection <
-                     IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_TOP_LEFT) ||
+                     5) ||
                     (localplayers[i]->m_iScreenSection >
-                     IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_BOTTOM_RIGHT)) {
+                     8)) {
                     for (int j = 0; j < 4; j++) {
                         if (!quadrantsAllocated[j]) {
                             localplayers[i]->m_iScreenSection =
-                                IPlatformRenderer::
+                                
                                     VIEWPORT_TYPE_QUADRANT_TOP_LEFT +
                                 j;
                             quadrantsAllocated[j] = true;
@@ -839,7 +839,7 @@ std::shared_ptr<MultiplayerLocalPlayer> Minecraft::createExtraLocalPlayer(
     if (clientConnection == nullptr) return nullptr;
 
     if (clientConnection == m_pendingLocalConnections[idx]) {
-        int tempScreenSection = IPlatformRenderer::VIEWPORT_TYPE_FULLSCREEN;
+        int tempScreenSection = 0;
         if (localplayers[idx] != nullptr && localgameModes[idx] == nullptr) {
             // A temp player displaying a connecting screen
             tempScreenSection = localplayers[idx]->m_iScreenSection;
@@ -1634,7 +1634,7 @@ void Minecraft::run_middle() {
                     for (int i = 0; i < XUSER_MAX_COUNT; i++) {
                         if (setLocalPlayerIdx(i)) {
                             RenderPath.StateSetViewport(
-                                (IPlatformRenderer::eViewportType)
+                                
                                     player->m_iScreenSection);
                             gameRenderer->current_view.viewport_layout =
                                 static_cast<rp::ViewportLayout>(
@@ -1666,7 +1666,7 @@ void Minecraft::run_middle() {
                     if (bFirst) {
                         localPlayerIdx = 0;
                         RenderPath.StateSetViewport(
-                            IPlatformRenderer::VIEWPORT_TYPE_FULLSCREEN);
+                            0);
                         gameRenderer->render(timer->a, true);
                     }
 #endif
@@ -1676,20 +1676,20 @@ void Minecraft::run_middle() {
                     if (unoccupiedQuadrant > -1) {
                         // render a logo
                         RenderPath.StateSetViewport((
-                            IPlatformRenderer::
-                                eViewportType)(IPlatformRenderer::
+                            
+                                eViewportType)(
                                                    VIEWPORT_TYPE_QUADRANT_TOP_LEFT +
                                                unoccupiedQuadrant));
                         glClearColor(0, 0, 0, 0);
                         glClear(GL_COLOR_BUFFER_BIT);
 
                         ui.SetEmptyQuadrantLogo(
-                            IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_TOP_LEFT +
+                            5 +
                             unoccupiedQuadrant);
                     }
                     setLocalPlayerIdx(iPrimaryPad);
                     RenderPath.StateSetViewport(
-                        IPlatformRenderer::VIEWPORT_TYPE_FULLSCREEN);
+                        0);
                 }
                 glFlush();
 

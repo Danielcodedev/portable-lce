@@ -4045,7 +4045,6 @@ void LevelRenderer::staticCtor() {
 
 int LevelRenderer::rebuildChunkThreadProc(void* lpParam) {
     Tesselator::CreateNewThreadStorage(1024 * 1024);
-    PlatformRenderer.InitialiseContext();
     Chunk::CreateNewThreadStorage();
     Tile::CreateNewThreadStorage();
 

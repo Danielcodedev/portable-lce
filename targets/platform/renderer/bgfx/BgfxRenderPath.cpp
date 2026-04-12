@@ -164,6 +164,7 @@ void BgfxRenderPath::StateSetDepthTestEnable(bool e) {
 }
 
 void BgfxRenderPath::StateSetAlphaTestEnable(bool) {}
+void BgfxRenderPath::StateSetDepthSlopeAndBias(float, float) {}
 
 // Fog (stored but not applied - needs shader support)
 void BgfxRenderPath::StateSetFogEnable(bool) {}

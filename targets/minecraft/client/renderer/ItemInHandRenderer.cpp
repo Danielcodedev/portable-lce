@@ -417,15 +417,15 @@ void ItemInHandRenderer::render(float a) {
         std::dynamic_pointer_cast<LocalPlayer>(player);
     if (localPlayer) {
         if (localPlayer->m_iScreenSection ==
-                IPlatformRenderer::VIEWPORT_TYPE_SPLIT_BOTTOM ||
+                2 ||
             localPlayer->m_iScreenSection ==
-                IPlatformRenderer::VIEWPORT_TYPE_SPLIT_TOP) {
+                1) {
             fudgeY = 0.08f;
             splitHoriz = true;
         } else if (localPlayer->m_iScreenSection ==
-                       IPlatformRenderer::VIEWPORT_TYPE_SPLIT_LEFT ||
+                       3 ||
                    localPlayer->m_iScreenSection ==
-                       IPlatformRenderer::VIEWPORT_TYPE_SPLIT_RIGHT) {
+                       4) {
             fudgeX = -0.18f;
         }
     }

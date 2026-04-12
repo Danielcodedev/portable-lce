@@ -5,22 +5,12 @@
 #include "minecraft/client/MemoryTracker.h"
 #include "minecraft/util/Log.h"
 #include "platform/renderer/IRenderPath.h"
-#include "platform/renderer/renderer.h"
 #include "platform/stubs.h"
-
 
 namespace {
 
-void submit_draw(IPlatformRenderer::ePrimitiveType prim, int count, void* data,
-                 IPlatformRenderer::eVertexType vtype,
-                 IPlatformRenderer::ePixelShaderType stype) {
-    if (platform_internal::cbuff_recording) {
-        PlatformRenderer.DrawVertices(prim, count, data, vtype, stype);
-    } else {
-        RenderPath.DrawVertices(static_cast<int>(prim), count, data,
-                                static_cast<int>(vtype),
-                                static_cast<int>(stype));
-    }
+void submit_draw(int prim, int count, void* data, int vtype, int stype) {
+    RenderPath.DrawVertices(prim, count, data, vtype, stype);
 }
 
 } // namespace
@@ -122,35 +112,34 @@ void Tesselator::end() {
         }
         if (mode == GL_QUADS && TRIANGLE_MODE) {
             submit_draw(
-                IPlatformRenderer::PRIMITIVE_TYPE_TRIANGLE_LIST, vertices,
+                0, vertices,
                 _array->data(),
                 useCompactFormat360
-                    ? IPlatformRenderer::VERTEX_TYPE_COMPRESSED
-                    : IPlatformRenderer::VERTEX_TYPE_PF3_TF2_CB4_NB4_XW1,
+                    ? 1
+                    : 0,
                 useProjectedTexturePixelShader
-                    ? IPlatformRenderer::PIXEL_SHADER_TYPE_PROJECTION
-                    : IPlatformRenderer::PIXEL_SHADER_TYPE_STANDARD);
+                    ? 1
+                    : 0);
         } else {
             int vertexCount = vertices;
             if (useCompactFormat360) {
                 submit_draw(
-                    (IPlatformRenderer::ePrimitiveType)mode, vertexCount,
-                    _array->data(), IPlatformRenderer::VERTEX_TYPE_COMPRESSED,
-                    IPlatformRenderer::PIXEL_SHADER_TYPE_STANDARD);
+                    mode, vertexCount,
+                    _array->data(), 1,
+                    0);
             } else {
                 if (useProjectedTexturePixelShader) {
                     submit_draw(
-                        (IPlatformRenderer::ePrimitiveType)mode, vertexCount,
+                        mode, vertexCount,
                         _array->data(),
-                        IPlatformRenderer::
-                            VERTEX_TYPE_PF3_TF2_CB4_NB4_XW1_TEXGEN,
-                        IPlatformRenderer::PIXEL_SHADER_TYPE_PROJECTION);
+                        2,
+                        1);
                 } else {
                     submit_draw(
-                        (IPlatformRenderer::ePrimitiveType)mode, vertexCount,
+                        mode, vertexCount,
                         _array->data(),
-                        IPlatformRenderer::VERTEX_TYPE_PF3_TF2_CB4_NB4_XW1,
-                        IPlatformRenderer::PIXEL_SHADER_TYPE_STANDARD);
+                        0,
+                        0);
                 }
             }
         }

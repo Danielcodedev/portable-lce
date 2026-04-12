@@ -610,16 +610,16 @@ void GameRenderer::getFovAndAspect(float& fov, float& aspect, float a,
     fov = getFov(a, applyEffects);
 
     if ((mc->player->m_iScreenSection ==
-         IPlatformRenderer::VIEWPORT_TYPE_SPLIT_TOP) ||
+         1) ||
         (mc->player->m_iScreenSection ==
-         IPlatformRenderer::VIEWPORT_TYPE_SPLIT_BOTTOM)) {
+         2)) {
         aspect *= 2.0f;
         fov *= 0.7f;  // Reduce FOV to make things less fish-eye, at the expense
                       // of reducing vertical FOV from single player mode
     } else if ((mc->player->m_iScreenSection ==
-                IPlatformRenderer::VIEWPORT_TYPE_SPLIT_LEFT) ||
+                3) ||
                (mc->player->m_iScreenSection ==
-                IPlatformRenderer::VIEWPORT_TYPE_SPLIT_RIGHT)) {
+                4)) {
         // Ideally I'd like to make the fov bigger here, but if I do then you an
         // see that the arm isn't very long...
         aspect *= 0.5f;
@@ -1128,7 +1128,6 @@ int GameRenderer::runUpdate(void* lpParam) {
     Minecraft* minecraft = Minecraft::GetInstance();
     Tesselator::CreateNewThreadStorage(1024 * 1024);
     Compression::UseDefaultThreadStorage();
-    PlatformRenderer.InitialiseContext();
 #if defined(_LARGE_WORLDS)
     Chunk::CreateNewThreadStorage();
 #endif

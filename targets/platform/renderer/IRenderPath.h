@@ -427,7 +427,7 @@ public:
     // =======================================================================
     // [[deprecated]] Legacy methods - shrinks as subsystems migrate.
     //
-    // These exist so call sites can move from `PlatformRenderer.foo()` to
+    // These exist so call sites can move from `the old renderer` to
     // `render_path->foo()` one subsystem at a time. Each method forwards
     // to the underlying backend in LegacyGLRenderPath. Every caller
     // produces a compiler warning. When a method has zero callers, delete
@@ -486,6 +486,7 @@ virtual void StateSetLineWidth(float width) = 0;
 virtual void StateSetWriteEnable(bool r, bool g, bool b, bool a) = 0;
 virtual void StateSetDepthTestEnable(bool enable) = 0;
 virtual void StateSetAlphaTestEnable(bool enable) = 0;
+virtual void StateSetDepthSlopeAndBias(float slope, float bias) = 0;
 
     // Fog
 virtual void StateSetFogEnable(bool enable) = 0;
@@ -613,8 +614,6 @@ IRenderPath& get_active();
 // ---------------------------------------------------------------------------
 // Factory
 // ---------------------------------------------------------------------------
-
-std::unique_ptr<rp::IRenderPath> make_legacy_gl_render_path();
 
 struct SDL_Window;
 std::unique_ptr<rp::IRenderPath> make_bgfx_render_path(SDL_Window* window);

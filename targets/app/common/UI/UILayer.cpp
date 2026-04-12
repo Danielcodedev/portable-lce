@@ -139,7 +139,7 @@ void UILayer::tick() {
 }
 
 void UILayer::render(S32 width, S32 height,
-                     IPlatformRenderer::eViewportType viewport) {
+                     eViewportType viewport) {
     if (!ui.IsExpectingOrReloadingSkin()) {
         for (auto it = m_components.begin(); it != m_components.end(); ++it) {
             auto itRef = m_componentRefCount.find((*it)->getSceneType());
@@ -809,7 +809,7 @@ void UILayer::HandleMessage(EUIMessage message, void* data) {
 
 bool UILayer::IsFullscreenGroup() { return m_parentGroup->IsFullscreenGroup(); }
 
-IPlatformRenderer::eViewportType UILayer::getViewport() {
+eViewportType UILayer::getViewport() {
     return m_parentGroup->GetViewportType();
 }
 

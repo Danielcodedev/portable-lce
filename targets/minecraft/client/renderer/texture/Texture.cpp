@@ -572,14 +572,14 @@ void Texture::updateOnGPU() {
     //}
     // else if(height != 1)
     //{
-    // 4J Added check so we can differentiate between which PlatformRenderer
+    // 4J Added check so we can differentiate between which RenderPath
     // function to call
     if (!m_bInitialised) {
         RenderPath.TextureSetTextureLevels(m_iMipLevels);  // 4J added
 
         RenderPath.TextureData(
             width, height, data[0]->getBuffer(), 0,
-            IPlatformRenderer::TEXTURE_FORMAT_RxGyBzAw);
+            0);
 
         if (mipmapped) {
             for (int level = 1; level < m_iMipLevels; level++) {
@@ -588,7 +588,7 @@ void Texture::updateOnGPU() {
 
                 RenderPath.TextureData(
                     levelWidth, levelHeight, data[level]->getBuffer(), level,
-                    IPlatformRenderer::TEXTURE_FORMAT_RxGyBzAw);
+                    0);
             }
         }
 

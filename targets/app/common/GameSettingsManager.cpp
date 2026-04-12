@@ -370,7 +370,7 @@ void GameSettingsManager::actionGameSettings(int iPad, eGameSetting eVal) {
             for (std::uint8_t idx = 0; idx < XUSER_MAX_COUNT; ++idx) {
                 if (pMinecraft->localplayers[idx] != nullptr) {
                     if (pMinecraft->localplayers[idx]->m_iScreenSection ==
-                        IPlatformRenderer::VIEWPORT_TYPE_FULLSCREEN) {
+                        0) {
                         ui.DisplayGamertag(idx, false);
                     } else {
                         ui.DisplayGamertag(idx, true);

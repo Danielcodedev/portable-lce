@@ -40,8 +40,8 @@
 // Mesa/Nvidia drivers) and the per-level crispBlend loop is both wasteful and
 // still causes visible blurring.
 bool Textures::MIPMAP = false;
-IPlatformRenderer::eTextureFormat Textures::TEXTURE_FORMAT =
-    IPlatformRenderer::TEXTURE_FORMAT_RxGyBzAw;
+int Textures::TEXTURE_FORMAT =
+    0;
 
 int Textures::preLoadedIdx[TN_COUNT];
 const char* Textures::preLoaded[TN_COUNT] = {
@@ -417,7 +417,7 @@ int Textures::loadTexture(int idx) {
 void Textures::setTextureFormat(const std::string& resourceName) {
     // 4J Stu - These texture formats are not currently in the render header
     {
-        TEXTURE_FORMAT = IPlatformRenderer::TEXTURE_FORMAT_RxGyBzAw;
+        TEXTURE_FORMAT = 0;
     }
 }
 
@@ -527,7 +527,7 @@ void Textures::bindTextureLayers(ResourceLocation* resource) {
             memcpy(mergedImage->getData(), mergedPixels.data(),
                    mergedWidth * mergedHeight * sizeof(int));
             id = getTexture(mergedImage,
-                            IPlatformRenderer::TEXTURE_FORMAT_RxGyBzAw, false);
+                            0, false);
         } else {
             id = 0;
         }
@@ -638,7 +638,7 @@ int Textures::loadTexture(TEXTURE_NAME texId, const std::string& resourceName) {
 
     idMap[resourceName] = id;
     MIPMAP = true;  // 4J added
-    TEXTURE_FORMAT = IPlatformRenderer::TEXTURE_FORMAT_RxGyBzAw;
+    TEXTURE_FORMAT = 0;
     return id;
     /*
 } catch (IOException e) {
@@ -653,13 +653,13 @@ return id;
 }
 
 int Textures::getTexture(BufferedImage* img,
-                         IPlatformRenderer::eTextureFormat format,
+                         int format,
                          bool mipmap) {
     int id = MemoryTracker::genTextures();
     TEXTURE_FORMAT = format;
     MIPMAP = mipmap;
     loadTexture(img, id);
-    TEXTURE_FORMAT = IPlatformRenderer::TEXTURE_FORMAT_RxGyBzAw;
+    TEXTURE_FORMAT = 0;
     MIPMAP = true;
     loadedImages[id] = img;
     return id;
@@ -1020,7 +1020,7 @@ int Textures::loadMemTexture(const std::string& url,
             if (texture->id < 0) {
                 texture->id = getTexture(
                     texture->loadedImage,
-                    IPlatformRenderer::TEXTURE_FORMAT_RxGyBzAw, MIPMAP);
+                    0, MIPMAP);
             } else {
                 loadTexture(texture->loadedImage, texture->id);
             }
@@ -1057,7 +1057,7 @@ int Textures::loadMemTexture(const std::string& url, int backup) {
             if (texture->id < 0) {
                 texture->id = getTexture(
                     texture->loadedImage,
-                    IPlatformRenderer::TEXTURE_FORMAT_RxGyBzAw, MIPMAP);
+                    0, MIPMAP);
             } else {
                 loadTexture(texture->loadedImage, texture->id);
             }

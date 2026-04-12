@@ -14,8 +14,8 @@ option('classic_panorama',
 option(
   'renderer',
   type: 'combo',
-  choices: ['gl3', 'gles', 'bgfx'],
-  value: 'gl3',
+  choices: ['bgfx'],
+  value: 'bgfx',
   description: 'Specifies a rendering implementation for the game.',
 )
 

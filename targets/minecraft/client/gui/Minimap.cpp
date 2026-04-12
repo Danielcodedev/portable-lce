@@ -29,7 +29,7 @@ Minimap::Minimap(Font* font, Options* options, Textures* textures,
     this->font = font;
     BufferedImage* img = new BufferedImage(w, h, BufferedImage::TYPE_INT_ARGB);
     mapTexture =
-        textures->getTexture(img, IPlatformRenderer::TEXTURE_FORMAT_RxGyBzAw,
+        textures->getTexture(img, 0,
                              false);  // 4J - make sure we aren't mipmapping as
                                       // we never set the data for mipmaps
     delete img;

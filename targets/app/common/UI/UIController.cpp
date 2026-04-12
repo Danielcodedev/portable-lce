@@ -238,7 +238,7 @@ UIController::UIController() {
 
     m_iPressStartQuadrantsMask = 0;
 
-    m_currentRenderViewport = IPlatformRenderer::VIEWPORT_TYPE_FULLSCREEN;
+    m_currentRenderViewport = 0;
     m_bCustomRenderPosition = false;
     m_winUserIndex = 0;
     m_accumulatedTicks = 0;
@@ -879,26 +879,26 @@ void UIController::renderScenes() {
 }
 
 void UIController::getRenderDimensions(
-    IPlatformRenderer::eViewportType viewport, S32& width, S32& height) {
+    eViewportType viewport, S32& width, S32& height) {
     switch (viewport) {
-        case IPlatformRenderer::VIEWPORT_TYPE_FULLSCREEN:
+        case 0:
             width = (S32)(getScreenWidth());
             height = (S32)(getScreenHeight());
             break;
-        case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_TOP:
-        case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_BOTTOM:
+        case 1:
+        case 2:
             width = (S32)(getScreenWidth() / 2);
             height = (S32)(getScreenHeight() / 2);
             break;
-        case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_LEFT:
-        case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_RIGHT:
+        case 3:
+        case 4:
             width = (S32)(getScreenWidth() / 2);
             height = (S32)(getScreenHeight() / 2);
             break;
-        case IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_TOP_LEFT:
-        case IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_TOP_RIGHT:
-        case IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_BOTTOM_LEFT:
-        case IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_BOTTOM_RIGHT:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
             width = (S32)(getScreenWidth() / 2);
             height = (S32)(getScreenHeight() / 2);
             break;
@@ -908,36 +908,36 @@ void UIController::getRenderDimensions(
 }
 
 void UIController::setupRenderPosition(
-    IPlatformRenderer::eViewportType viewport) {
+    eViewportType viewport) {
     if (m_bCustomRenderPosition || m_currentRenderViewport != viewport) {
         m_currentRenderViewport = viewport;
         m_bCustomRenderPosition = false;
         S32 xPos = 0;
         S32 yPos = 0;
         switch (viewport) {
-            case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_TOP:
+            case 1:
                 xPos = (S32)(getScreenWidth() / 4);
                 break;
-            case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_BOTTOM:
+            case 2:
                 xPos = (S32)(getScreenWidth() / 4);
                 yPos = (S32)(getScreenHeight() / 2);
                 break;
-            case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_LEFT:
+            case 3:
                 yPos = (S32)(getScreenHeight() / 4);
                 break;
-            case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_RIGHT:
+            case 4:
                 xPos = (S32)(getScreenWidth() / 2);
                 yPos = (S32)(getScreenHeight() / 4);
                 break;
-            case IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_TOP_LEFT:
+            case 5:
                 break;
-            case IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_TOP_RIGHT:
+            case 6:
                 xPos = (S32)(getScreenWidth() / 2);
                 break;
-            case IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_BOTTOM_LEFT:
+            case 7:
                 yPos = (S32)(getScreenHeight() / 2);
                 break;
-            case IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_BOTTOM_RIGHT:
+            case 8:
                 xPos = (S32)(getScreenWidth() / 2);
                 yPos = (S32)(getScreenHeight() / 2);
                 break;
@@ -1111,7 +1111,7 @@ GDrawTexture* RADLINK UIController::TextureSubstitutionCreateCallback(
             image.preMultiplyAlpha();
             Textures* t = Minecraft::GetInstance()->textures;
             int id = t->getTexture(
-                &image, IPlatformRenderer::TEXTURE_FORMAT_RxGyBzAw, false);
+                &image, 0, false);
 
             // 4J Stu - All our flash controls that allow replacing textures use
             // a special 64x64 symbol Force this size here so that our images
@@ -1937,13 +1937,13 @@ void UIController::UpdatePlayerBasePositions() {
     for (int idx = 0; idx < XUSER_MAX_COUNT; ++idx) {
         if (pMinecraft->localplayers[idx] != nullptr) {
             if (pMinecraft->localplayers[idx]->m_iScreenSection ==
-                IPlatformRenderer::VIEWPORT_TYPE_FULLSCREEN) {
+                0) {
                 DisplayGamertag(idx, false);
             } else {
                 DisplayGamertag(idx, true);
             }
             m_groups[idx + 1]->SetViewportType(
-                (IPlatformRenderer::eViewportType)pMinecraft->localplayers[idx]
+                pMinecraft->localplayers[idx]
                     ->m_iScreenSection);
         } else {
             // 4J Stu - This is a legacy thing from our XUI implementation that
@@ -1951,7 +1951,7 @@ void UIController::UpdatePlayerBasePositions() {
             // no longer exist is SLOW This should probably be on all platforms,
             // but I don't have time to test them all just now!
             m_groups[idx + 1]->SetViewportType(
-                IPlatformRenderer::VIEWPORT_TYPE_FULLSCREEN);
+                0);
             DisplayGamertag(idx, false);
         }
     }

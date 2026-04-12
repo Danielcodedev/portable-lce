@@ -161,7 +161,7 @@ private:
 
     int m_iPressStartQuadrantsMask;
 
-    IPlatformRenderer::eViewportType m_currentRenderViewport;
+    eViewportType m_currentRenderViewport;
     bool m_bCustomRenderPosition;
 
     static std::uint32_t m_dwTrialTimerLimitSecs;
@@ -270,9 +270,9 @@ public:
     }
 
     virtual void render() = 0;
-    void getRenderDimensions(IPlatformRenderer::eViewportType viewport,
+    void getRenderDimensions(eViewportType viewport,
                              S32& width, S32& height);
-    void setupRenderPosition(IPlatformRenderer::eViewportType viewport);
+    void setupRenderPosition(eViewportType viewport);
     void setupRenderPosition(S32 xOrigin, S32 yOrigin);
 
     void SetSysUIShowing(bool bVal);

@@ -95,6 +95,7 @@ public:
     void StateSetWriteEnable(bool r, bool g, bool b, bool a) override;
     void StateSetDepthTestEnable(bool enable) override;
     void StateSetAlphaTestEnable(bool enable) override;
+    void StateSetDepthSlopeAndBias(float slope, float bias) override;
 
     void StateSetFogEnable(bool enable) override;
     void StateSetFogMode(int mode) override;

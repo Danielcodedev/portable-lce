@@ -178,35 +178,35 @@ void UIScene::updateSafeZone() {
     F64 safeRight = 0.0;
 
     switch (m_parentLayer->getViewport()) {
-        case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_TOP:
+        case 1:
             safeTop = getSafeZoneHalfHeight();
             break;
-        case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_BOTTOM:
+        case 2:
             safeBottom = getSafeZoneHalfHeight();
             break;
-        case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_LEFT:
+        case 3:
             safeLeft = getSafeZoneHalfWidth();
             break;
-        case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_RIGHT:
+        case 4:
             safeRight = getSafeZoneHalfWidth();
             break;
-        case IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_TOP_LEFT:
+        case 5:
             safeTop = getSafeZoneHalfHeight();
             safeLeft = getSafeZoneHalfWidth();
             break;
-        case IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_TOP_RIGHT:
+        case 6:
             safeTop = getSafeZoneHalfHeight();
             safeRight = getSafeZoneHalfWidth();
             break;
-        case IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_BOTTOM_LEFT:
+        case 7:
             safeBottom = getSafeZoneHalfHeight();
             safeLeft = getSafeZoneHalfWidth();
             break;
-        case IPlatformRenderer::VIEWPORT_TYPE_QUADRANT_BOTTOM_RIGHT:
+        case 8:
             safeBottom = getSafeZoneHalfHeight();
             safeRight = getSafeZoneHalfWidth();
             break;
-        case IPlatformRenderer::VIEWPORT_TYPE_FULLSCREEN:
+        case 0:
         default:
             safeTop = getSafeZoneHalfHeight();
             safeBottom = getSafeZoneHalfHeight();
@@ -499,7 +499,7 @@ void UIScene::doHorizontalResizeCheck() {
 }
 
 void UIScene::render(S32 width, S32 height,
-                     IPlatformRenderer::eViewportType viewport) {
+                     eViewportType viewport) {
     if (m_bIsReloading) return;
     if (!m_hasTickedOnce || !swf) return;
     ui.setupRenderPosition(viewport);
