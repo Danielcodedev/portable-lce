@@ -84,9 +84,22 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
         bgfx::makeRef(fs_4jcraft_glsl, sizeof(fs_4jcraft_glsl)));
     program_ = bgfx::createProgram(vsh, fsh, true);
 
-    u_tintColor_ = bgfx::createUniform("u_tintColor", bgfx::UniformType::Vec4);
-    u_params_ = bgfx::createUniform("u_params", bgfx::UniformType::Vec4);
-    s_texColor_ = bgfx::createUniform("s_texColor", bgfx::UniformType::Sampler);
+    // Vertex uniforms
+    u_baseColor_    = bgfx::createUniform("u_baseColor",    bgfx::UniformType::Vec4);
+    u_chunkOffset_  = bgfx::createUniform("u_chunkOffset",  bgfx::UniformType::Vec4);
+    u_lightParams_  = bgfx::createUniform("u_lightParams",  bgfx::UniformType::Vec4);
+    u_light0Dir_    = bgfx::createUniform("u_light0Dir",    bgfx::UniformType::Vec4);
+    u_light1Dir_    = bgfx::createUniform("u_light1Dir",    bgfx::UniformType::Vec4);
+    u_lightDiffuse_ = bgfx::createUniform("u_lightDiffuse", bgfx::UniformType::Vec4);
+    u_lightAmbient_ = bgfx::createUniform("u_lightAmbient", bgfx::UniformType::Vec4);
+    u_fogParams_    = bgfx::createUniform("u_fogParams",    bgfx::UniformType::Vec4);
+    u_lmTransform_  = bgfx::createUniform("u_lmTransform",  bgfx::UniformType::Vec4);
+    u_globalLM_     = bgfx::createUniform("u_globalLM",     bgfx::UniformType::Vec4);
+    // Fragment uniforms
+    u_fragParams_   = bgfx::createUniform("u_fragParams",   bgfx::UniformType::Vec4);
+    u_fogColor_     = bgfx::createUniform("u_fogColor",     bgfx::UniformType::Vec4);
+    s_tex0_         = bgfx::createUniform("s_tex0",         bgfx::UniformType::Sampler);
+    s_tex1_         = bgfx::createUniform("s_tex1",         bgfx::UniformType::Sampler);
 }
 
 BgfxRenderPath::~BgfxRenderPath() {
@@ -155,7 +168,7 @@ void BgfxRenderPath::StateSetBlendFunc(rp::BlendFactor, rp::BlendFactor) {
 }
 
 void BgfxRenderPath::StateSetBlendFactor(unsigned int) {}
-void BgfxRenderPath::StateSetAlphaFunc(rp::AlphaTest, float) {}
+void BgfxRenderPath::StateSetAlphaFunc(rp::AlphaTest, float r) { alpha_ref_ = r; }
 
 void BgfxRenderPath::StateSetDepthFunc(rp::DepthTest) {
     bgfx_state_ = (bgfx_state_ & ~BGFX_STATE_DEPTH_TEST_MASK) |
@@ -186,18 +199,18 @@ void BgfxRenderPath::StateSetAlphaTestEnable(bool) {}
 void BgfxRenderPath::StateSetDepthSlopeAndBias(float, float) {}
 
 // Fog (stored but not applied - needs shader support)
-void BgfxRenderPath::StateSetFogEnable(bool) {}
-void BgfxRenderPath::StateSetFogMode(rp::FogMode) {}
-void BgfxRenderPath::StateSetFogNearDistance(float) {}
-void BgfxRenderPath::StateSetFogFarDistance(float) {}
-void BgfxRenderPath::StateSetFogDensity(float) {}
-void BgfxRenderPath::StateSetFogColour(float, float, float) {}
+void BgfxRenderPath::StateSetFogEnable(bool e) { fog_enabled_ = e; }
+void BgfxRenderPath::StateSetFogMode(rp::FogMode m) { fog_mode_ = static_cast<float>(m); }
+void BgfxRenderPath::StateSetFogNearDistance(float d) { fog_start_ = d; }
+void BgfxRenderPath::StateSetFogFarDistance(float d) { fog_end_ = d; }
+void BgfxRenderPath::StateSetFogDensity(float d) { fog_density_ = d; }
+void BgfxRenderPath::StateSetFogColour(float r, float g, float b) { fog_color_[0]=r; fog_color_[1]=g; fog_color_[2]=b; fog_color_[3]=1; }
 
 // Lighting (stored but not applied - needs shader support)
-void BgfxRenderPath::StateSetLightingEnable(bool) {}
-void BgfxRenderPath::StateSetLightColour(int, float, float, float) {}
-void BgfxRenderPath::StateSetLightAmbientColour(float, float, float) {}
-void BgfxRenderPath::StateSetLightDirection(int, float, float, float) {}
+void BgfxRenderPath::StateSetLightingEnable(bool e) { lighting_enabled_ = e; }
+void BgfxRenderPath::StateSetLightColour(int, float r, float g, float b) { light_diffuse_[0]=r; light_diffuse_[1]=g; light_diffuse_[2]=b; }
+void BgfxRenderPath::StateSetLightAmbientColour(float r, float g, float b) { light_ambient_[0]=r; light_ambient_[1]=g; light_ambient_[2]=b; }
+void BgfxRenderPath::StateSetLightDirection(int l, float x, float y, float z) { float* d = l==0 ? light0_dir_ : light1_dir_; d[0]=x; d[1]=y; d[2]=z; }
 void BgfxRenderPath::StateSetLightEnable(int, bool) {}
 
 void BgfxRenderPath::StateSetViewport(int) {}
@@ -229,9 +242,25 @@ void BgfxRenderPath::DrawVertices(int, int count, void* data, int, int) {
     bgfx::setState(bgfx_state_ | (blend_enabled_ ? BGFX_STATE_BLEND_ALPHA : 0));
     bgfx::setVertexBuffer(0, &tvb);
 
-    bgfx::setUniform(u_tintColor_, tint_color_);
-    float params[4] = { texture_enabled_ ? 1.0f : 0.0f, 0, 0, 0 };
-    bgfx::setUniform(u_params_, params);
+    // Vertex uniforms
+    bgfx::setUniform(u_baseColor_, tint_color_);
+    float chunkOff[4] = { chunk_offset_[0], chunk_offset_[1], chunk_offset_[2], 0 };
+    bgfx::setUniform(u_chunkOffset_, chunkOff);
+    float lp[4] = { lighting_enabled_ ? 1.0f : 0.0f, 1.0f, 0, 0 };
+    bgfx::setUniform(u_lightParams_, lp);
+    bgfx::setUniform(u_light0Dir_, light0_dir_);
+    bgfx::setUniform(u_light1Dir_, light1_dir_);
+    bgfx::setUniform(u_lightDiffuse_, light_diffuse_);
+    bgfx::setUniform(u_lightAmbient_, light_ambient_);
+    float fp[4] = { fog_enabled_ ? fog_mode_ : 0.0f, fog_start_, fog_end_, fog_density_ };
+    bgfx::setUniform(u_fogParams_, fp);
+    float lmt[4] = { 1, 1, 0, 0 };
+    bgfx::setUniform(u_lmTransform_, lmt);
+    bgfx::setUniform(u_globalLM_, global_lm_);
+    // Fragment uniforms
+    float fragP[4] = { texture_enabled_ ? 1.0f : 0.0f, 0.0f, alpha_ref_, fog_enabled_ ? 1.0f : 0.0f };
+    bgfx::setUniform(u_fragParams_, fragP);
+    bgfx::setUniform(u_fogColor_, fog_color_);
 
     if (bgfx::isValid(program_))
         bgfx::submit(current_view_id_, program_);

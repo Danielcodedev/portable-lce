@@ -176,15 +176,39 @@ private:
     bool texture_enabled_ = true;
     int bound_texture_ = -1;
     float chunk_offset_[3] = {0, 0, 0};
+    float fog_mode_ = 0;
+    float fog_start_ = 0;
+    float fog_end_ = 100;
+    float fog_density_ = 0;
+    float fog_color_[4] = {0.5f, 0.7f, 1.0f, 1.0f};
+    bool fog_enabled_ = false;
+    bool lighting_enabled_ = false;
+    float light0_dir_[4] = {0, -1, 0, 0};
+    float light1_dir_[4] = {0, -1, 0, 0};
+    float light_diffuse_[4] = {0.6f, 0.6f, 0.6f, 1};
+    float light_ambient_[4] = {0.4f, 0.4f, 0.4f, 1};
+    float global_lm_[4] = {0, 0, 0, 0};
+    float alpha_ref_ = 0.1f;
 
     // bgfx vertex layouts
     bgfx::VertexLayout vl_world_standard_;
 
     // bgfx shader program
     bgfx::ProgramHandle program_ = BGFX_INVALID_HANDLE;
-    bgfx::UniformHandle u_tintColor_ = BGFX_INVALID_HANDLE;
-    bgfx::UniformHandle u_params_ = BGFX_INVALID_HANDLE;
-    bgfx::UniformHandle s_texColor_ = BGFX_INVALID_HANDLE;
+    bgfx::UniformHandle u_baseColor_ = BGFX_INVALID_HANDLE;
+    bgfx::UniformHandle u_chunkOffset_ = BGFX_INVALID_HANDLE;
+    bgfx::UniformHandle u_lightParams_ = BGFX_INVALID_HANDLE;
+    bgfx::UniformHandle u_light0Dir_ = BGFX_INVALID_HANDLE;
+    bgfx::UniformHandle u_light1Dir_ = BGFX_INVALID_HANDLE;
+    bgfx::UniformHandle u_lightDiffuse_ = BGFX_INVALID_HANDLE;
+    bgfx::UniformHandle u_lightAmbient_ = BGFX_INVALID_HANDLE;
+    bgfx::UniformHandle u_fogParams_ = BGFX_INVALID_HANDLE;
+    bgfx::UniformHandle u_lmTransform_ = BGFX_INVALID_HANDLE;
+    bgfx::UniformHandle u_globalLM_ = BGFX_INVALID_HANDLE;
+    bgfx::UniformHandle u_fragParams_ = BGFX_INVALID_HANDLE;
+    bgfx::UniformHandle u_fogColor_ = BGFX_INVALID_HANDLE;
+    bgfx::UniformHandle s_tex0_ = BGFX_INVALID_HANDLE;
+    bgfx::UniformHandle s_tex1_ = BGFX_INVALID_HANDLE;
 
     // View ID management
     uint16_t current_view_id_ = 0;
