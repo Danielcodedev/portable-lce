@@ -17,13 +17,15 @@ This project is a heavily modified version of the Minecraft Console Legacy Editi
 | - | - | - | - | - | - | - | - | - | - | - | - | - |
 | **Linux** | `desktop` | `std` | `stub` | `sdl2` | `stub` | `stub` | `stub` | `gl` | `miniaudio` | `stub` | `std` | `java`, `shiggy` |
 | **Windows64** | `desktop` | `std` | `stub` | `sdl2` | `stub` | `stub` | `stub` | `gl` | `miniaudio` | `stub` | `std` | `java`, `shiggy` |
+| **macOS[^1]** | `desktop` | `std` | `stub` | `sdl2` | `stub` | `stub` | `stub` | `gl` | `miniaudio` | `stub` | `std` | `java` |
+
+[^1]: `platform_renderer_gl` is unstable on this platform and known to segfault. Development is WIP.
 
 > [!TIP]
 >
 > This table describes the current backend used for each game component on each platform. If a backend is `stub`, that means that the game uses a [stubbed implementation](https://en.wikipedia.org/wiki/Method_stub) and the feature is unsupported at the moment. In some cases (e.g. leaderboards and profile) it makes sense to use a stubbed implementation, since we don't have access to console services like Xbox live on desktop operating systems. In other cases, it is used temporarily while work is done to properly implement the feature (such as storage for world/DLC saving and loading).
 
 These platforms are currently work-in-progress:
-- **macOS**: Largely mirrors the Linux implementation. Has not been upstreamed due to supposed rendering issues. `ui-backend=java` only.
 - **Android**: Game runs, but the port predates many refactors and therefore can't be easily upstreamed at the moment. `ui-backend=java` only.
 - **Emscripten**: Works except for audio. Predates a major refactor, and requires a rebase. `ui-backend=java` only.
 
