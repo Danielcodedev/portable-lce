@@ -56,8 +56,6 @@
 #include "util/StringHelpers.h"
 #include "platform/renderer/IRenderPath.h"
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
 ResourceLocation Gui::PUMPKIN_BLUR_LOCATION =
     ResourceLocation(TN__BLUR__MISC_PUMPKINBLUR);

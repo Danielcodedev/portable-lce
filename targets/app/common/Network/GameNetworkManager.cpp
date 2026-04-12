@@ -55,8 +55,6 @@
 #include "platform/renderer/IRenderPath.h"
 
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 class FriendSessionInfo;
 class INVITE_INFO;
 

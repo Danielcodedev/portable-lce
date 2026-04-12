@@ -33,8 +33,6 @@
 #include "platform/renderer/IRenderPath.h"
 
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 Random* TitleScreen::random = new Random();
 
 TitleScreen::TitleScreen() {

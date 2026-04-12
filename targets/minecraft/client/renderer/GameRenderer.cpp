@@ -84,8 +84,6 @@
 #include "platform/renderer/IRenderPath.h"
 
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 bool GameRenderer::anaglyph3d = false;
 int GameRenderer::anaglyphPass = 0;
 

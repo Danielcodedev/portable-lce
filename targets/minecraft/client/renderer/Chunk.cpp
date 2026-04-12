@@ -25,8 +25,6 @@
 #include "platform/renderer/renderer.h"
 #include "platform/stubs.h"
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #include "util/FrameProfiler.h"
 
 int Chunk::updates = 0;

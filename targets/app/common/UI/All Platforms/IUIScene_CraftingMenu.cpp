@@ -30,8 +30,6 @@
 #include "platform/renderer/IRenderPath.h"
 
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 Recipy::_eGroupType IUIScene_CraftingMenu::m_GroupTypeMapping4GridA
     [IUIScene_CraftingMenu::m_iMaxGroup2x2] = {
         Recipy::eGroupType_Structure, Recipy::eGroupType_Tool,

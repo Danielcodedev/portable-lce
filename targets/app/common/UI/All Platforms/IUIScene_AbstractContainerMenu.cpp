@@ -36,8 +36,6 @@
 #include "platform/renderer/IRenderPath.h"
 
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 IUIScene_AbstractContainerMenu::IUIScene_AbstractContainerMenu() {
     m_menu = nullptr;
     m_autoDeleteMenu = false;

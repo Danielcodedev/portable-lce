@@ -47,8 +47,6 @@
 #include "platform/renderer/IRenderPath.h"
 
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 // 4J JEV - Images for each tab.
 IUIScene_CreativeMenu::TabSpec** IUIScene_CreativeMenu::specs = nullptr;
 

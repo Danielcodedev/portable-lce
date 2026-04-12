@@ -14,8 +14,6 @@
 #include "platform/renderer/IRenderPath.h"
 
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 AchievementPopup::AchievementPopup(Minecraft* mc) {
     // 4J - added initialisers
     width = 0;

@@ -15,8 +15,6 @@
 #include "platform/renderer/IRenderPath.h"
 
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 namespace {
 constexpr std::size_t AUDIO_DLC_WCHAR_BIN_SIZE = 2;
 

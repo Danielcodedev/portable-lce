@@ -435,120 +435,120 @@ public:
     // =======================================================================
 
     // Matrix stack
-    [[deprecated]] virtual void MatrixMode(int type) = 0;
-    [[deprecated]] virtual void MatrixSetIdentity() = 0;
-    [[deprecated]] virtual void MatrixTranslate(float x, float y, float z) = 0;
-    [[deprecated]] virtual void MatrixRotate(float angle, float x, float y, float z) = 0;
-    [[deprecated]] virtual void MatrixScale(float x, float y, float z) = 0;
-    [[deprecated]] virtual void MatrixPerspective(float fovy, float aspect, float zNear, float zFar) = 0;
-    [[deprecated]] virtual void MatrixOrthogonal(float left, float right, float bottom, float top, float zNear, float zFar) = 0;
-    [[deprecated]] virtual void MatrixPop() = 0;
-    [[deprecated]] virtual void MatrixPush() = 0;
-    [[deprecated]] virtual void MatrixMult(float* mat) = 0;
-    [[deprecated]] [[nodiscard]] virtual const float* MatrixGet(int type) = 0;
+virtual void MatrixMode(int type) = 0;
+virtual void MatrixSetIdentity() = 0;
+virtual void MatrixTranslate(float x, float y, float z) = 0;
+virtual void MatrixRotate(float angle, float x, float y, float z) = 0;
+virtual void MatrixScale(float x, float y, float z) = 0;
+virtual void MatrixPerspective(float fovy, float aspect, float zNear, float zFar) = 0;
+virtual void MatrixOrthogonal(float left, float right, float bottom, float top, float zNear, float zFar) = 0;
+virtual void MatrixPop() = 0;
+virtual void MatrixPush() = 0;
+virtual void MatrixMult(float* mat) = 0;
+[[nodiscard]] virtual const float* MatrixGet(int type) = 0;
 
     // Draw
-    [[deprecated]] virtual void DrawVertices(int primitiveType, int count, void* data,
+virtual void DrawVertices(int primitiveType, int count, void* data,
                                              int vertexType, int shaderType) = 0;
 
     // Command buffers
-    [[deprecated]] [[nodiscard]] virtual int CBuffCreate(int count) = 0;
-    [[deprecated]] virtual void CBuffDelete(int first, int count) = 0;
-    [[deprecated]] virtual void CBuffDeleteAll() = 0;
-    [[deprecated]] virtual void CBuffStart(int index, bool full = false) = 0;
-    [[deprecated]] virtual void CBuffClear(int index) = 0;
-    [[deprecated]] [[nodiscard]] virtual int CBuffSize(int index) = 0;
-    [[deprecated]] virtual void CBuffEnd() = 0;
-    [[deprecated]] [[nodiscard]] virtual bool CBuffCall(int index, bool full = true) = 0;
-    [[deprecated]] virtual void CBuffDeferredModeStart() = 0;
-    [[deprecated]] virtual void CBuffDeferredModeEnd() = 0;
+[[nodiscard]] virtual int CBuffCreate(int count) = 0;
+virtual void CBuffDelete(int first, int count) = 0;
+virtual void CBuffDeleteAll() = 0;
+virtual void CBuffStart(int index, bool full = false) = 0;
+virtual void CBuffClear(int index) = 0;
+[[nodiscard]] virtual int CBuffSize(int index) = 0;
+virtual void CBuffEnd() = 0;
+[[nodiscard]] virtual bool CBuffCall(int index, bool full = true) = 0;
+virtual void CBuffDeferredModeStart() = 0;
+virtual void CBuffDeferredModeEnd() = 0;
 
     // Textures
-    [[deprecated]] [[nodiscard]] virtual int  TextureCreate() = 0;
-    [[deprecated]] virtual void TextureFree(int idx) = 0;
-    [[deprecated]] virtual void TextureBind(int idx) = 0;
-    [[deprecated]] virtual void TextureBindVertex(int idx, bool scaleLight = false) = 0;
-    [[deprecated]] virtual void TextureSetTextureLevels(int levels) = 0;
-    [[deprecated]] virtual void TextureData(int width, int height, void* data, int level, int format = 0) = 0;
-    [[deprecated]] virtual void TextureDataUpdate(int xoff, int yoff, int w, int h, void* data, int level) = 0;
-    [[deprecated]] virtual void TextureSetParam(int param, int value) = 0;
+[[nodiscard]] virtual int  TextureCreate() = 0;
+virtual void TextureFree(int idx) = 0;
+virtual void TextureBind(int idx) = 0;
+virtual void TextureBindVertex(int idx, bool scaleLight = false) = 0;
+virtual void TextureSetTextureLevels(int levels) = 0;
+virtual void TextureData(int width, int height, void* data, int level, int format = 0) = 0;
+virtual void TextureDataUpdate(int xoff, int yoff, int w, int h, void* data, int level) = 0;
+virtual void TextureSetParam(int param, int value) = 0;
 
     // Render state
-    [[deprecated]] virtual void StateSetColour(float r, float g, float b, float a) = 0;
-    [[deprecated]] virtual void StateSetDepthMask(bool enable) = 0;
-    [[deprecated]] virtual void StateSetBlendEnable(bool enable) = 0;
-    [[deprecated]] virtual void StateSetBlendFunc(int src, int dst) = 0;
-    [[deprecated]] virtual void StateSetBlendFactor(unsigned int colour) = 0;
-    [[deprecated]] virtual void StateSetAlphaFunc(int func, float param) = 0;
-    [[deprecated]] virtual void StateSetDepthFunc(int func) = 0;
-    [[deprecated]] virtual void StateSetFaceCull(bool enable) = 0;
-    [[deprecated]] virtual void StateSetLineWidth(float width) = 0;
-    [[deprecated]] virtual void StateSetWriteEnable(bool r, bool g, bool b, bool a) = 0;
-    [[deprecated]] virtual void StateSetDepthTestEnable(bool enable) = 0;
-    [[deprecated]] virtual void StateSetAlphaTestEnable(bool enable) = 0;
+virtual void StateSetColour(float r, float g, float b, float a) = 0;
+virtual void StateSetDepthMask(bool enable) = 0;
+virtual void StateSetBlendEnable(bool enable) = 0;
+virtual void StateSetBlendFunc(int src, int dst) = 0;
+virtual void StateSetBlendFactor(unsigned int colour) = 0;
+virtual void StateSetAlphaFunc(int func, float param) = 0;
+virtual void StateSetDepthFunc(int func) = 0;
+virtual void StateSetFaceCull(bool enable) = 0;
+virtual void StateSetLineWidth(float width) = 0;
+virtual void StateSetWriteEnable(bool r, bool g, bool b, bool a) = 0;
+virtual void StateSetDepthTestEnable(bool enable) = 0;
+virtual void StateSetAlphaTestEnable(bool enable) = 0;
 
     // Fog
-    [[deprecated]] virtual void StateSetFogEnable(bool enable) = 0;
-    [[deprecated]] virtual void StateSetFogMode(int mode) = 0;
-    [[deprecated]] virtual void StateSetFogNearDistance(float dist) = 0;
-    [[deprecated]] virtual void StateSetFogFarDistance(float dist) = 0;
-    [[deprecated]] virtual void StateSetFogDensity(float density) = 0;
-    [[deprecated]] virtual void StateSetFogColour(float r, float g, float b) = 0;
+virtual void StateSetFogEnable(bool enable) = 0;
+virtual void StateSetFogMode(int mode) = 0;
+virtual void StateSetFogNearDistance(float dist) = 0;
+virtual void StateSetFogFarDistance(float dist) = 0;
+virtual void StateSetFogDensity(float density) = 0;
+virtual void StateSetFogColour(float r, float g, float b) = 0;
 
     // Lighting
-    [[deprecated]] virtual void StateSetLightingEnable(bool enable) = 0;
-    [[deprecated]] virtual void StateSetLightColour(int light, float r, float g, float b) = 0;
-    [[deprecated]] virtual void StateSetLightAmbientColour(float r, float g, float b) = 0;
-    [[deprecated]] virtual void StateSetLightDirection(int light, float x, float y, float z) = 0;
-    [[deprecated]] virtual void StateSetLightEnable(int light, bool enable) = 0;
+virtual void StateSetLightingEnable(bool enable) = 0;
+virtual void StateSetLightColour(int light, float r, float g, float b) = 0;
+virtual void StateSetLightAmbientColour(float r, float g, float b) = 0;
+virtual void StateSetLightDirection(int light, float x, float y, float z) = 0;
+virtual void StateSetLightEnable(int light, bool enable) = 0;
 
     // Viewport
-    [[deprecated]] virtual void StateSetViewport(int viewportType) = 0;
-    [[deprecated]] virtual void StateSetEnableViewportClipPlanes(bool enable) = 0;
-    [[deprecated]] virtual void StateSetStencil(int func, uint8_t ref, uint8_t funcMask, uint8_t writeMask) = 0;
-    [[deprecated]] virtual void StateSetForceLOD(int lod) = 0;
-    [[deprecated]] virtual void StateSetTextureEnable(bool enable) = 0;
-    [[deprecated]] virtual void StateSetActiveTexture(int tex) = 0;
+virtual void StateSetViewport(int viewportType) = 0;
+virtual void StateSetEnableViewportClipPlanes(bool enable) = 0;
+virtual void StateSetStencil(int func, uint8_t ref, uint8_t funcMask, uint8_t writeMask) = 0;
+virtual void StateSetForceLOD(int lod) = 0;
+virtual void StateSetTextureEnable(bool enable) = 0;
+virtual void StateSetActiveTexture(int tex) = 0;
 
     // Chunks
-    [[deprecated]] virtual void SetChunkOffset(float x, float y, float z) = 0;
+virtual void SetChunkOffset(float x, float y, float z) = 0;
 
     // Texture queries
-    [[deprecated]] [[nodiscard]] virtual int TextureGetTextureLevels() = 0;
-    [[deprecated]] virtual void ReadPixels(int x, int y, int w, int h, void* buf) = 0;
-    [[deprecated]] [[nodiscard]] virtual int LoadTextureData(const char* filename, void* srcInfo, int** dataOut) = 0;
-    [[deprecated]] [[nodiscard]] virtual int LoadTextureData(uint8_t* data, uint32_t bytes, void* srcInfo, int** dataOut) = 0;
+[[nodiscard]] virtual int TextureGetTextureLevels() = 0;
+virtual void ReadPixels(int x, int y, int w, int h, void* buf) = 0;
+[[nodiscard]] virtual int LoadTextureData(const char* filename, void* srcInfo, int** dataOut) = 0;
+[[nodiscard]] virtual int LoadTextureData(uint8_t* data, uint32_t bytes, void* srcInfo, int** dataOut) = 0;
 
     // Lighting state
-    [[deprecated]] virtual void StateSetVertexTextureUV(float u, float v) = 0;
+virtual void StateSetVertexTextureUV(float u, float v) = 0;
 
     // Frame lifecycle
-    [[deprecated]] virtual void StartFrame() = 0;
-    [[deprecated]] virtual void Present() = 0;
-    [[deprecated]] virtual void Clear(int flags) = 0;
-    [[deprecated]] virtual void SetClearColour(const float rgba[4]) = 0;
-    [[deprecated]] virtual void Set_matrixDirty() = 0;
-    [[deprecated]] virtual void CBuffLockStaticCreations() = 0;
+virtual void StartFrame() = 0;
+virtual void Present() = 0;
+virtual void Clear(int flags) = 0;
+virtual void SetClearColour(const float rgba[4]) = 0;
+virtual void Set_matrixDirty() = 0;
+virtual void CBuffLockStaticCreations() = 0;
 
     // Window queries (migrated to FrameDesc::framebuffer in new path)
-    [[deprecated]] virtual void GetFramebufferSize(int& w, int& h) = 0;
-    [[deprecated]] [[nodiscard]] virtual bool IsWidescreen() = 0;
-    [[deprecated]] [[nodiscard]] virtual bool IsHiDef() = 0;
-    [[deprecated]] virtual void Close() = 0;
-    [[deprecated]] [[nodiscard]] virtual bool ShouldClose() = 0;
-    [[deprecated]] virtual void SetWindowSize(int w, int h) = 0;
-    [[deprecated]] virtual void SetFullscreen(bool fs) = 0;
-    [[deprecated]] virtual void UpdateGamma(unsigned short gamma) = 0;
-    [[deprecated]] virtual void Suspend() = 0;
-    [[deprecated]] [[nodiscard]] virtual bool Suspended() = 0;
-    [[deprecated]] virtual void Resume() = 0;
+virtual void GetFramebufferSize(int& w, int& h) = 0;
+[[nodiscard]] virtual bool IsWidescreen() = 0;
+[[nodiscard]] virtual bool IsHiDef() = 0;
+virtual void Close() = 0;
+[[nodiscard]] virtual bool ShouldClose() = 0;
+virtual void SetWindowSize(int w, int h) = 0;
+virtual void SetFullscreen(bool fs) = 0;
+virtual void UpdateGamma(unsigned short gamma) = 0;
+virtual void Suspend() = 0;
+[[nodiscard]] virtual bool Suspended() = 0;
+virtual void Resume() = 0;
 
     // Events
-    [[deprecated]] virtual void BeginEvent(const char* name) = 0;
-    [[deprecated]] virtual void EndEvent() = 0;
+virtual void BeginEvent(const char* name) = 0;
+virtual void EndEvent() = 0;
 
     // Immediate single-draw submission
-    [[deprecated]] virtual void submit_immediate(const DrawCall& dc) = 0;
+virtual void submit_immediate(const DrawCall& dc) = 0;
 };
 
 // ---------------------------------------------------------------------------

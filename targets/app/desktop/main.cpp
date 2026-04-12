@@ -73,8 +73,6 @@ static void sigsegv_handler(int sig) {
 #include "strings.h"
 
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #define THEME_NAME "584111F70AAAAAAA"
 #define THEME_FILESIZE 2797568
 

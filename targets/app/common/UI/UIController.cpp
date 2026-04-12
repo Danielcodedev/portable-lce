@@ -53,8 +53,6 @@
 #include "platform/renderer/IRenderPath.h"
 
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 class Tutorial;
 
 // 4J Stu - Enable this to override the Iggy Allocator

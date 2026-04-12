@@ -10,8 +10,6 @@
 #include "platform/renderer/renderer.h"
 #include "platform/stubs.h"
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
 void GuiComponent::hLine(int x0, int x1, int y, int col) {
     if (x1 < x0) {
@@ -172,4 +170,3 @@ void GuiComponent::blit(int x, int y, int sx, int sy, int w, int h) {
     RenderPath.submit_immediate(dc);
 }
 
-#pragma GCC diagnostic pop

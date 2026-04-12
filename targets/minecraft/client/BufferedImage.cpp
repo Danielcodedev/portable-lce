@@ -14,8 +14,6 @@
 #include "platform/renderer/IRenderPath.h"
 
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 BufferedImage::BufferedImage(int width, int height, int type) {
     data[0] = new int[width * height];
 

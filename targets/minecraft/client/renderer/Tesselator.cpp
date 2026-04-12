@@ -8,8 +8,6 @@
 #include "platform/renderer/renderer.h"
 #include "platform/stubs.h"
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
 namespace {
 
@@ -27,7 +25,6 @@ void submit_draw(IPlatformRenderer::ePrimitiveType prim, int count, void* data,
 
 } // namespace
 
-#pragma GCC diagnostic pop
 
 bool Tesselator::TRIANGLE_MODE = false;
 bool Tesselator::USE_VBO = false;

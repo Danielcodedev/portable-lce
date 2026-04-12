@@ -12,8 +12,6 @@
 #include "platform/renderer/IRenderPath.h"
 
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 DLCSkinFile::DLCSkinFile(const std::string& path)
     : DLCFile(DLCManager::e_DLCType_Skin, path) {
     m_displayName = "";

@@ -25,8 +25,6 @@
 #include "platform/renderer/IRenderPath.h"
 
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 class Level;
 
 // 4jcraft: referenced from MCP 8.11 (JE 1.6.4) and the existing

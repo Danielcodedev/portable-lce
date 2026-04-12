@@ -25,8 +25,6 @@
 #include "platform/renderer/IRenderPath.h"
 #include "platform/renderer/renderer.h"
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
 // OpenGL Interception Macros
 #ifndef GL_MODELVIEW_MATRIX

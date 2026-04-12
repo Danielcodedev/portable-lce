@@ -29,8 +29,6 @@
 #include "platform/renderer/IRenderPath.h"
 
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 ResourceLocation LivingEntityRenderer::ENCHANT_GLINT_LOCATION =
     ResourceLocation(TN__BLUR__MISC_GLINT);
 int LivingEntityRenderer::MAX_ARMOR_LAYERS = 4;

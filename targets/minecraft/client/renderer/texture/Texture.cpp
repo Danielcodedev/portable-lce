@@ -16,8 +16,6 @@
 #include "platform/renderer/IRenderPath.h"
 
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #define MAX_MIP_LEVELS 5
 
 Texture::Texture(const std::string& name, int mode, int width, int height,

@@ -55,8 +55,6 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "platform/renderer/IRenderPath.h"
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
 namespace platform_internal {
 IPlatformRenderer& PlatformRenderer_get() {

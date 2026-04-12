@@ -21,8 +21,6 @@
 #include "platform/renderer/IRenderPath.h"
 
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 int UIScene_SettingsOptionsMenu::m_iDifficultySettingA[4] = {
     IDS_DIFFICULTY_PEACEFUL, IDS_DIFFICULTY_EASY, IDS_DIFFICULTY_NORMAL,
     IDS_DIFFICULTY_HARD};

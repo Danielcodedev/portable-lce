@@ -31,8 +31,6 @@
 #include "platform/renderer/IRenderPath.h"
 
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 class ResourceLocation;
 
 ItemRenderer::ItemRenderer() : EntityRenderer() {

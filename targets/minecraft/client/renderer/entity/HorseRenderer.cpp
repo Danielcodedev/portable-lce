@@ -16,8 +16,6 @@
 #include "platform/renderer/IRenderPath.h"
 
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 ResourceLocation HorseRenderer::HORSE_LOCATION =
     ResourceLocation(TN_MOB_HORSE_WHITE);
 ResourceLocation HorseRenderer::HORSE_MULE_LOCATION =

@@ -16,8 +16,6 @@
 #include "platform/renderer/IRenderPath.h"
 
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 class UILayer;
 
 #define PLAYER_ONLINE_TIMER_ID 0

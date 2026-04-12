@@ -31,8 +31,6 @@
 #include "platform/renderer/IRenderPath.h"
 
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 GameSettingsManager::GameSettingsManager() {
     memset(GameSettingsA, 0, sizeof(GameSettingsA));
     m_uiGameHostSettings = 0;

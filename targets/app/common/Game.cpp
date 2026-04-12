@@ -87,8 +87,6 @@
 #include "platform/renderer/IRenderPath.h"
 
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 class BeaconTileEntity;
 class BrewingStandTileEntity;
 class DispenserTileEntity;

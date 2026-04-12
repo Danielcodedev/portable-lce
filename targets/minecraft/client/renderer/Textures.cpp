@@ -33,8 +33,6 @@
 #include "platform/renderer/IRenderPath.h"
 
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 // Linux/PC port: disable mipmapping globally so textures are always sampled
 // from the full-resolution level 0 with GL_NEAREST, giving pixel-crisp
 // Minecraft blocks at all distances. Mipmapping causes glGenerateMipmap() to
