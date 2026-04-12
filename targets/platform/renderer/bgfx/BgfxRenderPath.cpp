@@ -244,12 +244,15 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data, int, int)
 
     uint32_t stride = vl_world_standard_.getStride();
 
-    // Convert triangle fan to triangle list (bgfx doesn't support fans)
-    // Fan: v0,v1,v2,v3 -> Triangles: v0,v1,v2, v0,v2,v3
+    // Convert unsupported primitive types to triangle list
     int submitCount = count;
-    bool isFan = (primType == 0x0006); // GL_TRIANGLE_FAN
+    bool isFan  = (primType == 0x0006); // GL_TRIANGLE_FAN
+    bool isQuad = (primType == 0x0007); // GL_QUADS
     if (isFan && count >= 3) {
         submitCount = (count - 2) * 3;
+    } else if (isQuad && count >= 4) {
+        // Each quad (4 verts) becomes 2 triangles (6 verts)
+        submitCount = (count / 4) * 6;
     }
 
     if (bgfx::getAvailTransientVertexBuffer(submitCount, vl_world_standard_) < (uint32_t)submitCount)
@@ -261,9 +264,26 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data, int, int)
         const uint8_t* src = (const uint8_t*)data;
         uint8_t* dst = tvb.data;
         for (int i = 1; i < count - 1; i++) {
-            memcpy(dst, src, stride); dst += stride;                    // v0
-            memcpy(dst, src + i * stride, stride); dst += stride;      // vi
-            memcpy(dst, src + (i+1) * stride, stride); dst += stride;  // vi+1
+            memcpy(dst, src, stride); dst += stride;
+            memcpy(dst, src + i * stride, stride); dst += stride;
+            memcpy(dst, src + (i+1) * stride, stride); dst += stride;
+        }
+    } else if (isQuad && count >= 4) {
+        const uint8_t* src = (const uint8_t*)data;
+        uint8_t* dst = tvb.data;
+        for (int q = 0; q < count / 4; q++) {
+            const uint8_t* v0 = src + (q*4+0) * stride;
+            const uint8_t* v1 = src + (q*4+1) * stride;
+            const uint8_t* v2 = src + (q*4+2) * stride;
+            const uint8_t* v3 = src + (q*4+3) * stride;
+            // Triangle 1: v0, v1, v2
+            memcpy(dst, v0, stride); dst += stride;
+            memcpy(dst, v1, stride); dst += stride;
+            memcpy(dst, v2, stride); dst += stride;
+            // Triangle 2: v0, v2, v3
+            memcpy(dst, v0, stride); dst += stride;
+            memcpy(dst, v2, stride); dst += stride;
+            memcpy(dst, v3, stride); dst += stride;
         }
     } else {
         memcpy(tvb.data, data, count * stride);
