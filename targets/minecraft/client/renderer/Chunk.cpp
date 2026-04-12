@@ -21,8 +21,12 @@
 #include "minecraft/world/level/tile/Tile.h"
 #include "minecraft/world/level/tile/entity/TileEntity.h"
 #include "minecraft/world/phys/AABB.h"
+#include "platform/renderer/IRenderPath.h"
 #include "platform/renderer/renderer.h"
 #include "platform/stubs.h"
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #include "util/FrameProfiler.h"
 
 int Chunk::updates = 0;
@@ -413,7 +417,7 @@ void Chunk::rebuild() {
             levelRenderer->setGlobalChunkFlag(this->x, this->y, this->z, level,
                                               LevelRenderer::CHUNK_FLAG_EMPTY0,
                                               currentLayer);
-            PlatformRenderer.CBuffClear(lists + currentLayer);
+            RenderPath.CBuffClear(lists + currentLayer);
         }
 
 #ifdef OCCLUSION_MODE_BFS
@@ -526,12 +530,12 @@ void Chunk::rebuild() {
             levelRenderer->setGlobalChunkFlag(this->x, this->y, this->z, level,
                                               LevelRenderer::CHUNK_FLAG_EMPTY0,
                                               currentLayer);
-            PlatformRenderer.CBuffClear(lists + currentLayer);
+            RenderPath.CBuffClear(lists + currentLayer);
         }
         if ((currentLayer == 0) && (!renderNextLayer)) {
             levelRenderer->setGlobalChunkFlag(this->x, this->y, this->z, level,
                                               LevelRenderer::CHUNK_FLAG_EMPTY1);
-            PlatformRenderer.CBuffClear(lists + 1);
+            RenderPath.CBuffClear(lists + 1);
             break;
         }
     }
@@ -752,7 +756,7 @@ void Chunk::reset() {
                     for (int i = 0; i < 2; i++) {
                         // 4J - added - clear any renderer data associated with
                         // this unused list
-                        PlatformRenderer.CBuffClear(lists + i);
+                        RenderPath.CBuffClear(lists + i);
                     }
                     levelRenderer->setGlobalChunkFlags(x, y, z, level, 0);
                 }
