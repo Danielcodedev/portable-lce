@@ -182,6 +182,9 @@ private:
 
     // bgfx shader program
     bgfx::ProgramHandle program_ = BGFX_INVALID_HANDLE;
+    bgfx::UniformHandle u_tintColor_ = BGFX_INVALID_HANDLE;
+    bgfx::UniformHandle u_params_ = BGFX_INVALID_HANDLE;
+    bgfx::UniformHandle s_texColor_ = BGFX_INVALID_HANDLE;
 
     // View ID management
     uint16_t current_view_id_ = 0;

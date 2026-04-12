@@ -17,8 +17,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-#include "vs_drawstress.bin.h"
-#include "fs_drawstress.bin.h"
+#include "vs_4jcraft.bin.h"
+#include "fs_4jcraft.bin.h"
 
 using namespace rp;
 
@@ -79,10 +79,14 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
 
     // Load shaders
     bgfx::ShaderHandle vsh = bgfx::createShader(
-        bgfx::makeRef(vs_drawstress_glsl, sizeof(vs_drawstress_glsl)));
+        bgfx::makeRef(vs_4jcraft_glsl, sizeof(vs_4jcraft_glsl)));
     bgfx::ShaderHandle fsh = bgfx::createShader(
-        bgfx::makeRef(fs_drawstress_glsl, sizeof(fs_drawstress_glsl)));
+        bgfx::makeRef(fs_4jcraft_glsl, sizeof(fs_4jcraft_glsl)));
     program_ = bgfx::createProgram(vsh, fsh, true);
+
+    u_tintColor_ = bgfx::createUniform("u_tintColor", bgfx::UniformType::Vec4);
+    u_params_ = bgfx::createUniform("u_params", bgfx::UniformType::Vec4);
+    s_texColor_ = bgfx::createUniform("s_texColor", bgfx::UniformType::Sampler);
 }
 
 BgfxRenderPath::~BgfxRenderPath() {
@@ -224,6 +228,10 @@ void BgfxRenderPath::DrawVertices(int, int count, void* data, int, int) {
     bgfx::setTransform(glm::value_ptr(mvp));
     bgfx::setState(bgfx_state_ | (blend_enabled_ ? BGFX_STATE_BLEND_ALPHA : 0));
     bgfx::setVertexBuffer(0, &tvb);
+
+    bgfx::setUniform(u_tintColor_, tint_color_);
+    float params[4] = { texture_enabled_ ? 1.0f : 0.0f, 0, 0, 0 };
+    bgfx::setUniform(u_params_, params);
 
     if (bgfx::isValid(program_))
         bgfx::submit(current_view_id_, program_);
