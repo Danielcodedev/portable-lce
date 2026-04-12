@@ -13,11 +13,20 @@ This project is a heavily modified version of the Minecraft Console Legacy Editi
 
 ## Status
 
-| Platform | app | fs | game | input | leaderboard | network | profile | renderer | sound | storage | thread | ui |
-| - | - | - | - | - | - | - | - | - | - | - | - | - |
-| **Linux** | `desktop` | `std` | `stub` | `sdl2` | `stub` | `stub` | `stub` | `gl` | `miniaudio` | `stub` | `std` | `java`, `shiggy` |
-| **Windows64** | `desktop` | `std` | `stub` | `sdl2` | `stub` | `stub` | `stub` | `gl` | `miniaudio` | `stub` | `std` | `java`, `shiggy` |
-| **macOS[^1]** | `desktop` | `std` | `stub` | `sdl2` | `stub` | `stub` | `stub` | `gl` | `miniaudio` | `stub` | `std` | `java` |
+|  | **Linux** | **Windows64** | **macOS[^1]** |
+| - | - | - | - |
+| app | `desktop` | `desktop` | `desktop` |
+| fs | `std` | `std` | `std` |
+| game | `stub` | `stub` | `stub` |
+| input | `sdl2` | `sdl2` | `sdl2` |
+| leaderboard | `stub` | `stub` | `stub` |
+| network | `stub` | `stub` | `stub` |
+| profile | `stub` | `stub` | `stub` |
+| renderer | `gl` | `gl` | `gl` |
+| sound | `miniaudio` | `miniaudio` | `miniaudio` |
+| storage | `stub` | `stub` | `stub` |
+| thread | `std` | `std` | `std` |
+| ui | `java`, `shiggy` (x86-64 only) | `java`, `shiggy` (x86-64 only) | `java` |
 
 [^1]: `platform_renderer_gl` is unstable on this platform and known to segfault. Development is WIP.
 
