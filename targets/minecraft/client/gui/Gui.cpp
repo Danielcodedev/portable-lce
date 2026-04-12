@@ -55,6 +55,9 @@
 #include "strings.h"
 #include "util/StringHelpers.h"
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 ResourceLocation Gui::PUMPKIN_BLUR_LOCATION =
     ResourceLocation(TN__BLUR__MISC_PUMPKINBLUR);
 ResourceLocation Gui::GUI_GUI_LOCATION = ResourceLocation(TN_GUI_GUI);
@@ -69,6 +72,10 @@ ResourceLocation Gui::GUI_ICONS_LOCATION = ResourceLocation(TN_GUI_ICONS);
 float Gui::currentGuiBlendFactor = 1.0f;  // 4J added
 float Gui::currentGuiScaleFactor = 1.0f;  // 4J added
 ItemRenderer* Gui::itemRenderer = new ItemRenderer();
+rp::MaterialHandle Gui::gui_mat_untextured_alpha_{};
+rp::MaterialHandle Gui::gui_mat_vignette_{};
+rp::MaterialHandle Gui::gui_mat_fullscreen_overlay_{};
+bool Gui::materials_initialized_ = false;
 
 Gui::Gui(Minecraft* minecraft) {
     // 4J - initialisers added
@@ -89,7 +96,49 @@ Gui::Gui(Minecraft* minecraft) {
     lastTickA = 0.0f;
 }
 
+void Gui::initMaterials() {
+    if (materials_initialized_) return;
+    materials_initialized_ = true;
+
+    rp::MaterialDesc untex{};
+    untex.shader      = rp::ShaderPath::standard;
+    untex.blend       = rp::BlendMode::alpha;
+    untex.textured    = false;
+    untex.lit         = false;
+    untex.fog_enabled = false;
+    untex.depth_test  = rp::DepthTest::less_equal;
+    untex.depth_write = true;
+    untex.cull        = rp::CullMode::none;
+    gui_mat_untextured_alpha_ = RenderPath.create_material(untex);
+
+    rp::MaterialDesc vig{};
+    vig.shader          = rp::ShaderPath::standard;
+    vig.blend           = rp::BlendMode::custom;
+    vig.blend_src_custom = rp::BlendFactor::zero;
+    vig.blend_dst_custom = rp::BlendFactor::one_minus_src_color;
+    vig.textured    = true;
+    vig.lit         = false;
+    vig.fog_enabled = false;
+    vig.depth_test  = rp::DepthTest::off;
+    vig.depth_write = false;
+    vig.cull        = rp::CullMode::none;
+    gui_mat_vignette_ = RenderPath.create_material(vig);
+
+    rp::MaterialDesc overlay{};
+    overlay.shader      = rp::ShaderPath::standard;
+    overlay.blend       = rp::BlendMode::alpha;
+    overlay.textured    = true;
+    overlay.lit         = false;
+    overlay.fog_enabled = false;
+    overlay.depth_test  = rp::DepthTest::off;
+    overlay.depth_write = false;
+    overlay.alpha_test  = rp::AlphaTest::off;
+    overlay.cull        = rp::CullMode::none;
+    gui_mat_fullscreen_overlay_ = RenderPath.create_material(overlay);
+}
+
 void Gui::render(float a, bool mouseFree, int xMouse, int yMouse) {
+    initMaterials();
     // 4J Stu - I have copied this code for XUI_BaseScene. If/when it gets
     // changed it should be broken out 4J - altered to force full screen mode to
     // 3X scaling, and any split screen modes to 2X scaling. This is so that the
@@ -1208,20 +1257,27 @@ void Gui::renderBossHealth(void) {
 }
 
 void Gui::renderPumpkin(int w, int h) {
+    auto [tvb, span] = RenderPath.alloc_transient_vertices(
+        4, rp::VertexLayout::world_standard, rp::PrimitiveType::triangle_fan);
+    if (span.empty()) return;
+    auto* v = reinterpret_cast<rp::WorldStandardVertex*>(span.data());
+    v[0] = {{0,       (float)h, -90}, {0, 1}, 0, 0, 0xfe00fe00};
+    v[1] = {{(float)w, (float)h, -90}, {1, 1}, 0, 0, 0xfe00fe00};
+    v[2] = {{(float)w, 0,        -90}, {1, 0}, 0, 0, 0xfe00fe00};
+    v[3] = {{0,        0,        -90}, {0, 0}, 0, 0, 0xfe00fe00};
+
+    rp::DrawCall dc{};
+    dc.source = rp::VertexSource::transient;
+    dc.transient = tvb;
+    dc.material = gui_mat_fullscreen_overlay_;
+
     glDisable(GL_DEPTH_TEST);
     glDepthMask(false);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glColor4f(1, 1, 1, 1);
     glDisable(GL_ALPHA_TEST);
-
     minecraft->textures->bindTexture(&PUMPKIN_BLUR_LOCATION);
-    Tesselator* t = Tesselator::getInstance();
-    t->begin();
-    t->vertexUV((float)(0), (float)(h), (float)(-90), (float)(0), (float)(1));
-    t->vertexUV((float)(w), (float)(h), (float)(-90), (float)(1), (float)(1));
-    t->vertexUV((float)(w), (float)(0), (float)(-90), (float)(1), (float)(0));
-    t->vertexUV((float)(0), (float)(0), (float)(-90), (float)(0), (float)(0));
-    t->end();
+    RenderPath.submit_immediate(dc);
     glDepthMask(true);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_ALPHA_TEST);
@@ -1234,24 +1290,31 @@ void Gui::renderVignette(float br, int w, int h) {
     if (br > 1) br = 1;
     tbr += (br - tbr) * 0.01f;
 
-    // 4J removed this path; keep it gated until the blend-function path is
-    // intentionally restored for the Java-style UI.
 #if defined(ENABLE_JAVA_GUIS)
+    auto [tvb, span] = RenderPath.alloc_transient_vertices(
+        4, rp::VertexLayout::world_standard, rp::PrimitiveType::triangle_fan);
+    if (span.empty()) return;
+    auto* v = reinterpret_cast<rp::WorldStandardVertex*>(span.data());
+    v[0] = {{0,        (float)h, -90}, {0, 1}, 0, 0, 0xfe00fe00};
+    v[1] = {{(float)w, (float)h, -90}, {1, 1}, 0, 0, 0xfe00fe00};
+    v[2] = {{(float)w, 0,        -90}, {1, 0}, 0, 0, 0xfe00fe00};
+    v[3] = {{0,        0,        -90}, {0, 0}, 0, 0, 0xfe00fe00};
+
+    rp::DrawCall dc{};
+    dc.source = rp::VertexSource::transient;
+    dc.transient = tvb;
+    dc.material = gui_mat_vignette_;
+    dc.tint_color[0] = tbr;
+    dc.tint_color[1] = tbr;
+    dc.tint_color[2] = tbr;
+    dc.tint_color[3] = 1.0f;
+
     glDisable(GL_DEPTH_TEST);
     glDepthMask(false);
     glBlendFunc(GL_ZERO, GL_ONE_MINUS_SRC_COLOR);
-    glColor4f(tbr, tbr, tbr, 1);
-    glBindTexture(
-        GL_TEXTURE_2D,
-        minecraft->textures->loadTexture(
-            TN__BLUR__MISC_VIGNETTE));  // "%blur%/misc/vignette.png"));
-    Tesselator* t = Tesselator::getInstance();
-    t->begin();
-    t->vertexUV((float)(0), (float)(h), (float)(-90), (float)(0), (float)(1));
-    t->vertexUV((float)(w), (float)(h), (float)(-90), (float)(1), (float)(1));
-    t->vertexUV((float)(w), (float)(0), (float)(-90), (float)(1), (float)(0));
-    t->vertexUV((float)(0), (float)(0), (float)(-90), (float)(0), (float)(0));
-    t->end();
+    glBindTexture(GL_TEXTURE_2D,
+                  minecraft->textures->loadTexture(TN__BLUR__MISC_VIGNETTE));
+    RenderPath.submit_immediate(dc);
     glDepthMask(true);
     glEnable(GL_DEPTH_TEST);
     glColor4f(1, 1, 1, 1);
@@ -1266,26 +1329,36 @@ void Gui::renderTp(float br, int w, int h) {
         br = br * 0.8f + 0.2f;
     }
 
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_DEPTH_TEST);
-    glDepthMask(false);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glColor4f(1, 1, 1, br);
-    minecraft->textures->bindTexture(
-        &TextureAtlas::LOCATION_BLOCKS);  // "/terrain.png"));
-
     Icon* slot = Tile::portalTile->getTexture(Facing::UP);
     float u0 = slot->getU0();
     float v0 = slot->getV0();
     float u1 = slot->getU1();
     float v1 = slot->getV1();
-    Tesselator* t = Tesselator::getInstance();
-    t->begin();
-    t->vertexUV((float)(0), (float)(h), (float)(-90), (float)(u0), (float)(v1));
-    t->vertexUV((float)(w), (float)(h), (float)(-90), (float)(u1), (float)(v1));
-    t->vertexUV((float)(w), (float)(0), (float)(-90), (float)(u1), (float)(v0));
-    t->vertexUV((float)(0), (float)(0), (float)(-90), (float)(u0), (float)(v0));
-    t->end();
+
+    auto [tvb, span] = RenderPath.alloc_transient_vertices(
+        4, rp::VertexLayout::world_standard, rp::PrimitiveType::triangle_fan);
+    if (span.empty()) return;
+    auto* v = reinterpret_cast<rp::WorldStandardVertex*>(span.data());
+    v[0] = {{0,        (float)h, -90}, {u0, v1}, 0, 0, 0xfe00fe00};
+    v[1] = {{(float)w, (float)h, -90}, {u1, v1}, 0, 0, 0xfe00fe00};
+    v[2] = {{(float)w, 0,        -90}, {u1, v0}, 0, 0, 0xfe00fe00};
+    v[3] = {{0,        0,        -90}, {u0, v0}, 0, 0, 0xfe00fe00};
+
+    rp::DrawCall dc{};
+    dc.source = rp::VertexSource::transient;
+    dc.transient = tvb;
+    dc.material = gui_mat_fullscreen_overlay_;
+    dc.tint_color[0] = 1;
+    dc.tint_color[1] = 1;
+    dc.tint_color[2] = 1;
+    dc.tint_color[3] = br;
+
+    glDisable(GL_ALPHA_TEST);
+    glDisable(GL_DEPTH_TEST);
+    glDepthMask(false);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    minecraft->textures->bindTexture(&TextureAtlas::LOCATION_BLOCKS);
+    RenderPath.submit_immediate(dc);
     glDepthMask(true);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_ALPHA_TEST);

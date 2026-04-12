@@ -1,5 +1,6 @@
 #include "app/common/AppGameServices.h"
 #include "app/common/GameMenuService.h"
+#include "platform/renderer/IRenderPath.h"
 // Minecraft.cpp : Defines the entry point for the application.
 //
 
@@ -437,6 +438,8 @@ int main(int argc, const char* argv[]) {
     static bool bTrialTimerDisplayed = true;
 
     PlatformRenderer.Initialise();
+    auto render_path = make_legacy_gl_render_path();
+    rp::render_path_internal::set_active(render_path.get());
 
     // Read the file containing the product codes
     app.DebugPrintf("---ReadProductCodes()\n");
