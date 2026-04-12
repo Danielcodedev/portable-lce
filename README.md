@@ -1,29 +1,26 @@
-# <img src=".github-assets/logo.jpg" alt="Logo" width="50" height="50" style="vertical-align: middle;"> Portable LCE
+# Portable LCE
 
 ![](.github-assets/transrights.png) ![](.github-assets/progress.png) ![](.github-assets/freepalestine.gif) ![](.github-assets/internetarchive.gif) ![](.github-assets//ieget-an.gif) ![](.github-assets/minecraft.gif) ![](.github-assets/powered-llvm.gif)
 ![](.github-assets/opengl.gif) ![](.github-assets/adobe_getflash2.gif) ![](.github-assets/flash_get_20010813.gif) ![](.github-assets/SiliconValley_7479_English_imagens_get_flashplayer.gif) ![](.github-assets/problematic-media.gif)
 ---
 
-Portable LCE is a modified version of the Minecraft Console Legacy Edition, aimed at porting old Minecraft to different platforms (such as Linux, Android, Emscripten, etc.) and refactoring the codebase to improve organization and use modern C++ features.
+This project is a heavily modified version of the Minecraft Console Legacy Edition codebase, aimed at porting old Minecraft (TU19/1.6.1) to different platforms and refactoring the codebase to improve organization and use modern C++ features.
 
-## Scope & Platform Support
+## Status
 
-At the moment, we're aiming to support the following platforms:
+| Platform | fs | game | input | leaderboard | network | profile | renderer | sound | storage | thread |
+| - | - | - | - | - | - | - | - | - | - | - |
+| **Linux** | `std` | `stub` | `sdl2` | `stub` | `stub` | `stub` | `gl` | `miniaudio` | `stub` | `std` |
+| **Windows64** | `std` | `stub` | `sdl2` | `stub` | `stub` | `stub` | `gl` | `miniaudio` | `stub` | `std` |
 
-Please note that these percentages are **estimates** and do not necessarily reflect the final playability of the game on each platform.
+> [!TIP]
+>
+> This table describes the current backend used for each game component on each platform. If a backend is `stub`, that means that the game uses a [stubbed implementation](https://en.wikipedia.org/wiki/Method_stub) and the feature is unsupported at the moment. In some cases (e.g. leaderboards and profile) it makes sense to use a stubbed implementation, since we don't have access to Xbox live on Linux. In other cases, it is used temporarily while work is done to properly implement the feature (such as world saving and loading).
 
-- Linux (~90%)
-- Emscripten (~10%) [[Check the Emscripten Branch](https://github.com/portable-lce/portable-lce/tree/feat/emscripten)]
-- macOS (not started) [No official support but people have been able to run the game on MacOS]
-- iOS (not started)
-- Android (~35%)
-
-> [!WARNING]
-> There is NO Windows support, for that, go to [MCLCE/MinecraftConsoles](https://github.com/MCLCE/MinecraftConsoles). 
-
-> All efforts are focused towards a native Linux port, OpenGL rendering pipeline, and modernizing the existing LCE codebase/tooling to make future platform ports easier.
-> 
-> `Windows64` and other platforms originally supported by LCE are currently unsupported, since the original Visual Studio tooling has been stripped from this repository and replaced with our own.
+These platforms are currently work-in-progress:
+- **macOS**: Largely mirrors the Linux implementation. Has not been upstreamed due to supposed rendering issues. `ui-backend=java` only.
+- **Android**: Game runs, but the port predates many refactors and therefore can't be easily upstreamed at the moment. `ui-backend=java` only.
+- **Emscripten**: Works except for audio. Predates a major refactor, and requires a rebase. `ui-backend=java` only.
 
 ---
 
@@ -144,15 +141,10 @@ meson setup --native-file ./scripts/llvm_native.txt build
 Game assets are automatically copied to the build output directory during compilation. Run from that directory:
 
 ```sh
-cd build/targets/app
-./Minecraft.Client
+./build/targets/app/Minecraft.Client
 ```
 
----
-
-### View the online documentation [here](https://portable-lce.github.io/portable-lce).
-
----
+<!-- ### View the online documentation [here](https://portable-lce.github.io/portable-lce). -->
 
 ## Generative AI Policy
 
