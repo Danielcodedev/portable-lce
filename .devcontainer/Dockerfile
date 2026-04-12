@@ -30,7 +30,7 @@ ENV CC="clang" \
     CC_LD="lld" \
     CXX_LD="lld"
 
-FROM clang AS ivjcraft
+FROM clang AS portablelce
 
 ARG MESON_VERSION=1.10.2
 
