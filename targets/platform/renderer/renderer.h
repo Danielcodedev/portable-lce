@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 #include "IPlatformRenderer.h"
 
 // Function accessor backed by a function-local static (Meyers singleton).
@@ -16,3 +18,7 @@ IPlatformRenderer& PlatformRenderer_get();
 }
 
 #define PlatformRenderer (::platform_internal::PlatformRenderer_get())
+
+namespace platform_internal {
+inline thread_local bool cbuff_recording = false;
+}

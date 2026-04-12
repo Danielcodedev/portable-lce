@@ -4,8 +4,30 @@
 
 #include "minecraft/client/MemoryTracker.h"
 #include "minecraft/util/Log.h"
+#include "platform/renderer/IRenderPath.h"
 #include "platform/renderer/renderer.h"
 #include "platform/stubs.h"
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
+namespace {
+
+void submit_draw(IPlatformRenderer::ePrimitiveType prim, int count, void* data,
+                 IPlatformRenderer::eVertexType vtype,
+                 IPlatformRenderer::ePixelShaderType stype) {
+    if (platform_internal::cbuff_recording) {
+        PlatformRenderer.DrawVertices(prim, count, data, vtype, stype);
+    } else {
+        RenderPath.DrawVertices(static_cast<int>(prim), count, data,
+                                static_cast<int>(vtype),
+                                static_cast<int>(stype));
+    }
+}
+
+} // namespace
+
+#pragma GCC diagnostic pop
 
 bool Tesselator::TRIANGLE_MODE = false;
 bool Tesselator::USE_VBO = false;
@@ -102,8 +124,7 @@ void Tesselator::end() {
             }
         }
         if (mode == GL_QUADS && TRIANGLE_MODE) {
-            // glDrawArrays(GL_TRIANGLES, 0, vertices); // 4J - changed for xbox
-            PlatformRenderer.DrawVertices(
+            submit_draw(
                 IPlatformRenderer::PRIMITIVE_TYPE_TRIANGLE_LIST, vertices,
                 _array->data(),
                 useCompactFormat360
@@ -113,28 +134,22 @@ void Tesselator::end() {
                     ? IPlatformRenderer::PIXEL_SHADER_TYPE_PROJECTION
                     : IPlatformRenderer::PIXEL_SHADER_TYPE_STANDARD);
         } else {
-            //            glDrawArrays(mode, 0, vertices);	// 4J - changed
-            //            for xbox
-            // For compact vertices, the vertexCount has to be calculated from
-            // the amount of data written, as we insert extra fake vertices to
-            // encode supplementary data for more awkward quads that have non
-            // axis aligned UVs (eg flowing lava/water)
             int vertexCount = vertices;
             if (useCompactFormat360) {
-                PlatformRenderer.DrawVertices(
+                submit_draw(
                     (IPlatformRenderer::ePrimitiveType)mode, vertexCount,
                     _array->data(), IPlatformRenderer::VERTEX_TYPE_COMPRESSED,
                     IPlatformRenderer::PIXEL_SHADER_TYPE_STANDARD);
             } else {
                 if (useProjectedTexturePixelShader) {
-                    PlatformRenderer.DrawVertices(
+                    submit_draw(
                         (IPlatformRenderer::ePrimitiveType)mode, vertexCount,
                         _array->data(),
                         IPlatformRenderer::
                             VERTEX_TYPE_PF3_TF2_CB4_NB4_XW1_TEXGEN,
                         IPlatformRenderer::PIXEL_SHADER_TYPE_PROJECTION);
                 } else {
-                    PlatformRenderer.DrawVertices(
+                    submit_draw(
                         (IPlatformRenderer::ePrimitiveType)mode, vertexCount,
                         _array->data(),
                         IPlatformRenderer::VERTEX_TYPE_PF3_TF2_CB4_NB4_XW1,

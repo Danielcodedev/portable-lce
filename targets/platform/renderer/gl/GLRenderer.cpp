@@ -962,6 +962,7 @@ void GLRenderer::CBuffStart(int index, bool) {
     s_recListId = index;
     s_recVerts.clear();
     s_recDraws.clear();
+    platform_internal::cbuff_recording = true;
 }
 
 void GLRenderer::CBuffEnd() {
@@ -972,6 +973,7 @@ void GLRenderer::CBuffEnd() {
     if (s_recVerts.empty()) {
         s_chunkPool.erase(s_recListId);
         s_recListId = -1;
+        platform_internal::cbuff_recording = false;
         return;
     }
     cb.rawVerts = std::move(s_recVerts);
@@ -979,6 +981,7 @@ void GLRenderer::CBuffEnd() {
     cb.valid = true;
     cb.vboReady = false;
     s_recListId = -1;
+    platform_internal::cbuff_recording = false;
 }
 
 void GLRenderer::CBuffClear(int index) {
