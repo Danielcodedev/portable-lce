@@ -6,12 +6,7 @@
     flake-utils.url = "github:numtide/flake-utils";
 
     shiggy = {
-      url = "github:4jcraft/shiggy/main";
-      flake = false;
-    };
-
-    "4jlibs" = {
-      url = "github:4jcraft/4jlibs/main";
+      url = "github:portable-lce/shiggy/main";
       flake = false;
     };
 
@@ -47,7 +42,6 @@
 
         subprojectNames = [
           "shiggy"
-          "4jlibs"
           "stb"
           "simdutf"
           "miniaudio"
