@@ -119,6 +119,7 @@ public:
 
 private:
     void execute_draw(const rp::DrawCall& dc);
+    void execute_chunk_draw(const rp::ChunkDrawCall& cdc);
     void apply_material(const rp::MaterialDesc& mat);
 
     int atomic_batch_depth_ = 0;
@@ -136,4 +137,12 @@ private:
         bool occupied = false;
     };
     std::vector<MaterialSlot> materials_;
+
+    // Mesh storage - maps MeshHandle to a CBuffer slot.
+    struct MeshSlot {
+        int cbuff_id = -1;
+        uint32_t generation = 0;
+        bool occupied = false;
+    };
+    std::vector<MeshSlot> meshes_;
 };

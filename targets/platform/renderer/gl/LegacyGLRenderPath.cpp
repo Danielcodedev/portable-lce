@@ -41,12 +41,63 @@ LegacyGLRenderPath::~LegacyGLRenderPath() = default;
 // New surface implementations
 // ---------------------------------------------------------------------------
 
-MeshHandle LegacyGLRenderPath::create_mesh(const MeshDesc&) {
-    return kInvalidMesh;
+static void upload_mesh_to_cbuff(int cbuff_id, const MeshDesc& desc) {
+    if (desc.vertex_count == 0 || desc.vertex_data.empty()) {
+        PlatformRenderer.CBuffClear(cbuff_id);
+        return;
+    }
+    auto vtype = IPlatformRenderer::VERTEX_TYPE_PF3_TF2_CB4_NB4_XW1;
+    switch (desc.layout) {
+        case VertexLayout::chunk_compact:  vtype = IPlatformRenderer::VERTEX_TYPE_COMPRESSED; break;
+        case VertexLayout::world_standard: vtype = IPlatformRenderer::VERTEX_TYPE_PF3_TF2_CB4_NB4_XW1; break;
+        case VertexLayout::world_texgen:   vtype = IPlatformRenderer::VERTEX_TYPE_PF3_TF2_CB4_NB4_XW1_TEXGEN; break;
+    }
+    auto ptype = IPlatformRenderer::PRIMITIVE_TYPE_TRIANGLE_LIST;
+    switch (desc.primitive) {
+        case PrimitiveType::triangle_list:  ptype = IPlatformRenderer::PRIMITIVE_TYPE_TRIANGLE_LIST; break;
+        case PrimitiveType::triangle_strip: ptype = IPlatformRenderer::PRIMITIVE_TYPE_TRIANGLE_STRIP; break;
+        case PrimitiveType::triangle_fan:   ptype = IPlatformRenderer::PRIMITIVE_TYPE_TRIANGLE_FAN; break;
+        case PrimitiveType::line_list:      ptype = IPlatformRenderer::PRIMITIVE_TYPE_LINE_LIST; break;
+        case PrimitiveType::line_strip:     ptype = IPlatformRenderer::PRIMITIVE_TYPE_LINE_STRIP; break;
+    }
+    PlatformRenderer.CBuffStart(cbuff_id, true);
+    PlatformRenderer.DrawVertices(ptype, desc.vertex_count,
+                                  const_cast<void*>(static_cast<const void*>(desc.vertex_data.data())),
+                                  vtype, IPlatformRenderer::PIXEL_SHADER_TYPE_STANDARD);
+    PlatformRenderer.CBuffEnd();
 }
 
-void LegacyGLRenderPath::update_mesh(MeshHandle, const MeshDesc&) {}
-void LegacyGLRenderPath::destroy_mesh(MeshHandle) {}
+MeshHandle LegacyGLRenderPath::create_mesh(const MeshDesc& desc) {
+    int cbuff_id = PlatformRenderer.CBuffCreate(1);
+    if (cbuff_id < 0) return kInvalidMesh;
+
+    upload_mesh_to_cbuff(cbuff_id, desc);
+
+    for (uint32_t i = 0; i < meshes_.size(); ++i) {
+        if (!meshes_[i].occupied) {
+            meshes_[i].cbuff_id = cbuff_id;
+            meshes_[i].generation++;
+            meshes_[i].occupied = true;
+            return {i, meshes_[i].generation};
+        }
+    }
+    uint32_t idx = static_cast<uint32_t>(meshes_.size());
+    meshes_.push_back({cbuff_id, 1, true});
+    return {idx, 1};
+}
+
+void LegacyGLRenderPath::update_mesh(MeshHandle h, const MeshDesc& desc) {
+    if (h.index >= meshes_.size() || meshes_[h.index].generation != h.generation)
+        return;
+    upload_mesh_to_cbuff(meshes_[h.index].cbuff_id, desc);
+}
+
+void LegacyGLRenderPath::destroy_mesh(MeshHandle h) {
+    if (h.index >= meshes_.size() || meshes_[h.index].generation != h.generation)
+        return;
+    PlatformRenderer.CBuffDelete(meshes_[h.index].cbuff_id, 1);
+    meshes_[h.index].occupied = false;
+}
 
 TextureHandle LegacyGLRenderPath::create_texture(const TextureDesc&) {
     return kInvalidTexture;
@@ -183,7 +234,14 @@ void LegacyGLRenderPath::execute_draw(const DrawCall& dc) {
     if (dc.line_width > 0)
         PlatformRenderer.StateSetLineWidth(dc.line_width);
 
-    if (dc.source == VertexSource::transient) {
+    if (dc.source == VertexSource::mesh) {
+        const auto& mh = dc.mesh;
+        if (mh.index < meshes_.size() &&
+            meshes_[mh.index].generation == mh.generation &&
+            meshes_[mh.index].occupied) {
+            PlatformRenderer.CBuffCall(meshes_[mh.index].cbuff_id, true);
+        }
+    } else {
         const auto& tvb = dc.transient;
         if (tvb.frame_index != current_frame_) return;
         void* data = transient_arena_.data() + tvb.offset;
@@ -209,9 +267,30 @@ void LegacyGLRenderPath::execute_draw(const DrawCall& dc) {
     }
 }
 
+void LegacyGLRenderPath::execute_chunk_draw(const rp::ChunkDrawCall& cdc) {
+    if (cdc.mesh.index < meshes_.size() &&
+        meshes_[cdc.mesh.index].generation == cdc.mesh.generation &&
+        meshes_[cdc.mesh.index].occupied) {
+        PlatformRenderer.SetChunkOffset(cdc.chunk_offset[0],
+                                        cdc.chunk_offset[1],
+                                        cdc.chunk_offset[2]);
+        PlatformRenderer.CBuffCall(meshes_[cdc.mesh.index].cbuff_id, true);
+    }
+}
+
 void LegacyGLRenderPath::render_frame(const FrameDesc& frame) {
     transient_offset_ = 0;
     current_frame_++;
+
+    for (const auto& view : frame.views) {
+        for (const auto& cdc : view.chunk_opaque)      execute_chunk_draw(cdc);
+        for (const auto& cdc : view.chunk_alpha_test)   execute_chunk_draw(cdc);
+        for (const auto& cdc : view.chunk_transparent)  execute_chunk_draw(cdc);
+        for (const auto& dc : view.world_opaque)        execute_draw(dc);
+        for (const auto& dc : view.world_alpha_test)    execute_draw(dc);
+        for (const auto& dc : view.world_transparent)   execute_draw(dc);
+        for (const auto& dc : view.debug_overlay)       execute_draw(dc);
+    }
 
     for (const auto& dc : frame.ui_overlay)
         execute_draw(dc);
