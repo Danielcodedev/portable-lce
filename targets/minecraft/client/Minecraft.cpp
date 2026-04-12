@@ -1636,6 +1636,9 @@ void Minecraft::run_middle() {
                             RenderPath.StateSetViewport(
                                 (IPlatformRenderer::eViewportType)
                                     player->m_iScreenSection);
+                            gameRenderer->current_view.viewport_layout =
+                                static_cast<rp::ViewportLayout>(
+                                    player->m_iScreenSection);
                             gameRenderer->render(timer->a, bFirst);
                             bFirst = false;
 

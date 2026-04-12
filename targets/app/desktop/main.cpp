@@ -1,5 +1,6 @@
 #include "app/common/AppGameServices.h"
 #include "app/common/GameMenuService.h"
+#include "minecraft/client/renderer/GameRenderer.h"
 #include "platform/renderer/IRenderPath.h"
 // Minecraft.cpp : Defines the entry point for the application.
 //
@@ -595,6 +596,10 @@ int main(int argc, const char* argv[]) {
         ui.tick();
         ui.render();
 
+        if (pMinecraft->gameRenderer) {
+            rp::ViewDesc& gv = pMinecraft->gameRenderer->current_view;
+            frame.views = {&gv, 1};
+        }
         RenderPath.render_frame(frame);
         RenderPath.Present();
 

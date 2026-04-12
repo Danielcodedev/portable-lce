@@ -1087,6 +1087,15 @@ void GameRenderer::render(float a, bool bFirst) {
         if (mc->screen != nullptr && mc->screen->particles != nullptr)
             mc->screen->particles->render(a);
     }
+
+    for (uint8_t i = 0; i < captured_fog_count && i < 4; ++i)
+        current_view.fog_profiles[i] = captured_fog_profiles[i];
+    current_view.fog_profile_count = captured_fog_count > 0 ? captured_fog_count : 1;
+    current_view.clear.flags = rp::CLEAR_COLOR | rp::CLEAR_DEPTH;
+    current_view.clear.color[0] = fr;
+    current_view.clear.color[1] = fg;
+    current_view.clear.color[2] = fb;
+    current_view.clear.color[3] = 0;
 }
 
 void GameRenderer::renderLevel(float a) { renderLevel(a, 0); }
@@ -1260,12 +1269,18 @@ void GameRenderer::renderLevel(float a, int64_t until) {
         cameraEntity->zOld + (cameraEntity->z - cameraEntity->zOld) * a;
 
     for (int i = 0; i < 2; i++) {
+        current_view = rp::ViewDesc{};
+        captured_fog_count = 0;
+
         if (mc->options->anaglyph3d) {
             GameRenderer::anaglyphPass = i;
-            if (GameRenderer::anaglyphPass == 0)
+            if (GameRenderer::anaglyphPass == 0) {
                 RenderPath.StateSetWriteEnable(false, true, true, false);
-            else
+                current_view.color_mask = {false, true, true, false};
+            } else {
                 RenderPath.StateSetWriteEnable(true, false, false, false);
+                current_view.color_mask = {true, false, false, false};
+            }
         }
 
         glViewport(0, 0, mc->width, mc->height);
@@ -1275,6 +1290,11 @@ void GameRenderer::renderLevel(float a, int64_t until) {
 
         setupCamera(a, i);
         Camera::prepare(mc->player, mc->player->ThirdPersonView() == 2);
+
+        memcpy(current_view.camera.projection, Camera::getProjectionData(),
+               16 * sizeof(float));
+        memcpy(current_view.camera.view, Camera::getModelviewData(),
+               16 * sizeof(float));
 
         Frustum::getFrustum();
         if (mc->options->viewDistance < 2) {
@@ -1368,6 +1388,7 @@ void GameRenderer::renderLevel(float a, int64_t until) {
             }
 
             turnOnLightLayer(a);  // 4J - brought forward from 1.8.2
+            captureLighting();
             {
                 FRAME_PROFILE_SCOPE(Particle);
                 particleEngine->renderLit(cameraEntity, a,
@@ -2017,6 +2038,44 @@ void GameRenderer::setupClearColor(float a) {
     glClearColor(fr, fg, fb, 0.0f);
 }
 
+void GameRenderer::captureFogProfile(int pass_index, float) {
+    if (captured_fog_count >= 4) return;
+    auto& fp = captured_fog_profiles[captured_fog_count++];
+    fp.color[0] = fr;
+    fp.color[1] = fg;
+    fp.color[2] = fb;
+    if (pass_index == -1) {
+        fp.mode = rp::FogMode::linear;
+        fp.start = 0;
+        fp.end = renderDistance * 0.8f;
+    } else {
+        fp.mode = rp::FogMode::linear;
+        fp.start = renderDistance * 0.25f;
+        fp.end = renderDistance;
+    }
+    fp.density = 0;
+}
+
+void GameRenderer::captureLighting() {
+    current_view.lighting.ambient_color[0] = 0.4f;
+    current_view.lighting.ambient_color[1] = 0.4f;
+    current_view.lighting.ambient_color[2] = 0.4f;
+    current_view.lighting.directional[0].enabled = true;
+    current_view.lighting.directional[0].direction[0] = 0.2f;
+    current_view.lighting.directional[0].direction[1] = 1.0f;
+    current_view.lighting.directional[0].direction[2] = -0.7f;
+    current_view.lighting.directional[0].color[0] = 0.6f;
+    current_view.lighting.directional[0].color[1] = 0.6f;
+    current_view.lighting.directional[0].color[2] = 0.6f;
+    current_view.lighting.directional[1].enabled = true;
+    current_view.lighting.directional[1].direction[0] = -0.2f;
+    current_view.lighting.directional[1].direction[1] = 1.0f;
+    current_view.lighting.directional[1].direction[2] = 0.7f;
+    current_view.lighting.directional[1].color[0] = 0.6f;
+    current_view.lighting.directional[1].color[1] = 0.6f;
+    current_view.lighting.directional[1].color[2] = 0.6f;
+}
+
 void GameRenderer::setupFog(int i, float alpha) {
     std::shared_ptr<LivingEntity> player = mc->cameraTargetPlayer;
 
@@ -2134,6 +2193,8 @@ void GameRenderer::setupFog(int i, float alpha) {
 
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT, GL_AMBIENT);
+
+    captureFogProfile(i, alpha);
 }
 
 FloatBuffer* GameRenderer::getBuffer(float a, float b, float c, float d) {
