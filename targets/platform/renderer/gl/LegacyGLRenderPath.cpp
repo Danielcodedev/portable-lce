@@ -422,8 +422,6 @@ bool LegacyGLRenderPath::IsWidescreen()                          { return Platfo
 bool LegacyGLRenderPath::IsHiDef()                               { return PlatformRenderer.IsHiDef(); }
 
 int  LegacyGLRenderPath::TextureGetTextureLevels()               { return PlatformRenderer.TextureGetTextureLevels(); }
-void LegacyGLRenderPath::TextureDynamicUpdateStart()             { PlatformRenderer.TextureDynamicUpdateStart(); }
-void LegacyGLRenderPath::TextureDynamicUpdateEnd()               { PlatformRenderer.TextureDynamicUpdateEnd(); }
 void LegacyGLRenderPath::ReadPixels(int x, int y, int w, int h, void* b) { PlatformRenderer.ReadPixels(x, y, w, h, b); }
 int  LegacyGLRenderPath::LoadTextureData(const char* f, void* si, int** d) { return PlatformRenderer.LoadTextureData(f, static_cast<D3DXIMAGE_INFO*>(si), d); }
 int  LegacyGLRenderPath::LoadTextureData(uint8_t* data, uint32_t bytes, void* si, int** d) { return PlatformRenderer.LoadTextureData(data, bytes, static_cast<D3DXIMAGE_INFO*>(si), d); }

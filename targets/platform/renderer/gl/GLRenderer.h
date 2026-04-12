@@ -35,7 +35,6 @@ public:
     void SetWindowSize(int w, int h);
     void SetFullscreen(bool fs);
     void StartFrame();
-    void DoScreenGrabOnNextPresent();
     void Present();
     void Clear(int flags);
     void SetClearColour(const float colourRGBA[4]);
@@ -80,22 +79,13 @@ public:
     void TextureDataUpdate(int xoffset, int yoffset, int width, int height,
                            void* data, int level);
     void TextureSetParam(int param, int value);
-    void TextureDynamicUpdateStart();
-    void TextureDynamicUpdateEnd();
 
     int LoadTextureData(const char* szFilename, D3DXIMAGE_INFO* pSrcInfo,
                         int** ppDataOut);
     int LoadTextureData(std::uint8_t* pbData, std::uint32_t byteCount,
                         D3DXIMAGE_INFO* pSrcInfo, int** ppDataOut);
-    int SaveTextureData(const char* szFilename, D3DXIMAGE_INFO* pSrcInfo,
-                        int* ppDataOut);
-    int SaveTextureDataToMemory(void* pOutput, int outputCapacity,
-                                int* outputLength, int width, int height,
-                                int* ppDataIn);
 
     void ReadPixels(int x, int y, int w, int h, void* buf);
-    void TextureGetStats();
-    void* TextureGetTexture(int idx);
 
     // State control
     void StateSetColour(float r, float g, float b, float a);

@@ -113,8 +113,6 @@ public:
     [[nodiscard]] bool IsHiDef() override;
 
     [[nodiscard]] int TextureGetTextureLevels() override;
-    void TextureDynamicUpdateStart() override;
-    void TextureDynamicUpdateEnd() override;
     void ReadPixels(int x, int y, int w, int h, void* buf) override;
     [[nodiscard]] int LoadTextureData(const char* filename, void* srcInfo, int** dataOut) override;
     [[nodiscard]] int LoadTextureData(uint8_t* data, uint32_t bytes, void* srcInfo, int** dataOut) override;

@@ -9,7 +9,6 @@ public:
     enum eVertexType {
         VERTEX_TYPE_PF3_TF2_CB4_NB4_XW1,
         VERTEX_TYPE_COMPRESSED,
-        VERTEX_TYPE_PF3_TF2_CB4_NB4_XW1_LIT,
         VERTEX_TYPE_PF3_TF2_CB4_NB4_XW1_TEXGEN,
         VERTEX_TYPE_COUNT
     };
@@ -17,7 +16,6 @@ public:
     enum ePixelShaderType {
         PIXEL_SHADER_TYPE_STANDARD,
         PIXEL_SHADER_TYPE_PROJECTION,
-        PIXEL_SHADER_TYPE_FORCELOD,
         PIXEL_SHADER_COUNT
     };
 
@@ -118,8 +116,6 @@ public:
     virtual void TextureDataUpdate(int xoffset, int yoffset, int width,
                                    int height, void* data, int level) = 0;
     virtual void TextureSetParam(int param, int value) = 0;
-    virtual void TextureDynamicUpdateStart() = 0;
-    virtual void TextureDynamicUpdateEnd() = 0;
     [[nodiscard]] virtual int LoadTextureData(const char* szFilename,
                                               D3DXIMAGE_INFO* pSrcInfo,
                                               int** ppDataOut) = 0;
@@ -127,17 +123,7 @@ public:
                                               std::uint32_t byteCount,
                                               D3DXIMAGE_INFO* pSrcInfo,
                                               int** ppDataOut) = 0;
-    [[nodiscard]] virtual int SaveTextureData(const char* szFilename,
-                                              D3DXIMAGE_INFO* pSrcInfo,
-                                              int* ppDataOut) = 0;
-    [[nodiscard]] virtual int SaveTextureDataToMemory(void* pOutput,
-                                                      int outputCapacity,
-                                                      int* outputLength,
-                                                      int width, int height,
-                                                      int* ppDataIn) = 0;
     virtual void ReadPixels(int x, int y, int w, int h, void* buf) = 0;
-    virtual void TextureGetStats() = 0;
-    [[nodiscard]] virtual void* TextureGetTexture(int idx) = 0;
 
     // Render state
     virtual void StateSetColour(float r, float g, float b, float a) = 0;
@@ -197,7 +183,6 @@ public:
     virtual void EndConditionalRendering() = 0;
 
     // Screenshots
-    virtual void DoScreenGrabOnNextPresent() = 0;
     virtual void CaptureThumbnail(ImageFileBuffer* pngOut) = 0;
     virtual void CaptureScreen(ImageFileBuffer* jpgOut,
                                XSOCIAL_PREVIEWIMAGE* previewOut) = 0;

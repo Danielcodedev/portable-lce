@@ -13,21 +13,7 @@ void GLRenderer::StateSetEnableViewportClipPlanes(bool) {}
 void GLRenderer::StateSetForceLOD(int) {}
 void GLRenderer::StateSetTexGenCol(int, float, float, float, float, bool) {}
 
-// Textures
-void GLRenderer::TextureDynamicUpdateStart() {}
-void GLRenderer::TextureDynamicUpdateEnd() {}
-void GLRenderer::TextureGetStats() {}
-void* GLRenderer::TextureGetTexture(int) { return nullptr; }
-
-int GLRenderer::SaveTextureData(const char*, D3DXIMAGE_INFO*, int*) {
-    return 0;
-}
-int GLRenderer::SaveTextureDataToMemory(void*, int, int*, int, int, int*) {
-    return 0;
-}
-
 // Screen/Image Capturing
-void GLRenderer::DoScreenGrabOnNextPresent() {}
 void GLRenderer::CaptureThumbnail(ImageFileBuffer*) {}
 void GLRenderer::CaptureScreen(ImageFileBuffer*, XSOCIAL_PREVIEWIMAGE*) {}
 

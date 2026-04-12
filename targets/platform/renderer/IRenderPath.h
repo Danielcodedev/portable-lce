@@ -514,8 +514,6 @@ public:
 
     // Texture queries
     [[deprecated]] [[nodiscard]] virtual int TextureGetTextureLevels() = 0;
-    [[deprecated]] virtual void TextureDynamicUpdateStart() = 0;
-    [[deprecated]] virtual void TextureDynamicUpdateEnd() = 0;
     [[deprecated]] virtual void ReadPixels(int x, int y, int w, int h, void* buf) = 0;
     [[deprecated]] [[nodiscard]] virtual int LoadTextureData(const char* filename, void* srcInfo, int** dataOut) = 0;
     [[deprecated]] [[nodiscard]] virtual int LoadTextureData(uint8_t* data, uint32_t bytes, void* srcInfo, int** dataOut) = 0;
