@@ -12,6 +12,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "platform/PlatformTypes.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 using namespace rp;
 
 static constexpr uint32_t TRANSIENT_ARENA_SIZE = 16 * 1024 * 1024;
@@ -338,8 +343,31 @@ void BgfxRenderPath::TextureDataUpdate(int, int, int, int, void*, int) {}
 void BgfxRenderPath::TextureSetParam(int, int) {}
 int  BgfxRenderPath::TextureGetTextureLevels() { return 1; }
 void BgfxRenderPath::ReadPixels(int, int, int, int, void*) {}
-int  BgfxRenderPath::LoadTextureData(const char*, void*, int**) { return -1; }
-int  BgfxRenderPath::LoadTextureData(uint8_t*, uint32_t, void*, int**) { return -1; }
+int BgfxRenderPath::LoadTextureData(const char* filename, void* srcInfo, int** dataOut) {
+    int w, h, channels;
+    unsigned char* pixels = stbi_load(filename, &w, &h, &channels, 4);
+    if (!pixels) return -1;
+    auto* info = static_cast<D3DXIMAGE_INFO*>(srcInfo);
+    if (info) { info->Width = w; info->Height = h; }
+    int* rgba = new int[w * h];
+    memcpy(rgba, pixels, w * h * 4);
+    stbi_image_free(pixels);
+    *dataOut = rgba;
+    return 0;
+}
+
+int BgfxRenderPath::LoadTextureData(uint8_t* data, uint32_t bytes, void* srcInfo, int** dataOut) {
+    int w, h, channels;
+    unsigned char* pixels = stbi_load_from_memory(data, bytes, &w, &h, &channels, 4);
+    if (!pixels) return -1;
+    auto* info = static_cast<D3DXIMAGE_INFO*>(srcInfo);
+    if (info) { info->Width = w; info->Height = h; }
+    int* rgba = new int[w * h];
+    memcpy(rgba, pixels, w * h * 4);
+    stbi_image_free(pixels);
+    *dataOut = rgba;
+    return 0;
+}
 
 // -- Frame lifecycle --------------------------------------------------------
 

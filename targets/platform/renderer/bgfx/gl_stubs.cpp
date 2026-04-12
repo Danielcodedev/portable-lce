@@ -3,14 +3,17 @@
 #include "java/FloatBuffer.h"
 #include "java/IntBuffer.h"
 
-// GL compat function stubs for game code that calls gl* functions
-// via the compatibility macros in gl_compat.h. These provide the
-// non-template overloads that get linked against.
+// Stub implementations for legacy texture/buffer functions
+// that the game's texture system still calls.
+
+static int next_tex_id = 1;
 
 void glGetFloat(int, FloatBuffer*) {}
 
-int glGenTextures_4J() { return 0; }
-void glGenTextures_4J(int, unsigned int*) {}
+int glGenTextures_4J() { return next_tex_id++; }
+void glGenTextures_4J(int n, unsigned int* out) {
+    for (int i = 0; i < n; i++) out[i] = next_tex_id++;
+}
 void glDeleteTextures_4J(int) {}
 void glDeleteTextures_4J(int, const unsigned int*) {}
 void glTexImage2D_4J(int, int, int, int, int, int, int, int, void*) {}
