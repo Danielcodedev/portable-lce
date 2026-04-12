@@ -371,7 +371,15 @@ int BgfxRenderPath::LoadTextureData(uint8_t* data, uint32_t bytes, void* srcInfo
 
 // -- Frame lifecycle --------------------------------------------------------
 
-void BgfxRenderPath::StartFrame() {}
+void BgfxRenderPath::StartFrame() {
+    int w, h;
+    SDL_GetWindowSize(window_, &w, &h);
+    width_ = w; height_ = h;
+    fb_.width = w; fb_.height = h;
+    fb_.aspect = h > 0 ? (float)w / (float)h : 1.0f;
+    fb_.is_widescreen = fb_.aspect > 1.5f;
+    fb_.is_hi_def = h >= 720;
+}
 void BgfxRenderPath::Present() {}
 void BgfxRenderPath::Clear(int) {}
 void BgfxRenderPath::SetClearColour(const float[4]) {}
