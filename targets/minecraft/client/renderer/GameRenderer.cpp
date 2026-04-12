@@ -81,7 +81,11 @@
 #include "platform/stubs.h"
 #include "platform/thread/ShutdownManager.h"
 #include "util/FrameProfiler.h"
+#include "platform/renderer/IRenderPath.h"
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 bool GameRenderer::anaglyph3d = false;
 int GameRenderer::anaglyphPass = 0;
 
@@ -642,7 +646,7 @@ void GameRenderer::setupCamera(float a, int eye) {
         glTranslatef((float)zoom_x, (float)-zoom_y, 0);
         glScaled(zoom, zoom, 1);
     }
-    PlatformRenderer.MatrixPerspective(fov, aspect, 0.05f, renderDistance * 2);
+    RenderPath.MatrixPerspective(fov, aspect, 0.05f, renderDistance * 2);
 
     if (mc->gameMode->isCutScene()) {
         float s = 1 / 1.5f;
@@ -739,7 +743,7 @@ void GameRenderer::renderItemInHand(float a, int eye) {
         glTranslatef((float)zoom_x, (float)-zoom_y, 0);
         glScaled(zoom, zoom, 1);
     }
-    PlatformRenderer.MatrixPerspective(fov, aspect, 0.05f, renderDistance * 2);
+    RenderPath.MatrixPerspective(fov, aspect, 0.05f, renderDistance * 2);
 
     if (mc->gameMode->isCutScene()) {
         float s = 1 / 1.5f;
@@ -804,7 +808,7 @@ void GameRenderer::turnOffLightLayer(double alpha) {  // 4J - TODO
 
     // 4jcraft
     if (SharedConstants::TEXTURE_LIGHTING) {
-        PlatformRenderer.TextureBindVertex(-1);
+        RenderPath.TextureBindVertex(-1);
     }
 
     // // 4jcraft: manually handle this in order to ensure that the light layer
@@ -840,11 +844,11 @@ void GameRenderer::turnOnLightLayer(
                   textureId, scaleLight ? 1 : 0);
     }
 
-    PlatformRenderer.TextureBindVertex(textureId, scaleLight);
+    RenderPath.TextureBindVertex(textureId, scaleLight);
 #else
     // 4jcraft: update light texture
     // todo: check implementation of getLightTexture.
-    PlatformRenderer.TextureBindVertex(
+    RenderPath.TextureBindVertex(
         getLightTexture(mc->player->GetXboxPad(), mc->level), scaleLight);
 #endif
 }
@@ -1157,7 +1161,7 @@ int GameRenderer::runUpdate(void* lpParam) {
 
         //		while( minecraft->levelRenderer->updateDirtyChunks() )
         //			;
-        PlatformRenderer.CBuffDeferredModeEnd();
+        RenderPath.CBuffDeferredModeEnd();
 
         // If any renderable tile entities were flagged in this last block of
         // chunk(s) that were udpated, then change their flags to say that this
@@ -1261,9 +1265,9 @@ void GameRenderer::renderLevel(float a, int64_t until) {
         if (mc->options->anaglyph3d) {
             GameRenderer::anaglyphPass = i;
             if (GameRenderer::anaglyphPass == 0)
-                PlatformRenderer.StateSetWriteEnable(false, true, true, false);
+                RenderPath.StateSetWriteEnable(false, true, true, false);
             else
-                PlatformRenderer.StateSetWriteEnable(true, false, false, false);
+                RenderPath.StateSetWriteEnable(true, false, false, false);
         }
 
         glViewport(0, 0, mc->width, mc->height);
@@ -1397,9 +1401,9 @@ void GameRenderer::renderLevel(float a, int64_t until) {
 
         glDisable(GL_BLEND);
         glEnable(GL_CULL_FACE);
-        PlatformRenderer.StateSetBlendFunc(GL_SRC_ALPHA,
+        RenderPath.StateSetBlendFunc(GL_SRC_ALPHA,
                                            GL_ONE_MINUS_SRC_ALPHA);
-        PlatformRenderer.StateSetDepthMask(true);
+        RenderPath.StateSetDepthMask(true);
         setupFog(0, a);
         glEnable(GL_BLEND);
         glDisable(GL_CULL_FACE);
@@ -1416,11 +1420,11 @@ void GameRenderer::renderLevel(float a, int64_t until) {
                 glShadeModel(GL_SMOOTH);
             }
 
-            PlatformRenderer.StateSetBlendFunc(GL_ZERO, GL_ONE);
+            RenderPath.StateSetBlendFunc(GL_ZERO, GL_ONE);
             int visibleWaterChunks =
                 levelRenderer->render(cameraEntity, 1, a, updateChunks);
 
-            PlatformRenderer.StateSetBlendFunc(GL_SRC_ALPHA,
+            RenderPath.StateSetBlendFunc(GL_SRC_ALPHA,
                                                GL_ONE_MINUS_SRC_ALPHA);
 
             if (visibleWaterChunks > 0) {
@@ -1456,7 +1460,7 @@ void GameRenderer::renderLevel(float a, int64_t until) {
         turnOffLightLayer(a);  // 4J - brought forward from 1.8.2
         ////////////////////////// End of 4J added section
 
-        PlatformRenderer.StateSetDepthMask(true);
+        RenderPath.StateSetDepthMask(true);
         glEnable(GL_CULL_FACE);
         glDisable(GL_BLEND);
 
@@ -1480,7 +1484,7 @@ void GameRenderer::renderLevel(float a, int64_t until) {
         */
 
         glEnable(GL_BLEND);
-        PlatformRenderer.StateSetBlendFunc(GL_SRC_ALPHA, GL_ONE);
+        RenderPath.StateSetBlendFunc(GL_SRC_ALPHA, GL_ONE);
         {
             FRAME_PROFILE_SCOPE(WeatherSky);
             levelRenderer->renderDestroyAnimation(
@@ -1514,7 +1518,7 @@ void GameRenderer::renderLevel(float a, int64_t until) {
             return;
         }
     }
-    PlatformRenderer.StateSetWriteEnable(true, true, true, false);
+    RenderPath.StateSetWriteEnable(true, true, true, false);
 }
 
 void GameRenderer::prepareAndRenderClouds(LevelRenderer* levelRenderer,
@@ -1613,7 +1617,7 @@ void GameRenderer::renderSnowAndRain(float a) {
     if (rainLevel <= 0) return;
 
     // 4J - rain is relatively low poly, but high fill-rate - better to clip it
-    PlatformRenderer.StateSetEnableViewportClipPlanes(true);
+    RenderPath.StateSetEnableViewportClipPlanes(true);
 
     turnOnLightLayer(a);
 
@@ -1643,7 +1647,7 @@ void GameRenderer::renderSnowAndRain(float a) {
     glDisable(GL_CULL_FACE);
     glNormal3f(0, 1, 0);
     glEnable(GL_BLEND);
-    PlatformRenderer.StateSetBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    RenderPath.StateSetBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glAlphaFunc(GL_GREATER, 0.01f);
 
     mc->textures->bindTexture(
@@ -1813,13 +1817,13 @@ void GameRenderer::renderSnowAndRain(float a) {
     glAlphaFunc(GL_GREATER, 0.1f);
     turnOffLightLayer(a);
 
-    PlatformRenderer.StateSetEnableViewportClipPlanes(false);
+    RenderPath.StateSetEnableViewportClipPlanes(false);
 }
 
 // 4J - added forceScale parameter
 void GameRenderer::setupGuiScreen(int forceScale /*=-1*/) {
     int fbw, fbh;
-    PlatformRenderer.GetFramebufferSize(fbw, fbh);
+    RenderPath.GetFramebufferSize(fbw, fbh);
 
     // 4jcraft: use actual framebuffer dimensions instead of mc->width/height
     // to ensure GUI scales correctly after a window resize.
@@ -1827,17 +1831,17 @@ void GameRenderer::setupGuiScreen(int forceScale /*=-1*/) {
 
     // 4jcraft: Java GUI screens still assume a clean 2D fixed-function style
     // state.
-    PlatformRenderer.StateSetFaceCull(false);
+    RenderPath.StateSetFaceCull(false);
     glDisable(GL_LIGHTING);
     glDisable(GL_FOG);
     glColor4f(1, 1, 1, 1);
     glEnable(GL_ALPHA_TEST);
     glAlphaFunc(GL_GREATER, 0.1f);
     glEnable(GL_DEPTH_TEST);
-    PlatformRenderer.StateSetDepthFunc(GL_LEQUAL);
-    PlatformRenderer.StateSetDepthMask(true);
+    RenderPath.StateSetDepthFunc(GL_LEQUAL);
+    RenderPath.StateSetDepthMask(true);
 
-    PlatformRenderer.TextureBindVertex(-1);
+    RenderPath.TextureBindVertex(-1);
 
     glClientActiveTexture(GL_TEXTURE1);
     glActiveTexture(GL_TEXTURE1);

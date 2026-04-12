@@ -50,7 +50,11 @@
 #include "strings.h"
 #include "util/StringHelpers.h"
 #include "util/Timer.h"
+#include "platform/renderer/IRenderPath.h"
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 class Tutorial;
 
 // 4J Stu - Enable this to override the Iggy Allocator
@@ -962,13 +966,13 @@ void UIController::setupCustomDrawGameState() {
     m_customRenderingClearRect.top = LONG_MAX;
     m_customRenderingClearRect.bottom = LONG_MIN;
 
-    PlatformRenderer.StartFrame();
-    PlatformRenderer.Set_matrixDirty();
+    RenderPath.StartFrame();
+    RenderPath.Set_matrixDirty();
 
     // 4J Stu - We don't need to clear this here as iggy hasn't written anything
     // to the depth buffer. We DO however clear after we render which is why we
     // still setup the rectangle here
-    // PlatformRenderer.Clear(GL_DEPTH_BUFFER_BIT, &m_customRenderingClearRect);
+    // RenderPath.Clear(GL_DEPTH_BUFFER_BIT, &m_customRenderingClearRect);
     // glClear(GL_DEPTH_BUFFER_BIT);
 
     glMatrixMode(GL_PROJECTION);
@@ -1046,7 +1050,7 @@ void UIController::setupCustomDrawGameStateAndMatrices(
 }
 
 void UIController::endCustomDrawGameState() {
-    PlatformRenderer.Clear(GL_DEPTH_BUFFER_BIT);
+    RenderPath.Clear(GL_DEPTH_BUFFER_BIT);
     // glClear(GL_DEPTH_BUFFER_BIT);
     glDepthMask(false);
     glDisable(GL_ALPHA_TEST);

@@ -54,6 +54,7 @@
 #include "platform/stubs.h"
 #include "strings.h"
 #include "util/StringHelpers.h"
+#include "platform/renderer/IRenderPath.h"
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
@@ -405,10 +406,10 @@ void Gui::render(float a, bool mouseFree, int xMouse, int yMouse) {
             fVal = fAlphaIncrementPerCent * (float)ucAlpha;
         }
 
-        PlatformRenderer.StateSetBlendFactor(0xffffff |
+        RenderPath.StateSetBlendFactor(0xffffff |
                                              (((unsigned int)fVal) << 24));
         currentGuiBlendFactor = fVal / 255.0f;
-        //	PlatformRenderer.StateSetBlendFactor(0x40ffffff);
+        //	RenderPath.StateSetBlendFactor(0x40ffffff);
         glBlendFunc(GL_CONSTANT_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA);
 
         blitOffset = -90;
@@ -457,7 +458,7 @@ void Gui::render(float a, bool mouseFree, int xMouse, int yMouse) {
             minecraft->textures->bindTexture(
                 &GUI_ICONS_LOCATION);  // "/gui/icons.png"));
             glEnable(GL_BLEND);
-            PlatformRenderer.StateSetBlendFactor(0xffffff |
+            RenderPath.StateSetBlendFactor(0xffffff |
                                                  (((unsigned int)fVal) << 24));
             glBlendFunc(GL_CONSTANT_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA);
             // glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ONE_MINUS_SRC_COLOR);
@@ -1480,7 +1481,7 @@ void Gui::addMessage(const std::string& _string, int iPad,
         case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_TOP:
         case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_BOTTOM:
         case IPlatformRenderer::VIEWPORT_TYPE_FULLSCREEN:
-            if (PlatformRenderer.IsHiDef()) {
+            if (RenderPath.IsHiDef()) {
                 maximumChars = 105;
             } else {
                 maximumChars = 55;
@@ -1489,7 +1490,7 @@ void Gui::addMessage(const std::string& _string, int iPad,
                 case XC_LANGUAGE_JAPANESE:
                 case XC_LANGUAGE_TCHINESE:
                 case XC_LANGUAGE_KOREAN:
-                    if (PlatformRenderer.IsHiDef()) {
+                    if (RenderPath.IsHiDef()) {
                         maximumChars = 70;
                     } else {
                         maximumChars = 35;

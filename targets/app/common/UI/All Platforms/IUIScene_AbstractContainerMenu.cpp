@@ -33,7 +33,11 @@
 #include "platform/input/input.h"
 #include "platform/renderer/renderer.h"
 #include "strings.h"
+#include "platform/renderer/IRenderPath.h"
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 IUIScene_AbstractContainerMenu::IUIScene_AbstractContainerMenu() {
     m_menu = nullptr;
     m_autoDeleteMenu = false;
@@ -328,7 +332,7 @@ void IUIScene_AbstractContainerMenu::onMouseTick() {
         // 4J Stu - The cursor moves too fast in SD mode
         // The SD/splitscreen scenes are approximately 0.6 times the size of
         // the fullscreen on
-        if (!PlatformRenderer.IsHiDef() || app.GetLocalPlayerCount() > 1)
+        if (!RenderPath.IsHiDef() || app.GetLocalPlayerCount() > 1)
             fInputScale *= 0.6f;
 
         fInputX *= fInputScale;

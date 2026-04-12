@@ -28,7 +28,11 @@
 #include "platform/renderer/renderer.h"
 #include "platform/stubs.h"
 #include "util/StringHelpers.h"
+#include "platform/renderer/IRenderPath.h"
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 class ResourceLocation;
 
 ItemRenderer::ItemRenderer() : EntityRenderer() {
@@ -222,7 +226,7 @@ void ItemRenderer::renderItemBillboard(std::shared_ptr<ItemEntity> entity,
             LOD = 2;  // Force LOD level 2 to achieve texture reads from 256x256
                       // map
         }
-        PlatformRenderer.StateSetForceLOD(LOD);
+        RenderPath.StateSetForceLOD(LOD);
 
         glPushMatrix();
         if (m_bItemFrame) {
@@ -311,7 +315,7 @@ void ItemRenderer::renderItemBillboard(std::shared_ptr<ItemEntity> entity,
 
         glPopMatrix();
 
-        PlatformRenderer.StateSetForceLOD(-1);
+        RenderPath.StateSetForceLOD(-1);
     } else {
         for (int i = 0; i < count; i++) {
             glPushMatrix();

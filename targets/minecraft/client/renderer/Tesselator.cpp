@@ -552,7 +552,7 @@ void Tesselator::vertex(float x, float y, float z) {
 #endif
         } else {
             // -512 each for u/v will mean that the renderer will use global
-            // settings (set via PlatformRenderer.StateSetVertexTextureUV)
+            // settings (set via RenderPath.StateSetVertexTextureUV)
             // rather than these local ones
             *(unsigned int*)(&_array->data()[p + 7]) = 0xfe00fe00;
         }

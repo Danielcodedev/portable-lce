@@ -9,7 +9,11 @@
 #include "minecraft/client/MemoryTracker.h"
 #include "platform/renderer/renderer.h"
 #include "platform/stubs.h"
+#include "platform/renderer/IRenderPath.h"
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 class FrustumData;
 
 Frustum* Frustum::frustum = new Frustum();
@@ -58,9 +62,9 @@ void Frustum::calculateFrustum() {
     // queries.
     // Camera::prepare() already captures both matrices every frame :)
     // i spent an ungodly amount of time on this simple fix.
-    memcpy(proj.data(), PlatformRenderer.MatrixGet(GL_PROJECTION_MATRIX),
+    memcpy(proj.data(), RenderPath.MatrixGet(GL_PROJECTION_MATRIX),
            16 * sizeof(float));
-    memcpy(modl.data(), PlatformRenderer.MatrixGet(GL_MODELVIEW_MATRIX),
+    memcpy(modl.data(), RenderPath.MatrixGet(GL_MODELVIEW_MATRIX),
            16 * sizeof(float));
 
     float* p = proj.data();

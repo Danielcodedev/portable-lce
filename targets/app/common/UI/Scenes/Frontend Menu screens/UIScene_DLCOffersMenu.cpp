@@ -13,7 +13,11 @@
 #include "platform/PlatformTypes.h"
 #include "platform/renderer/renderer.h"
 #include "strings.h"
+#include "platform/renderer/IRenderPath.h"
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 class UILayer;
 
 #define PLAYER_ONLINE_TIMER_ID 0
@@ -34,7 +38,7 @@ UIScene_DLCOffersMenu::UIScene_DLCOffersMenu(int iPad, void* initData,
     // Alert the app the we want to be informed of ethernet connections
     app.SetLiveLinkRequired(true);
 
-    m_bIsSD = !PlatformRenderer.IsHiDef() && !PlatformRenderer.IsWidescreen();
+    m_bIsSD = !RenderPath.IsHiDef() && !RenderPath.IsWidescreen();
 
     m_labelOffers.init(app.GetString(IDS_DOWNLOADABLE_CONTENT_OFFERS));
     m_buttonListOffers.init(eControl_OffersList);

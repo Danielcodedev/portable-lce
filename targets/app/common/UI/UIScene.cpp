@@ -28,7 +28,11 @@
 #include "minecraft/world/entity/player/Inventory.h"
 #include "minecraft/world/item/ItemInstance.h"
 #include "util/StringHelpers.h"
+#include "platform/renderer/IRenderPath.h"
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 class MultiplayerLocalPlayer;
 
 UIScene::UIScene(int iPad, UILayer* parentLayer) {
@@ -144,7 +148,7 @@ F64 UIScene::getSafeZoneHalfHeight() {
 
     float safeHeight = 0.0f;
 
-    if (!PlatformRenderer.IsHiDef() && PlatformRenderer.IsWidescreen()) {
+    if (!RenderPath.IsHiDef() && RenderPath.IsWidescreen()) {
         // 90% safezone
         safeHeight = height * (0.15f / 2);
     } else {
@@ -158,7 +162,7 @@ F64 UIScene::getSafeZoneHalfWidth() {
     float width = ui.getScreenWidth();
 
     float safeWidth = 0.0f;
-    if (!PlatformRenderer.IsHiDef() && PlatformRenderer.IsWidescreen()) {
+    if (!RenderPath.IsHiDef() && RenderPath.IsWidescreen()) {
         // 85% safezone
         safeWidth = width * (0.15f / 2);
     } else {
@@ -561,7 +565,7 @@ void UIScene::customDrawSlotControl(IggyCustomDrawCallbackRegion* region,
 
                 if (!useCommandBuffers || m_needsCacheRendered) {
                     if (useCommandBuffers)
-                        PlatformRenderer.CBuffStart(list, true);
+                        RenderPath.CBuffStart(list, true);
                     ui.setupCustomDrawMatrices(this, customDrawRegion);
                     _customDrawSlotControl(customDrawRegion, iPad, item, fAlpha,
                                            isFoil, bDecorations,
@@ -582,11 +586,11 @@ void UIScene::customDrawSlotControl(IggyCustomDrawCallbackRegion* region,
                         delete drawData;
                     }
 
-                    if (useCommandBuffers) PlatformRenderer.CBuffEnd();
+                    if (useCommandBuffers) RenderPath.CBuffEnd();
                 }
                 m_cachedSlotDraw.clear();
 
-                if (useCommandBuffers) (void)PlatformRenderer.CBuffCall(list);
+                if (useCommandBuffers) (void)RenderPath.CBuffCall(list);
 
                 // Finish GDraw and anything else that needs to be finalised
                 ui.endCustomDraw(region);

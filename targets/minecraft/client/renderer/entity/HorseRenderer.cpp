@@ -13,7 +13,11 @@
 #include "minecraft/world/entity/animal/EntityHorse.h"
 #include "platform/renderer/renderer.h"
 #include "platform/stubs.h"
+#include "platform/renderer/IRenderPath.h"
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 ResourceLocation HorseRenderer::HORSE_LOCATION =
     ResourceLocation(TN_MOB_HORSE_WHITE);
 ResourceLocation HorseRenderer::HORSE_MULE_LOCATION =
@@ -59,7 +63,7 @@ void HorseRenderer::renderModel(std::shared_ptr<LivingEntity> mob, float wp,
                       true);
         // Ensure that any extra layers of texturing are disabled after
         // rendering this horse
-        PlatformRenderer.TextureBind(-1);
+        RenderPath.TextureBind(-1);
     }
 }
 

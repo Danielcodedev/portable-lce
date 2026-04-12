@@ -22,7 +22,11 @@
 #include "minecraft/world/inventory/Slot.h"
 #include "minecraft/world/item/ItemInstance.h"
 #include "platform/stubs.h"
+#include "platform/renderer/IRenderPath.h"
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 class Level;
 
 // 4jcraft: referenced from MCP 8.11 (JE 1.6.4) and the existing
@@ -160,7 +164,7 @@ void EnchantmentScreen::renderBg(float a) {
                240 * scaleFactor);
 
     glTranslatef(-0.34f, 0.23f, 0.0f);
-    PlatformRenderer.MatrixPerspective(90.0f, 1.3333334f, 9.0f, 80.0f);
+    RenderPath.MatrixPerspective(90.0f, 1.3333334f, 9.0f, 80.0f);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();

@@ -15,7 +15,11 @@
 #include "app/common/Iggy/include/rrCore.h"
 #include "app/common/UI/ConsoleUIController.h"
 #include "util/StringHelpers.h"
+#include "platform/renderer/IRenderPath.h"
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 UIComponent_Tooltips::UIComponent_Tooltips(int iPad, void* initData,
                                            UILayer* parentLayer)
     : UIScene(iPad, parentLayer) {
@@ -55,7 +59,7 @@ F64 UIComponent_Tooltips::getSafeZoneHalfWidth() {
     float safeWidth = 0.0f;
 
     // 85% safezone for tooltips in either SD mode
-    if (!PlatformRenderer.IsHiDef()) {
+    if (!RenderPath.IsHiDef()) {
         // 85% safezone
         safeWidth = m_movieWidth * (0.15f / 2);
     } else {

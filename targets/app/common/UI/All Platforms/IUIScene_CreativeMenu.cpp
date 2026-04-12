@@ -44,7 +44,11 @@
 #include "nbt/CompoundTag.h"
 #include "nbt/ListTag.h"
 #include "strings.h"
+#include "platform/renderer/IRenderPath.h"
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 // 4J JEV - Images for each tab.
 IUIScene_CreativeMenu::TabSpec** IUIScene_CreativeMenu::specs = nullptr;
 
@@ -878,7 +882,7 @@ void IUIScene_CreativeMenu::staticCtor() {
 
     // Just use the text LT - the graphic doesn't fit in splitscreen either
     // In 480p there's not enough room for the LT button, so use text instead
-    // if(!PlatformRenderer.IsHiDef() && !PlatformRenderer.IsWidescreen())
+    // if(!RenderPath.IsHiDef() && !RenderPath.IsWidescreen())
     {
         specs[eCreativeInventoryTab_Brewing] =
             new TabSpec("Brewing", IDS_GROUPNAME_POTIONS_480, 5, brewingGroup);

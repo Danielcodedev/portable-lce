@@ -26,7 +26,11 @@
 #include "minecraft/world/entity/projectile/Arrow.h"
 #include "platform/renderer/renderer.h"
 #include "platform/stubs.h"
+#include "platform/renderer/IRenderPath.h"
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 ResourceLocation LivingEntityRenderer::ENCHANT_GLINT_LOCATION =
     ResourceLocation(TN__BLUR__MISC_GLINT);
 int LivingEntityRenderer::MAX_ARMOR_LAYERS = 4;
@@ -499,7 +503,7 @@ void LivingEntityRenderer::renderNameTag(std::shared_ptr<LivingEntity> mob,
     // 4J Stu - If it's beyond readable distance, then just render a coloured
     // box
     int readableDist = PLAYER_NAME_READABLE_FULLSCREEN;
-    if (!PlatformRenderer.IsHiDef()) {
+    if (!RenderPath.IsHiDef()) {
         readableDist = PLAYER_NAME_READABLE_DISTANCE_SD;
     } else if (gameServices().getLocalPlayerCount() > 2) {
         readableDist = PLAYER_NAME_READABLE_DISTANCE_SPLITSCREEN;

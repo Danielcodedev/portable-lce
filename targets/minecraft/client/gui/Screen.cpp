@@ -16,7 +16,11 @@
 #include "platform/input/input.h"
 #include "platform/profile/profile.h"
 #include "platform/stubs.h"
+#include "platform/renderer/IRenderPath.h"
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 Screen::Screen()  // 4J added
 {
     minecraft = nullptr;
@@ -102,7 +106,7 @@ void Screen::updateEvents() {
 // TODO: update for SDL if we ever get around to that
 #if (defined(ENABLE_JAVA_GUIS))
     int fbw, fbh;
-    PlatformRenderer.GetFramebufferSize(fbw, fbh);
+    RenderPath.GetFramebufferSize(fbw, fbh);
     glViewport(0, 0, fbw, fbh);
     ScreenSizeCalculator ssc(minecraft->options, minecraft->width,
                              minecraft->height);

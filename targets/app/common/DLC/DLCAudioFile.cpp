@@ -12,7 +12,11 @@
 #include "platform/renderer/renderer.h"
 #include "platform/storage/storage.h"
 #include "util/StringHelpers.h"
+#include "platform/renderer/IRenderPath.h"
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 namespace {
 constexpr std::size_t AUDIO_DLC_WCHAR_BIN_SIZE = 2;
 
@@ -100,8 +104,8 @@ void DLCAudioFile::addParameter(EAudioType type, EAudioParameterType ptype,
 
                 int maximumChars = 55;
 
-                bool bIsSDMode = !PlatformRenderer.IsHiDef() &&
-                                 !PlatformRenderer.IsWidescreen();
+                bool bIsSDMode = !RenderPath.IsHiDef() &&
+                                 !RenderPath.IsWidescreen();
 
                 if (bIsSDMode) {
                     maximumChars = 45;

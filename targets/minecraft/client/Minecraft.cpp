@@ -129,7 +129,11 @@
 #include "minecraft/world/level/chunk/SparseLightStorage.h"
 #include "platform/input/input.h"
 #include "util/StringHelpers.h"
+#include "platform/renderer/IRenderPath.h"
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 class ChunkSource;
 
 // #define DISABLE_SPU_CODE
@@ -233,7 +237,7 @@ Minecraft::Minecraft(Component* mouseComponent, Canvas* parent,
     // code that the width is 3/4 what it actually is, to correctly present a
     // 4:3 image. Have added width_phys and height_phys for any code we add that
     // requires to know the real physical dimensions of the frame buffer.
-    if (PlatformRenderer.IsWidescreen()) {
+    if (RenderPath.IsWidescreen()) {
         this->width = width;
     } else {
         this->width = (width * 3) / 4;
@@ -390,7 +394,7 @@ void Minecraft::init() {
     }
     progressRenderer = new ProgressRenderer(this);
 
-    PlatformRenderer.CBuffLockStaticCreations();
+    RenderPath.CBuffLockStaticCreations();
 }
 
 void Minecraft::renderLoadingScreen() {
@@ -400,7 +404,7 @@ void Minecraft::renderLoadingScreen() {
     ScreenSizeCalculator ssc(options, width, height);
 
     // xxx
-    PlatformRenderer.StartFrame();
+    RenderPath.StartFrame();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -441,7 +445,7 @@ void Minecraft::renderLoadingScreen() {
 
     // Display::swapBuffers();
     // xxx
-    PlatformRenderer.Present();
+    RenderPath.Present();
 #endif
 }
 
@@ -1367,7 +1371,7 @@ void Minecraft::run_middle() {
                                        !ui.IsIgnorePlayerJoinMenuDisplayed(
                                            PlatformInput.GetPrimaryPad()) &&
                                        NetworkService.SessionHasSpace() &&
-                                       PlatformRenderer.IsHiDef() &&
+                                       RenderPath.IsHiDef() &&
                                        PlatformInput.ButtonPressed(i);
                         if (tryJoin) {
                             if (!ui.PressStartPlaying(i)) {
@@ -1631,7 +1635,7 @@ void Minecraft::run_middle() {
                     int iPrimaryPad = PlatformInput.GetPrimaryPad();
                     for (int i = 0; i < XUSER_MAX_COUNT; i++) {
                         if (setLocalPlayerIdx(i)) {
-                            PlatformRenderer.StateSetViewport(
+                            RenderPath.StateSetViewport(
                                 (IPlatformRenderer::eViewportType)
                                     player->m_iScreenSection);
                             gameRenderer->render(timer->a, bFirst);
@@ -1660,7 +1664,7 @@ void Minecraft::run_middle() {
                     // GameRenderer directly so mc->screen draws.
                     if (bFirst) {
                         localPlayerIdx = 0;
-                        PlatformRenderer.StateSetViewport(
+                        RenderPath.StateSetViewport(
                             IPlatformRenderer::VIEWPORT_TYPE_FULLSCREEN);
                         gameRenderer->render(timer->a, true);
                     }
@@ -1670,7 +1674,7 @@ void Minecraft::run_middle() {
                     // black
                     if (unoccupiedQuadrant > -1) {
                         // render a logo
-                        PlatformRenderer.StateSetViewport((
+                        RenderPath.StateSetViewport((
                             IPlatformRenderer::
                                 eViewportType)(IPlatformRenderer::
                                                    VIEWPORT_TYPE_QUADRANT_TOP_LEFT +
@@ -1683,7 +1687,7 @@ void Minecraft::run_middle() {
                             unoccupiedQuadrant);
                     }
                     setLocalPlayerIdx(iPrimaryPad);
-                    PlatformRenderer.StateSetViewport(
+                    RenderPath.StateSetViewport(
                         IPlatformRenderer::VIEWPORT_TYPE_FULLSCREEN);
                 }
                 glFlush();
@@ -1917,7 +1921,7 @@ void Minecraft::pauseGame() {
 
 bool Minecraft::pollResize() {
     int fbw, fbh;
-    PlatformRenderer.GetFramebufferSize(fbw, fbh);
+    RenderPath.GetFramebufferSize(fbw, fbh);
     if (fbw != width_phys || fbh != height_phys) {
         resize(fbw, fbh);
         return true;
@@ -1932,7 +1936,7 @@ void Minecraft::resize(int width, int height) {
     // for non-widescreen aspect ratio to fix UI scaling.
     this->width_phys = width;
     this->height_phys = height;
-    if (PlatformRenderer.IsWidescreen()) {
+    if (RenderPath.IsWidescreen()) {
         this->width = width;
     } else {
         this->width = (width * 3) / 4;

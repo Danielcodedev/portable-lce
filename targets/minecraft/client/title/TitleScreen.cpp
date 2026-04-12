@@ -30,7 +30,11 @@
 #include "platform/renderer/renderer.h"
 #include "platform/stubs.h"
 #include "util/StringHelpers.h"
+#include "platform/renderer/IRenderPath.h"
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 Random* TitleScreen::random = new Random();
 
 TitleScreen::TitleScreen() {
@@ -175,7 +179,7 @@ void TitleScreen::buttonClicked(Button* button) {
     if (button->id == 4) {
         Log::info(
             "TitleScreen::buttonClicked() Exit Game if (button->id == 4)\n");
-        PlatformRenderer.Close();  // minecraft->stop();
+        RenderPath.Close();  // minecraft->stop();
     }
 }
 

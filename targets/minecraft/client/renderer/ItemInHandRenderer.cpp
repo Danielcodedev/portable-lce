@@ -38,7 +38,11 @@
 #include "minecraft/world/level/tile/Tile.h"
 #include "platform/renderer/renderer.h"
 #include "platform/stubs.h"
+#include "platform/renderer/IRenderPath.h"
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 class EntityRenderer;
 class MapItemSavedData;
 
@@ -300,7 +304,7 @@ void ItemInHandRenderer::renderItem(std::shared_ptr<LivingEntity> mob,
             LOD = 2;  // Force LOD level 2 to achieve texture reads from 256x256
                       // map
         }
-        PlatformRenderer.StateSetForceLOD(LOD);
+        RenderPath.StateSetForceLOD(LOD);
 
         // 4J Original comment
         // Yes, these are backwards.
@@ -362,7 +366,7 @@ void ItemInHandRenderer::renderItem(std::shared_ptr<LivingEntity> mob,
             glDepthFunc(GL_LEQUAL);
         }
 
-        PlatformRenderer.StateSetForceLOD(-1);
+        RenderPath.StateSetForceLOD(-1);
 
         glDisable(GL_RESCALE_NORMAL);
     }

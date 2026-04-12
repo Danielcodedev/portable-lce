@@ -112,6 +112,31 @@ public:
     [[nodiscard]] bool IsWidescreen() override;
     [[nodiscard]] bool IsHiDef() override;
 
+    [[nodiscard]] int TextureGetTextureLevels() override;
+    void TextureDynamicUpdateStart() override;
+    void TextureDynamicUpdateEnd() override;
+    void ReadPixels(int x, int y, int w, int h, void* buf) override;
+    [[nodiscard]] int LoadTextureData(const char* filename, void* srcInfo, int** dataOut) override;
+    [[nodiscard]] int LoadTextureData(uint8_t* data, uint32_t bytes, void* srcInfo, int** dataOut) override;
+
+    void StateSetVertexTextureUV(float u, float v) override;
+
+    void StartFrame() override;
+    void Present() override;
+    void Clear(int flags) override;
+    void SetClearColour(const float rgba[4]) override;
+    void Set_matrixDirty() override;
+    void CBuffLockStaticCreations() override;
+
+    void Close() override;
+    [[nodiscard]] bool ShouldClose() override;
+    void SetWindowSize(int w, int h) override;
+    void SetFullscreen(bool fs) override;
+    void UpdateGamma(unsigned short gamma) override;
+    void Suspend() override;
+    [[nodiscard]] bool Suspended() override;
+    void Resume() override;
+
     void BeginEvent(const char* name) override;
     void EndEvent() override;
 

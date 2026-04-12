@@ -11,7 +11,11 @@
 #include "minecraft/SharedConstants.h"
 #include "platform/renderer/renderer.h"
 #include "platform/stubs.h"
+#include "platform/renderer/IRenderPath.h"
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 AchievementPopup::AchievementPopup(Minecraft* mc) {
     // 4J - added initialisers
     width = 0;
@@ -44,7 +48,7 @@ void AchievementPopup::permanent(Achievement* ach) {
 void AchievementPopup::prepareWindow() {
     {
         int fbw, fbh;
-        PlatformRenderer.GetFramebufferSize(fbw, fbh);
+        RenderPath.GetFramebufferSize(fbw, fbh);
         glViewport(0, 0, fbw, fbh);
     }  // just future proofing
     glMatrixMode(GL_PROJECTION);

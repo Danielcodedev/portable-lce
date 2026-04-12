@@ -28,7 +28,11 @@
 #include "platform/profile/ProfileConstants.h"
 #include "platform/renderer/renderer.h"
 #include "platform/storage/storage.h"
+#include "platform/renderer/IRenderPath.h"
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 GameSettingsManager::GameSettingsManager() {
     memset(GameSettingsA, 0, sizeof(GameSettingsA));
     m_uiGameHostSettings = 0;
@@ -258,7 +262,7 @@ void GameSettingsManager::actionGameSettings(int iPad, eGameSetting eVal) {
         case eGameSetting_Gamma:
             if (iPad == PlatformProfile.GetPrimaryPad()) {
                 float fVal = ((float)GameSettingsA[iPad]->ucGamma) * 327.68f;
-                PlatformRenderer.UpdateGamma((unsigned short)fVal);
+                RenderPath.UpdateGamma((unsigned short)fVal);
             }
             break;
         case eGameSetting_Difficulty:

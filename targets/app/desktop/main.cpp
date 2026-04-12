@@ -72,6 +72,9 @@ static void sigsegv_handler(int sig) {
 #include "platform/storage/storage.h"
 #include "strings.h"
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #define THEME_NAME "584111F70AAAAAAA"
 #define THEME_FILESIZE 2797568
 
@@ -522,11 +525,11 @@ int main(int argc, const char* argv[]) {
     app.InitGameSettings();
 
     app.InitialiseTips();
-    while (!PlatformRenderer.ShouldClose()) {
-        PlatformRenderer.StartFrame();
+    while (!RenderPath.ShouldClose()) {
+        RenderPath.StartFrame();
         if (pMinecraft->pollResize()) {
             int fbw, fbh;
-            PlatformRenderer.GetFramebufferSize(fbw, fbh);
+            RenderPath.GetFramebufferSize(fbw, fbh);
             ui.setScreenSize(fbw, fbh);
         }
         app.UpdateTime();
@@ -536,7 +539,7 @@ int main(int argc, const char* argv[]) {
 
         PlatformStorage.Tick();
 
-        PlatformRenderer.Tick();
+        RenderPath.tick();
 
         // Tick the social networking manager.
         //		CSocialManager::Instance()->Tick();
@@ -585,7 +588,7 @@ int main(int argc, const char* argv[]) {
         ui.render();
 
         // Present the frame.
-        PlatformRenderer.Present();
+        RenderPath.Present();
 
         ui.CheckMenuDisplayed();
         // has the game defined profile data been changed (by a profile load)

@@ -22,7 +22,11 @@
 #include "platform/renderer/renderer.h"
 #include "strings.h"
 #include "util/StringHelpers.h"
+#include "platform/renderer/IRenderPath.h"
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #define GAME_CREATE_ONLINE_TIMER_ID 0
 #define GAME_CREATE_ONLINE_TIMER_TIME 100
 
@@ -211,7 +215,7 @@ UIScene_LaunchMoreOptionsMenu::UIScene_LaunchMoreOptionsMenu(
     std::string wsText = app.GetString(IDS_GAMEOPTION_ONLINE);
 #endif
     EHTMLFontSize size = eHTMLSize_Normal;
-    if (!PlatformRenderer.IsHiDef() && !PlatformRenderer.IsWidescreen()) {
+    if (!RenderPath.IsHiDef() && !RenderPath.IsWidescreen()) {
         size = eHTMLSize_Splitscreen;
     }
     char startTags[64];
@@ -500,7 +504,7 @@ void UIScene_LaunchMoreOptionsMenu::handleFocusChange(F64 controlId,
 
     std::string wsText = app.GetString(stringId);
     EHTMLFontSize size = eHTMLSize_Normal;
-    if (!PlatformRenderer.IsHiDef() && !PlatformRenderer.IsWidescreen()) {
+    if (!RenderPath.IsHiDef() && !RenderPath.IsWidescreen()) {
         size = eHTMLSize_Splitscreen;
     }
     char startTags[64];

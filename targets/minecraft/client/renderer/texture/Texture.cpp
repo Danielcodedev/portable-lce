@@ -13,7 +13,11 @@
 #include "minecraft/util/Log.h"
 #include "platform/renderer/renderer.h"
 #include "platform/stubs.h"
+#include "platform/renderer/IRenderPath.h"
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #define MAX_MIP_LEVELS 5
 
 Texture::Texture(const std::string& name, int mode, int width, int height,
@@ -573,9 +577,9 @@ void Texture::updateOnGPU() {
     // 4J Added check so we can differentiate between which PlatformRenderer
     // function to call
     if (!m_bInitialised) {
-        PlatformRenderer.TextureSetTextureLevels(m_iMipLevels);  // 4J added
+        RenderPath.TextureSetTextureLevels(m_iMipLevels);  // 4J added
 
-        PlatformRenderer.TextureData(
+        RenderPath.TextureData(
             width, height, data[0]->getBuffer(), 0,
             IPlatformRenderer::TEXTURE_FORMAT_RxGyBzAw);
 
@@ -584,7 +588,7 @@ void Texture::updateOnGPU() {
                 int levelWidth = width >> level;
                 int levelHeight = height >> level;
 
-                PlatformRenderer.TextureData(
+                RenderPath.TextureData(
                     levelWidth, levelHeight, data[level]->getBuffer(), level,
                     IPlatformRenderer::TEXTURE_FORMAT_RxGyBzAw);
             }
@@ -592,16 +596,16 @@ void Texture::updateOnGPU() {
 
         m_bInitialised = true;
     } else {
-        PlatformRenderer.TextureDataUpdate(0, 0, width, height,
+        RenderPath.TextureDataUpdate(0, 0, width, height,
                                            data[0]->getBuffer(), 0);
 
         if (mipmapped) {
-            if (PlatformRenderer.TextureGetTextureLevels() > 1) {
+            if (RenderPath.TextureGetTextureLevels() > 1) {
                 for (int level = 1; level < m_iMipLevels; level++) {
                     int levelWidth = width >> level;
                     int levelHeight = height >> level;
 
-                    PlatformRenderer.TextureDataUpdate(
+                    RenderPath.TextureDataUpdate(
                         0, 0, levelWidth, levelHeight, data[level]->getBuffer(),
                         level);
                 }

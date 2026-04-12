@@ -30,7 +30,11 @@
 #include "platform/renderer/renderer.h"
 #include "platform/stubs.h"
 #include "util/StringHelpers.h"
+#include "platform/renderer/IRenderPath.h"
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 // Linux/PC port: disable mipmapping globally so textures are always sampled
 // from the full-resolution level 0 with GL_NEAREST, giving pixel-crisp
 // Minecraft blocks at all distances. Mipmapping causes glGenerateMipmap() to
@@ -533,7 +537,7 @@ void Textures::bindTextureLayers(ResourceLocation* resource) {
         idMap[cacheKey] = id;
     }
 
-    PlatformRenderer.TextureBind(id);
+    RenderPath.TextureBind(id);
 }
 
 void Textures::bind(int id) {
@@ -740,11 +744,11 @@ void Textures::loadTexture(BufferedImage* img, int id, bool blur, bool clamp) {
         while ((8 << iHeightMips) < h) iHeightMips++;
 
         iMipLevels = (iWidthMips < iHeightMips) ? iWidthMips : iHeightMips;
-        // PlatformRenderer.TextureSetTextureLevels(5);	// 4J added
+        // RenderPath.TextureSetTextureLevels(5);	// 4J added
         if (iMipLevels > 5) iMipLevels = 5;
-        PlatformRenderer.TextureSetTextureLevels(iMipLevels);  // 4J added
+        RenderPath.TextureSetTextureLevels(iMipLevels);  // 4J added
     }
-    PlatformRenderer.TextureData(w, h, pixels->getBuffer(), 0, TEXTURE_FORMAT);
+    RenderPath.TextureData(w, h, pixels->getBuffer(), 0, TEXTURE_FORMAT);
     // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL12.GL_BGRA,
     // GL12.GL_UNSIGNED_INT_8_8_8_8_REV, pixels);
 
@@ -801,7 +805,7 @@ void Textures::loadTexture(BufferedImage* img, int id, bool blur, bool clamp) {
                     pixels->putInt((x + y * ww) * 4, tempData[x + y * ww]);
                 }
             delete[] tempData;
-            PlatformRenderer.TextureData(ww, hh, pixels->getBuffer(), level,
+            RenderPath.TextureData(ww, hh, pixels->getBuffer(), level,
                                          TEXTURE_FORMAT);
         }
     }
@@ -878,7 +882,7 @@ void Textures::replaceTexture(std::vector<int>& rawPixels, int w, int h,
     // New
     // glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL12.GL_BGRA,
     // GL12.GL_UNSIGNED_INT_8_8_8_8_REV, pixels);
-    PlatformRenderer.TextureDataUpdate(0, 0, w, h, pixels->getBuffer(), 0);
+    RenderPath.TextureDataUpdate(0, 0, w, h, pixels->getBuffer(), 0);
     // Old
     // glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE,
     // pixels);
@@ -901,7 +905,7 @@ void Textures::replaceTextureDirect(const std::vector<int>& rawPixels, int w,
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    PlatformRenderer.TextureDataUpdate(0, 0, w, h,
+    RenderPath.TextureDataUpdate(0, 0, w, h,
                                        const_cast<int*>(rawPixels.data()), 0);
 }
 
@@ -921,7 +925,7 @@ void Textures::replaceTextureDirect(const std::vector<short>& rawPixels, int w,
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    PlatformRenderer.TextureDataUpdate(0, 0, w, h,
+    RenderPath.TextureDataUpdate(0, 0, w, h,
                                        const_cast<short*>(rawPixels.data()), 0);
 }
 
@@ -1146,10 +1150,10 @@ void Textures::tick(
         // 4J - added - tell renderer that we're about to do a block of dynamic
         // texture updates, so we can unlock the resources after they are done
         // rather than a series of locks/unlocks
-        // PlatformRenderer.TextureDynamicUpdateStart();
+        // RenderPath.TextureDynamicUpdateStart();
         terrain->cycleAnimationFrames();
         items->cycleAnimationFrames();
-        // PlatformRenderer.TextureDynamicUpdateEnd();	// 4J added - see
+        // RenderPath.TextureDynamicUpdateEnd();	// 4J added - see
         // comment above
     }
 

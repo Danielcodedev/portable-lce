@@ -421,6 +421,31 @@ void LegacyGLRenderPath::GetFramebufferSize(int& w, int& h)     { PlatformRender
 bool LegacyGLRenderPath::IsWidescreen()                          { return PlatformRenderer.IsWidescreen(); }
 bool LegacyGLRenderPath::IsHiDef()                               { return PlatformRenderer.IsHiDef(); }
 
+int  LegacyGLRenderPath::TextureGetTextureLevels()               { return PlatformRenderer.TextureGetTextureLevels(); }
+void LegacyGLRenderPath::TextureDynamicUpdateStart()             { PlatformRenderer.TextureDynamicUpdateStart(); }
+void LegacyGLRenderPath::TextureDynamicUpdateEnd()               { PlatformRenderer.TextureDynamicUpdateEnd(); }
+void LegacyGLRenderPath::ReadPixels(int x, int y, int w, int h, void* b) { PlatformRenderer.ReadPixels(x, y, w, h, b); }
+int  LegacyGLRenderPath::LoadTextureData(const char* f, void* si, int** d) { return PlatformRenderer.LoadTextureData(f, static_cast<D3DXIMAGE_INFO*>(si), d); }
+int  LegacyGLRenderPath::LoadTextureData(uint8_t* data, uint32_t bytes, void* si, int** d) { return PlatformRenderer.LoadTextureData(data, bytes, static_cast<D3DXIMAGE_INFO*>(si), d); }
+
+void LegacyGLRenderPath::StateSetVertexTextureUV(float u, float v) { PlatformRenderer.StateSetVertexTextureUV(u, v); }
+
+void LegacyGLRenderPath::StartFrame()                            { PlatformRenderer.StartFrame(); }
+void LegacyGLRenderPath::Present()                               { PlatformRenderer.Present(); }
+void LegacyGLRenderPath::Clear(int f)                            { PlatformRenderer.Clear(f); }
+void LegacyGLRenderPath::SetClearColour(const float c[4])        { PlatformRenderer.SetClearColour(c); }
+void LegacyGLRenderPath::Set_matrixDirty()                       { PlatformRenderer.Set_matrixDirty(); }
+void LegacyGLRenderPath::CBuffLockStaticCreations()              { PlatformRenderer.CBuffLockStaticCreations(); }
+
+void LegacyGLRenderPath::Close()                                 { PlatformRenderer.Close(); }
+bool LegacyGLRenderPath::ShouldClose()                           { return PlatformRenderer.ShouldClose(); }
+void LegacyGLRenderPath::SetWindowSize(int w, int h)             { PlatformRenderer.SetWindowSize(w, h); }
+void LegacyGLRenderPath::SetFullscreen(bool f)                   { PlatformRenderer.SetFullscreen(f); }
+void LegacyGLRenderPath::UpdateGamma(unsigned short g)           { PlatformRenderer.UpdateGamma(g); }
+void LegacyGLRenderPath::Suspend()                               { PlatformRenderer.Suspend(); }
+bool LegacyGLRenderPath::Suspended()                             { return PlatformRenderer.Suspended(); }
+void LegacyGLRenderPath::Resume()                                { PlatformRenderer.Resume(); }
+
 void LegacyGLRenderPath::BeginEvent(const char* n)               { PlatformRenderer.BeginEvent(n); }
 void LegacyGLRenderPath::EndEvent()                              { PlatformRenderer.EndEvent(); }
 

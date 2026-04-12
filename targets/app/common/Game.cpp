@@ -84,7 +84,11 @@
 #include "strings.h"
 #include "util/StringHelpers.h"
 #include "util/Timer.h"
+#include "platform/renderer/IRenderPath.h"
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 class BeaconTileEntity;
 class BrewingStandTileEntity;
 class DispenserTileEntity;
@@ -346,7 +350,7 @@ void Game::StoreLaunchData() {}
 
 void Game::ExitGame() {
     DebugPrintf("[Game] ExitGame AFTER START\n");
-    PlatformRenderer.Close();
+    RenderPath.Close();
 }
 
 // Invites
@@ -538,7 +542,7 @@ bool Game::IsLocalMultiplayerAvailable() {
             ++connectedControllers;
     }
 
-    bool available = PlatformRenderer.IsHiDef() && connectedControllers > 1;
+    bool available = RenderPath.IsHiDef() && connectedControllers > 1;
 
     return available;
 

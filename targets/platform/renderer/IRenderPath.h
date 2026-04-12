@@ -512,17 +512,43 @@ public:
     // Chunks
     [[deprecated]] virtual void SetChunkOffset(float x, float y, float z) = 0;
 
+    // Texture queries
+    [[deprecated]] [[nodiscard]] virtual int TextureGetTextureLevels() = 0;
+    [[deprecated]] virtual void TextureDynamicUpdateStart() = 0;
+    [[deprecated]] virtual void TextureDynamicUpdateEnd() = 0;
+    [[deprecated]] virtual void ReadPixels(int x, int y, int w, int h, void* buf) = 0;
+    [[deprecated]] [[nodiscard]] virtual int LoadTextureData(const char* filename, void* srcInfo, int** dataOut) = 0;
+    [[deprecated]] [[nodiscard]] virtual int LoadTextureData(uint8_t* data, uint32_t bytes, void* srcInfo, int** dataOut) = 0;
+
+    // Lighting state
+    [[deprecated]] virtual void StateSetVertexTextureUV(float u, float v) = 0;
+
+    // Frame lifecycle
+    [[deprecated]] virtual void StartFrame() = 0;
+    [[deprecated]] virtual void Present() = 0;
+    [[deprecated]] virtual void Clear(int flags) = 0;
+    [[deprecated]] virtual void SetClearColour(const float rgba[4]) = 0;
+    [[deprecated]] virtual void Set_matrixDirty() = 0;
+    [[deprecated]] virtual void CBuffLockStaticCreations() = 0;
+
     // Window queries (migrated to FrameDesc::framebuffer in new path)
     [[deprecated]] virtual void GetFramebufferSize(int& w, int& h) = 0;
     [[deprecated]] [[nodiscard]] virtual bool IsWidescreen() = 0;
     [[deprecated]] [[nodiscard]] virtual bool IsHiDef() = 0;
+    [[deprecated]] virtual void Close() = 0;
+    [[deprecated]] [[nodiscard]] virtual bool ShouldClose() = 0;
+    [[deprecated]] virtual void SetWindowSize(int w, int h) = 0;
+    [[deprecated]] virtual void SetFullscreen(bool fs) = 0;
+    [[deprecated]] virtual void UpdateGamma(unsigned short gamma) = 0;
+    [[deprecated]] virtual void Suspend() = 0;
+    [[deprecated]] [[nodiscard]] virtual bool Suspended() = 0;
+    [[deprecated]] virtual void Resume() = 0;
 
     // Events
     [[deprecated]] virtual void BeginEvent(const char* name) = 0;
     [[deprecated]] virtual void EndEvent() = 0;
 
-    // Immediate single-draw submission (transitional - preserves draw
-    // ordering while subsystems migrate one at a time).
+    // Immediate single-draw submission
     [[deprecated]] virtual void submit_immediate(const DrawCall& dc) = 0;
 };
 
