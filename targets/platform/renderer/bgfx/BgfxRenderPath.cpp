@@ -58,12 +58,19 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
     bgfx::setViewRect(0, 0, 0, width_, height_);
 
     // Vertex layout matching world_standard (32 bytes)
+    // Must match the GL backend's vertex layout exactly:
+    // attr 0: Position  - 3 float  @ offset 0  (12 bytes)
+    // attr 1: TexCoord0 - 2 float  @ offset 12 (8 bytes)
+    // attr 2: Color0    - 4 ubyte  @ offset 20 (4 bytes)
+    // attr 3: Normal    - 3 byte   @ offset 24 (3 bytes + 1 pad)
+    // attr 4: TexCoord1 - 2 short  @ offset 28 (4 bytes)
+    // Total stride: 32
     vl_world_standard_
         .begin()
         .add(bgfx::Attrib::Position,  3, bgfx::AttribType::Float)
         .add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float)
         .add(bgfx::Attrib::Color0,    4, bgfx::AttribType::Uint8, true)
-        .add(bgfx::Attrib::Normal,    4, bgfx::AttribType::Uint8, true)
+        .add(bgfx::Attrib::Normal,    4, bgfx::AttribType::Uint8, true) // 3 bytes + 1 pad read as 4
         .add(bgfx::Attrib::TexCoord1, 2, bgfx::AttribType::Int16, true)
         .end();
 
@@ -229,8 +236,11 @@ void BgfxRenderPath::StateSetVertexTextureUV(float, float) {}
 
 // -- DrawVertices -----------------------------------------------------------
 
+static int s_drawCount = 0;
+static int s_frameCount = 0;
 void BgfxRenderPath::DrawVertices(int primType, int count, void* data, int, int) {
     if (count <= 0 || !data) return;
+    s_drawCount++;
 
     uint32_t stride = vl_world_standard_.getStride();
 
@@ -267,7 +277,10 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data, int, int)
 
     glm::mat4 mvp = projection_stack_.top() * modelview_stack_.top();
     bgfx::setTransform(glm::value_ptr(mvp));
-    bgfx::setState(bgfx_state_ | (blend_enabled_ ? BGFX_STATE_BLEND_ALPHA : 0) | primState);
+    uint64_t finalState = (BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BGFX_STATE_WRITE_Z | BGFX_STATE_DEPTH_TEST_LEQUAL)
+                        | (blend_enabled_ ? BGFX_STATE_BLEND_ALPHA : 0)
+                        | primState;
+    bgfx::setState(finalState);
     bgfx::setVertexBuffer(0, &tvb);
 
     // Vertex uniforms
@@ -383,6 +396,8 @@ void BgfxRenderPath::render_frame(const FrameDesc& frame) {
     bgfx::setViewRect(0, 0, 0, width_, height_);
     bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x303030ff, 1.0f, 0);
     bgfx::touch(0);
+    if (s_frameCount++ < 3) fprintf(stderr, "Frame %d: %d draws, fb=%dx%d\n", s_frameCount, s_drawCount, width_, height_);
+    s_drawCount = 0;
     bgfx::frame();
 }
 
