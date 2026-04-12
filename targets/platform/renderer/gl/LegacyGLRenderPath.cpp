@@ -278,9 +278,14 @@ void LegacyGLRenderPath::execute_chunk_draw(const rp::ChunkDrawCall& cdc) {
     }
 }
 
+const FrameFramebuffer& LegacyGLRenderPath::framebuffer() const {
+    return current_framebuffer_;
+}
+
 void LegacyGLRenderPath::render_frame(const FrameDesc& frame) {
     transient_offset_ = 0;
     current_frame_++;
+    current_framebuffer_ = frame.framebuffer;
 
     for (const auto& view : frame.views) {
         for (const auto& cdc : view.chunk_opaque)      execute_chunk_draw(cdc);
@@ -428,7 +433,16 @@ int  LegacyGLRenderPath::LoadTextureData(uint8_t* data, uint32_t bytes, void* si
 
 void LegacyGLRenderPath::StateSetVertexTextureUV(float u, float v) { PlatformRenderer.StateSetVertexTextureUV(u, v); }
 
-void LegacyGLRenderPath::StartFrame()                            { PlatformRenderer.StartFrame(); }
+void LegacyGLRenderPath::StartFrame() {
+    PlatformRenderer.StartFrame();
+    int w = 0, h = 0;
+    PlatformRenderer.GetFramebufferSize(w, h);
+    current_framebuffer_.width  = w;
+    current_framebuffer_.height = h;
+    current_framebuffer_.aspect = h > 0 ? (float)w / (float)h : 1.0f;
+    current_framebuffer_.is_widescreen = PlatformRenderer.IsWidescreen();
+    current_framebuffer_.is_hi_def     = PlatformRenderer.IsHiDef();
+}
 void LegacyGLRenderPath::Present()                               { PlatformRenderer.Present(); }
 void LegacyGLRenderPath::Clear(int f)                            { PlatformRenderer.Clear(f); }
 void LegacyGLRenderPath::SetClearColour(const float c[4])        { PlatformRenderer.SetClearColour(c); }

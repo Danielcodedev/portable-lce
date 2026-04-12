@@ -527,10 +527,20 @@ int main(int argc, const char* argv[]) {
     app.InitialiseTips();
     while (!RenderPath.ShouldClose()) {
         RenderPath.StartFrame();
+
+        rp::FrameDesc frame{};
+        {
+            int fbw = 0, fbh = 0;
+            fbw = frame.framebuffer.width; fbh = frame.framebuffer.height;
+            frame.framebuffer.width  = fbw;
+            frame.framebuffer.height = fbh;
+            frame.framebuffer.aspect = fbh > 0 ? (float)fbw / (float)fbh : 1.0f;
+            frame.framebuffer.is_widescreen = RenderPath.framebuffer().is_widescreen;
+            frame.framebuffer.is_hi_def     = RenderPath.framebuffer().is_hi_def;
+        }
+
         if (pMinecraft->pollResize()) {
-            int fbw, fbh;
-            RenderPath.GetFramebufferSize(fbw, fbh);
-            ui.setScreenSize(fbw, fbh);
+            ui.setScreenSize(frame.framebuffer.width, frame.framebuffer.height);
         }
         app.UpdateTime();
         PlatformInput.Tick();
@@ -587,7 +597,7 @@ int main(int argc, const char* argv[]) {
         ui.tick();
         ui.render();
 
-        // Present the frame.
+        RenderPath.render_frame(frame);
         RenderPath.Present();
 
         ui.CheckMenuDisplayed();

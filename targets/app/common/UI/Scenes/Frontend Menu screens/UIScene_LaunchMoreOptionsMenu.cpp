@@ -215,7 +215,7 @@ UIScene_LaunchMoreOptionsMenu::UIScene_LaunchMoreOptionsMenu(
     std::string wsText = app.GetString(IDS_GAMEOPTION_ONLINE);
 #endif
     EHTMLFontSize size = eHTMLSize_Normal;
-    if (!RenderPath.IsHiDef() && !RenderPath.IsWidescreen()) {
+    if (!RenderPath.framebuffer().is_hi_def && !RenderPath.framebuffer().is_widescreen) {
         size = eHTMLSize_Splitscreen;
     }
     char startTags[64];
@@ -504,7 +504,7 @@ void UIScene_LaunchMoreOptionsMenu::handleFocusChange(F64 controlId,
 
     std::string wsText = app.GetString(stringId);
     EHTMLFontSize size = eHTMLSize_Normal;
-    if (!RenderPath.IsHiDef() && !RenderPath.IsWidescreen()) {
+    if (!RenderPath.framebuffer().is_hi_def && !RenderPath.framebuffer().is_widescreen) {
         size = eHTMLSize_Splitscreen;
     }
     char startTags[64];

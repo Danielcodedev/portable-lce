@@ -48,7 +48,7 @@ void AchievementPopup::permanent(Achievement* ach) {
 void AchievementPopup::prepareWindow() {
     {
         int fbw, fbh;
-        RenderPath.GetFramebufferSize(fbw, fbh);
+        fbw = RenderPath.framebuffer().width; fbh = RenderPath.framebuffer().height;
         glViewport(0, 0, fbw, fbh);
     }  // just future proofing
     glMatrixMode(GL_PROJECTION);

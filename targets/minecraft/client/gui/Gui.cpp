@@ -1481,7 +1481,7 @@ void Gui::addMessage(const std::string& _string, int iPad,
         case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_TOP:
         case IPlatformRenderer::VIEWPORT_TYPE_SPLIT_BOTTOM:
         case IPlatformRenderer::VIEWPORT_TYPE_FULLSCREEN:
-            if (RenderPath.IsHiDef()) {
+            if (RenderPath.framebuffer().is_hi_def) {
                 maximumChars = 105;
             } else {
                 maximumChars = 55;
@@ -1490,7 +1490,7 @@ void Gui::addMessage(const std::string& _string, int iPad,
                 case XC_LANGUAGE_JAPANESE:
                 case XC_LANGUAGE_TCHINESE:
                 case XC_LANGUAGE_KOREAN:
-                    if (RenderPath.IsHiDef()) {
+                    if (RenderPath.framebuffer().is_hi_def) {
                         maximumChars = 70;
                     } else {
                         maximumChars = 35;

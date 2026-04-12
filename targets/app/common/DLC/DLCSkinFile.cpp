@@ -60,8 +60,8 @@ void DLCSkinFile::addParameter(DLCManager::EDLCParameterType type,
 
                 int maximumChars = 55;
 
-                bool bIsSDMode = !RenderPath.IsHiDef() &&
-                                 !RenderPath.IsWidescreen();
+                bool bIsSDMode = !RenderPath.framebuffer().is_hi_def &&
+                                 !RenderPath.framebuffer().is_widescreen;
 
                 if (bIsSDMode) {
                     maximumChars = 45;

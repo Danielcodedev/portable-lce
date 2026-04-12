@@ -503,7 +503,7 @@ void LivingEntityRenderer::renderNameTag(std::shared_ptr<LivingEntity> mob,
     // 4J Stu - If it's beyond readable distance, then just render a coloured
     // box
     int readableDist = PLAYER_NAME_READABLE_FULLSCREEN;
-    if (!RenderPath.IsHiDef()) {
+    if (!RenderPath.framebuffer().is_hi_def) {
         readableDist = PLAYER_NAME_READABLE_DISTANCE_SD;
     } else if (gameServices().getLocalPlayerCount() > 2) {
         readableDist = PLAYER_NAME_READABLE_DISTANCE_SPLITSCREEN;

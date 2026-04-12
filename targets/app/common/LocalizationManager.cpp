@@ -112,7 +112,7 @@ int LocalizationManager::TipsSortFunction(const void* a, const void* b) {
 void LocalizationManager::initialiseTips() {
     memset(m_TipIDA, 0, sizeof(m_TipIDA));
 
-    if (!RenderPath.IsHiDef()) {
+    if (!RenderPath.framebuffer().is_hi_def) {
         m_GameTipA[0].uiStringID = IDS_TIPS_GAMETIP_0;
     }
 

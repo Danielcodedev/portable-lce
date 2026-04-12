@@ -882,7 +882,7 @@ void IUIScene_CreativeMenu::staticCtor() {
 
     // Just use the text LT - the graphic doesn't fit in splitscreen either
     // In 480p there's not enough room for the LT button, so use text instead
-    // if(!RenderPath.IsHiDef() && !RenderPath.IsWidescreen())
+    // if(!RenderPath.framebuffer().is_hi_def && !RenderPath.framebuffer().is_widescreen)
     {
         specs[eCreativeInventoryTab_Brewing] =
             new TabSpec("Brewing", IDS_GROUPNAME_POTIONS_480, 5, brewingGroup);

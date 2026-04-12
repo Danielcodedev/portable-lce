@@ -542,7 +542,7 @@ bool Game::IsLocalMultiplayerAvailable() {
             ++connectedControllers;
     }
 
-    bool available = RenderPath.IsHiDef() && connectedControllers > 1;
+    bool available = RenderPath.framebuffer().is_hi_def && connectedControllers > 1;
 
     return available;
 

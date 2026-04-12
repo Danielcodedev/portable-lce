@@ -38,7 +38,7 @@ UIScene_DLCOffersMenu::UIScene_DLCOffersMenu(int iPad, void* initData,
     // Alert the app the we want to be informed of ethernet connections
     app.SetLiveLinkRequired(true);
 
-    m_bIsSD = !RenderPath.IsHiDef() && !RenderPath.IsWidescreen();
+    m_bIsSD = !RenderPath.framebuffer().is_hi_def && !RenderPath.framebuffer().is_widescreen;
 
     m_labelOffers.init(app.GetString(IDS_DOWNLOADABLE_CONTENT_OFFERS));
     m_buttonListOffers.init(eControl_OffersList);

@@ -405,6 +405,7 @@ public:
 
     // -- Queries ------------------------------------------------------------
 
+    [[nodiscard]] virtual const FrameFramebuffer& framebuffer() const = 0;
     virtual void read_framebuffer(const TextureReadback& req) = 0;
     [[nodiscard]] virtual ResourceFootprint query_resource_footprint() const = 0;
 

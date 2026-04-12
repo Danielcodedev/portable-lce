@@ -106,7 +106,7 @@ void Screen::updateEvents() {
 // TODO: update for SDL if we ever get around to that
 #if (defined(ENABLE_JAVA_GUIS))
     int fbw, fbh;
-    RenderPath.GetFramebufferSize(fbw, fbh);
+    fbw = RenderPath.framebuffer().width; fbh = RenderPath.framebuffer().height;
     glViewport(0, 0, fbw, fbh);
     ScreenSizeCalculator ssc(minecraft->options, minecraft->width,
                              minecraft->height);

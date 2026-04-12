@@ -254,7 +254,7 @@ void UIScene_LoadMenu::updateTooltips() {
 void UIScene_LoadMenu::updateComponents() {
     m_parentLayer->showComponent(m_iPad, eUIComponent_Panorama, true);
 
-    if (RenderPath.IsWidescreen()) {
+    if (RenderPath.framebuffer().is_widescreen) {
         m_parentLayer->showComponent(m_iPad, eUIComponent_Logo, true);
     } else {
         m_parentLayer->showComponent(m_iPad, eUIComponent_Logo, false);

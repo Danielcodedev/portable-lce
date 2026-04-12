@@ -484,7 +484,7 @@ bool IUIScene_CraftingMenu::handleKeyDown(int iPad, int iAction, bool bRepeat) {
     // Vita)
     bool bNoScrollSlots = false;
     if (m_bSplitscreen ||
-        (!RenderPath.IsHiDef() && !RenderPath.IsWidescreen())) {
+        (!RenderPath.framebuffer().is_hi_def && !RenderPath.framebuffer().is_widescreen)) {
         bNoScrollSlots = true;
     }
 
@@ -1039,7 +1039,7 @@ void IUIScene_CraftingMenu::UpdateVerticalSlots() {
         // splits & Vita)
         bool bNoScrollSlots = false;
         if (m_bSplitscreen ||
-            (!RenderPath.IsHiDef() && !RenderPath.IsWidescreen())) {
+            (!RenderPath.framebuffer().is_hi_def && !RenderPath.framebuffer().is_widescreen)) {
             bNoScrollSlots = true;
         }
 
@@ -1318,8 +1318,8 @@ void IUIScene_CraftingMenu::UpdateDescriptionText(bool bCanBeMade) {
 
             // 12 for splitscreen, 14 for normal
             EHTMLFontSize size = eHTMLSize_Normal;
-            if (m_bSplitscreen || (!RenderPath.IsHiDef() &&
-                                   !RenderPath.IsWidescreen())) {
+            if (m_bSplitscreen || (!RenderPath.framebuffer().is_hi_def &&
+                                   !RenderPath.framebuffer().is_widescreen)) {
                 size = eHTMLSize_Splitscreen;
             }
             char startTags[64];

@@ -148,7 +148,7 @@ F64 UIScene::getSafeZoneHalfHeight() {
 
     float safeHeight = 0.0f;
 
-    if (!RenderPath.IsHiDef() && RenderPath.IsWidescreen()) {
+    if (!RenderPath.framebuffer().is_hi_def && RenderPath.framebuffer().is_widescreen) {
         // 90% safezone
         safeHeight = height * (0.15f / 2);
     } else {
@@ -162,7 +162,7 @@ F64 UIScene::getSafeZoneHalfWidth() {
     float width = ui.getScreenWidth();
 
     float safeWidth = 0.0f;
-    if (!RenderPath.IsHiDef() && RenderPath.IsWidescreen()) {
+    if (!RenderPath.framebuffer().is_hi_def && RenderPath.framebuffer().is_widescreen) {
         // 85% safezone
         safeWidth = width * (0.15f / 2);
     } else {

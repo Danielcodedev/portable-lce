@@ -237,7 +237,7 @@ Minecraft::Minecraft(Component* mouseComponent, Canvas* parent,
     // code that the width is 3/4 what it actually is, to correctly present a
     // 4:3 image. Have added width_phys and height_phys for any code we add that
     // requires to know the real physical dimensions of the frame buffer.
-    if (RenderPath.IsWidescreen()) {
+    if (RenderPath.framebuffer().is_widescreen) {
         this->width = width;
     } else {
         this->width = (width * 3) / 4;
@@ -1371,7 +1371,7 @@ void Minecraft::run_middle() {
                                        !ui.IsIgnorePlayerJoinMenuDisplayed(
                                            PlatformInput.GetPrimaryPad()) &&
                                        NetworkService.SessionHasSpace() &&
-                                       RenderPath.IsHiDef() &&
+                                       RenderPath.framebuffer().is_hi_def &&
                                        PlatformInput.ButtonPressed(i);
                         if (tryJoin) {
                             if (!ui.PressStartPlaying(i)) {
@@ -1921,7 +1921,7 @@ void Minecraft::pauseGame() {
 
 bool Minecraft::pollResize() {
     int fbw, fbh;
-    RenderPath.GetFramebufferSize(fbw, fbh);
+    fbw = RenderPath.framebuffer().width; fbh = RenderPath.framebuffer().height;
     if (fbw != width_phys || fbh != height_phys) {
         resize(fbw, fbh);
         return true;
@@ -1936,7 +1936,7 @@ void Minecraft::resize(int width, int height) {
     // for non-widescreen aspect ratio to fix UI scaling.
     this->width_phys = width;
     this->height_phys = height;
-    if (RenderPath.IsWidescreen()) {
+    if (RenderPath.framebuffer().is_widescreen) {
         this->width = width;
     } else {
         this->width = (width * 3) / 4;

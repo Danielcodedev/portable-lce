@@ -27,6 +27,7 @@ public:
 
     void render_frame(const rp::FrameDesc& frame) override;
     void resize(uint32_t w, uint32_t h) override;
+    [[nodiscard]] const rp::FrameFramebuffer& framebuffer() const override;
     void read_framebuffer(const rp::TextureReadback& req) override;
     [[nodiscard]] rp::ResourceFootprint query_resource_footprint() const override;
     void seal_static_resource_tier() override;
@@ -160,6 +161,8 @@ private:
         bool occupied = false;
     };
     std::vector<MaterialSlot> materials_;
+
+    rp::FrameFramebuffer current_framebuffer_;
 
     // Mesh storage - maps MeshHandle to a CBuffer slot.
     struct MeshSlot {

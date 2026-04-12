@@ -59,7 +59,7 @@ F64 UIComponent_Tooltips::getSafeZoneHalfWidth() {
     float safeWidth = 0.0f;
 
     // 85% safezone for tooltips in either SD mode
-    if (!RenderPath.IsHiDef()) {
+    if (!RenderPath.framebuffer().is_hi_def) {
         // 85% safezone
         safeWidth = m_movieWidth * (0.15f / 2);
     } else {

@@ -1823,7 +1823,7 @@ void GameRenderer::renderSnowAndRain(float a) {
 // 4J - added forceScale parameter
 void GameRenderer::setupGuiScreen(int forceScale /*=-1*/) {
     int fbw, fbh;
-    RenderPath.GetFramebufferSize(fbw, fbh);
+    fbw = RenderPath.framebuffer().width; fbh = RenderPath.framebuffer().height;
 
     // 4jcraft: use actual framebuffer dimensions instead of mc->width/height
     // to ensure GUI scales correctly after a window resize.
