@@ -56,9 +56,9 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
     init.resolution.width = width_;
     init.resolution.height = height_;
     init.resolution.reset = BGFX_RESET_VSYNC;
+    init.limits.maxTransientVbSize = 32 * 1024 * 1024;
     bgfx::init(init);
 
-    bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x303030ff, 1.0f, 0);
     bgfx::setViewRect(0, 0, 0, width_, height_);
 
     // Vertex layout matching world_standard (32 bytes)
@@ -240,11 +240,9 @@ void BgfxRenderPath::StateSetVertexTextureUV(float, float) {}
 
 // -- DrawVertices -----------------------------------------------------------
 
-static int s_drawCount = 0;
 static int s_frameCount = 0;
 void BgfxRenderPath::DrawVertices(int primType, int count, void* data, int vType, int) {
     if (count <= 0 || !data) return;
-    s_drawCount++;
 
     uint32_t stride = vl_world_standard_.getStride(); // 32
 
@@ -466,10 +464,7 @@ void BgfxRenderPath::render_frame(const FrameDesc& frame) {
         cbuf_destroy_queue_.clear();
     }
 
-    bgfx::setViewRect(0, 0, 0, width_, height_);
-    bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x303030ff, 1.0f, 0);
-    bgfx::setViewMode(0, bgfx::ViewMode::Sequential);
-    bgfx::touch(0);
+    s_frameCount++;
     bgfx::frame();
 }
 
@@ -569,6 +564,7 @@ bool BgfxRenderPath::CBuffCall(int index, bool) {
     if (it == cbuf_pool_.end() || !it->second.valid) return false;
     auto& cb = it->second;
     if (cb.draws.empty()) return false;
+
 
     // Lazily create static VB on main thread
     if (!cb.vb_ready) {
@@ -723,6 +719,14 @@ void BgfxRenderPath::StartFrame() {
     fb_.aspect = h > 0 ? (float)w / (float)h : 1.0f;
     fb_.is_widescreen = fb_.aspect > 1.5f;
     fb_.is_hi_def = h >= 720;
+    current_view_id_ = 0;
+    uint32_t rgba = (uint32_t(clear_color_[0] * 255) << 24) |
+                    (uint32_t(clear_color_[1] * 255) << 16) |
+                    (uint32_t(clear_color_[2] * 255) << 8) | 0xFF;
+    bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, rgba, 1.0f, 0);
+    bgfx::setViewRect(0, 0, 0, width_, height_);
+    bgfx::setViewMode(0, bgfx::ViewMode::Sequential);
+    bgfx::touch(0);
 }
 void BgfxRenderPath::Present() {
     SDL_Event ev;
@@ -737,8 +741,20 @@ void BgfxRenderPath::Present() {
         }
     }
 }
-void BgfxRenderPath::Clear(int) {}
-void BgfxRenderPath::SetClearColour(const float[4]) {}
+void BgfxRenderPath::Clear(int flags) {
+    if (flags & rp::CLEAR_COLOR) {
+        uint32_t rgba = (uint32_t(clear_color_[0] * 255) << 24) |
+                        (uint32_t(clear_color_[1] * 255) << 16) |
+                        (uint32_t(clear_color_[2] * 255) << 8) | 0xFF;
+        uint16_t bgfx_flags = BGFX_CLEAR_COLOR;
+        if (flags & rp::CLEAR_DEPTH) bgfx_flags |= BGFX_CLEAR_DEPTH;
+        bgfx::setViewClear(current_view_id_, bgfx_flags, rgba, 1.0f, 0);
+    }
+}
+void BgfxRenderPath::SetClearColour(const float rgba[4]) {
+    clear_color_[0] = rgba[0]; clear_color_[1] = rgba[1];
+    clear_color_[2] = rgba[2]; clear_color_[3] = rgba[3];
+}
 void BgfxRenderPath::Set_matrixDirty() {}
 void BgfxRenderPath::CBuffLockStaticCreations() {}
 

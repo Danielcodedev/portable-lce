@@ -191,6 +191,7 @@ private:
     float light_ambient_[4] = {0.4f, 0.4f, 0.4f, 1};
     float global_lm_[4] = {0, 0, 0, 0};
     float alpha_ref_ = 0.1f;
+    float clear_color_[4] = {0.19f, 0.19f, 0.19f, 1.0f};
 
     // bgfx vertex layouts
     bgfx::VertexLayout vl_world_standard_;
