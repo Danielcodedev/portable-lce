@@ -238,11 +238,39 @@ void BgfxRenderPath::StateSetVertexTextureUV(float, float) {}
 
 static int s_drawCount = 0;
 static int s_frameCount = 0;
-void BgfxRenderPath::DrawVertices(int primType, int count, void* data, int, int) {
+void BgfxRenderPath::DrawVertices(int primType, int count, void* data, int vType, int) {
     if (count <= 0 || !data) return;
     s_drawCount++;
 
-    uint32_t stride = vl_world_standard_.getStride();
+    uint32_t stride = vl_world_standard_.getStride(); // 32
+
+    // Expand compact 16-byte vertices to 32-byte world_standard
+    static thread_local std::vector<uint8_t> expand_buf;
+    if (vType == 1) {
+        expand_buf.resize((size_t)count * 32);
+        const int16_t* csrc = (const int16_t*)data;
+        uint8_t* dst = expand_buf.data();
+        for (int i = 0; i < count; i++) {
+            auto* dstF = (float*)dst;
+            dstF[0] = csrc[0] / 1024.0f;
+            dstF[1] = csrc[1] / 1024.0f;
+            dstF[2] = csrc[2] / 1024.0f;
+            dstF[3] = csrc[4] / 8192.0f;
+            dstF[4] = csrc[5] / 8192.0f;
+            uint16_t packed = (uint16_t)((int)csrc[3] + 32768);
+            dst[20] = 255;
+            dst[21] = (uint8_t)((packed & 0x1F) * 255 / 31);
+            dst[22] = (uint8_t)(((packed >> 5) & 0x3F) * 255 / 63);
+            dst[23] = (uint8_t)(((packed >> 11) & 0x1F) * 255 / 31);
+            dst[24] = 0; dst[25] = 127; dst[26] = 0; dst[27] = 0;
+            auto* dstS = (int16_t*)(dst + 28);
+            dstS[0] = csrc[6];
+            dstS[1] = csrc[7];
+            csrc += 8;
+            dst += 32;
+        }
+        data = expand_buf.data();
+    }
 
     // Convert unsupported primitive types to triangle list
     int submitCount = count;
@@ -297,9 +325,11 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data, int, int)
 
     glm::mat4 mvp = projection_stack_.top() * modelview_stack_.top();
     bgfx::setTransform(glm::value_ptr(mvp));
-    uint64_t finalState = (BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BGFX_STATE_WRITE_Z | BGFX_STATE_DEPTH_TEST_LEQUAL)
-                        | (blend_enabled_ ? BGFX_STATE_BLEND_ALPHA : 0)
-                        | primState;
+    uint64_t finalState = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A;
+    if (depth_write_)        finalState |= BGFX_STATE_WRITE_Z;
+    if (depth_test_enabled_) finalState |= BGFX_STATE_DEPTH_TEST_LEQUAL;
+    if (blend_enabled_)      finalState |= BGFX_STATE_BLEND_ALPHA;
+    finalState |= primState;
     bgfx::setState(finalState);
     bgfx::setVertexBuffer(0, &tvb);
 
@@ -415,9 +445,8 @@ void BgfxRenderPath::render_frame(const FrameDesc& frame) {
 
     bgfx::setViewRect(0, 0, 0, width_, height_);
     bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x303030ff, 1.0f, 0);
+    bgfx::setViewMode(0, bgfx::ViewMode::Sequential);
     bgfx::touch(0);
-    if (s_frameCount++ < 3) fprintf(stderr, "Frame %d: %d draws, fb=%dx%d\n", s_frameCount, s_drawCount, width_, height_);
-    s_drawCount = 0;
     bgfx::frame();
 }
 
@@ -472,7 +501,8 @@ void BgfxRenderPath::TextureBind(int idx) {
 void BgfxRenderPath::TextureBindVertex(int, bool) {}
 void BgfxRenderPath::TextureSetTextureLevels(int) {}
 
-void BgfxRenderPath::TextureData(int width, int height, void* data, int, int) {
+void BgfxRenderPath::TextureData(int width, int height, void* data, int level, int) {
+    if (level > 0) return; // Skip mipmaps - only store base level
     if (bound_texture_ < 0 || !data || width <= 0 || height <= 0) return;
     auto it = gl_tex_to_bgfx_.find(bound_texture_);
     if (it != gl_tex_to_bgfx_.end()) {
@@ -496,16 +526,24 @@ void BgfxRenderPath::TextureDataUpdate(int xoff, int yoff, int w, int h, void* d
 void BgfxRenderPath::TextureSetParam(int, int) {}
 int  BgfxRenderPath::TextureGetTextureLevels() { return 1; }
 void BgfxRenderPath::ReadPixels(int, int, int, int, void*) {}
+static int* stb_pixels_to_argb(unsigned char* pixels, int w, int h) {
+    int* px = new int[w * h];
+    for (int i = 0; i < w * h; i++) {
+        unsigned char r = pixels[i * 4], g = pixels[i * 4 + 1],
+                      b = pixels[i * 4 + 2], a = pixels[i * 4 + 3];
+        px[i] = (a << 24) | (r << 16) | (g << 8) | b;
+    }
+    return px;
+}
+
 int BgfxRenderPath::LoadTextureData(const char* filename, void* srcInfo, int** dataOut) {
     int w, h, channels;
     unsigned char* pixels = stbi_load(filename, &w, &h, &channels, 4);
     if (!pixels) return -1;
     auto* info = static_cast<D3DXIMAGE_INFO*>(srcInfo);
     if (info) { info->Width = w; info->Height = h; }
-    int* rgba = new int[w * h];
-    memcpy(rgba, pixels, w * h * 4);
+    *dataOut = stb_pixels_to_argb(pixels, w, h);
     stbi_image_free(pixels);
-    *dataOut = rgba;
     return 0;
 }
 
@@ -515,10 +553,8 @@ int BgfxRenderPath::LoadTextureData(uint8_t* data, uint32_t bytes, void* srcInfo
     if (!pixels) return -1;
     auto* info = static_cast<D3DXIMAGE_INFO*>(srcInfo);
     if (info) { info->Width = w; info->Height = h; }
-    int* rgba = new int[w * h];
-    memcpy(rgba, pixels, w * h * 4);
+    *dataOut = stb_pixels_to_argb(pixels, w, h);
     stbi_image_free(pixels);
-    *dataOut = rgba;
     return 0;
 }
 
@@ -556,7 +592,62 @@ void BgfxRenderPath::Resume() {}
 void BgfxRenderPath::BeginEvent(const char*) {}
 void BgfxRenderPath::EndEvent() {}
 
-void BgfxRenderPath::submit_immediate(const DrawCall&) {}
+void BgfxRenderPath::submit_immediate(const DrawCall& dc) {
+    if (dc.source != rp::VertexSource::transient) return;
+    const auto& tvb = dc.transient;
+    uint32_t vertCount = tvb.vertex_count;
+    if (vertCount == 0) return;
+    uint32_t stride = vl_world_standard_.getStride();
+    const uint8_t* src = reinterpret_cast<const uint8_t*>(
+        transient_arena_.data() + tvb.offset);
+    bool isFan = (tvb.primitive == rp::PrimitiveType::triangle_fan);
+    uint32_t submitCount = vertCount;
+    if (isFan && vertCount >= 3) submitCount = (vertCount - 2) * 3;
+    if (bgfx::getAvailTransientVertexBuffer(submitCount, vl_world_standard_) < submitCount)
+        return;
+    bgfx::TransientVertexBuffer bvb;
+    bgfx::allocTransientVertexBuffer(&bvb, submitCount, vl_world_standard_);
+    if (isFan && vertCount >= 3) {
+        uint8_t* dst = bvb.data;
+        for (uint32_t i = 1; i < vertCount - 1; i++) {
+            memcpy(dst, src, stride); dst += stride;
+            memcpy(dst, src + i * stride, stride); dst += stride;
+            memcpy(dst, src + (i + 1) * stride, stride); dst += stride;
+        }
+    } else {
+        memcpy(bvb.data, src, vertCount * stride);
+    }
+    glm::mat4 mvp = projection_stack_.top() * modelview_stack_.top();
+    bgfx::setTransform(glm::value_ptr(mvp));
+    uint64_t state = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A;
+    if (depth_write_)        state |= BGFX_STATE_WRITE_Z;
+    if (depth_test_enabled_) state |= BGFX_STATE_DEPTH_TEST_LEQUAL;
+    if (blend_enabled_)      state |= BGFX_STATE_BLEND_ALPHA;
+    bgfx::setState(state);
+    bgfx::setVertexBuffer(0, &bvb);
+    bgfx::setUniform(u_baseColor_, dc.tint_color);
+    float zero4[4] = {0, 0, 0, 0};
+    bgfx::setUniform(u_chunkOffset_, zero4);
+    float lp[4] = {0, 0, 0, 0};
+    bgfx::setUniform(u_lightParams_, lp);
+    float fp[4] = {0, 0, 0, 0};
+    bgfx::setUniform(u_fogParams_, fp);
+    bool hasTexture = false;
+    if (texture_enabled_ && bound_texture_ >= 0) {
+        auto it = gl_tex_to_bgfx_.find(bound_texture_);
+        if (it != gl_tex_to_bgfx_.end()) {
+            bgfx::setTexture(0, s_tex0_, it->second);
+            hasTexture = true;
+        }
+    }
+    float fragP[4] = { hasTexture ? 1.0f : 0.0f, 0.0f, alpha_ref_, 0.0f };
+    bgfx::setUniform(u_fragParams_, fragP);
+    bgfx::setUniform(u_fogColor_, zero4);
+    if (bgfx::isValid(program_))
+        bgfx::submit(current_view_id_, program_);
+    else
+        bgfx::discard();
+}
 
 // -- Factory ----------------------------------------------------------------
 
