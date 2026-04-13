@@ -569,7 +569,19 @@ void BgfxRenderPath::StartFrame() {
     fb_.is_widescreen = fb_.aspect > 1.5f;
     fb_.is_hi_def = h >= 720;
 }
-void BgfxRenderPath::Present() {}
+void BgfxRenderPath::Present() {
+    SDL_Event ev;
+    while (SDL_PollEvent(&ev)) {
+        if (ev.type == SDL_QUIT) {
+            should_close_ = true;
+        } else if (ev.type == SDL_WINDOWEVENT) {
+            if (ev.window.event == SDL_WINDOWEVENT_CLOSE)
+                should_close_ = true;
+            else if (ev.window.event == SDL_WINDOWEVENT_RESIZED)
+                resize(ev.window.data1, ev.window.data2);
+        }
+    }
+}
 void BgfxRenderPath::Clear(int) {}
 void BgfxRenderPath::SetClearColour(const float[4]) {}
 void BgfxRenderPath::Set_matrixDirty() {}
