@@ -1,13 +1,12 @@
 #pragma once
 
+#include <bgfx/bgfx.h>
+
+#include <glm/glm.hpp>
 #include <mutex>
 #include <stack>
 #include <unordered_map>
 #include <vector>
-
-#include <glm/glm.hpp>
-
-#include <bgfx/bgfx.h>
 
 #include "platform/renderer/IRenderPath.h"
 
@@ -18,29 +17,34 @@ public:
     explicit BgfxRenderPath(SDL_Window* window);
     ~BgfxRenderPath() override;
 
-    // -- New surface --------------------------------------------------------
+    // MARK: new APIs
 
-    [[nodiscard]] rp::MeshHandle    create_mesh(const rp::MeshDesc& desc) override;
-    void                            update_mesh(rp::MeshHandle h, const rp::MeshDesc& desc) override;
-    void                            destroy_mesh(rp::MeshHandle h) override;
+    [[nodiscard]] rp::MeshHandle create_mesh(const rp::MeshDesc& desc) override;
+    void update_mesh(rp::MeshHandle h, const rp::MeshDesc& desc) override;
+    void destroy_mesh(rp::MeshHandle h) override;
 
-    [[nodiscard]] rp::TextureHandle create_texture(const rp::TextureDesc& desc) override;
-    void                            update_texture(rp::TextureHandle h, const rp::TextureRegion& region) override;
-    void                            destroy_texture(rp::TextureHandle h) override;
+    [[nodiscard]] rp::TextureHandle create_texture(
+        const rp::TextureDesc& desc) override;
+    void update_texture(rp::TextureHandle h,
+                        const rp::TextureRegion& region) override;
+    void destroy_texture(rp::TextureHandle h) override;
 
-    [[nodiscard]] rp::MaterialHandle create_material(const rp::MaterialDesc& desc) override;
-    void                             update_material(rp::MaterialHandle h, const rp::MaterialDesc& desc) override;
-    void                             destroy_material(rp::MaterialHandle h) override;
+    [[nodiscard]] rp::MaterialHandle create_material(
+        const rp::MaterialDesc& desc) override;
+    void update_material(rp::MaterialHandle h,
+                         const rp::MaterialDesc& desc) override;
+    void destroy_material(rp::MaterialHandle h) override;
 
     [[nodiscard]] std::pair<rp::TransientVertexBuffer, std::span<std::byte>>
-        alloc_transient_vertices(uint32_t vertex_count, rp::VertexLayout layout,
-                                 rp::PrimitiveType primitive) override;
+    alloc_transient_vertices(uint32_t vertex_count, rp::VertexLayout layout,
+                             rp::PrimitiveType primitive) override;
 
     void render_frame(const rp::FrameDesc& frame) override;
     void resize(uint32_t w, uint32_t h) override;
     [[nodiscard]] const rp::FrameFramebuffer& framebuffer() const override;
     void read_framebuffer(const rp::TextureReadback& req) override;
-    [[nodiscard]] rp::ResourceFootprint query_resource_footprint() const override;
+    [[nodiscard]] rp::ResourceFootprint query_resource_footprint()
+        const override;
     void seal_static_resource_tier() override;
     void begin_atomic_resource_batch() override;
     void end_atomic_resource_batch() override;
@@ -48,22 +52,24 @@ public:
     void pop_debug_event() override;
     void tick() override;
 
-    // -- Legacy state methods (software emulation) --------------------------
+    // MARK: Legacy fixed-function state
 
     void MatrixMode(rp::MatrixStack stack) override;
     void MatrixSetIdentity() override;
     void MatrixTranslate(float x, float y, float z) override;
     void MatrixRotate(float angle, float x, float y, float z) override;
     void MatrixScale(float x, float y, float z) override;
-    void MatrixPerspective(float fovy, float aspect, float zNear, float zFar) override;
-    void MatrixOrthogonal(float left, float right, float bottom, float top, float zNear, float zFar) override;
+    void MatrixPerspective(float fovy, float aspect, float zNear,
+                           float zFar) override;
+    void MatrixOrthogonal(float left, float right, float bottom, float top,
+                          float zNear, float zFar) override;
     void MatrixPop() override;
     void MatrixPush() override;
     void MatrixMult(float* mat) override;
     [[nodiscard]] const float* MatrixGet(rp::MatrixStack stack) override;
 
-    void DrawVertices(int primitiveType, int count, void* data,
-                      int vertexType, int shaderType) override;
+    void DrawVertices(int primitiveType, int count, void* data, int vertexType,
+                      int shaderType) override;
 
     [[nodiscard]] int CBuffCreate(int count) override;
     void CBuffDelete(int first, int count) override;
@@ -81,8 +87,10 @@ public:
     void TextureBind(int idx) override;
     void TextureBindVertex(int idx, bool scaleLight) override;
     void TextureSetTextureLevels(int levels) override;
-    void TextureData(int width, int height, void* data, int level, int format) override;
-    void TextureDataUpdate(int xoff, int yoff, int w, int h, void* data, int level) override;
+    void TextureData(int width, int height, void* data, int level,
+                     int format) override;
+    void TextureDataUpdate(int xoff, int yoff, int w, int h, void* data,
+                           int level) override;
     void TextureSetParam(int param, int value) override;
 
     void StateSetColour(float r, float g, float b, float a) override;
@@ -114,7 +122,8 @@ public:
 
     void StateSetViewport(int viewportType) override;
     void StateSetEnableViewportClipPlanes(bool enable) override;
-    void StateSetStencil(int func, uint8_t ref, uint8_t funcMask, uint8_t writeMask) override;
+    void StateSetStencil(int func, uint8_t ref, uint8_t funcMask,
+                         uint8_t writeMask) override;
     void StateSetForceLOD(int lod) override;
     void StateSetTextureEnable(bool enable) override;
     void StateSetActiveTexture(int tex) override;
@@ -123,8 +132,10 @@ public:
 
     [[nodiscard]] int TextureGetTextureLevels() override;
     void ReadPixels(int x, int y, int w, int h, void* buf) override;
-    [[nodiscard]] int LoadTextureData(const char* filename, void* srcInfo, int** dataOut) override;
-    [[nodiscard]] int LoadTextureData(uint8_t* data, uint32_t bytes, void* srcInfo, int** dataOut) override;
+    [[nodiscard]] int LoadTextureData(const char* filename, void* srcInfo,
+                                      int** dataOut) override;
+    [[nodiscard]] int LoadTextureData(uint8_t* data, uint32_t bytes,
+                                      void* srcInfo, int** dataOut) override;
 
     void StateSetVertexTextureUV(float u, float v) override;
 
@@ -162,7 +173,7 @@ private:
     bool should_close_ = false;
 
     // Software matrix stack
-    rp::MatrixStack matrix_mode_ = rp::MatrixStack::modelview; // GL_MODELVIEW
+    rp::MatrixStack matrix_mode_ = rp::MatrixStack::modelview;  // GL_MODELVIEW
     std::stack<glm::mat4> projection_stack_;
     std::stack<glm::mat4> modelview_stack_;
     glm::mat4 projection_top_{1.0f};
@@ -244,7 +255,10 @@ private:
     int next_gl_tex_id_ = 1;
 
     // CBuffer (display list) system
-    struct CBuffDrawCmd { int first; int count; };
+    struct CBuffDrawCmd {
+        int first;
+        int count;
+    };
     struct ChunkBuffer {
         bgfx::VertexBufferHandle vbh = BGFX_INVALID_HANDLE;
         std::vector<uint8_t> raw_verts;

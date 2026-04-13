@@ -1,6 +1,6 @@
-#include "IRenderPath.h"
-
 #include <cassert>
+
+#include "IRenderPath.h"
 
 namespace rp::render_path_internal {
 
@@ -13,4 +13,4 @@ IRenderPath& get_active() {
     return *s_active;
 }
 
-} // namespace rp::render_path_internal
+}  // namespace rp::render_path_internal

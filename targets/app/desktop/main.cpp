@@ -1,8 +1,9 @@
+#include <SDL.h>
+
 #include "app/common/AppGameServices.h"
 #include "app/common/GameMenuService.h"
 #include "minecraft/client/renderer/GameRenderer.h"
 #include "platform/renderer/IRenderPath.h"
-#include <SDL.h>
 // Minecraft.cpp : Defines the entry point for the application.
 //
 
@@ -73,7 +74,6 @@ static void sigsegv_handler(int sig) {
 #include "platform/renderer/renderer.h"
 #include "platform/storage/storage.h"
 #include "strings.h"
-
 
 #define THEME_NAME "584111F70AAAAAAA"
 #define THEME_FILESIZE 2797568
@@ -436,10 +436,12 @@ int main(int argc, const char* argv[]) {
 
     static bool bTrialTimerDisplayed = true;
 
+    // PLCE(TODO): make this shit work on native wayland
+    setenv("SDL_VIDEODRIVER", "x11", 1);
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Window* sdl_window = SDL_CreateWindow(
-        "4jcraft", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        reqW > 0 ? reqW : 1280, reqH > 0 ? reqH : 720,
+        "Minecraft Console Edition", SDL_WINDOWPOS_CENTERED,
+        SDL_WINDOWPOS_CENTERED, reqW > 0 ? reqW : 1280, reqH > 0 ? reqH : 720,
         SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
     auto render_path = make_bgfx_render_path(sdl_window);
     rp::render_path_internal::set_active(render_path.get());
@@ -531,12 +533,14 @@ int main(int argc, const char* argv[]) {
         rp::FrameDesc frame{};
         {
             int fbw = 0, fbh = 0;
-            fbw = frame.framebuffer.width; fbh = frame.framebuffer.height;
-            frame.framebuffer.width  = fbw;
+            fbw = frame.framebuffer.width;
+            fbh = frame.framebuffer.height;
+            frame.framebuffer.width = fbw;
             frame.framebuffer.height = fbh;
             frame.framebuffer.aspect = fbh > 0 ? (float)fbw / (float)fbh : 1.0f;
-            frame.framebuffer.is_widescreen = RenderPath.framebuffer().is_widescreen;
-            frame.framebuffer.is_hi_def     = RenderPath.framebuffer().is_hi_def;
+            frame.framebuffer.is_widescreen =
+                RenderPath.framebuffer().is_widescreen;
+            frame.framebuffer.is_hi_def = RenderPath.framebuffer().is_hi_def;
         }
 
         if (pMinecraft->pollResize()) {
@@ -652,7 +656,7 @@ int main(int argc, const char* argv[]) {
     }  // end game loop
 
     // Graceful shutdown: destroy GL context and GLFW before any C++ dtors run.
-    render_path.reset(); // destroy bgfx before _exit skips destructors
+    render_path.reset();  // destroy bgfx before _exit skips destructors
     SDL_DestroyWindow(sdl_window);
     SDL_Quit();
     _exit(0);

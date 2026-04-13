@@ -1,13 +1,11 @@
 #include "BgfxRenderPath.h"
 
-#include <cstring>
-
 #include <SDL.h>
 #include <SDL_syswm.h>
-
 #include <bgfx/bgfx.h>
 #include <bgfx/platform.h>
 
+#include <cstring>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -15,16 +13,16 @@
 #include "platform/PlatformTypes.h"
 
 #define STB_IMAGE_IMPLEMENTATION
+#include "shaders/fs_4jcraft.bin.h"
+#include "shaders/vs_4jcraft.bin.h"
 #include "stb_image.h"
-
-#include "vs_4jcraft.bin.h"
-#include "fs_4jcraft.bin.h"
 
 using namespace rp;
 
 thread_local int BgfxRenderPath::cbuf_rec_id_ = -1;
 thread_local std::vector<uint8_t> BgfxRenderPath::cbuf_rec_verts_;
-thread_local std::vector<BgfxRenderPath::CBuffDrawCmd> BgfxRenderPath::cbuf_rec_draws_;
+thread_local std::vector<BgfxRenderPath::CBuffDrawCmd>
+    BgfxRenderPath::cbuf_rec_draws_;
 
 static constexpr uint32_t TRANSIENT_ARENA_SIZE = 16 * 1024 * 1024;
 
@@ -43,15 +41,27 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
     SDL_VERSION(&wmi.version);
     SDL_GetWindowWMInfo(window_, &wmi);
 
-    bgfx::renderFrame(); // single-threaded mode signal
+    bgfx::renderFrame();  // single-threaded mode signal
+    SDL_Log("SDL subsystem: %d (X11=%d, Wayland=%d)", wmi.subsystem,
+            SDL_SYSWM_X11, SDL_SYSWM_WAYLAND);
 
     bgfx::Init init;
 #if defined(__linux__)
-    init.platformData.ndt = wmi.info.x11.display;
-    init.platformData.nwh = (void*)(uintptr_t)wmi.info.x11.window;
+    if (wmi.subsystem == SDL_SYSWM_X11) {
+        init.platformData.ndt = wmi.info.x11.display;
+        init.platformData.nwh = (void*)(uintptr_t)wmi.info.x11.window;
+    } else if (wmi.subsystem == SDL_SYSWM_WAYLAND) {
+        init.platformData.ndt = wmi.info.wl.display;
+        init.platformData.nwh = wmi.info.wl.surface;
+        init.platformData.type = bgfx::NativeWindowHandleType::Default;
+    } else {
+        // Unknown subsystem
+        assert(false && "Unsupported windowing system");
+    }
 #elif defined(_WIN32)
     init.platformData.nwh = wmi.info.win.window;
 #endif
+
     init.type = bgfx::RendererType::OpenGL;
     init.resolution.width = width_;
     init.resolution.height = height_;
@@ -69,12 +79,12 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
     // attr 3: Normal    - 3 byte   @ offset 24 (3 bytes + 1 pad)
     // attr 4: TexCoord1 - 2 short  @ offset 28 (4 bytes)
     // Total stride: 32
-    vl_world_standard_
-        .begin()
-        .add(bgfx::Attrib::Position,  3, bgfx::AttribType::Float)
+    vl_world_standard_.begin()
+        .add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float)
         .add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float)
-        .add(bgfx::Attrib::Color0,    4, bgfx::AttribType::Uint8, true)
-        .add(bgfx::Attrib::Normal,    4, bgfx::AttribType::Uint8, true) // 3 bytes + 1 pad read as 4
+        .add(bgfx::Attrib::Color0, 4, bgfx::AttribType::Uint8, true)
+        .add(bgfx::Attrib::Normal, 4, bgfx::AttribType::Uint8,
+             true)  // 3 bytes + 1 pad read as 4
         .add(bgfx::Attrib::TexCoord1, 2, bgfx::AttribType::Int16, true)
         .end();
 
@@ -85,7 +95,7 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
     fb_.is_hi_def = height_ >= 720;
 
     bgfx_state_ = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A |
-                   BGFX_STATE_WRITE_Z | BGFX_STATE_DEPTH_TEST_LEQUAL;
+                  BGFX_STATE_WRITE_Z | BGFX_STATE_DEPTH_TEST_LEQUAL;
 
     // Load shaders
     bgfx::ShaderHandle vsh = bgfx::createShader(
@@ -95,57 +105,75 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
     program_ = bgfx::createProgram(vsh, fsh, true);
 
     // Vertex uniforms
-    u_baseColor_    = bgfx::createUniform("u_baseColor",    bgfx::UniformType::Vec4);
-    u_chunkOffset_  = bgfx::createUniform("u_chunkOffset",  bgfx::UniformType::Vec4);
-    u_lightParams_  = bgfx::createUniform("u_lightParams",  bgfx::UniformType::Vec4);
-    u_light0Dir_    = bgfx::createUniform("u_light0Dir",    bgfx::UniformType::Vec4);
-    u_light1Dir_    = bgfx::createUniform("u_light1Dir",    bgfx::UniformType::Vec4);
-    u_lightDiffuse_ = bgfx::createUniform("u_lightDiffuse", bgfx::UniformType::Vec4);
-    u_lightAmbient_ = bgfx::createUniform("u_lightAmbient", bgfx::UniformType::Vec4);
-    u_fogParams_    = bgfx::createUniform("u_fogParams",    bgfx::UniformType::Vec4);
-    u_lmTransform_  = bgfx::createUniform("u_lmTransform",  bgfx::UniformType::Vec4);
-    u_globalLM_     = bgfx::createUniform("u_globalLM",     bgfx::UniformType::Vec4);
+    u_baseColor_ = bgfx::createUniform("u_baseColor", bgfx::UniformType::Vec4);
+    u_chunkOffset_ =
+        bgfx::createUniform("u_chunkOffset", bgfx::UniformType::Vec4);
+    u_lightParams_ =
+        bgfx::createUniform("u_lightParams", bgfx::UniformType::Vec4);
+    u_light0Dir_ = bgfx::createUniform("u_light0Dir", bgfx::UniformType::Vec4);
+    u_light1Dir_ = bgfx::createUniform("u_light1Dir", bgfx::UniformType::Vec4);
+    u_lightDiffuse_ =
+        bgfx::createUniform("u_lightDiffuse", bgfx::UniformType::Vec4);
+    u_lightAmbient_ =
+        bgfx::createUniform("u_lightAmbient", bgfx::UniformType::Vec4);
+    u_fogParams_ = bgfx::createUniform("u_fogParams", bgfx::UniformType::Vec4);
+    u_lmTransform_ =
+        bgfx::createUniform("u_lmTransform", bgfx::UniformType::Vec4);
+    u_globalLM_ = bgfx::createUniform("u_globalLM", bgfx::UniformType::Vec4);
     // Fragment uniforms
-    u_fragParams_   = bgfx::createUniform("u_fragParams",   bgfx::UniformType::Vec4);
-    u_fogColor_     = bgfx::createUniform("u_fogColor",     bgfx::UniformType::Vec4);
-    s_tex0_         = bgfx::createUniform("s_tex0",         bgfx::UniformType::Sampler);
-    s_tex1_         = bgfx::createUniform("s_tex1",         bgfx::UniformType::Sampler);
+    u_fragParams_ =
+        bgfx::createUniform("u_fragParams", bgfx::UniformType::Vec4);
+    u_fogColor_ = bgfx::createUniform("u_fogColor", bgfx::UniformType::Vec4);
+    s_tex0_ = bgfx::createUniform("s_tex0", bgfx::UniformType::Sampler);
+    s_tex1_ = bgfx::createUniform("s_tex1", bgfx::UniformType::Sampler);
 }
 
 BgfxRenderPath::~BgfxRenderPath() {
-    if (bgfx::isValid(program_))
-        bgfx::destroy(program_);
+    if (bgfx::isValid(program_)) bgfx::destroy(program_);
     bgfx::shutdown();
 }
 
-// -- Matrix stack -----------------------------------------------------------
+// MARK: Matrix stack
 
 std::stack<glm::mat4>& BgfxRenderPath::current_stack() {
-    return (matrix_mode_ == rp::MatrixStack::projection) ? projection_stack_ : modelview_stack_;
+    return (matrix_mode_ == rp::MatrixStack::projection) ? projection_stack_
+                                                         : modelview_stack_;
 }
 
-void BgfxRenderPath::MatrixMode(rp::MatrixStack stack)     { matrix_mode_ = stack; }
-void BgfxRenderPath::MatrixSetIdentity()      { current_stack().top() = glm::mat4(1.0f); }
-void BgfxRenderPath::MatrixPush()             { current_stack().push(current_stack().top()); }
-void BgfxRenderPath::MatrixPop()              { if (current_stack().size() > 1) current_stack().pop(); }
+void BgfxRenderPath::MatrixMode(rp::MatrixStack stack) { matrix_mode_ = stack; }
+void BgfxRenderPath::MatrixSetIdentity() {
+    current_stack().top() = glm::mat4(1.0f);
+}
+void BgfxRenderPath::MatrixPush() {
+    current_stack().push(current_stack().top());
+}
+void BgfxRenderPath::MatrixPop() {
+    if (current_stack().size() > 1) current_stack().pop();
+}
 
 void BgfxRenderPath::MatrixTranslate(float x, float y, float z) {
-    current_stack().top() = glm::translate(current_stack().top(), glm::vec3(x, y, z));
+    current_stack().top() =
+        glm::translate(current_stack().top(), glm::vec3(x, y, z));
 }
 
 void BgfxRenderPath::MatrixRotate(float angle, float x, float y, float z) {
-    current_stack().top() = glm::rotate(current_stack().top(), angle, glm::vec3(x, y, z));
+    current_stack().top() =
+        glm::rotate(current_stack().top(), angle, glm::vec3(x, y, z));
 }
 
 void BgfxRenderPath::MatrixScale(float x, float y, float z) {
-    current_stack().top() = glm::scale(current_stack().top(), glm::vec3(x, y, z));
+    current_stack().top() =
+        glm::scale(current_stack().top(), glm::vec3(x, y, z));
 }
 
-void BgfxRenderPath::MatrixPerspective(float fovy, float aspect, float zNear, float zFar) {
-    current_stack().top() = glm::perspective(glm::radians(fovy), aspect, zNear, zFar);
+void BgfxRenderPath::MatrixPerspective(float fovy, float aspect, float zNear,
+                                       float zFar) {
+    current_stack().top() =
+        glm::perspective(glm::radians(fovy), aspect, zNear, zFar);
 }
 
-void BgfxRenderPath::MatrixOrthogonal(float left, float right, float bottom, float top, float zNear, float zFar) {
+void BgfxRenderPath::MatrixOrthogonal(float left, float right, float bottom,
+                                      float top, float zNear, float zFar) {
     current_stack().top() = glm::ortho(left, right, bottom, top, zNear, zFar);
 }
 
@@ -154,19 +182,24 @@ void BgfxRenderPath::MatrixMult(float* m) {
 }
 
 const float* BgfxRenderPath::MatrixGet(rp::MatrixStack stack) {
-    if (stack == rp::MatrixStack::projection) return glm::value_ptr(projection_stack_.top());
+    if (stack == rp::MatrixStack::projection)
+        return glm::value_ptr(projection_stack_.top());
     return glm::value_ptr(modelview_stack_.top());
 }
 
-// -- State accumulator ------------------------------------------------------
+// MARK: State accumulator
 
 void BgfxRenderPath::StateSetColour(float r, float g, float b, float a) {
-    tint_color_[0] = r; tint_color_[1] = g; tint_color_[2] = b; tint_color_[3] = a;
+    tint_color_[0] = r;
+    tint_color_[1] = g;
+    tint_color_[2] = b;
+    tint_color_[3] = a;
 }
 
 void BgfxRenderPath::StateSetDepthMask(bool e) {
     depth_write_ = e;
-    bgfx_state_ = (bgfx_state_ & ~BGFX_STATE_WRITE_Z) | (e ? BGFX_STATE_WRITE_Z : 0);
+    bgfx_state_ =
+        (bgfx_state_ & ~BGFX_STATE_WRITE_Z) | (e ? BGFX_STATE_WRITE_Z : 0);
 }
 
 void BgfxRenderPath::StateSetBlendEnable(bool e) { blend_enabled_ = e; }
@@ -174,15 +207,17 @@ void BgfxRenderPath::StateSetBlendEnable(bool e) { blend_enabled_ = e; }
 void BgfxRenderPath::StateSetBlendFunc(rp::BlendFactor, rp::BlendFactor) {
     // Simplified: most common is src_alpha/one_minus_src_alpha
     bgfx_state_ = (bgfx_state_ & ~BGFX_STATE_BLEND_MASK) |
-                   (blend_enabled_ ? BGFX_STATE_BLEND_ALPHA : 0);
+                  (blend_enabled_ ? BGFX_STATE_BLEND_ALPHA : 0);
 }
 
 void BgfxRenderPath::StateSetBlendFactor(unsigned int) {}
-void BgfxRenderPath::StateSetAlphaFunc(rp::AlphaTest, float r) { alpha_ref_ = r; }
+void BgfxRenderPath::StateSetAlphaFunc(rp::AlphaTest, float r) {
+    alpha_ref_ = r;
+}
 
 void BgfxRenderPath::StateSetDepthFunc(rp::DepthTest) {
     bgfx_state_ = (bgfx_state_ & ~BGFX_STATE_DEPTH_TEST_MASK) |
-                   (depth_test_enabled_ ? BGFX_STATE_DEPTH_TEST_LEQUAL : 0);
+                  (depth_test_enabled_ ? BGFX_STATE_DEPTH_TEST_LEQUAL : 0);
 }
 
 void BgfxRenderPath::StateSetFaceCull(bool e) {
@@ -204,25 +239,45 @@ void BgfxRenderPath::StateSetWriteEnable(bool r, bool g, bool b, bool a) {
 void BgfxRenderPath::StateSetDepthTestEnable(bool e) {
     depth_test_enabled_ = e;
     bgfx_state_ = (bgfx_state_ & ~BGFX_STATE_DEPTH_TEST_MASK) |
-                   (e ? BGFX_STATE_DEPTH_TEST_LEQUAL : 0);
+                  (e ? BGFX_STATE_DEPTH_TEST_LEQUAL : 0);
 }
 
 void BgfxRenderPath::StateSetAlphaTestEnable(bool) {}
 void BgfxRenderPath::StateSetDepthSlopeAndBias(float, float) {}
 
-// Fog (stored but not applied - needs shader support)
+// MARK: Fog
 void BgfxRenderPath::StateSetFogEnable(bool e) { fog_enabled_ = e; }
-void BgfxRenderPath::StateSetFogMode(rp::FogMode m) { fog_mode_ = static_cast<float>(m); }
+void BgfxRenderPath::StateSetFogMode(rp::FogMode m) {
+    fog_mode_ = static_cast<float>(m);
+}
 void BgfxRenderPath::StateSetFogNearDistance(float d) { fog_start_ = d; }
 void BgfxRenderPath::StateSetFogFarDistance(float d) { fog_end_ = d; }
 void BgfxRenderPath::StateSetFogDensity(float d) { fog_density_ = d; }
-void BgfxRenderPath::StateSetFogColour(float r, float g, float b) { fog_color_[0]=r; fog_color_[1]=g; fog_color_[2]=b; fog_color_[3]=1; }
+void BgfxRenderPath::StateSetFogColour(float r, float g, float b) {
+    fog_color_[0] = r;
+    fog_color_[1] = g;
+    fog_color_[2] = b;
+    fog_color_[3] = 1;
+}
 
-// Lighting (stored but not applied - needs shader support)
+// MARK: Lighting
 void BgfxRenderPath::StateSetLightingEnable(bool e) { lighting_enabled_ = e; }
-void BgfxRenderPath::StateSetLightColour(int, float r, float g, float b) { light_diffuse_[0]=r; light_diffuse_[1]=g; light_diffuse_[2]=b; }
-void BgfxRenderPath::StateSetLightAmbientColour(float r, float g, float b) { light_ambient_[0]=r; light_ambient_[1]=g; light_ambient_[2]=b; }
-void BgfxRenderPath::StateSetLightDirection(int l, float x, float y, float z) { float* d = l==0 ? light0_dir_ : light1_dir_; d[0]=x; d[1]=y; d[2]=z; }
+void BgfxRenderPath::StateSetLightColour(int, float r, float g, float b) {
+    light_diffuse_[0] = r;
+    light_diffuse_[1] = g;
+    light_diffuse_[2] = b;
+}
+void BgfxRenderPath::StateSetLightAmbientColour(float r, float g, float b) {
+    light_ambient_[0] = r;
+    light_ambient_[1] = g;
+    light_ambient_[2] = b;
+}
+void BgfxRenderPath::StateSetLightDirection(int l, float x, float y, float z) {
+    float* d = l == 0 ? light0_dir_ : light1_dir_;
+    d[0] = x;
+    d[1] = y;
+    d[2] = z;
+}
 void BgfxRenderPath::StateSetLightEnable(int, bool) {}
 
 void BgfxRenderPath::StateSetViewport(int) {}
@@ -233,18 +288,21 @@ void BgfxRenderPath::StateSetTextureEnable(bool e) { texture_enabled_ = e; }
 void BgfxRenderPath::StateSetActiveTexture(int) {}
 
 void BgfxRenderPath::SetChunkOffset(float x, float y, float z) {
-    chunk_offset_[0] = x; chunk_offset_[1] = y; chunk_offset_[2] = z;
+    chunk_offset_[0] = x;
+    chunk_offset_[1] = y;
+    chunk_offset_[2] = z;
 }
 
 void BgfxRenderPath::StateSetVertexTextureUV(float, float) {}
 
-// -- DrawVertices -----------------------------------------------------------
+// MARK: DrawVertices
 
 static int s_frameCount = 0;
-void BgfxRenderPath::DrawVertices(int primType, int count, void* data, int vType, int) {
+void BgfxRenderPath::DrawVertices(int primType, int count, void* data,
+                                  int vType, int) {
     if (count <= 0 || !data) return;
 
-    uint32_t stride = vl_world_standard_.getStride(); // 32
+    uint32_t stride = vl_world_standard_.getStride();  // 32
 
     // Expand compact 16-byte vertices to 32-byte world_standard
     static thread_local std::vector<uint8_t> expand_buf;
@@ -264,7 +322,10 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data, int vType
             dst[21] = (uint8_t)((packed & 0x1F) * 255 / 31);
             dst[22] = (uint8_t)(((packed >> 5) & 0x3F) * 255 / 63);
             dst[23] = (uint8_t)(((packed >> 11) & 0x1F) * 255 / 31);
-            dst[24] = 0; dst[25] = 127; dst[26] = 0; dst[27] = 0;
+            dst[24] = 0;
+            dst[25] = 127;
+            dst[26] = 0;
+            dst[27] = 0;
             auto* dstS = (int16_t*)(dst + 28);
             dstS[0] = csrc[6];
             dstS[1] = csrc[7];
@@ -276,8 +337,8 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data, int vType
 
     // Convert unsupported primitive types to triangle list into a CPU buffer
     static thread_local std::vector<uint8_t> conv_buf;
-    bool isFan  = (primType == 0x0006); // GL_TRIANGLE_FAN
-    bool isQuad = (primType == 0x0007); // GL_QUADS
+    bool isFan = (primType == 0x0006);   // GL_TRIANGLE_FAN
+    bool isQuad = (primType == 0x0007);  // GL_QUADS
     const uint8_t* src = (const uint8_t*)data;
     int submitCount = count;
 
@@ -287,16 +348,22 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data, int vType
         conv_buf.resize(submitCount * stride);
         uint8_t* dst = conv_buf.data();
         for (int q = 0; q < numQuads; q++) {
-            const uint8_t* v0 = src + (q*4+0) * stride;
-            const uint8_t* v1 = src + (q*4+1) * stride;
-            const uint8_t* v2 = src + (q*4+2) * stride;
-            const uint8_t* v3 = src + (q*4+3) * stride;
-            memcpy(dst, v0, stride); dst += stride;
-            memcpy(dst, v1, stride); dst += stride;
-            memcpy(dst, v2, stride); dst += stride;
-            memcpy(dst, v0, stride); dst += stride;
-            memcpy(dst, v2, stride); dst += stride;
-            memcpy(dst, v3, stride); dst += stride;
+            const uint8_t* v0 = src + (q * 4 + 0) * stride;
+            const uint8_t* v1 = src + (q * 4 + 1) * stride;
+            const uint8_t* v2 = src + (q * 4 + 2) * stride;
+            const uint8_t* v3 = src + (q * 4 + 3) * stride;
+            memcpy(dst, v0, stride);
+            dst += stride;
+            memcpy(dst, v1, stride);
+            dst += stride;
+            memcpy(dst, v2, stride);
+            dst += stride;
+            memcpy(dst, v0, stride);
+            dst += stride;
+            memcpy(dst, v2, stride);
+            dst += stride;
+            memcpy(dst, v3, stride);
+            dst += stride;
         }
         src = conv_buf.data();
     } else if (isFan && count >= 3) {
@@ -304,9 +371,12 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data, int vType
         conv_buf.resize(submitCount * stride);
         uint8_t* dst = conv_buf.data();
         for (int i = 1; i < count - 1; i++) {
-            memcpy(dst, src, stride); dst += stride;
-            memcpy(dst, src + i * stride, stride); dst += stride;
-            memcpy(dst, src + (i+1) * stride, stride); dst += stride;
+            memcpy(dst, src, stride);
+            dst += stride;
+            memcpy(dst, src + i * stride, stride);
+            dst += stride;
+            memcpy(dst, src + (i + 1) * stride, stride);
+            dst += stride;
         }
         src = conv_buf.data();
     }
@@ -322,7 +392,8 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data, int vType
     }
 
     // Immediate mode - submit through bgfx
-    if (bgfx::getAvailTransientVertexBuffer(submitCount, vl_world_standard_) < (uint32_t)submitCount)
+    if (bgfx::getAvailTransientVertexBuffer(submitCount, vl_world_standard_) <
+        (uint32_t)submitCount)
         return;
     bgfx::TransientVertexBuffer tvb;
     bgfx::allocTransientVertexBuffer(&tvb, submitCount, vl_world_standard_);
@@ -330,33 +401,38 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data, int vType
 
     // Set primitive type in bgfx state
     uint64_t primState = 0;
-    if (primType == 0x0005) primState = BGFX_STATE_PT_TRISTRIP;      // GL_TRIANGLE_STRIP
-    else if (primType == 0x0001) primState = BGFX_STATE_PT_LINES;    // GL_LINES
-    else if (primType == 0x0003) primState = BGFX_STATE_PT_LINESTRIP; // GL_LINE_STRIP
+    if (primType == 0x0005)
+        primState = BGFX_STATE_PT_TRISTRIP;  // GL_TRIANGLE_STRIP
+    else if (primType == 0x0001)
+        primState = BGFX_STATE_PT_LINES;  // GL_LINES
+    else if (primType == 0x0003)
+        primState = BGFX_STATE_PT_LINESTRIP;  // GL_LINE_STRIP
 
     glm::mat4 mvp = projection_stack_.top() * modelview_stack_.top();
     bgfx::setTransform(glm::value_ptr(mvp));
     uint64_t finalState = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A;
-    if (depth_write_)        finalState |= BGFX_STATE_WRITE_Z;
+    if (depth_write_) finalState |= BGFX_STATE_WRITE_Z;
     if (depth_test_enabled_) finalState |= BGFX_STATE_DEPTH_TEST_LEQUAL;
-    if (blend_enabled_)      finalState |= BGFX_STATE_BLEND_ALPHA;
+    if (blend_enabled_) finalState |= BGFX_STATE_BLEND_ALPHA;
     finalState |= primState;
     bgfx::setState(finalState);
     bgfx::setVertexBuffer(0, &tvb);
 
     // Vertex uniforms
     bgfx::setUniform(u_baseColor_, tint_color_);
-    float chunkOff[4] = { chunk_offset_[0], chunk_offset_[1], chunk_offset_[2], 0 };
+    float chunkOff[4] = {chunk_offset_[0], chunk_offset_[1], chunk_offset_[2],
+                         0};
     bgfx::setUniform(u_chunkOffset_, chunkOff);
-    float lp[4] = { lighting_enabled_ ? 1.0f : 0.0f, 1.0f, 0, 0 };
+    float lp[4] = {lighting_enabled_ ? 1.0f : 0.0f, 1.0f, 0, 0};
     bgfx::setUniform(u_lightParams_, lp);
     bgfx::setUniform(u_light0Dir_, light0_dir_);
     bgfx::setUniform(u_light1Dir_, light1_dir_);
     bgfx::setUniform(u_lightDiffuse_, light_diffuse_);
     bgfx::setUniform(u_lightAmbient_, light_ambient_);
-    float fp[4] = { fog_enabled_ ? fog_mode_ : 0.0f, fog_start_, fog_end_, fog_density_ };
+    float fp[4] = {fog_enabled_ ? fog_mode_ : 0.0f, fog_start_, fog_end_,
+                   fog_density_};
     bgfx::setUniform(u_fogParams_, fp);
-    float lmt[4] = { 1, 1, 0, 0 };
+    float lmt[4] = {1, 1, 0, 0};
     bgfx::setUniform(u_lmTransform_, lmt);
     bgfx::setUniform(u_globalLM_, global_lm_);
     // Bind texture if available
@@ -369,7 +445,8 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data, int vType
         }
     }
     // Fragment uniforms
-    float fragP[4] = { hasTexture ? 1.0f : 0.0f, 0.0f, alpha_ref_, fog_enabled_ ? 1.0f : 0.0f };
+    float fragP[4] = {hasTexture ? 1.0f : 0.0f, 0.0f, alpha_ref_,
+                      fog_enabled_ ? 1.0f : 0.0f};
     bgfx::setUniform(u_fragParams_, fragP);
     bgfx::setUniform(u_fogColor_, fog_color_);
 
@@ -379,19 +456,26 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data, int vType
         bgfx::discard();
 }
 
-// -- Resource methods -------------------------------------------------------
+// MARK: Resource methods
 
-MeshHandle BgfxRenderPath::create_mesh(const MeshDesc&)          { return kInvalidMesh; }
-void BgfxRenderPath::update_mesh(MeshHandle, const MeshDesc&)    {}
-void BgfxRenderPath::destroy_mesh(MeshHandle)                     {}
+MeshHandle BgfxRenderPath::create_mesh(const MeshDesc&) { return kInvalidMesh; }
+void BgfxRenderPath::update_mesh(MeshHandle, const MeshDesc&) {}
+void BgfxRenderPath::destroy_mesh(MeshHandle) {}
 
 TextureHandle BgfxRenderPath::create_texture(const TextureDesc& desc) {
-    auto mem = bgfx::copy(desc.initial_data.data(), desc.initial_data.size());
     auto th = bgfx::createTexture2D(desc.width, desc.height, false, 1,
-                                     bgfx::TextureFormat::RGBA8, 0, mem);
+                                    bgfx::TextureFormat::RGBA8, 0);  // no mem
+
+    if (!desc.initial_data.empty()) {
+        auto mem =
+            bgfx::copy(desc.initial_data.data(), desc.initial_data.size());
+        bgfx::updateTexture2D(th, 0, 0, 0, 0, desc.width, desc.height, mem);
+    }
+
     for (uint32_t i = 0; i < textures_.size(); ++i) {
         if (!textures_[i].occupied) {
-            textures_[i] = {th, ++textures_[i].generation, desc.width, desc.height, true};
+            textures_[i] = {th, ++textures_[i].generation, desc.width,
+                            desc.height, true};
             return {i, textures_[i].generation};
         }
     }
@@ -403,7 +487,8 @@ TextureHandle BgfxRenderPath::create_texture(const TextureDesc& desc) {
 void BgfxRenderPath::update_texture(TextureHandle, const TextureRegion&) {}
 
 void BgfxRenderPath::destroy_texture(TextureHandle h) {
-    if (h.index < textures_.size() && textures_[h.index].generation == h.generation) {
+    if (h.index < textures_.size() &&
+        textures_[h.index].generation == h.generation) {
         bgfx::destroy(textures_[h.index].bgfx_handle);
         textures_[h.index].occupied = false;
     }
@@ -421,33 +506,37 @@ MaterialHandle BgfxRenderPath::create_material(const MaterialDesc& desc) {
     return {idx, 1};
 }
 
-void BgfxRenderPath::update_material(MaterialHandle h, const MaterialDesc& desc) {
-    if (h.index < materials_.size() && materials_[h.index].generation == h.generation)
+void BgfxRenderPath::update_material(MaterialHandle h,
+                                     const MaterialDesc& desc) {
+    if (h.index < materials_.size() &&
+        materials_[h.index].generation == h.generation)
         materials_[h.index].desc = desc;
 }
 
 void BgfxRenderPath::destroy_material(MaterialHandle h) {
-    if (h.index < materials_.size() && materials_[h.index].generation == h.generation)
+    if (h.index < materials_.size() &&
+        materials_[h.index].generation == h.generation)
         materials_[h.index].occupied = false;
 }
 
 std::pair<TransientVertexBuffer, std::span<std::byte>>
-BgfxRenderPath::alloc_transient_vertices(uint32_t count, VertexLayout, PrimitiveType prim) {
+BgfxRenderPath::alloc_transient_vertices(uint32_t count, VertexLayout,
+                                         PrimitiveType prim) {
     uint32_t stride = vl_world_standard_.getStride();
     uint32_t bytes = count * stride;
-    if (transient_offset_ + bytes > transient_arena_.size())
-        return {{}, {}};
+    if (transient_offset_ + bytes > transient_arena_.size()) return {{}, {}};
     TransientVertexBuffer tvb;
     tvb.frame_index = current_frame_;
     tvb.offset = transient_offset_;
     tvb.vertex_count = count;
     tvb.primitive = prim;
-    auto span = std::span<std::byte>(transient_arena_.data() + transient_offset_, bytes);
+    auto span = std::span<std::byte>(
+        transient_arena_.data() + transient_offset_, bytes);
     transient_offset_ += bytes;
     return {tvb, span};
 }
 
-// -- Frame submission -------------------------------------------------------
+// MARK: Frame submission
 
 void BgfxRenderPath::render_frame(const FrameDesc& frame) {
     transient_offset_ = 0;
@@ -458,8 +547,7 @@ void BgfxRenderPath::render_frame(const FrameDesc& frame) {
     {
         std::lock_guard<std::mutex> lk(cbuf_mtx_);
         for (auto h : cbuf_destroy_queue_) {
-            if (bgfx::isValid(h))
-                bgfx::destroy(h);
+            if (bgfx::isValid(h)) bgfx::destroy(h);
         }
         cbuf_destroy_queue_.clear();
     }
@@ -476,7 +564,9 @@ void BgfxRenderPath::resize(uint32_t w, uint32_t h) {
 
 const FrameFramebuffer& BgfxRenderPath::framebuffer() const { return fb_; }
 void BgfxRenderPath::read_framebuffer(const TextureReadback&) {}
-ResourceFootprint BgfxRenderPath::query_resource_footprint() const { return {}; }
+ResourceFootprint BgfxRenderPath::query_resource_footprint() const {
+    return {};
+}
 void BgfxRenderPath::seal_static_resource_tier() {}
 void BgfxRenderPath::begin_atomic_resource_batch() {}
 void BgfxRenderPath::end_atomic_resource_batch() {}
@@ -484,7 +574,7 @@ void BgfxRenderPath::push_debug_event(const char*) {}
 void BgfxRenderPath::pop_debug_event() {}
 void BgfxRenderPath::tick() {}
 
-// -- Command buffer stubs (no display list equivalent in bgfx) --------------
+// MARK: Command buffer stubs
 
 int BgfxRenderPath::CBuffCreate(int count) {
     std::lock_guard<std::mutex> lk(cbuf_mtx_);
@@ -508,8 +598,7 @@ void BgfxRenderPath::CBuffDelete(int first, int count) {
 void BgfxRenderPath::CBuffDeleteAll() {
     std::lock_guard<std::mutex> lk(cbuf_mtx_);
     for (auto& [id, cb] : cbuf_pool_) {
-        if (bgfx::isValid(cb.vbh))
-            cbuf_destroy_queue_.push_back(cb.vbh);
+        if (bgfx::isValid(cb.vbh)) cbuf_destroy_queue_.push_back(cb.vbh);
     }
     cbuf_pool_.clear();
     cbuf_next_id_ = 1;
@@ -565,11 +654,11 @@ bool BgfxRenderPath::CBuffCall(int index, bool) {
     auto& cb = it->second;
     if (cb.draws.empty()) return false;
 
-
     // Lazily create static VB on main thread
     if (!cb.vb_ready) {
         if (cb.raw_verts.empty()) return false;
-        auto* mem = bgfx::copy(cb.raw_verts.data(), (uint32_t)cb.raw_verts.size());
+        auto* mem =
+            bgfx::copy(cb.raw_verts.data(), (uint32_t)cb.raw_verts.size());
         cb.vbh = bgfx::createVertexBuffer(mem, vl_world_standard_);
         cb.raw_verts.clear();
         cb.raw_verts.shrink_to_fit();
@@ -585,25 +674,27 @@ bool BgfxRenderPath::CBuffCall(int index, bool) {
     bgfx::setTransform(glm::value_ptr(mvp));
 
     uint64_t state = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A;
-    if (depth_write_)        state |= BGFX_STATE_WRITE_Z;
+    if (depth_write_) state |= BGFX_STATE_WRITE_Z;
     if (depth_test_enabled_) state |= BGFX_STATE_DEPTH_TEST_LEQUAL;
-    if (blend_enabled_)      state |= BGFX_STATE_BLEND_ALPHA;
+    if (blend_enabled_) state |= BGFX_STATE_BLEND_ALPHA;
     bgfx::setState(state);
 
     bgfx::setVertexBuffer(0, cb.vbh, 0, total_count);
 
     bgfx::setUniform(u_baseColor_, tint_color_);
-    float chunkOff[4] = { chunk_offset_[0], chunk_offset_[1], chunk_offset_[2], 0 };
+    float chunkOff[4] = {chunk_offset_[0], chunk_offset_[1], chunk_offset_[2],
+                         0};
     bgfx::setUniform(u_chunkOffset_, chunkOff);
-    float lp[4] = { lighting_enabled_ ? 1.0f : 0.0f, 1.0f, 0, 0 };
+    float lp[4] = {lighting_enabled_ ? 1.0f : 0.0f, 1.0f, 0, 0};
     bgfx::setUniform(u_lightParams_, lp);
     bgfx::setUniform(u_light0Dir_, light0_dir_);
     bgfx::setUniform(u_light1Dir_, light1_dir_);
     bgfx::setUniform(u_lightDiffuse_, light_diffuse_);
     bgfx::setUniform(u_lightAmbient_, light_ambient_);
-    float fp[4] = { fog_enabled_ ? fog_mode_ : 0.0f, fog_start_, fog_end_, fog_density_ };
+    float fp[4] = {fog_enabled_ ? fog_mode_ : 0.0f, fog_start_, fog_end_,
+                   fog_density_};
     bgfx::setUniform(u_fogParams_, fp);
-    float lmt[4] = { 1, 1, 0, 0 };
+    float lmt[4] = {1, 1, 0, 0};
     bgfx::setUniform(u_lmTransform_, lmt);
     bgfx::setUniform(u_globalLM_, global_lm_);
 
@@ -615,7 +706,8 @@ bool BgfxRenderPath::CBuffCall(int index, bool) {
             hasTexture = true;
         }
     }
-    float fragP[4] = { hasTexture ? 1.0f : 0.0f, 0.0f, alpha_ref_, fog_enabled_ ? 1.0f : 0.0f };
+    float fragP[4] = {hasTexture ? 1.0f : 0.0f, 0.0f, alpha_ref_,
+                      fog_enabled_ ? 1.0f : 0.0f};
     bgfx::setUniform(u_fragParams_, fragP);
     bgfx::setUniform(u_fogColor_, fog_color_);
 
@@ -630,7 +722,7 @@ bool BgfxRenderPath::CBuffCall(int index, bool) {
 void BgfxRenderPath::CBuffDeferredModeStart() {}
 void BgfxRenderPath::CBuffDeferredModeEnd() {}
 
-// -- Texture legacy stubs ---------------------------------------------------
+// MARK: Texture legacy stubs
 
 int BgfxRenderPath::TextureCreate() {
     int id = next_gl_tex_id_++;
@@ -645,28 +737,31 @@ void BgfxRenderPath::TextureFree(int idx) {
     }
 }
 
-void BgfxRenderPath::TextureBind(int idx) {
-    bound_texture_ = idx;
-}
+void BgfxRenderPath::TextureBind(int idx) { bound_texture_ = idx; }
 
 void BgfxRenderPath::TextureBindVertex(int, bool) {}
 void BgfxRenderPath::TextureSetTextureLevels(int) {}
 
-void BgfxRenderPath::TextureData(int width, int height, void* data, int level, int) {
-    if (level > 0) return; // Skip mipmaps - only store base level
+void BgfxRenderPath::TextureData(int width, int height, void* data, int level,
+                                 int) {
+    if (level > 0) return;
     if (bound_texture_ < 0 || !data || width <= 0 || height <= 0) return;
     auto it = gl_tex_to_bgfx_.find(bound_texture_);
     if (it != gl_tex_to_bgfx_.end()) {
         bgfx::destroy(it->second);
     }
-    const bgfx::Memory* mem = bgfx::copy(data, width * height * 4);
     bgfx::TextureHandle th = bgfx::createTexture2D(
         width, height, false, 1, bgfx::TextureFormat::RGBA8,
-        BGFX_SAMPLER_MIN_POINT | BGFX_SAMPLER_MAG_POINT, mem);
+        BGFX_SAMPLER_MIN_POINT | BGFX_SAMPLER_MAG_POINT);  // no mem
+
+    const bgfx::Memory* mem = bgfx::copy(data, width * height * 4);
+    bgfx::updateTexture2D(th, 0, 0, 0, 0, width, height, mem);
+
     gl_tex_to_bgfx_[bound_texture_] = th;
 }
 
-void BgfxRenderPath::TextureDataUpdate(int xoff, int yoff, int w, int h, void* data, int) {
+void BgfxRenderPath::TextureDataUpdate(int xoff, int yoff, int w, int h,
+                                       void* data, int) {
     if (bound_texture_ < 0 || !data) return;
     auto it = gl_tex_to_bgfx_.find(bound_texture_);
     if (it == gl_tex_to_bgfx_.end()) return;
@@ -675,7 +770,7 @@ void BgfxRenderPath::TextureDataUpdate(int xoff, int yoff, int w, int h, void* d
 }
 
 void BgfxRenderPath::TextureSetParam(int, int) {}
-int  BgfxRenderPath::TextureGetTextureLevels() { return 1; }
+int BgfxRenderPath::TextureGetTextureLevels() { return 1; }
 void BgfxRenderPath::ReadPixels(int, int, int, int, void*) {}
 static int* stb_pixels_to_argb(unsigned char* pixels, int w, int h) {
     int* px = new int[w * h];
@@ -687,35 +782,46 @@ static int* stb_pixels_to_argb(unsigned char* pixels, int w, int h) {
     return px;
 }
 
-int BgfxRenderPath::LoadTextureData(const char* filename, void* srcInfo, int** dataOut) {
+int BgfxRenderPath::LoadTextureData(const char* filename, void* srcInfo,
+                                    int** dataOut) {
     int w, h, channels;
     unsigned char* pixels = stbi_load(filename, &w, &h, &channels, 4);
     if (!pixels) return -1;
     auto* info = static_cast<D3DXIMAGE_INFO*>(srcInfo);
-    if (info) { info->Width = w; info->Height = h; }
+    if (info) {
+        info->Width = w;
+        info->Height = h;
+    }
     *dataOut = stb_pixels_to_argb(pixels, w, h);
     stbi_image_free(pixels);
     return 0;
 }
 
-int BgfxRenderPath::LoadTextureData(uint8_t* data, uint32_t bytes, void* srcInfo, int** dataOut) {
+int BgfxRenderPath::LoadTextureData(uint8_t* data, uint32_t bytes,
+                                    void* srcInfo, int** dataOut) {
     int w, h, channels;
-    unsigned char* pixels = stbi_load_from_memory(data, bytes, &w, &h, &channels, 4);
+    unsigned char* pixels =
+        stbi_load_from_memory(data, bytes, &w, &h, &channels, 4);
     if (!pixels) return -1;
     auto* info = static_cast<D3DXIMAGE_INFO*>(srcInfo);
-    if (info) { info->Width = w; info->Height = h; }
+    if (info) {
+        info->Width = w;
+        info->Height = h;
+    }
     *dataOut = stb_pixels_to_argb(pixels, w, h);
     stbi_image_free(pixels);
     return 0;
 }
 
-// -- Frame lifecycle --------------------------------------------------------
+// MARK: Frame lifecycle
 
 void BgfxRenderPath::StartFrame() {
     int w, h;
     SDL_GetWindowSize(window_, &w, &h);
-    width_ = w; height_ = h;
-    fb_.width = w; fb_.height = h;
+    width_ = w;
+    height_ = h;
+    fb_.width = w;
+    fb_.height = h;
     fb_.aspect = h > 0 ? (float)w / (float)h : 1.0f;
     fb_.is_widescreen = fb_.aspect > 1.5f;
     fb_.is_hi_def = h >= 720;
@@ -752,21 +858,31 @@ void BgfxRenderPath::Clear(int flags) {
     }
 }
 void BgfxRenderPath::SetClearColour(const float rgba[4]) {
-    clear_color_[0] = rgba[0]; clear_color_[1] = rgba[1];
-    clear_color_[2] = rgba[2]; clear_color_[3] = rgba[3];
+    clear_color_[0] = rgba[0];
+    clear_color_[1] = rgba[1];
+    clear_color_[2] = rgba[2];
+    clear_color_[3] = rgba[3];
 }
 void BgfxRenderPath::Set_matrixDirty() {}
 void BgfxRenderPath::CBuffLockStaticCreations() {}
 
-// -- Window -----------------------------------------------------------------
+// MARK: Window
 
-void BgfxRenderPath::GetFramebufferSize(int& w, int& h) { w = width_; h = height_; }
+void BgfxRenderPath::GetFramebufferSize(int& w, int& h) {
+    w = width_;
+    h = height_;
+}
 bool BgfxRenderPath::IsWidescreen() { return fb_.is_widescreen; }
 bool BgfxRenderPath::IsHiDef() { return fb_.is_hi_def; }
 void BgfxRenderPath::Close() { should_close_ = true; }
 bool BgfxRenderPath::ShouldClose() { return should_close_; }
-void BgfxRenderPath::SetWindowSize(int w, int h) { SDL_SetWindowSize(window_, w, h); resize(w, h); }
-void BgfxRenderPath::SetFullscreen(bool fs) { SDL_SetWindowFullscreen(window_, fs ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0); }
+void BgfxRenderPath::SetWindowSize(int w, int h) {
+    SDL_SetWindowSize(window_, w, h);
+    resize(w, h);
+}
+void BgfxRenderPath::SetFullscreen(bool fs) {
+    SDL_SetWindowFullscreen(window_, fs ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
+}
 void BgfxRenderPath::UpdateGamma(unsigned short) {}
 void BgfxRenderPath::Suspend() {}
 bool BgfxRenderPath::Suspended() { return false; }
@@ -781,21 +897,25 @@ void BgfxRenderPath::submit_immediate(const DrawCall& dc) {
     uint32_t vertCount = tvb.vertex_count;
     if (vertCount == 0) return;
     uint32_t stride = vl_world_standard_.getStride();
-    const uint8_t* src = reinterpret_cast<const uint8_t*>(
-        transient_arena_.data() + tvb.offset);
+    const uint8_t* src =
+        reinterpret_cast<const uint8_t*>(transient_arena_.data() + tvb.offset);
     bool isFan = (tvb.primitive == rp::PrimitiveType::triangle_fan);
     uint32_t submitCount = vertCount;
     if (isFan && vertCount >= 3) submitCount = (vertCount - 2) * 3;
-    if (bgfx::getAvailTransientVertexBuffer(submitCount, vl_world_standard_) < submitCount)
+    if (bgfx::getAvailTransientVertexBuffer(submitCount, vl_world_standard_) <
+        submitCount)
         return;
     bgfx::TransientVertexBuffer bvb;
     bgfx::allocTransientVertexBuffer(&bvb, submitCount, vl_world_standard_);
     if (isFan && vertCount >= 3) {
         uint8_t* dst = bvb.data;
         for (uint32_t i = 1; i < vertCount - 1; i++) {
-            memcpy(dst, src, stride); dst += stride;
-            memcpy(dst, src + i * stride, stride); dst += stride;
-            memcpy(dst, src + (i + 1) * stride, stride); dst += stride;
+            memcpy(dst, src, stride);
+            dst += stride;
+            memcpy(dst, src + i * stride, stride);
+            dst += stride;
+            memcpy(dst, src + (i + 1) * stride, stride);
+            dst += stride;
         }
     } else {
         memcpy(bvb.data, src, vertCount * stride);
@@ -803,9 +923,9 @@ void BgfxRenderPath::submit_immediate(const DrawCall& dc) {
     glm::mat4 mvp = projection_stack_.top() * modelview_stack_.top();
     bgfx::setTransform(glm::value_ptr(mvp));
     uint64_t state = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A;
-    if (depth_write_)        state |= BGFX_STATE_WRITE_Z;
+    if (depth_write_) state |= BGFX_STATE_WRITE_Z;
     if (depth_test_enabled_) state |= BGFX_STATE_DEPTH_TEST_LEQUAL;
-    if (blend_enabled_)      state |= BGFX_STATE_BLEND_ALPHA;
+    if (blend_enabled_) state |= BGFX_STATE_BLEND_ALPHA;
     bgfx::setState(state);
     bgfx::setVertexBuffer(0, &bvb);
     bgfx::setUniform(u_baseColor_, dc.tint_color);
@@ -823,7 +943,7 @@ void BgfxRenderPath::submit_immediate(const DrawCall& dc) {
             hasTexture = true;
         }
     }
-    float fragP[4] = { hasTexture ? 1.0f : 0.0f, 0.0f, alpha_ref_, 0.0f };
+    float fragP[4] = {hasTexture ? 1.0f : 0.0f, 0.0f, alpha_ref_, 0.0f};
     bgfx::setUniform(u_fragParams_, fragP);
     bgfx::setUniform(u_fogColor_, zero4);
     if (bgfx::isValid(program_))
@@ -832,7 +952,7 @@ void BgfxRenderPath::submit_immediate(const DrawCall& dc) {
         bgfx::discard();
 }
 
-// -- Factory ----------------------------------------------------------------
+// MARK: Factory
 
 std::unique_ptr<rp::IRenderPath> make_bgfx_render_path(SDL_Window* window) {
     return std::make_unique<BgfxRenderPath>(window);
