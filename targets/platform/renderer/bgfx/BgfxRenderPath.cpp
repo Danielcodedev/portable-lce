@@ -22,6 +22,10 @@
 
 using namespace rp;
 
+thread_local int BgfxRenderPath::cbuf_rec_id_ = -1;
+thread_local std::vector<uint8_t> BgfxRenderPath::cbuf_rec_verts_;
+thread_local std::vector<BgfxRenderPath::CBuffDrawCmd> BgfxRenderPath::cbuf_rec_draws_;
+
 static constexpr uint32_t TRANSIENT_ARENA_SIZE = 16 * 1024 * 1024;
 
 // Embedded minimal shaders (GLSL source for bgfx's GL backend).
@@ -272,50 +276,59 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data, int vType
         data = expand_buf.data();
     }
 
-    // Convert unsupported primitive types to triangle list
-    int submitCount = count;
+    // Convert unsupported primitive types to triangle list into a CPU buffer
+    static thread_local std::vector<uint8_t> conv_buf;
     bool isFan  = (primType == 0x0006); // GL_TRIANGLE_FAN
     bool isQuad = (primType == 0x0007); // GL_QUADS
-    if (isFan && count >= 3) {
+    const uint8_t* src = (const uint8_t*)data;
+    int submitCount = count;
+
+    if (isQuad && count >= 4) {
+        int numQuads = count / 4;
+        submitCount = numQuads * 6;
+        conv_buf.resize(submitCount * stride);
+        uint8_t* dst = conv_buf.data();
+        for (int q = 0; q < numQuads; q++) {
+            const uint8_t* v0 = src + (q*4+0) * stride;
+            const uint8_t* v1 = src + (q*4+1) * stride;
+            const uint8_t* v2 = src + (q*4+2) * stride;
+            const uint8_t* v3 = src + (q*4+3) * stride;
+            memcpy(dst, v0, stride); dst += stride;
+            memcpy(dst, v1, stride); dst += stride;
+            memcpy(dst, v2, stride); dst += stride;
+            memcpy(dst, v0, stride); dst += stride;
+            memcpy(dst, v2, stride); dst += stride;
+            memcpy(dst, v3, stride); dst += stride;
+        }
+        src = conv_buf.data();
+    } else if (isFan && count >= 3) {
         submitCount = (count - 2) * 3;
-    } else if (isQuad && count >= 4) {
-        // Each quad (4 verts) becomes 2 triangles (6 verts)
-        submitCount = (count / 4) * 6;
-    }
-
-    if (bgfx::getAvailTransientVertexBuffer(submitCount, vl_world_standard_) < (uint32_t)submitCount)
-        return;
-    bgfx::TransientVertexBuffer tvb;
-    bgfx::allocTransientVertexBuffer(&tvb, submitCount, vl_world_standard_);
-
-    if (isFan && count >= 3) {
-        const uint8_t* src = (const uint8_t*)data;
-        uint8_t* dst = tvb.data;
+        conv_buf.resize(submitCount * stride);
+        uint8_t* dst = conv_buf.data();
         for (int i = 1; i < count - 1; i++) {
             memcpy(dst, src, stride); dst += stride;
             memcpy(dst, src + i * stride, stride); dst += stride;
             memcpy(dst, src + (i+1) * stride, stride); dst += stride;
         }
-    } else if (isQuad && count >= 4) {
-        const uint8_t* src = (const uint8_t*)data;
-        uint8_t* dst = tvb.data;
-        for (int q = 0; q < count / 4; q++) {
-            const uint8_t* v0 = src + (q*4+0) * stride;
-            const uint8_t* v1 = src + (q*4+1) * stride;
-            const uint8_t* v2 = src + (q*4+2) * stride;
-            const uint8_t* v3 = src + (q*4+3) * stride;
-            // Triangle 1: v0, v1, v2
-            memcpy(dst, v0, stride); dst += stride;
-            memcpy(dst, v1, stride); dst += stride;
-            memcpy(dst, v2, stride); dst += stride;
-            // Triangle 2: v0, v2, v3
-            memcpy(dst, v0, stride); dst += stride;
-            memcpy(dst, v2, stride); dst += stride;
-            memcpy(dst, v3, stride); dst += stride;
-        }
-    } else {
-        memcpy(tvb.data, data, count * stride);
+        src = conv_buf.data();
     }
+
+    size_t bytes = (size_t)submitCount * stride;
+
+    // CBuffer recording mode - append to thread-local buffer, skip bgfx calls
+    if (cbuf_rec_id_ >= 0) {
+        int first = (int)(cbuf_rec_verts_.size() / stride);
+        cbuf_rec_verts_.insert(cbuf_rec_verts_.end(), src, src + bytes);
+        cbuf_rec_draws_.push_back({first, submitCount});
+        return;
+    }
+
+    // Immediate mode - submit through bgfx
+    if (bgfx::getAvailTransientVertexBuffer(submitCount, vl_world_standard_) < (uint32_t)submitCount)
+        return;
+    bgfx::TransientVertexBuffer tvb;
+    bgfx::allocTransientVertexBuffer(&tvb, submitCount, vl_world_standard_);
+    memcpy(tvb.data, src, bytes);
 
     // Set primitive type in bgfx state
     uint64_t primState = 0;
@@ -443,6 +456,16 @@ void BgfxRenderPath::render_frame(const FrameDesc& frame) {
     current_frame_++;
     fb_ = frame.framebuffer;
 
+    // Destroy deferred VBs on main thread
+    {
+        std::lock_guard<std::mutex> lk(cbuf_mtx_);
+        for (auto h : cbuf_destroy_queue_) {
+            if (bgfx::isValid(h))
+                bgfx::destroy(h);
+        }
+        cbuf_destroy_queue_.clear();
+    }
+
     bgfx::setViewRect(0, 0, 0, width_, height_);
     bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x303030ff, 1.0f, 0);
     bgfx::setViewMode(0, bgfx::ViewMode::Sequential);
@@ -468,14 +491,146 @@ void BgfxRenderPath::tick() {}
 
 // -- Command buffer stubs (no display list equivalent in bgfx) --------------
 
-int  BgfxRenderPath::CBuffCreate(int) { return -1; }
-void BgfxRenderPath::CBuffDelete(int, int) {}
-void BgfxRenderPath::CBuffDeleteAll() {}
-void BgfxRenderPath::CBuffStart(int, bool) {}
-void BgfxRenderPath::CBuffClear(int) {}
-int  BgfxRenderPath::CBuffSize(int) { return 0; }
-void BgfxRenderPath::CBuffEnd() {}
-bool BgfxRenderPath::CBuffCall(int, bool) { return false; }
+int BgfxRenderPath::CBuffCreate(int count) {
+    std::lock_guard<std::mutex> lk(cbuf_mtx_);
+    int base = cbuf_next_id_;
+    cbuf_next_id_ += count;
+    return base;
+}
+
+void BgfxRenderPath::CBuffDelete(int first, int count) {
+    std::lock_guard<std::mutex> lk(cbuf_mtx_);
+    for (int i = first; i < first + count; i++) {
+        auto it = cbuf_pool_.find(i);
+        if (it != cbuf_pool_.end()) {
+            if (bgfx::isValid(it->second.vbh))
+                cbuf_destroy_queue_.push_back(it->second.vbh);
+            cbuf_pool_.erase(it);
+        }
+    }
+}
+
+void BgfxRenderPath::CBuffDeleteAll() {
+    std::lock_guard<std::mutex> lk(cbuf_mtx_);
+    for (auto& [id, cb] : cbuf_pool_) {
+        if (bgfx::isValid(cb.vbh))
+            cbuf_destroy_queue_.push_back(cb.vbh);
+    }
+    cbuf_pool_.clear();
+    cbuf_next_id_ = 1;
+}
+
+void BgfxRenderPath::CBuffStart(int index, bool) {
+    cbuf_rec_id_ = index;
+    cbuf_rec_verts_.clear();
+    cbuf_rec_draws_.clear();
+}
+
+void BgfxRenderPath::CBuffClear(int index) {
+    std::lock_guard<std::mutex> lk(cbuf_mtx_);
+    auto it = cbuf_pool_.find(index);
+    if (it != cbuf_pool_.end()) {
+        if (bgfx::isValid(it->second.vbh))
+            cbuf_destroy_queue_.push_back(it->second.vbh);
+        cbuf_pool_.erase(it);
+    }
+}
+
+int BgfxRenderPath::CBuffSize(int index) {
+    std::lock_guard<std::mutex> lk(cbuf_mtx_);
+    auto it = cbuf_pool_.find(index);
+    if (it == cbuf_pool_.end()) return 0;
+    return it->second.valid ? 1 : 0;
+}
+
+void BgfxRenderPath::CBuffEnd() {
+    if (cbuf_rec_id_ < 0) return;
+    std::lock_guard<std::mutex> lk(cbuf_mtx_);
+    auto& cb = cbuf_pool_[cbuf_rec_id_];
+    if (bgfx::isValid(cb.vbh)) {
+        cbuf_destroy_queue_.push_back(cb.vbh);
+        cb.vbh = BGFX_INVALID_HANDLE;
+    }
+    if (cbuf_rec_verts_.empty()) {
+        cbuf_pool_.erase(cbuf_rec_id_);
+        cbuf_rec_id_ = -1;
+        return;
+    }
+    cb.raw_verts = std::move(cbuf_rec_verts_);
+    cb.draws = std::move(cbuf_rec_draws_);
+    cb.valid = true;
+    cb.vb_ready = false;
+    cbuf_rec_id_ = -1;
+}
+
+bool BgfxRenderPath::CBuffCall(int index, bool) {
+    std::lock_guard<std::mutex> lk(cbuf_mtx_);
+    auto it = cbuf_pool_.find(index);
+    if (it == cbuf_pool_.end() || !it->second.valid) return false;
+    auto& cb = it->second;
+    if (cb.draws.empty()) return false;
+
+    // Lazily create static VB on main thread
+    if (!cb.vb_ready) {
+        if (cb.raw_verts.empty()) return false;
+        auto* mem = bgfx::copy(cb.raw_verts.data(), (uint32_t)cb.raw_verts.size());
+        cb.vbh = bgfx::createVertexBuffer(mem, vl_world_standard_);
+        cb.raw_verts.clear();
+        cb.raw_verts.shrink_to_fit();
+        cb.vb_ready = true;
+    }
+
+    if (!bgfx::isValid(cb.vbh)) return false;
+
+    int total_count = 0;
+    for (const auto& dc : cb.draws) total_count += dc.count;
+
+    glm::mat4 mvp = projection_stack_.top() * modelview_stack_.top();
+    bgfx::setTransform(glm::value_ptr(mvp));
+
+    uint64_t state = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A;
+    if (depth_write_)        state |= BGFX_STATE_WRITE_Z;
+    if (depth_test_enabled_) state |= BGFX_STATE_DEPTH_TEST_LEQUAL;
+    if (blend_enabled_)      state |= BGFX_STATE_BLEND_ALPHA;
+    bgfx::setState(state);
+
+    bgfx::setVertexBuffer(0, cb.vbh, 0, total_count);
+
+    bgfx::setUniform(u_baseColor_, tint_color_);
+    float chunkOff[4] = { chunk_offset_[0], chunk_offset_[1], chunk_offset_[2], 0 };
+    bgfx::setUniform(u_chunkOffset_, chunkOff);
+    float lp[4] = { lighting_enabled_ ? 1.0f : 0.0f, 1.0f, 0, 0 };
+    bgfx::setUniform(u_lightParams_, lp);
+    bgfx::setUniform(u_light0Dir_, light0_dir_);
+    bgfx::setUniform(u_light1Dir_, light1_dir_);
+    bgfx::setUniform(u_lightDiffuse_, light_diffuse_);
+    bgfx::setUniform(u_lightAmbient_, light_ambient_);
+    float fp[4] = { fog_enabled_ ? fog_mode_ : 0.0f, fog_start_, fog_end_, fog_density_ };
+    bgfx::setUniform(u_fogParams_, fp);
+    float lmt[4] = { 1, 1, 0, 0 };
+    bgfx::setUniform(u_lmTransform_, lmt);
+    bgfx::setUniform(u_globalLM_, global_lm_);
+
+    bool hasTexture = false;
+    if (texture_enabled_ && bound_texture_ >= 0) {
+        auto tex_it = gl_tex_to_bgfx_.find(bound_texture_);
+        if (tex_it != gl_tex_to_bgfx_.end()) {
+            bgfx::setTexture(0, s_tex0_, tex_it->second);
+            hasTexture = true;
+        }
+    }
+    float fragP[4] = { hasTexture ? 1.0f : 0.0f, 0.0f, alpha_ref_, fog_enabled_ ? 1.0f : 0.0f };
+    bgfx::setUniform(u_fragParams_, fragP);
+    bgfx::setUniform(u_fogColor_, fog_color_);
+
+    if (bgfx::isValid(program_))
+        bgfx::submit(current_view_id_, program_);
+    else
+        bgfx::discard();
+
+    return true;
+}
+
 void BgfxRenderPath::CBuffDeferredModeStart() {}
 void BgfxRenderPath::CBuffDeferredModeEnd() {}
 

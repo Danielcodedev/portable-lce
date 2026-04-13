@@ -1,5 +1,6 @@
 #pragma once
 
+#include <mutex>
 #include <stack>
 #include <unordered_map>
 #include <vector>
@@ -240,4 +241,21 @@ private:
     // GL texture ID to our handle map (for legacy TextureCreate/Bind)
     std::unordered_map<int, bgfx::TextureHandle> gl_tex_to_bgfx_;
     int next_gl_tex_id_ = 1;
+
+    // CBuffer (display list) system
+    struct CBuffDrawCmd { int first; int count; };
+    struct ChunkBuffer {
+        bgfx::VertexBufferHandle vbh = BGFX_INVALID_HANDLE;
+        std::vector<uint8_t> raw_verts;
+        std::vector<CBuffDrawCmd> draws;
+        bool valid = false;
+        bool vb_ready = false;
+    };
+    std::mutex cbuf_mtx_;
+    std::unordered_map<int, ChunkBuffer> cbuf_pool_;
+    std::vector<bgfx::VertexBufferHandle> cbuf_destroy_queue_;
+    int cbuf_next_id_ = 1;
+    static thread_local int cbuf_rec_id_;
+    static thread_local std::vector<uint8_t> cbuf_rec_verts_;
+    static thread_local std::vector<CBuffDrawCmd> cbuf_rec_draws_;
 };
