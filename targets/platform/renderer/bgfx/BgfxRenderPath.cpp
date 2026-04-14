@@ -198,11 +198,37 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
 }
 
 BgfxRenderPath::~BgfxRenderPath() {
-    // PLCE(todo): this seems to race over cbuf_pool_ and cbuf_destroy_queue_
-    // with worker threads doing Cbuff cleanup operations.
-    //
-    // we need to make sure that worker threads are done running Cbuff cleanup
-    // operations before this runs.
+    {
+        std::lock_guard<std::mutex> lk(cbuf_mtx_);
+        shutdown_.store(true, std::memory_order_release);
+        for (auto h : cbuf_destroy_queue_) {
+            if (bgfx::isValid(h)) bgfx::destroy(h);
+        }
+        cbuf_destroy_queue_.clear();
+        for (auto& [id, cb] : cbuf_pool_) {
+            if (bgfx::isValid(cb.vbh)) bgfx::destroy(cb.vbh);
+        }
+        cbuf_pool_.clear();
+    }
+
+    for (auto& slot : textures_) {
+        if (slot.occupied && bgfx::isValid(slot.bgfx_handle))
+            bgfx::destroy(slot.bgfx_handle);
+    }
+    textures_.clear();
+
+    for (auto& [id, h] : gl_tex_to_bgfx_) {
+        if (bgfx::isValid(h)) bgfx::destroy(h);
+    }
+    gl_tex_to_bgfx_.clear();
+
+    for (auto* u : {&u_baseColor_, &u_chunkOffset_, &u_lightParams_,
+                    &u_light0Dir_, &u_light1Dir_, &u_lightDiffuse_,
+                    &u_lightAmbient_, &u_fogParams_, &u_lmTransform_,
+                    &u_globalLM_, &u_fragParams_, &u_fogColor_,
+                    &s_tex0_, &s_tex1_}) {
+        if (bgfx::isValid(*u)) bgfx::destroy(*u);
+    }
 
     if (bgfx::isValid(program_)) bgfx::destroy(program_);
     bgfx::shutdown();
@@ -692,6 +718,7 @@ void BgfxRenderPath::tick() {}
 
 int BgfxRenderPath::CBuffCreate(int count) {
     std::lock_guard<std::mutex> lk(cbuf_mtx_);
+    if (shutdown_.load(std::memory_order_acquire)) return 0;
     int base = cbuf_next_id_;
     cbuf_next_id_ += count;
     return base;
@@ -699,6 +726,7 @@ int BgfxRenderPath::CBuffCreate(int count) {
 
 void BgfxRenderPath::CBuffDelete(int first, int count) {
     std::lock_guard<std::mutex> lk(cbuf_mtx_);
+    if (shutdown_.load(std::memory_order_acquire)) return;
     for (int i = first; i < first + count; i++) {
         auto it = cbuf_pool_.find(i);
         if (it != cbuf_pool_.end()) {
@@ -711,6 +739,7 @@ void BgfxRenderPath::CBuffDelete(int first, int count) {
 
 void BgfxRenderPath::CBuffDeleteAll() {
     std::lock_guard<std::mutex> lk(cbuf_mtx_);
+    if (shutdown_.load(std::memory_order_acquire)) return;
     for (auto& [id, cb] : cbuf_pool_) {
         if (bgfx::isValid(cb.vbh)) cbuf_destroy_queue_.push_back(cb.vbh);
     }
@@ -726,6 +755,7 @@ void BgfxRenderPath::CBuffStart(int index, bool) {
 
 void BgfxRenderPath::CBuffClear(int index) {
     std::lock_guard<std::mutex> lk(cbuf_mtx_);
+    if (shutdown_.load(std::memory_order_acquire)) return;
     auto it = cbuf_pool_.find(index);
     if (it != cbuf_pool_.end()) {
         if (bgfx::isValid(it->second.vbh))
@@ -736,6 +766,7 @@ void BgfxRenderPath::CBuffClear(int index) {
 
 int BgfxRenderPath::CBuffSize(int index) {
     std::lock_guard<std::mutex> lk(cbuf_mtx_);
+    if (shutdown_.load(std::memory_order_acquire)) return 0;
     auto it = cbuf_pool_.find(index);
     if (it == cbuf_pool_.end()) return 0;
     return it->second.valid ? 1 : 0;
@@ -744,12 +775,16 @@ int BgfxRenderPath::CBuffSize(int index) {
 void BgfxRenderPath::CBuffEnd() {
     if (cbuf_rec_id_ < 0) return;
     std::lock_guard<std::mutex> lk(cbuf_mtx_);
-    auto& cb = cbuf_pool_[cbuf_rec_id_];
-    if (bgfx::isValid(cb.vbh)) {
-        cbuf_destroy_queue_.push_back(cb.vbh);
-        cb.vbh = BGFX_INVALID_HANDLE;
+    if (shutdown_.load(std::memory_order_acquire)) {
+        cbuf_rec_id_ = -1;
+        return;
     }
+    auto& cb = cbuf_pool_[cbuf_rec_id_];
     if (cbuf_rec_verts_.empty()) {
+        if (bgfx::isValid(cb.vbh)) {
+            cbuf_destroy_queue_.push_back(cb.vbh);
+            cb.vbh = BGFX_INVALID_HANDLE;
+        }
         cbuf_pool_.erase(cbuf_rec_id_);
         cbuf_rec_id_ = -1;
         return;
@@ -763,17 +798,24 @@ void BgfxRenderPath::CBuffEnd() {
 
 bool BgfxRenderPath::CBuffCall(int index, bool) {
     std::lock_guard<std::mutex> lk(cbuf_mtx_);
+    if (shutdown_.load(std::memory_order_acquire)) return false;
     auto it = cbuf_pool_.find(index);
     if (it == cbuf_pool_.end() || !it->second.valid) return false;
     auto& cb = it->second;
     if (cb.draws.empty()) return false;
 
-    // Lazily create static VB on main thread
+    // Lazily upload geometry on main thread. Reuse the same dynamic VB
+    // across remeshes; BGFX_BUFFER_ALLOW_RESIZE lets bgfx grow on update.
     if (!cb.vb_ready) {
         if (cb.raw_verts.empty()) return false;
         auto* mem =
             bgfx::copy(cb.raw_verts.data(), (uint32_t)cb.raw_verts.size());
-        cb.vbh = bgfx::createVertexBuffer(mem, vl_world_standard_);
+        if (!bgfx::isValid(cb.vbh)) {
+            cb.vbh = bgfx::createDynamicVertexBuffer(
+                mem, vl_world_standard_, BGFX_BUFFER_ALLOW_RESIZE);
+        } else {
+            bgfx::update(cb.vbh, 0, mem);
+        }
         cb.raw_verts.clear();
         cb.raw_verts.shrink_to_fit();
         cb.vb_ready = true;

@@ -2,6 +2,7 @@
 
 #include <bgfx/bgfx.h>
 
+#include <atomic>
 #include <glm/glm.hpp>
 #include <mutex>
 #include <stack>
@@ -236,7 +237,7 @@ private:
         int count;
     };
     struct CommandBuffer {
-        bgfx::VertexBufferHandle vbh = BGFX_INVALID_HANDLE;
+        bgfx::DynamicVertexBufferHandle vbh = BGFX_INVALID_HANDLE;
         std::vector<uint8_t> raw_verts;
         std::vector<CBuffDrawCmd> draws;
         bool valid = false;
@@ -279,8 +280,9 @@ private:
     };
 
     std::mutex cbuf_mtx_;
+    std::atomic<bool> shutdown_{false};
     std::unordered_map<int, CommandBuffer> cbuf_pool_;
-    std::vector<bgfx::VertexBufferHandle> cbuf_destroy_queue_;
+    std::vector<bgfx::DynamicVertexBufferHandle> cbuf_destroy_queue_;
     int cbuf_next_id_ = 1;
     static thread_local int cbuf_rec_id_;
     static thread_local std::vector<uint8_t> cbuf_rec_verts_;
