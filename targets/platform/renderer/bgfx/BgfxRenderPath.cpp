@@ -550,10 +550,10 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data,
 
     glm::mat4 mvp = projection_stack_.top() * modelview_stack_.top();
 
-    // PLCE: this is a hack to avoid implementing this in a shader. these values
-    // are used to prevent Z-fighting and this does effectively the same thing
-    // by breaking the tie in the depth buffer.
-    if (state_.depth_z_bias != 0.0f || state_.depth_slope_bias != 0.0f) {
+    // PLCE: bgfx exposes no polygon offset state, so the constant bias is
+    // baked into clip-space Z here. Slope bias would need a shader-side
+    // implementation and is currently ignored.
+    if (state_.depth_z_bias != 0.0f) {
         mvp[3][2] += state_.depth_z_bias * Z_BIAS_EPSILON;
     }
 
@@ -1055,7 +1055,11 @@ void BgfxRenderPath::GetFramebufferSize(int& w, int& h) {
 }
 bool BgfxRenderPath::IsWidescreen() { return fb_.is_widescreen; }
 bool BgfxRenderPath::IsHiDef() { return fb_.is_hi_def; }
-void BgfxRenderPath::Close() { should_close_ = true; }
+void BgfxRenderPath::Close() {
+    should_close_ = true;
+    std::lock_guard<std::mutex> lk(cbuf_mtx_);
+    shutdown_.store(true, std::memory_order_release);
+}
 bool BgfxRenderPath::ShouldClose() { return should_close_; }
 void BgfxRenderPath::SetWindowSize(int w, int h) {
     SDL_SetWindowSize(window_, w, h);
@@ -1102,16 +1106,29 @@ void BgfxRenderPath::submit_immediate(const DrawCall& dc) {
         memcpy(bvb.data, src, vertCount * stride);
     }
     glm::mat4 mvp = projection_stack_.top() * modelview_stack_.top();
+    if (state_.depth_z_bias != 0.0f) {
+        mvp[3][2] += state_.depth_z_bias * Z_BIAS_EPSILON;
+    }
     bgfx::setTransform(glm::value_ptr(mvp));
     bgfx::setState(state_.bgfx_state, state_.blend_factor_rgba);
     bgfx::setVertexBuffer(0, &bvb);
+
     bgfx::setUniform(u_baseColor_, dc.tint_color);
-    float zero4[4] = {0, 0, 0, 0};
-    bgfx::setUniform(u_chunkOffset_, zero4);
-    float lp[4] = {0, 0, 0, 0};
+    float chunkOff[4] = {state_.chunk_offset[0], state_.chunk_offset[1],
+                         state_.chunk_offset[2], 0};
+    bgfx::setUniform(u_chunkOffset_, chunkOff);
+    float lp[4] = {state_.lighting_enabled ? 1.0f : 0.0f, 1.0f, 0, 0};
     bgfx::setUniform(u_lightParams_, lp);
-    float fp[4] = {0, 0, 0, 0};
+    bgfx::setUniform(u_light0Dir_, state_.light0_dir);
+    bgfx::setUniform(u_light1Dir_, state_.light1_dir);
+    bgfx::setUniform(u_lightDiffuse_, state_.light_diffuse);
+    bgfx::setUniform(u_lightAmbient_, state_.light_ambient);
+    float fp[4] = {state_.fog_enabled ? state_.fog_mode : 0.0f,
+                   state_.fog_start, state_.fog_end, state_.fog_density};
     bgfx::setUniform(u_fogParams_, fp);
+    bgfx::setUniform(u_lmTransform_, state_.lm_transform);
+    bgfx::setUniform(u_globalLM_, state_.global_lm);
+
     bool hasTexture = false;
     if (state_.texture_enabled && state_.bound_texture >= 0) {
         auto it = gl_tex_to_bgfx_.find(state_.bound_texture);
@@ -1120,9 +1137,11 @@ void BgfxRenderPath::submit_immediate(const DrawCall& dc) {
             hasTexture = true;
         }
     }
-    float fragP[4] = {hasTexture ? 1.0f : 0.0f, 0.0f, state_.alpha_ref, 0.0f};
+    float fragP[4] = {hasTexture ? 1.0f : 0.0f, 0.0f, state_.alpha_ref,
+                      state_.fog_enabled ? 1.0f : 0.0f};
     bgfx::setUniform(u_fragParams_, fragP);
-    bgfx::setUniform(u_fogColor_, zero4);
+    bgfx::setUniform(u_fogColor_, state_.fog_color);
+
     if (bgfx::isValid(program_))
         bgfx::submit(current_view_id_, program_);
     else
