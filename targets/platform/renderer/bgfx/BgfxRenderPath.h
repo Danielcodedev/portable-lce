@@ -234,7 +234,7 @@ private:
         int first;
         int count;
     };
-    struct ChunkBuffer {
+    struct CommandBuffer {
         bgfx::VertexBufferHandle vbh = BGFX_INVALID_HANDLE;
         std::vector<uint8_t> raw_verts;
         std::vector<CBuffDrawCmd> draws;
@@ -270,7 +270,7 @@ private:
     };
 
     std::mutex cbuf_mtx_;
-    std::unordered_map<int, ChunkBuffer> cbuf_pool_;
+    std::unordered_map<int, CommandBuffer> cbuf_pool_;
     std::vector<bgfx::VertexBufferHandle> cbuf_destroy_queue_;
     int cbuf_next_id_ = 1;
     static thread_local int cbuf_rec_id_;
