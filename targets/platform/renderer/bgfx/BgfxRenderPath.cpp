@@ -29,6 +29,37 @@ thread_local BgfxRenderPath::RenderState BgfxRenderPath::state_;
 static constexpr uint32_t TRANSIENT_ARENA_SIZE = 16 * 1024 * 1024;
 constexpr float Z_BIAS_EPSILON = 6e-5f;
 
+static uint64_t bgfx_blend_factor(rp::BlendFactor f) {
+    switch (f) {
+        case rp::BlendFactor::zero:                     return BGFX_STATE_BLEND_ZERO;
+        case rp::BlendFactor::one:                      return BGFX_STATE_BLEND_ONE;
+        case rp::BlendFactor::src_color:                return BGFX_STATE_BLEND_SRC_COLOR;
+        case rp::BlendFactor::one_minus_src_color:      return BGFX_STATE_BLEND_INV_SRC_COLOR;
+        case rp::BlendFactor::src_alpha:                return BGFX_STATE_BLEND_SRC_ALPHA;
+        case rp::BlendFactor::one_minus_src_alpha:      return BGFX_STATE_BLEND_INV_SRC_ALPHA;
+        case rp::BlendFactor::dst_color:                return BGFX_STATE_BLEND_DST_COLOR;
+        case rp::BlendFactor::one_minus_dst_color:      return BGFX_STATE_BLEND_INV_DST_COLOR;
+        case rp::BlendFactor::dst_alpha:                return BGFX_STATE_BLEND_DST_ALPHA;
+        case rp::BlendFactor::one_minus_dst_alpha:      return BGFX_STATE_BLEND_INV_DST_ALPHA;
+        case rp::BlendFactor::constant_alpha:           return BGFX_STATE_BLEND_FACTOR;
+        case rp::BlendFactor::one_minus_constant_alpha: return BGFX_STATE_BLEND_INV_FACTOR;
+    }
+    return BGFX_STATE_BLEND_ONE;
+}
+
+static uint64_t bgfx_depth_func(rp::DepthTest t) {
+    switch (t) {
+        case rp::DepthTest::off:           return BGFX_STATE_DEPTH_TEST_ALWAYS;
+        case rp::DepthTest::less:          return BGFX_STATE_DEPTH_TEST_LESS;
+        case rp::DepthTest::less_equal:    return BGFX_STATE_DEPTH_TEST_LEQUAL;
+        case rp::DepthTest::equal:         return BGFX_STATE_DEPTH_TEST_EQUAL;
+        case rp::DepthTest::greater:       return BGFX_STATE_DEPTH_TEST_GREATER;
+        case rp::DepthTest::greater_equal: return BGFX_STATE_DEPTH_TEST_GEQUAL;
+        case rp::DepthTest::always:        return BGFX_STATE_DEPTH_TEST_ALWAYS;
+    }
+    return BGFX_STATE_DEPTH_TEST_LEQUAL;
+}
+
 // Embedded minimal shaders (GLSL source for bgfx's GL backend).
 // In production these would be compiled with shaderc; for bootstrap we
 // use bgfx's built-in debug text program or the noop renderer.
@@ -246,23 +277,43 @@ void BgfxRenderPath::StateSetDepthMask(bool e) {
                         (e ? BGFX_STATE_WRITE_Z : 0);
 }
 
-void BgfxRenderPath::StateSetBlendEnable(bool e) { state_.blend_enabled = e; }
-
-void BgfxRenderPath::StateSetBlendFunc(rp::BlendFactor, rp::BlendFactor) {
-    // Simplified: most common is src_alpha/one_minus_src_alpha
-    state_.bgfx_state = (state_.bgfx_state & ~BGFX_STATE_BLEND_MASK) |
-                        (state_.blend_enabled ? BGFX_STATE_BLEND_ALPHA : 0);
+void BgfxRenderPath::StateSetBlendEnable(bool e) {
+    state_.blend_enabled = e;
+    state_.bgfx_state &= ~BGFX_STATE_BLEND_MASK;
+    if (e) {
+        state_.bgfx_state |= BGFX_STATE_BLEND_FUNC(
+            bgfx_blend_factor(state_.blend_src),
+            bgfx_blend_factor(state_.blend_dst));
+    }
 }
 
-void BgfxRenderPath::StateSetBlendFactor(unsigned int) {}
+void BgfxRenderPath::StateSetBlendFunc(rp::BlendFactor s, rp::BlendFactor d) {
+    state_.blend_src = s;
+    state_.blend_dst = d;
+    state_.bgfx_state &= ~BGFX_STATE_BLEND_MASK;
+    if (state_.blend_enabled) {
+        state_.bgfx_state |= BGFX_STATE_BLEND_FUNC(bgfx_blend_factor(s),
+                                                   bgfx_blend_factor(d));
+    }
+}
+
+void BgfxRenderPath::StateSetBlendFactor(unsigned int argb) {
+    uint32_t a = (argb >> 24) & 0xFF;
+    uint32_t r = (argb >> 16) & 0xFF;
+    uint32_t g = (argb >> 8) & 0xFF;
+    uint32_t b = argb & 0xFF;
+    state_.blend_factor_rgba = (r << 24) | (g << 16) | (b << 8) | a;
+}
+
 void BgfxRenderPath::StateSetAlphaFunc(rp::AlphaTest, float r) {
     state_.alpha_ref = r;
 }
 
-void BgfxRenderPath::StateSetDepthFunc(rp::DepthTest) {
+void BgfxRenderPath::StateSetDepthFunc(rp::DepthTest t) {
+    state_.depth_func_bits = bgfx_depth_func(t);
     state_.bgfx_state =
         (state_.bgfx_state & ~BGFX_STATE_DEPTH_TEST_MASK) |
-        (state_.depth_test_enabled ? BGFX_STATE_DEPTH_TEST_LEQUAL : 0);
+        (state_.depth_test_enabled ? state_.depth_func_bits : 0);
 }
 
 void BgfxRenderPath::StateSetFaceCull(bool e) {
@@ -282,10 +333,13 @@ void BgfxRenderPath::StateSetWriteEnable(bool r, bool g, bool b, bool a) {
 void BgfxRenderPath::StateSetDepthTestEnable(bool e) {
     state_.depth_test_enabled = e;
     state_.bgfx_state = (state_.bgfx_state & ~BGFX_STATE_DEPTH_TEST_MASK) |
-                        (e ? BGFX_STATE_DEPTH_TEST_LEQUAL : 0);
+                        (e ? state_.depth_func_bits : 0);
 }
 
-void BgfxRenderPath::StateSetAlphaTestEnable(bool) {}
+void BgfxRenderPath::StateSetAlphaTestEnable(bool e) {
+    state_.alpha_test_enabled = e;
+    state_.alpha_ref = e ? 0.1f : 0.0f;
+}
 void BgfxRenderPath::StateSetDepthSlopeAndBias(float slope, float bias) {
     state_.depth_slope_bias = slope;
     state_.depth_z_bias = bias;
@@ -321,14 +375,19 @@ void BgfxRenderPath::StateSetLightAmbientColour(float r, float g, float b) {
     state_.light_ambient[2] = b;
 }
 void BgfxRenderPath::StateSetLightDirection(int l, float x, float y, float z) {
-    float* d = l == 0 ? state_.light0_dir : state_.light1_dir;
-    d[0] = x;
-    d[1] = y;
-    d[2] = z;
+    glm::vec3 d = glm::normalize(glm::mat3(modelview_stack_.top()) *
+                                 glm::vec3(x, y, z));
+    float* dst = (l == 0) ? state_.light0_dir : state_.light1_dir;
+    dst[0] = d.x;
+    dst[1] = d.y;
+    dst[2] = d.z;
+    dst[3] = 0;
 }
 void BgfxRenderPath::StateSetLightEnable(int, bool) {}
 
-void BgfxRenderPath::StateSetViewport(int) {}
+void BgfxRenderPath::StateSetViewport(int) {
+    bgfx::setViewRect(current_view_id_, 0, 0, width_, height_);
+}
 void BgfxRenderPath::StateSetEnableViewportClipPlanes(bool) {}
 void BgfxRenderPath::StateSetStencil(int, uint8_t, uint8_t, uint8_t) {}
 void BgfxRenderPath::StateSetForceLOD(int) {}
@@ -343,7 +402,10 @@ void BgfxRenderPath::SetChunkOffset(float x, float y, float z) {
     state_.chunk_offset[2] = z;
 }
 
-void BgfxRenderPath::StateSetVertexTextureUV(float, float) {}
+void BgfxRenderPath::StateSetVertexTextureUV(float u, float v) {
+    state_.global_lm[0] = u;
+    state_.global_lm[1] = v;
+}
 
 // MARK: DrawVertices
 
@@ -439,7 +501,7 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data,
     if (cbuf_rec_id_ >= 0) {
         int first = (int)(cbuf_rec_verts_.size() / stride);
         cbuf_rec_verts_.insert(cbuf_rec_verts_.end(), src, src + bytes);
-        cbuf_rec_draws_.push_back({first, submitCount});
+        cbuf_rec_draws_.push_back({primType, first, submitCount});
         return;
     }
 
@@ -470,13 +532,7 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data,
     }
 
     bgfx::setTransform(glm::value_ptr(mvp));
-    uint64_t finalState = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A;
-    if (state_.depth_write) finalState |= BGFX_STATE_WRITE_Z;
-    if (state_.cull_enabled) finalState |= BGFX_STATE_CULL_CW;
-    if (state_.depth_test_enabled) finalState |= BGFX_STATE_DEPTH_TEST_LEQUAL;
-    if (state_.blend_enabled) finalState |= BGFX_STATE_BLEND_ALPHA;
-    finalState |= primState;
-    bgfx::setState(finalState);
+    bgfx::setState(state_.bgfx_state | primState, state_.blend_factor_rgba);
     bgfx::setVertexBuffer(0, &tvb);
 
     // Vertex uniforms
@@ -493,10 +549,8 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data,
     float fp[4] = {state_.fog_enabled ? state_.fog_mode : 0.0f,
                    state_.fog_start, state_.fog_end, state_.fog_density};
     bgfx::setUniform(u_fogParams_, fp);
-    float lmt[4] = {1, 1, 0, 0};
-    bgfx::setUniform(u_lmTransform_, lmt);
+    bgfx::setUniform(u_lmTransform_, state_.lm_transform);
     bgfx::setUniform(u_globalLM_, state_.global_lm);
-    // Bind texture if available
     bool hasTexture = false;
     if (state_.texture_enabled && state_.bound_texture >= 0) {
         auto it = gl_tex_to_bgfx_.find(state_.bound_texture);
@@ -505,7 +559,6 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data,
             hasTexture = true;
         }
     }
-    // Fragment uniforms
     float fragP[4] = {hasTexture ? 1.0f : 0.0f, 0.0f, state_.alpha_ref,
                       state_.fog_enabled ? 1.0f : 0.0f};
     bgfx::setUniform(u_fragParams_, fragP);
@@ -728,9 +781,6 @@ bool BgfxRenderPath::CBuffCall(int index, bool) {
 
     if (!bgfx::isValid(cb.vbh)) return false;
 
-    int total_count = 0;
-    for (const auto& dc : cb.draws) total_count += dc.count;
-
     glm::mat4 mvp = projection_stack_.top() * modelview_stack_.top();
     // PLCE: this is a hack to avoid implementing this in a shader. these values
     // are used to prevent Z-fighting and this does effectively the same thing
@@ -738,51 +788,55 @@ bool BgfxRenderPath::CBuffCall(int index, bool) {
     if (state_.depth_z_bias != 0.0f) {
         mvp[3][2] += state_.depth_z_bias * Z_BIAS_EPSILON;
     }
-    bgfx::setTransform(glm::value_ptr(mvp));
 
-    uint64_t state = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A;
-    if (state_.depth_write) state |= BGFX_STATE_WRITE_Z;
-    if (state_.cull_enabled) state |= BGFX_STATE_CULL_CW;
-    if (state_.depth_test_enabled) state |= BGFX_STATE_DEPTH_TEST_LEQUAL;
-    if (state_.blend_enabled) state |= BGFX_STATE_BLEND_ALPHA;
-    bgfx::setState(state);
-
-    bgfx::setVertexBuffer(0, cb.vbh, 0, total_count);
-
-    bgfx::setUniform(u_baseColor_, state_.tint_color);
     float chunkOff[4] = {state_.chunk_offset[0], state_.chunk_offset[1],
                          state_.chunk_offset[2], 0};
-    bgfx::setUniform(u_chunkOffset_, chunkOff);
     float lp[4] = {state_.lighting_enabled ? 1.0f : 0.0f, 1.0f, 0, 0};
-    bgfx::setUniform(u_lightParams_, lp);
-    bgfx::setUniform(u_light0Dir_, state_.light0_dir);
-    bgfx::setUniform(u_light1Dir_, state_.light1_dir);
-    bgfx::setUniform(u_lightDiffuse_, state_.light_diffuse);
-    bgfx::setUniform(u_lightAmbient_, state_.light_ambient);
     float fp[4] = {state_.fog_enabled ? state_.fog_mode : 0.0f,
                    state_.fog_start, state_.fog_end, state_.fog_density};
-    bgfx::setUniform(u_fogParams_, fp);
-    float lmt[4] = {1, 1, 0, 0};
-    bgfx::setUniform(u_lmTransform_, lmt);
-    bgfx::setUniform(u_globalLM_, state_.global_lm);
 
     bool hasTexture = false;
+    bgfx::TextureHandle texHandle = BGFX_INVALID_HANDLE;
     if (state_.texture_enabled && state_.bound_texture >= 0) {
         auto tex_it = gl_tex_to_bgfx_.find(state_.bound_texture);
         if (tex_it != gl_tex_to_bgfx_.end()) {
-            bgfx::setTexture(0, s_tex0_, tex_it->second);
+            texHandle = tex_it->second;
             hasTexture = true;
         }
     }
     float fragP[4] = {hasTexture ? 1.0f : 0.0f, 0.0f, state_.alpha_ref,
                       state_.fog_enabled ? 1.0f : 0.0f};
-    bgfx::setUniform(u_fragParams_, fragP);
-    bgfx::setUniform(u_fogColor_, state_.fog_color);
 
-    if (bgfx::isValid(program_))
-        bgfx::submit(current_view_id_, program_);
-    else
-        bgfx::discard();
+    for (const auto& dc : cb.draws) {
+        uint64_t primBits = 0;
+        if (dc.prim == 0x0005)      primBits = BGFX_STATE_PT_TRISTRIP;
+        else if (dc.prim == 0x0001) primBits = BGFX_STATE_PT_LINES;
+        else if (dc.prim == 0x0003) primBits = BGFX_STATE_PT_LINESTRIP;
+
+        bgfx::setTransform(glm::value_ptr(mvp));
+        bgfx::setState(state_.bgfx_state | primBits, state_.blend_factor_rgba);
+        bgfx::setVertexBuffer(0, cb.vbh, dc.first, dc.count);
+
+        bgfx::setUniform(u_baseColor_, state_.tint_color);
+        bgfx::setUniform(u_chunkOffset_, chunkOff);
+        bgfx::setUniform(u_lightParams_, lp);
+        bgfx::setUniform(u_light0Dir_, state_.light0_dir);
+        bgfx::setUniform(u_light1Dir_, state_.light1_dir);
+        bgfx::setUniform(u_lightDiffuse_, state_.light_diffuse);
+        bgfx::setUniform(u_lightAmbient_, state_.light_ambient);
+        bgfx::setUniform(u_fogParams_, fp);
+        bgfx::setUniform(u_lmTransform_, state_.lm_transform);
+        bgfx::setUniform(u_globalLM_, state_.global_lm);
+        bgfx::setUniform(u_fragParams_, fragP);
+        bgfx::setUniform(u_fogColor_, state_.fog_color);
+
+        if (hasTexture) bgfx::setTexture(0, s_tex0_, texHandle);
+
+        if (bgfx::isValid(program_))
+            bgfx::submit(current_view_id_, program_);
+        else
+            bgfx::discard();
+    }
 
     return true;
 }
@@ -807,7 +861,24 @@ void BgfxRenderPath::TextureFree(int idx) {
 
 void BgfxRenderPath::TextureBind(int idx) { state_.bound_texture = idx; }
 
-void BgfxRenderPath::TextureBindVertex(int, bool) {}
+void BgfxRenderPath::TextureBindVertex(int idx, bool scaleLight) {
+    if (idx < 0) {
+        state_.bound_vertex_texture = -1;
+        state_.use_lightmap = false;
+        return;
+    }
+    state_.bound_vertex_texture = idx;
+    state_.use_lightmap = true;
+    state_.lm_transform[0] = 1;
+    state_.lm_transform[1] = 1;
+    if (scaleLight) {
+        state_.lm_transform[2] = 8.f / 256.f;
+        state_.lm_transform[3] = 8.f / 256.f;
+    } else {
+        state_.lm_transform[2] = 0;
+        state_.lm_transform[3] = 0;
+    }
+}
 void BgfxRenderPath::TextureSetTextureLevels(int) {}
 
 void BgfxRenderPath::TextureData(int width, int height, void* data, int level,
@@ -990,12 +1061,7 @@ void BgfxRenderPath::submit_immediate(const DrawCall& dc) {
     }
     glm::mat4 mvp = projection_stack_.top() * modelview_stack_.top();
     bgfx::setTransform(glm::value_ptr(mvp));
-    uint64_t state = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A;
-    if (state_.depth_write) state |= BGFX_STATE_WRITE_Z;
-    if (state_.cull_enabled) state |= BGFX_STATE_CULL_CW;
-    if (state_.depth_test_enabled) state |= BGFX_STATE_DEPTH_TEST_LEQUAL;
-    if (state_.blend_enabled) state |= BGFX_STATE_BLEND_ALPHA;
-    bgfx::setState(state);
+    bgfx::setState(state_.bgfx_state, state_.blend_factor_rgba);
     bgfx::setVertexBuffer(0, &bvb);
     bgfx::setUniform(u_baseColor_, dc.tint_color);
     float zero4[4] = {0, 0, 0, 0};

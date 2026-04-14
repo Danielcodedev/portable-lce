@@ -231,6 +231,7 @@ private:
 
     // CBuffer (display list) system
     struct CBuffDrawCmd {
+        int prim;
         int first;
         int count;
     };
@@ -267,6 +268,14 @@ private:
         float clear_color[4] = {0.19f, 0.19f, 0.19f, 1.0f};
         float depth_slope_bias = 0.0f;
         float depth_z_bias = 0.0f;
+        rp::BlendFactor blend_src = rp::BlendFactor::src_alpha;
+        rp::BlendFactor blend_dst = rp::BlendFactor::one_minus_src_alpha;
+        uint32_t blend_factor_rgba = 0xFFFFFFFF;
+        bool alpha_test_enabled = false;
+        uint64_t depth_func_bits = BGFX_STATE_DEPTH_TEST_LEQUAL;
+        int bound_vertex_texture = -1;
+        float lm_transform[4] = {1, 1, 0, 0};
+        bool use_lightmap = false;
     };
 
     std::mutex cbuf_mtx_;
