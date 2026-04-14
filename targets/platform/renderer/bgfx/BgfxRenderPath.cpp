@@ -26,6 +26,7 @@ thread_local std::vector<BgfxRenderPath::CBuffDrawCmd>
     BgfxRenderPath::cbuf_rec_draws_;
 
 static constexpr uint32_t TRANSIENT_ARENA_SIZE = 16 * 1024 * 1024;
+constexpr float Z_BIAS_EPSILON = 6e-5f;
 
 // Embedded minimal shaders (GLSL source for bgfx's GL backend).
 // In production these would be compiled with shaderc; for bootstrap we
@@ -43,8 +44,6 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
     SDL_GetWindowWMInfo(window_, &wmi);
 
     bgfx::renderFrame();  // single-threaded mode signal
-    SDL_Log("SDL subsystem: %d (X11=%d, Wayland=%d)", wmi.subsystem,
-            SDL_SYSWM_X11, SDL_SYSWM_WAYLAND);
 
     bgfx::Init init;
 #if defined(__linux__)
@@ -279,7 +278,10 @@ void BgfxRenderPath::StateSetDepthTestEnable(bool e) {
 }
 
 void BgfxRenderPath::StateSetAlphaTestEnable(bool) {}
-void BgfxRenderPath::StateSetDepthSlopeAndBias(float, float) {}
+void BgfxRenderPath::StateSetDepthSlopeAndBias(float slope, float bias) {
+    depth_slope_bias_ = slope;
+    depth_z_bias_ = bias;
+}
 
 // MARK: Fog
 void BgfxRenderPath::StateSetFogEnable(bool e) { fog_enabled_ = e; }
@@ -447,6 +449,14 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data,
         primState = BGFX_STATE_PT_LINESTRIP;  // GL_LINE_STRIP
 
     glm::mat4 mvp = projection_stack_.top() * modelview_stack_.top();
+
+    // PLCE: this is a hack to avoid implementing this in a shader. these values
+    // are used to prevent Z-fighting and this does effectively the same thing by
+    // breaking the tie in the depth buffer.
+    if (depth_z_bias_ != 0.0f || depth_slope_bias_ != 0.0f) {
+        mvp[3][2] += depth_z_bias_ * Z_BIAS_EPSILON;
+    }
+
     bgfx::setTransform(glm::value_ptr(mvp));
     uint64_t finalState = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A;
     if (depth_write_) finalState |= BGFX_STATE_WRITE_Z;
@@ -710,6 +720,12 @@ bool BgfxRenderPath::CBuffCall(int index, bool) {
     for (const auto& dc : cb.draws) total_count += dc.count;
 
     glm::mat4 mvp = projection_stack_.top() * modelview_stack_.top();
+    // PLCE: this is a hack to avoid implementing this in a shader. these values
+    // are used to prevent Z-fighting and this does effectively the same thing by
+    // breaking the tie in the depth buffer.
+    if (depth_z_bias_ != 0.0f) {
+        mvp[3][2] += depth_z_bias_ * Z_BIAS_EPSILON;
+    }
     bgfx::setTransform(glm::value_ptr(mvp));
 
     uint64_t state = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A;
