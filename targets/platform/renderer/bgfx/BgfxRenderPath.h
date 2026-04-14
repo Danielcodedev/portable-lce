@@ -179,33 +179,6 @@ private:
     glm::mat4 projection_top_{1.0f};
     glm::mat4 modelview_top_{1.0f};
 
-    // State accumulator
-    uint64_t bgfx_state_ = 0;
-    float tint_color_[4] = {1, 1, 1, 1};
-    bool blend_enabled_ = false;
-    bool depth_test_enabled_ = true;
-    bool depth_write_ = true;
-    bool cull_enabled_ = true;
-    bool texture_enabled_ = true;
-    int bound_texture_ = -1;
-    float chunk_offset_[3] = {0, 0, 0};
-    float fog_mode_ = 0;
-    float fog_start_ = 0;
-    float fog_end_ = 100;
-    float fog_density_ = 0;
-    float fog_color_[4] = {0.5f, 0.7f, 1.0f, 1.0f};
-    bool fog_enabled_ = false;
-    bool lighting_enabled_ = false;
-    float light0_dir_[4] = {0, -1, 0, 0};
-    float light1_dir_[4] = {0, -1, 0, 0};
-    float light_diffuse_[4] = {0.6f, 0.6f, 0.6f, 1};
-    float light_ambient_[4] = {0.4f, 0.4f, 0.4f, 1};
-    float global_lm_[4] = {0, 0, 0, 0};
-    float alpha_ref_ = 0.1f;
-    float clear_color_[4] = {0.19f, 0.19f, 0.19f, 1.0f};
-    float depth_slope_bias_ = 0.0f;
-    float depth_z_bias_ = 0.0f;
-
     // bgfx vertex layouts
     bgfx::VertexLayout vl_world_standard_;
 
@@ -268,6 +241,34 @@ private:
         bool valid = false;
         bool vb_ready = false;
     };
+    struct RenderState {
+        uint64_t bgfx_state = 0;
+        bool depth_write = true;
+        bool blend_enabled = false;
+        bool depth_test_enabled = true;
+        bool cull_enabled = true;
+        bool texture_enabled = true;
+        bool fog_enabled = false;
+        bool lighting_enabled = false;
+        int bound_texture = -1;
+        float tint_color[4] = {1, 1, 1, 1};
+        float chunk_offset[3] = {0, 0, 0};
+        float fog_mode = 0;
+        float fog_start = 0;
+        float fog_end = 100;
+        float fog_density = 0;
+        float fog_color[4] = {0.5f, 0.7f, 1.0f, 1.0f};
+        float light0_dir[4] = {0, -1, 0, 0};
+        float light1_dir[4] = {0, -1, 0, 0};
+        float light_diffuse[4] = {0.6f, 0.6f, 0.6f, 1};
+        float light_ambient[4] = {0.4f, 0.4f, 0.4f, 1};
+        float global_lm[4] = {0, 0, 0, 0};
+        float alpha_ref = 0.1f;
+        float clear_color[4] = {0.19f, 0.19f, 0.19f, 1.0f};
+        float depth_slope_bias = 0.0f;
+        float depth_z_bias = 0.0f;
+    };
+
     std::mutex cbuf_mtx_;
     std::unordered_map<int, ChunkBuffer> cbuf_pool_;
     std::vector<bgfx::VertexBufferHandle> cbuf_destroy_queue_;
@@ -275,4 +276,5 @@ private:
     static thread_local int cbuf_rec_id_;
     static thread_local std::vector<uint8_t> cbuf_rec_verts_;
     static thread_local std::vector<CBuffDrawCmd> cbuf_rec_draws_;
+    static thread_local RenderState state_;
 };

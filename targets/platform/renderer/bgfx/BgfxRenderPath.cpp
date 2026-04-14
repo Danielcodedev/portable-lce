@@ -24,6 +24,7 @@ thread_local int BgfxRenderPath::cbuf_rec_id_ = -1;
 thread_local std::vector<uint8_t> BgfxRenderPath::cbuf_rec_verts_;
 thread_local std::vector<BgfxRenderPath::CBuffDrawCmd>
     BgfxRenderPath::cbuf_rec_draws_;
+thread_local BgfxRenderPath::RenderState BgfxRenderPath::state_;
 
 static constexpr uint32_t TRANSIENT_ARENA_SIZE = 16 * 1024 * 1024;
 constexpr float Z_BIAS_EPSILON = 6e-5f;
@@ -94,8 +95,8 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
     fb_.is_widescreen = fb_.aspect > 1.5f;
     fb_.is_hi_def = height_ >= 720;
 
-    bgfx_state_ = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A |
-                  BGFX_STATE_WRITE_Z | BGFX_STATE_DEPTH_TEST_LEQUAL;
+    state_.bgfx_state = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A |
+                        BGFX_STATE_WRITE_Z | BGFX_STATE_DEPTH_TEST_LEQUAL;
 
     // Load shaders
     const uint8_t* vs_data = nullptr;
@@ -166,6 +167,12 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
 }
 
 BgfxRenderPath::~BgfxRenderPath() {
+    // PLCE(todo): this seems to race over cbuf_pool_ and cbuf_destroy_queue_
+    // with worker threads doing Cbuff cleanup operations.
+    //
+    // we need to make sure that worker threads are done running Cbuff cleanup
+    // operations before this runs.
+
     if (bgfx::isValid(program_)) bgfx::destroy(program_);
     bgfx::shutdown();
 }
@@ -227,91 +234,94 @@ const float* BgfxRenderPath::MatrixGet(rp::MatrixStack stack) {
 // MARK: State accumulator
 
 void BgfxRenderPath::StateSetColour(float r, float g, float b, float a) {
-    tint_color_[0] = r;
-    tint_color_[1] = g;
-    tint_color_[2] = b;
-    tint_color_[3] = a;
+    state_.tint_color[0] = r;
+    state_.tint_color[1] = g;
+    state_.tint_color[2] = b;
+    state_.tint_color[3] = a;
 }
 
 void BgfxRenderPath::StateSetDepthMask(bool e) {
-    depth_write_ = e;
-    bgfx_state_ =
-        (bgfx_state_ & ~BGFX_STATE_WRITE_Z) | (e ? BGFX_STATE_WRITE_Z : 0);
+    state_.depth_write = e;
+    state_.bgfx_state = (state_.bgfx_state & ~BGFX_STATE_WRITE_Z) |
+                        (e ? BGFX_STATE_WRITE_Z : 0);
 }
 
-void BgfxRenderPath::StateSetBlendEnable(bool e) { blend_enabled_ = e; }
+void BgfxRenderPath::StateSetBlendEnable(bool e) { state_.blend_enabled = e; }
 
 void BgfxRenderPath::StateSetBlendFunc(rp::BlendFactor, rp::BlendFactor) {
     // Simplified: most common is src_alpha/one_minus_src_alpha
-    bgfx_state_ = (bgfx_state_ & ~BGFX_STATE_BLEND_MASK) |
-                  (blend_enabled_ ? BGFX_STATE_BLEND_ALPHA : 0);
+    state_.bgfx_state = (state_.bgfx_state & ~BGFX_STATE_BLEND_MASK) |
+                        (state_.blend_enabled ? BGFX_STATE_BLEND_ALPHA : 0);
 }
 
 void BgfxRenderPath::StateSetBlendFactor(unsigned int) {}
 void BgfxRenderPath::StateSetAlphaFunc(rp::AlphaTest, float r) {
-    alpha_ref_ = r;
+    state_.alpha_ref = r;
 }
 
 void BgfxRenderPath::StateSetDepthFunc(rp::DepthTest) {
-    bgfx_state_ = (bgfx_state_ & ~BGFX_STATE_DEPTH_TEST_MASK) |
-                  (depth_test_enabled_ ? BGFX_STATE_DEPTH_TEST_LEQUAL : 0);
+    state_.bgfx_state =
+        (state_.bgfx_state & ~BGFX_STATE_DEPTH_TEST_MASK) |
+        (state_.depth_test_enabled ? BGFX_STATE_DEPTH_TEST_LEQUAL : 0);
 }
 
 void BgfxRenderPath::StateSetFaceCull(bool e) {
-    cull_enabled_ = e;
-    bgfx_state_ &= ~BGFX_STATE_CULL_MASK;
-    if (e) bgfx_state_ |= BGFX_STATE_CULL_CW;
+    state_.cull_enabled = e;
+    state_.bgfx_state &= ~BGFX_STATE_CULL_MASK;
+    if (e) state_.bgfx_state |= BGFX_STATE_CULL_CW;
 }
 
 void BgfxRenderPath::StateSetLineWidth(float) {}
 
 void BgfxRenderPath::StateSetWriteEnable(bool r, bool g, bool b, bool a) {
-    bgfx_state_ &= ~(BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A);
-    if (r || g || b) bgfx_state_ |= BGFX_STATE_WRITE_RGB;
-    if (a) bgfx_state_ |= BGFX_STATE_WRITE_A;
+    state_.bgfx_state &= ~(BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A);
+    if (r || g || b) state_.bgfx_state |= BGFX_STATE_WRITE_RGB;
+    if (a) state_.bgfx_state |= BGFX_STATE_WRITE_A;
 }
 
 void BgfxRenderPath::StateSetDepthTestEnable(bool e) {
-    depth_test_enabled_ = e;
-    bgfx_state_ = (bgfx_state_ & ~BGFX_STATE_DEPTH_TEST_MASK) |
-                  (e ? BGFX_STATE_DEPTH_TEST_LEQUAL : 0);
+    state_.depth_test_enabled = e;
+    state_.bgfx_state = (state_.bgfx_state & ~BGFX_STATE_DEPTH_TEST_MASK) |
+                        (e ? BGFX_STATE_DEPTH_TEST_LEQUAL : 0);
 }
 
 void BgfxRenderPath::StateSetAlphaTestEnable(bool) {}
 void BgfxRenderPath::StateSetDepthSlopeAndBias(float slope, float bias) {
-    depth_slope_bias_ = slope;
-    depth_z_bias_ = bias;
+    state_.depth_slope_bias = slope;
+    state_.depth_z_bias = bias;
 }
 
 // MARK: Fog
-void BgfxRenderPath::StateSetFogEnable(bool e) { fog_enabled_ = e; }
+void BgfxRenderPath::StateSetFogEnable(bool e) { state_.fog_enabled = e; }
 void BgfxRenderPath::StateSetFogMode(rp::FogMode m) {
-    fog_mode_ = static_cast<float>(m);
+    state_.fog_mode = static_cast<float>(m);
 }
-void BgfxRenderPath::StateSetFogNearDistance(float d) { fog_start_ = d; }
-void BgfxRenderPath::StateSetFogFarDistance(float d) { fog_end_ = d; }
-void BgfxRenderPath::StateSetFogDensity(float d) { fog_density_ = d; }
+void BgfxRenderPath::StateSetFogNearDistance(float d) { state_.fog_start = d; }
+void BgfxRenderPath::StateSetFogFarDistance(float d) { state_.fog_end = d; }
+void BgfxRenderPath::StateSetFogDensity(float d) { state_.fog_density = d; }
 void BgfxRenderPath::StateSetFogColour(float r, float g, float b) {
-    fog_color_[0] = r;
-    fog_color_[1] = g;
-    fog_color_[2] = b;
-    fog_color_[3] = 1;
+    state_.fog_color[0] = r;
+    state_.fog_color[1] = g;
+    state_.fog_color[2] = b;
+    state_.fog_color[3] = 1;
 }
 
 // MARK: Lighting
-void BgfxRenderPath::StateSetLightingEnable(bool e) { lighting_enabled_ = e; }
+void BgfxRenderPath::StateSetLightingEnable(bool e) {
+    state_.lighting_enabled = e;
+}
 void BgfxRenderPath::StateSetLightColour(int, float r, float g, float b) {
-    light_diffuse_[0] = r;
-    light_diffuse_[1] = g;
-    light_diffuse_[2] = b;
+    state_.light_diffuse[0] = r;
+    state_.light_diffuse[1] = g;
+    state_.light_diffuse[2] = b;
 }
 void BgfxRenderPath::StateSetLightAmbientColour(float r, float g, float b) {
-    light_ambient_[0] = r;
-    light_ambient_[1] = g;
-    light_ambient_[2] = b;
+    state_.light_ambient[0] = r;
+    state_.light_ambient[1] = g;
+    state_.light_ambient[2] = b;
 }
 void BgfxRenderPath::StateSetLightDirection(int l, float x, float y, float z) {
-    float* d = l == 0 ? light0_dir_ : light1_dir_;
+    float* d = l == 0 ? state_.light0_dir : state_.light1_dir;
     d[0] = x;
     d[1] = y;
     d[2] = z;
@@ -322,13 +332,15 @@ void BgfxRenderPath::StateSetViewport(int) {}
 void BgfxRenderPath::StateSetEnableViewportClipPlanes(bool) {}
 void BgfxRenderPath::StateSetStencil(int, uint8_t, uint8_t, uint8_t) {}
 void BgfxRenderPath::StateSetForceLOD(int) {}
-void BgfxRenderPath::StateSetTextureEnable(bool e) { texture_enabled_ = e; }
+void BgfxRenderPath::StateSetTextureEnable(bool e) {
+    state_.texture_enabled = e;
+}
 void BgfxRenderPath::StateSetActiveTexture(int) {}
 
 void BgfxRenderPath::SetChunkOffset(float x, float y, float z) {
-    chunk_offset_[0] = x;
-    chunk_offset_[1] = y;
-    chunk_offset_[2] = z;
+    state_.chunk_offset[0] = x;
+    state_.chunk_offset[1] = y;
+    state_.chunk_offset[2] = z;
 }
 
 void BgfxRenderPath::StateSetVertexTextureUV(float, float) {}
@@ -451,53 +463,53 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data,
     glm::mat4 mvp = projection_stack_.top() * modelview_stack_.top();
 
     // PLCE: this is a hack to avoid implementing this in a shader. these values
-    // are used to prevent Z-fighting and this does effectively the same thing by
-    // breaking the tie in the depth buffer.
-    if (depth_z_bias_ != 0.0f || depth_slope_bias_ != 0.0f) {
-        mvp[3][2] += depth_z_bias_ * Z_BIAS_EPSILON;
+    // are used to prevent Z-fighting and this does effectively the same thing
+    // by breaking the tie in the depth buffer.
+    if (state_.depth_z_bias != 0.0f || state_.depth_slope_bias != 0.0f) {
+        mvp[3][2] += state_.depth_z_bias * Z_BIAS_EPSILON;
     }
 
     bgfx::setTransform(glm::value_ptr(mvp));
     uint64_t finalState = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A;
-    if (depth_write_) finalState |= BGFX_STATE_WRITE_Z;
-    if (cull_enabled_) finalState |= BGFX_STATE_CULL_CW;
-    if (depth_test_enabled_) finalState |= BGFX_STATE_DEPTH_TEST_LEQUAL;
-    if (blend_enabled_) finalState |= BGFX_STATE_BLEND_ALPHA;
+    if (state_.depth_write) finalState |= BGFX_STATE_WRITE_Z;
+    if (state_.cull_enabled) finalState |= BGFX_STATE_CULL_CW;
+    if (state_.depth_test_enabled) finalState |= BGFX_STATE_DEPTH_TEST_LEQUAL;
+    if (state_.blend_enabled) finalState |= BGFX_STATE_BLEND_ALPHA;
     finalState |= primState;
     bgfx::setState(finalState);
     bgfx::setVertexBuffer(0, &tvb);
 
     // Vertex uniforms
-    bgfx::setUniform(u_baseColor_, tint_color_);
-    float chunkOff[4] = {chunk_offset_[0], chunk_offset_[1], chunk_offset_[2],
-                         0};
+    bgfx::setUniform(u_baseColor_, state_.tint_color);
+    float chunkOff[4] = {state_.chunk_offset[0], state_.chunk_offset[1],
+                         state_.chunk_offset[2], 0};
     bgfx::setUniform(u_chunkOffset_, chunkOff);
-    float lp[4] = {lighting_enabled_ ? 1.0f : 0.0f, 1.0f, 0, 0};
+    float lp[4] = {state_.lighting_enabled ? 1.0f : 0.0f, 1.0f, 0, 0};
     bgfx::setUniform(u_lightParams_, lp);
-    bgfx::setUniform(u_light0Dir_, light0_dir_);
-    bgfx::setUniform(u_light1Dir_, light1_dir_);
-    bgfx::setUniform(u_lightDiffuse_, light_diffuse_);
-    bgfx::setUniform(u_lightAmbient_, light_ambient_);
-    float fp[4] = {fog_enabled_ ? fog_mode_ : 0.0f, fog_start_, fog_end_,
-                   fog_density_};
+    bgfx::setUniform(u_light0Dir_, state_.light0_dir);
+    bgfx::setUniform(u_light1Dir_, state_.light1_dir);
+    bgfx::setUniform(u_lightDiffuse_, state_.light_diffuse);
+    bgfx::setUniform(u_lightAmbient_, state_.light_ambient);
+    float fp[4] = {state_.fog_enabled ? state_.fog_mode : 0.0f,
+                   state_.fog_start, state_.fog_end, state_.fog_density};
     bgfx::setUniform(u_fogParams_, fp);
     float lmt[4] = {1, 1, 0, 0};
     bgfx::setUniform(u_lmTransform_, lmt);
-    bgfx::setUniform(u_globalLM_, global_lm_);
+    bgfx::setUniform(u_globalLM_, state_.global_lm);
     // Bind texture if available
     bool hasTexture = false;
-    if (texture_enabled_ && bound_texture_ >= 0) {
-        auto it = gl_tex_to_bgfx_.find(bound_texture_);
+    if (state_.texture_enabled && state_.bound_texture >= 0) {
+        auto it = gl_tex_to_bgfx_.find(state_.bound_texture);
         if (it != gl_tex_to_bgfx_.end()) {
             bgfx::setTexture(0, s_tex0_, it->second);
             hasTexture = true;
         }
     }
     // Fragment uniforms
-    float fragP[4] = {hasTexture ? 1.0f : 0.0f, 0.0f, alpha_ref_,
-                      fog_enabled_ ? 1.0f : 0.0f};
+    float fragP[4] = {hasTexture ? 1.0f : 0.0f, 0.0f, state_.alpha_ref,
+                      state_.fog_enabled ? 1.0f : 0.0f};
     bgfx::setUniform(u_fragParams_, fragP);
-    bgfx::setUniform(u_fogColor_, fog_color_);
+    bgfx::setUniform(u_fogColor_, state_.fog_color);
 
     if (bgfx::isValid(program_))
         bgfx::submit(current_view_id_, program_);
@@ -721,51 +733,51 @@ bool BgfxRenderPath::CBuffCall(int index, bool) {
 
     glm::mat4 mvp = projection_stack_.top() * modelview_stack_.top();
     // PLCE: this is a hack to avoid implementing this in a shader. these values
-    // are used to prevent Z-fighting and this does effectively the same thing by
-    // breaking the tie in the depth buffer.
-    if (depth_z_bias_ != 0.0f) {
-        mvp[3][2] += depth_z_bias_ * Z_BIAS_EPSILON;
+    // are used to prevent Z-fighting and this does effectively the same thing
+    // by breaking the tie in the depth buffer.
+    if (state_.depth_z_bias != 0.0f) {
+        mvp[3][2] += state_.depth_z_bias * Z_BIAS_EPSILON;
     }
     bgfx::setTransform(glm::value_ptr(mvp));
 
     uint64_t state = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A;
-    if (depth_write_) state |= BGFX_STATE_WRITE_Z;
-    if (cull_enabled_) state |= BGFX_STATE_CULL_CW;
-    if (depth_test_enabled_) state |= BGFX_STATE_DEPTH_TEST_LEQUAL;
-    if (blend_enabled_) state |= BGFX_STATE_BLEND_ALPHA;
+    if (state_.depth_write) state |= BGFX_STATE_WRITE_Z;
+    if (state_.cull_enabled) state |= BGFX_STATE_CULL_CW;
+    if (state_.depth_test_enabled) state |= BGFX_STATE_DEPTH_TEST_LEQUAL;
+    if (state_.blend_enabled) state |= BGFX_STATE_BLEND_ALPHA;
     bgfx::setState(state);
 
     bgfx::setVertexBuffer(0, cb.vbh, 0, total_count);
 
-    bgfx::setUniform(u_baseColor_, tint_color_);
-    float chunkOff[4] = {chunk_offset_[0], chunk_offset_[1], chunk_offset_[2],
-                         0};
+    bgfx::setUniform(u_baseColor_, state_.tint_color);
+    float chunkOff[4] = {state_.chunk_offset[0], state_.chunk_offset[1],
+                         state_.chunk_offset[2], 0};
     bgfx::setUniform(u_chunkOffset_, chunkOff);
-    float lp[4] = {lighting_enabled_ ? 1.0f : 0.0f, 1.0f, 0, 0};
+    float lp[4] = {state_.lighting_enabled ? 1.0f : 0.0f, 1.0f, 0, 0};
     bgfx::setUniform(u_lightParams_, lp);
-    bgfx::setUniform(u_light0Dir_, light0_dir_);
-    bgfx::setUniform(u_light1Dir_, light1_dir_);
-    bgfx::setUniform(u_lightDiffuse_, light_diffuse_);
-    bgfx::setUniform(u_lightAmbient_, light_ambient_);
-    float fp[4] = {fog_enabled_ ? fog_mode_ : 0.0f, fog_start_, fog_end_,
-                   fog_density_};
+    bgfx::setUniform(u_light0Dir_, state_.light0_dir);
+    bgfx::setUniform(u_light1Dir_, state_.light1_dir);
+    bgfx::setUniform(u_lightDiffuse_, state_.light_diffuse);
+    bgfx::setUniform(u_lightAmbient_, state_.light_ambient);
+    float fp[4] = {state_.fog_enabled ? state_.fog_mode : 0.0f,
+                   state_.fog_start, state_.fog_end, state_.fog_density};
     bgfx::setUniform(u_fogParams_, fp);
     float lmt[4] = {1, 1, 0, 0};
     bgfx::setUniform(u_lmTransform_, lmt);
-    bgfx::setUniform(u_globalLM_, global_lm_);
+    bgfx::setUniform(u_globalLM_, state_.global_lm);
 
     bool hasTexture = false;
-    if (texture_enabled_ && bound_texture_ >= 0) {
-        auto tex_it = gl_tex_to_bgfx_.find(bound_texture_);
+    if (state_.texture_enabled && state_.bound_texture >= 0) {
+        auto tex_it = gl_tex_to_bgfx_.find(state_.bound_texture);
         if (tex_it != gl_tex_to_bgfx_.end()) {
             bgfx::setTexture(0, s_tex0_, tex_it->second);
             hasTexture = true;
         }
     }
-    float fragP[4] = {hasTexture ? 1.0f : 0.0f, 0.0f, alpha_ref_,
-                      fog_enabled_ ? 1.0f : 0.0f};
+    float fragP[4] = {hasTexture ? 1.0f : 0.0f, 0.0f, state_.alpha_ref,
+                      state_.fog_enabled ? 1.0f : 0.0f};
     bgfx::setUniform(u_fragParams_, fragP);
-    bgfx::setUniform(u_fogColor_, fog_color_);
+    bgfx::setUniform(u_fogColor_, state_.fog_color);
 
     if (bgfx::isValid(program_))
         bgfx::submit(current_view_id_, program_);
@@ -793,7 +805,7 @@ void BgfxRenderPath::TextureFree(int idx) {
     }
 }
 
-void BgfxRenderPath::TextureBind(int idx) { bound_texture_ = idx; }
+void BgfxRenderPath::TextureBind(int idx) { state_.bound_texture = idx; }
 
 void BgfxRenderPath::TextureBindVertex(int, bool) {}
 void BgfxRenderPath::TextureSetTextureLevels(int) {}
@@ -801,8 +813,8 @@ void BgfxRenderPath::TextureSetTextureLevels(int) {}
 void BgfxRenderPath::TextureData(int width, int height, void* data, int level,
                                  int) {
     if (level > 0) return;
-    if (bound_texture_ < 0 || !data || width <= 0 || height <= 0) return;
-    auto it = gl_tex_to_bgfx_.find(bound_texture_);
+    if (state_.bound_texture < 0 || !data || width <= 0 || height <= 0) return;
+    auto it = gl_tex_to_bgfx_.find(state_.bound_texture);
     if (it != gl_tex_to_bgfx_.end()) {
         bgfx::destroy(it->second);
     }
@@ -813,13 +825,13 @@ void BgfxRenderPath::TextureData(int width, int height, void* data, int level,
     const bgfx::Memory* mem = bgfx::copy(data, width * height * 4);
     bgfx::updateTexture2D(th, 0, 0, 0, 0, width, height, mem);
 
-    gl_tex_to_bgfx_[bound_texture_] = th;
+    gl_tex_to_bgfx_[state_.bound_texture] = th;
 }
 
 void BgfxRenderPath::TextureDataUpdate(int xoff, int yoff, int w, int h,
                                        void* data, int) {
-    if (bound_texture_ < 0 || !data) return;
-    auto it = gl_tex_to_bgfx_.find(bound_texture_);
+    if (state_.bound_texture < 0 || !data) return;
+    auto it = gl_tex_to_bgfx_.find(state_.bound_texture);
     if (it == gl_tex_to_bgfx_.end()) return;
     const bgfx::Memory* mem = bgfx::copy(data, w * h * 4);
     bgfx::updateTexture2D(it->second, 0, 0, xoff, yoff, w, h, mem);
@@ -882,9 +894,9 @@ void BgfxRenderPath::StartFrame() {
     fb_.is_widescreen = fb_.aspect > 1.5f;
     fb_.is_hi_def = h >= 720;
     current_view_id_ = 0;
-    uint32_t rgba = (uint32_t(clear_color_[0] * 255) << 24) |
-                    (uint32_t(clear_color_[1] * 255) << 16) |
-                    (uint32_t(clear_color_[2] * 255) << 8) | 0xFF;
+    uint32_t rgba = (uint32_t(state_.clear_color[0] * 255) << 24) |
+                    (uint32_t(state_.clear_color[1] * 255) << 16) |
+                    (uint32_t(state_.clear_color[2] * 255) << 8) | 0xFF;
     bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, rgba, 1.0f, 0);
     bgfx::setViewRect(0, 0, 0, width_, height_);
     bgfx::setViewMode(0, bgfx::ViewMode::Sequential);
@@ -905,19 +917,19 @@ void BgfxRenderPath::Present() {
 }
 void BgfxRenderPath::Clear(int flags) {
     if (flags & rp::CLEAR_COLOR) {
-        uint32_t rgba = (uint32_t(clear_color_[0] * 255) << 24) |
-                        (uint32_t(clear_color_[1] * 255) << 16) |
-                        (uint32_t(clear_color_[2] * 255) << 8) | 0xFF;
+        uint32_t rgba = (uint32_t(state_.clear_color[0] * 255) << 24) |
+                        (uint32_t(state_.clear_color[1] * 255) << 16) |
+                        (uint32_t(state_.clear_color[2] * 255) << 8) | 0xFF;
         uint16_t bgfx_flags = BGFX_CLEAR_COLOR;
         if (flags & rp::CLEAR_DEPTH) bgfx_flags |= BGFX_CLEAR_DEPTH;
         bgfx::setViewClear(current_view_id_, bgfx_flags, rgba, 1.0f, 0);
     }
 }
 void BgfxRenderPath::SetClearColour(const float rgba[4]) {
-    clear_color_[0] = rgba[0];
-    clear_color_[1] = rgba[1];
-    clear_color_[2] = rgba[2];
-    clear_color_[3] = rgba[3];
+    state_.clear_color[0] = rgba[0];
+    state_.clear_color[1] = rgba[1];
+    state_.clear_color[2] = rgba[2];
+    state_.clear_color[3] = rgba[3];
 }
 void BgfxRenderPath::Set_matrixDirty() {}
 void BgfxRenderPath::CBuffLockStaticCreations() {}
@@ -979,10 +991,10 @@ void BgfxRenderPath::submit_immediate(const DrawCall& dc) {
     glm::mat4 mvp = projection_stack_.top() * modelview_stack_.top();
     bgfx::setTransform(glm::value_ptr(mvp));
     uint64_t state = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A;
-    if (depth_write_) state |= BGFX_STATE_WRITE_Z;
-    if (cull_enabled_) state |= BGFX_STATE_CULL_CW;
-    if (depth_test_enabled_) state |= BGFX_STATE_DEPTH_TEST_LEQUAL;
-    if (blend_enabled_) state |= BGFX_STATE_BLEND_ALPHA;
+    if (state_.depth_write) state |= BGFX_STATE_WRITE_Z;
+    if (state_.cull_enabled) state |= BGFX_STATE_CULL_CW;
+    if (state_.depth_test_enabled) state |= BGFX_STATE_DEPTH_TEST_LEQUAL;
+    if (state_.blend_enabled) state |= BGFX_STATE_BLEND_ALPHA;
     bgfx::setState(state);
     bgfx::setVertexBuffer(0, &bvb);
     bgfx::setUniform(u_baseColor_, dc.tint_color);
@@ -993,14 +1005,14 @@ void BgfxRenderPath::submit_immediate(const DrawCall& dc) {
     float fp[4] = {0, 0, 0, 0};
     bgfx::setUniform(u_fogParams_, fp);
     bool hasTexture = false;
-    if (texture_enabled_ && bound_texture_ >= 0) {
-        auto it = gl_tex_to_bgfx_.find(bound_texture_);
+    if (state_.texture_enabled && state_.bound_texture >= 0) {
+        auto it = gl_tex_to_bgfx_.find(state_.bound_texture);
         if (it != gl_tex_to_bgfx_.end()) {
             bgfx::setTexture(0, s_tex0_, it->second);
             hasTexture = true;
         }
     }
-    float fragP[4] = {hasTexture ? 1.0f : 0.0f, 0.0f, alpha_ref_, 0.0f};
+    float fragP[4] = {hasTexture ? 1.0f : 0.0f, 0.0f, state_.alpha_ref, 0.0f};
     bgfx::setUniform(u_fragParams_, fragP);
     bgfx::setUniform(u_fogColor_, zero4);
     if (bgfx::isValid(program_))
