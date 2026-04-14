@@ -23,7 +23,7 @@ void main()
     v_uv0 = a_texcoord0;
 
     // Lightmap UV from vertex data or global fallback
-    vec2 lm = (a_texcoord1.x <= -1.9) ? u_globalLM.xy : a_texcoord1;
+    vec2 lm = (a_texcoord1.x <= -2) ? u_globalLM.xy : vec2(a_texcoord1);
     v_uv1 = (lm / 256.0) * u_lmTransform.xy + u_lmTransform.zw;
 
     // Game packs color as (R<<24|G<<16|B<<8|A). In little-endian memory

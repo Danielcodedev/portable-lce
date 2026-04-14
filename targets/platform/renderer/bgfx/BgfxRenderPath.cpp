@@ -147,24 +147,14 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
             fs_data = fs_4jcraft_spv;
             fs_size = sizeof(fs_4jcraft_spv);
             break;
-        case bgfx::RendererType::OpenGLES:
-            vs_data = vs_4jcraft_es320;
-            vs_size = sizeof(vs_4jcraft_es320);
-            fs_data = fs_4jcraft_es320;
-            fs_size = sizeof(fs_4jcraft_es320);
-            break;
-        case bgfx::RendererType::WebGPU:
-            vs_data = vs_4jcraft_wgsl;
-            vs_size = sizeof(vs_4jcraft_wgsl);
-            fs_data = fs_4jcraft_es320;
-            fs_size = sizeof(fs_4jcraft_es320);
-            break;
         case bgfx::RendererType::OpenGL:
-        default:
             vs_data = vs_4jcraft_glsl;
             vs_size = sizeof(vs_4jcraft_glsl);
             fs_data = fs_4jcraft_glsl;
             fs_size = sizeof(fs_4jcraft_glsl);
+            break;
+        default:
+            assert(0 && "shaders not yet compiled for this renderer");
             break;
     }
 #endif
