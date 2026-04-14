@@ -10,6 +10,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "bgfx/defines.h"
 #include "platform/PlatformTypes.h"
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -260,9 +261,7 @@ void BgfxRenderPath::StateSetDepthFunc(rp::DepthTest) {
 void BgfxRenderPath::StateSetFaceCull(bool e) {
     cull_enabled_ = e;
     bgfx_state_ &= ~BGFX_STATE_CULL_MASK;
-    // Don't add cull state - the quad-to-triangle expansion in Tesselator
-    // produces alternating winding. Culling will be re-enabled once
-    // the vertex winding is fixed.
+    if (e) bgfx_state_ |= BGFX_STATE_CULL_CW;
 }
 
 void BgfxRenderPath::StateSetLineWidth(float) {}
@@ -389,17 +388,19 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data,
             const uint8_t* v1 = src + (q * 4 + 1) * stride;
             const uint8_t* v2 = src + (q * 4 + 2) * stride;
             const uint8_t* v3 = src + (q * 4 + 3) * stride;
+            // first triangle (v0, v1, v2) ccw
             memcpy(dst, v0, stride);
             dst += stride;
             memcpy(dst, v1, stride);
             dst += stride;
             memcpy(dst, v2, stride);
             dst += stride;
-            memcpy(dst, v0, stride);
-            dst += stride;
+            // second triangle (v2, v3, v0) ccw
             memcpy(dst, v2, stride);
             dst += stride;
             memcpy(dst, v3, stride);
+            dst += stride;
+            memcpy(dst, v0, stride);
             dst += stride;
         }
         src = conv_buf.data();
@@ -449,6 +450,7 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data,
     bgfx::setTransform(glm::value_ptr(mvp));
     uint64_t finalState = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A;
     if (depth_write_) finalState |= BGFX_STATE_WRITE_Z;
+    if (cull_enabled_) finalState |= BGFX_STATE_CULL_CW;
     if (depth_test_enabled_) finalState |= BGFX_STATE_DEPTH_TEST_LEQUAL;
     if (blend_enabled_) finalState |= BGFX_STATE_BLEND_ALPHA;
     finalState |= primState;
@@ -712,6 +714,7 @@ bool BgfxRenderPath::CBuffCall(int index, bool) {
 
     uint64_t state = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A;
     if (depth_write_) state |= BGFX_STATE_WRITE_Z;
+    if (cull_enabled_) state |= BGFX_STATE_CULL_CW;
     if (depth_test_enabled_) state |= BGFX_STATE_DEPTH_TEST_LEQUAL;
     if (blend_enabled_) state |= BGFX_STATE_BLEND_ALPHA;
     bgfx::setState(state);
@@ -961,6 +964,7 @@ void BgfxRenderPath::submit_immediate(const DrawCall& dc) {
     bgfx::setTransform(glm::value_ptr(mvp));
     uint64_t state = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A;
     if (depth_write_) state |= BGFX_STATE_WRITE_Z;
+    if (cull_enabled_) state |= BGFX_STATE_CULL_CW;
     if (depth_test_enabled_) state |= BGFX_STATE_DEPTH_TEST_LEQUAL;
     if (blend_enabled_) state |= BGFX_STATE_BLEND_ALPHA;
     bgfx::setState(state);
