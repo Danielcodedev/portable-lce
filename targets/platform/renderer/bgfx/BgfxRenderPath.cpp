@@ -96,7 +96,7 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
     init.platformData.nwh = wmi.info.win.window;
 #endif
 
-    init.type = bgfx::RendererType::Vulkan;
+    init.type = bgfx::RendererType::OpenGL;
     init.resolution.width = width_;
     init.resolution.height = height_;
     init.resolution.reset = BGFX_RESET_VSYNC;
@@ -119,7 +119,7 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
         .add(bgfx::Attrib::Color0, 4, bgfx::AttribType::Uint8, true)
         .add(bgfx::Attrib::Normal, 4, bgfx::AttribType::Uint8,
              true)  // 3 bytes + 1 pad read as 4
-        .add(bgfx::Attrib::TexCoord1, 2, bgfx::AttribType::Int16, true)
+        .add(bgfx::Attrib::TexCoord1, 2, bgfx::AttribType::Int16)
         .end();
 
     fb_.width = width_;
@@ -224,11 +224,11 @@ BgfxRenderPath::~BgfxRenderPath() {
     }
     gl_tex_to_bgfx_.clear();
 
-    for (auto* u : {&u_baseColor_, &u_chunkOffset_, &u_lightParams_,
-                    &u_light0Dir_, &u_light1Dir_, &u_lightDiffuse_,
-                    &u_lightAmbient_, &u_fogParams_, &u_lmTransform_,
-                    &u_globalLM_, &u_fragParams_, &u_fogColor_,
-                    &s_tex0_, &s_tex1_}) {
+    for (auto* u :
+         {&u_baseColor_, &u_chunkOffset_, &u_lightParams_, &u_light0Dir_,
+          &u_light1Dir_, &u_lightDiffuse_, &u_lightAmbient_, &u_fogParams_,
+          &u_lmTransform_, &u_globalLM_, &u_fragParams_, &u_fogColor_, &s_tex0_,
+          &s_tex1_}) {
         if (bgfx::isValid(*u)) bgfx::destroy(*u);
     }
 
@@ -309,9 +309,9 @@ void BgfxRenderPath::StateSetBlendEnable(bool e) {
     state_.blend_enabled = e;
     state_.bgfx_state &= ~BGFX_STATE_BLEND_MASK;
     if (e) {
-        state_.bgfx_state |= BGFX_STATE_BLEND_FUNC(
-            bgfx_blend_factor(state_.blend_src),
-            bgfx_blend_factor(state_.blend_dst));
+        state_.bgfx_state |=
+            BGFX_STATE_BLEND_FUNC(bgfx_blend_factor(state_.blend_src),
+                                  bgfx_blend_factor(state_.blend_dst));
     }
 }
 
@@ -320,8 +320,8 @@ void BgfxRenderPath::StateSetBlendFunc(rp::BlendFactor s, rp::BlendFactor d) {
     state_.blend_dst = d;
     state_.bgfx_state &= ~BGFX_STATE_BLEND_MASK;
     if (state_.blend_enabled) {
-        state_.bgfx_state |= BGFX_STATE_BLEND_FUNC(bgfx_blend_factor(s),
-                                                   bgfx_blend_factor(d));
+        state_.bgfx_state |=
+            BGFX_STATE_BLEND_FUNC(bgfx_blend_factor(s), bgfx_blend_factor(d));
     }
 }
 
@@ -403,8 +403,8 @@ void BgfxRenderPath::StateSetLightAmbientColour(float r, float g, float b) {
     state_.light_ambient[2] = b;
 }
 void BgfxRenderPath::StateSetLightDirection(int l, float x, float y, float z) {
-    glm::vec3 d = glm::normalize(glm::mat3(modelview_stack_.top()) *
-                                 glm::vec3(x, y, z));
+    glm::vec3 d =
+        glm::normalize(glm::mat3(modelview_stack_.top()) * glm::vec3(x, y, z));
     float* dst = (l == 0) ? state_.light0_dir : state_.light1_dir;
     dst[0] = d.x;
     dst[1] = d.y;
@@ -577,7 +577,7 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data,
     float fp[4] = {state_.fog_enabled ? state_.fog_mode : 0.0f,
                    state_.fog_start, state_.fog_end, state_.fog_density};
     bgfx::setUniform(u_fogParams_, fp);
-    bgfx::setUniform(u_lmTransform_, state_.lm_transform);
+    bgfx::setUniform(u_lmTransform_, state_.lightmap_transform);
     bgfx::setUniform(u_globalLM_, state_.global_lm);
     bool hasTexture = false;
     if (state_.texture_enabled && state_.bound_texture >= 0) {
@@ -587,7 +587,11 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data,
             hasTexture = true;
         }
     }
-    float fragP[4] = {hasTexture ? 1.0f : 0.0f, 0.0f, state_.alpha_ref,
+    if (state_.use_lightmap && bgfx::isValid(state_.bound_lightmap)) {
+        bgfx::setTexture(1, s_tex1_, state_.bound_lightmap);
+    }
+    float fragP[4] = {hasTexture ? 1.0f : 0.0f,
+                      state_.use_lightmap ? 1.0f : 0.0f, state_.alpha_ref,
                       state_.fog_enabled ? 1.0f : 0.0f};
     bgfx::setUniform(u_fragParams_, fragP);
     bgfx::setUniform(u_fogColor_, state_.fog_color);
@@ -813,8 +817,8 @@ bool BgfxRenderPath::CBuffCall(int index, bool) {
         auto* mem =
             bgfx::copy(cb.raw_verts.data(), (uint32_t)cb.raw_verts.size());
         if (!bgfx::isValid(cb.vbh)) {
-            cb.vbh = bgfx::createDynamicVertexBuffer(
-                mem, vl_world_standard_, BGFX_BUFFER_ALLOW_RESIZE);
+            cb.vbh = bgfx::createDynamicVertexBuffer(mem, vl_world_standard_,
+                                                     BGFX_BUFFER_ALLOW_RESIZE);
         } else {
             bgfx::update(cb.vbh, 0, mem);
         }
@@ -848,14 +852,18 @@ bool BgfxRenderPath::CBuffCall(int index, bool) {
             hasTexture = true;
         }
     }
-    float fragP[4] = {hasTexture ? 1.0f : 0.0f, 0.0f, state_.alpha_ref,
+    float fragP[4] = {hasTexture ? 1.0f : 0.0f,
+                      state_.use_lightmap ? 1.0f : 0.0f, state_.alpha_ref,
                       state_.fog_enabled ? 1.0f : 0.0f};
 
     for (const auto& dc : cb.draws) {
         uint64_t primBits = 0;
-        if (dc.prim == 0x0005)      primBits = BGFX_STATE_PT_TRISTRIP;
-        else if (dc.prim == 0x0001) primBits = BGFX_STATE_PT_LINES;
-        else if (dc.prim == 0x0003) primBits = BGFX_STATE_PT_LINESTRIP;
+        if (dc.prim == 0x0005)
+            primBits = BGFX_STATE_PT_TRISTRIP;
+        else if (dc.prim == 0x0001)
+            primBits = BGFX_STATE_PT_LINES;
+        else if (dc.prim == 0x0003)
+            primBits = BGFX_STATE_PT_LINESTRIP;
 
         bgfx::setTransform(glm::value_ptr(mvp));
         bgfx::setState(state_.bgfx_state | primBits, state_.blend_factor_rgba);
@@ -869,12 +877,15 @@ bool BgfxRenderPath::CBuffCall(int index, bool) {
         bgfx::setUniform(u_lightDiffuse_, state_.light_diffuse);
         bgfx::setUniform(u_lightAmbient_, state_.light_ambient);
         bgfx::setUniform(u_fogParams_, fp);
-        bgfx::setUniform(u_lmTransform_, state_.lm_transform);
+        bgfx::setUniform(u_lmTransform_, state_.lightmap_transform);
         bgfx::setUniform(u_globalLM_, state_.global_lm);
         bgfx::setUniform(u_fragParams_, fragP);
         bgfx::setUniform(u_fogColor_, state_.fog_color);
 
         if (hasTexture) bgfx::setTexture(0, s_tex0_, texHandle);
+        if (state_.use_lightmap && bgfx::isValid(state_.bound_lightmap)) {
+            bgfx::setTexture(1, s_tex1_, state_.bound_lightmap);
+        }
 
         if (bgfx::isValid(program_))
             bgfx::submit(current_view_id_, program_);
@@ -907,21 +918,23 @@ void BgfxRenderPath::TextureBind(int idx) { state_.bound_texture = idx; }
 
 void BgfxRenderPath::TextureBindVertex(int idx, bool scaleLight) {
     if (idx < 0) {
-        state_.bound_vertex_texture = -1;
         state_.use_lightmap = false;
         return;
     }
-    state_.bound_vertex_texture = idx;
-    state_.use_lightmap = true;
-    state_.lm_transform[0] = 1;
-    state_.lm_transform[1] = 1;
-    if (scaleLight) {
-        state_.lm_transform[2] = 8.f / 256.f;
-        state_.lm_transform[3] = 8.f / 256.f;
+
+    auto it = gl_tex_to_bgfx_.find(idx);
+    if (it != gl_tex_to_bgfx_.end()) {
+        state_.bound_lightmap = it->second;
+        state_.use_lightmap = true;
     } else {
-        state_.lm_transform[2] = 0;
-        state_.lm_transform[3] = 0;
+        state_.bound_lightmap = {bgfx::kInvalidHandle};
+        state_.use_lightmap = false;
     }
+
+    state_.lightmap_transform[0] = 1.0f;
+    state_.lightmap_transform[1] = 1.0f;
+    state_.lightmap_transform[2] = scaleLight ? 8.f / 256.f : 0.0f;
+    state_.lightmap_transform[3] = scaleLight ? 8.f / 256.f : 0.0f;
 }
 void BgfxRenderPath::TextureSetTextureLevels(int) {}
 
@@ -1128,7 +1141,7 @@ void BgfxRenderPath::submit_immediate(const DrawCall& dc) {
     float fp[4] = {state_.fog_enabled ? state_.fog_mode : 0.0f,
                    state_.fog_start, state_.fog_end, state_.fog_density};
     bgfx::setUniform(u_fogParams_, fp);
-    bgfx::setUniform(u_lmTransform_, state_.lm_transform);
+    bgfx::setUniform(u_lmTransform_, state_.lightmap_transform);
     bgfx::setUniform(u_globalLM_, state_.global_lm);
 
     bool hasTexture = false;
@@ -1139,7 +1152,11 @@ void BgfxRenderPath::submit_immediate(const DrawCall& dc) {
             hasTexture = true;
         }
     }
-    float fragP[4] = {hasTexture ? 1.0f : 0.0f, 0.0f, state_.alpha_ref,
+    if (state_.use_lightmap && bgfx::isValid(state_.bound_lightmap)) {
+        bgfx::setTexture(1, s_tex1_, state_.bound_lightmap);
+    }
+    float fragP[4] = {hasTexture ? 1.0f : 0.0f,
+                      state_.use_lightmap ? 1.0f : 0.0f, state_.alpha_ref,
                       state_.fog_enabled ? 1.0f : 0.0f};
     bgfx::setUniform(u_fragParams_, fragP);
     bgfx::setUniform(u_fogColor_, state_.fog_color);

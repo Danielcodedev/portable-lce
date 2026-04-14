@@ -260,23 +260,24 @@ private:
         float fog_end = 100;
         float fog_density = 0;
         float fog_color[4] = {0.5f, 0.7f, 1.0f, 1.0f};
-        float light0_dir[4] = {0, -1, 0, 0};
-        float light1_dir[4] = {0, -1, 0, 0};
+        float light0_dir[4] = {0.173913f, 0.869565f, -0.608696f, 0};
+        float light1_dir[4] = {-0.173913f, 0.869565f, 0.608696f, 0};
         float light_diffuse[4] = {0.6f, 0.6f, 0.6f, 1};
         float light_ambient[4] = {0.4f, 0.4f, 0.4f, 1};
-        float global_lm[4] = {0, 0, 0, 0};
+        float global_lm[4] = {240.0, 240.0, 0.0, 0.0}; // actually a vec2, last two components ignored
         float alpha_ref = 0.1f;
         float clear_color[4] = {0.19f, 0.19f, 0.19f, 1.0f};
         float depth_slope_bias = 0.0f;
         float depth_z_bias = 0.0f;
+        float gamma = 1.0f;
         rp::BlendFactor blend_src = rp::BlendFactor::src_alpha;
         rp::BlendFactor blend_dst = rp::BlendFactor::one_minus_src_alpha;
         uint32_t blend_factor_rgba = 0xFFFFFFFF;
         bool alpha_test_enabled = false;
         uint64_t depth_func_bits = BGFX_STATE_DEPTH_TEST_LEQUAL;
-        int bound_vertex_texture = -1;
-        float lm_transform[4] = {1, 1, 0, 0};
+        float lightmap_transform[4] = {1.0, 1.0, 0.0, 0.0};
         bool use_lightmap = false;
+        bgfx::TextureHandle bound_lightmap = BGFX_INVALID_HANDLE;
     };
 
     std::mutex cbuf_mtx_;
