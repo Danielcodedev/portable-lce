@@ -62,7 +62,7 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
     init.platformData.nwh = wmi.info.win.window;
 #endif
 
-    init.type = bgfx::RendererType::OpenGL;
+    init.type = bgfx::RendererType::Vulkan;
     init.resolution.width = width_;
     init.resolution.height = height_;
     init.resolution.reset = BGFX_RESET_VSYNC;
@@ -98,10 +98,31 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
                   BGFX_STATE_WRITE_Z | BGFX_STATE_DEPTH_TEST_LEQUAL;
 
     // Load shaders
-    bgfx::ShaderHandle vsh = bgfx::createShader(
-        bgfx::makeRef(vs_4jcraft_glsl, sizeof(vs_4jcraft_glsl)));
-    bgfx::ShaderHandle fsh = bgfx::createShader(
-        bgfx::makeRef(fs_4jcraft_glsl, sizeof(fs_4jcraft_glsl)));
+    const uint8_t* vs_data = nullptr;
+    uint32_t vs_size = 0;
+    const uint8_t* fs_data = nullptr;
+    uint32_t fs_size = 0;
+
+    switch (bgfx::getRendererType()) {
+        case bgfx::RendererType::Vulkan:
+            vs_data = vs_4jcraft_spv;
+            vs_size = sizeof(vs_4jcraft_spv);
+            fs_data = fs_4jcraft_spv;
+            fs_size = sizeof(fs_4jcraft_spv);
+            break;
+        case bgfx::RendererType::OpenGL:
+        default:
+            vs_data = vs_4jcraft_glsl;
+            vs_size = sizeof(vs_4jcraft_glsl);
+            fs_data = fs_4jcraft_glsl;
+            fs_size = sizeof(fs_4jcraft_glsl);
+            break;
+    }
+
+    bgfx::ShaderHandle vsh =
+        bgfx::createShader(bgfx::makeRef(vs_data, vs_size));
+    bgfx::ShaderHandle fsh =
+        bgfx::createShader(bgfx::makeRef(fs_data, fs_size));
     program_ = bgfx::createProgram(vsh, fsh, true);
 
     // Vertex uniforms
