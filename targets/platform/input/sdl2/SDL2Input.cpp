@@ -314,14 +314,6 @@ void SDL2Input::Tick() {
         s_accumRelY = 0;
     }
 
-    if (!SDL_GetKeyboardFocus()) {
-        SDL_Window* mf = SDL_GetMouseFocus();
-        if (mf) {
-            SDL_RaiseWindow(mf);
-            SDL_SetWindowGrab(mf, SDL_TRUE);
-        }
-    }
-
     // If there is a controller update the buttons and sticks
     if (controller) {
         for (int i = 0; i < s_watchedBtnsCount; ++i) {
