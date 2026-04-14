@@ -41,8 +41,10 @@ static uint64_t bgfx_blend_factor(rp::BlendFactor f) {
         case rp::BlendFactor::one_minus_dst_color:      return BGFX_STATE_BLEND_INV_DST_COLOR;
         case rp::BlendFactor::dst_alpha:                return BGFX_STATE_BLEND_DST_ALPHA;
         case rp::BlendFactor::one_minus_dst_alpha:      return BGFX_STATE_BLEND_INV_DST_ALPHA;
-        case rp::BlendFactor::constant_alpha:           return BGFX_STATE_BLEND_FACTOR;
-        case rp::BlendFactor::one_minus_constant_alpha: return BGFX_STATE_BLEND_INV_FACTOR;
+        // PLCE: these were BGFX_STATE_BLEND_FACTOR / BGFX_STATE_BLEND_INV_FACTOR,
+        // switching them to SRC_ALPHA / INV_SRC_ALPHA fixes the invisible HUD.
+        case rp::BlendFactor::constant_alpha:           return BGFX_STATE_BLEND_SRC_ALPHA;
+        case rp::BlendFactor::one_minus_constant_alpha: return BGFX_STATE_BLEND_INV_SRC_ALPHA;
     }
     return BGFX_STATE_BLEND_ONE;
 }
