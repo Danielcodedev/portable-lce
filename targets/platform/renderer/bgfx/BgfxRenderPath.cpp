@@ -103,12 +103,27 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
     const uint8_t* fs_data = nullptr;
     uint32_t fs_size = 0;
 
+    // these shaders were compiled with --platform=linux, we'll need a set
+    // compiled for each shaderc platform
+#ifdef __linux__
     switch (bgfx::getRendererType()) {
         case bgfx::RendererType::Vulkan:
             vs_data = vs_4jcraft_spv;
             vs_size = sizeof(vs_4jcraft_spv);
             fs_data = fs_4jcraft_spv;
             fs_size = sizeof(fs_4jcraft_spv);
+            break;
+        case bgfx::RendererType::OpenGLES:
+            vs_data = vs_4jcraft_es320;
+            vs_size = sizeof(vs_4jcraft_es320);
+            fs_data = fs_4jcraft_es320;
+            fs_size = sizeof(fs_4jcraft_es320);
+            break;
+        case bgfx::RendererType::WebGPU:
+            vs_data = vs_4jcraft_wgsl;
+            vs_size = sizeof(vs_4jcraft_wgsl);
+            fs_data = fs_4jcraft_es320;
+            fs_size = sizeof(fs_4jcraft_es320);
             break;
         case bgfx::RendererType::OpenGL:
         default:
@@ -118,6 +133,7 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
             fs_size = sizeof(fs_4jcraft_glsl);
             break;
     }
+#endif
 
     bgfx::ShaderHandle vsh =
         bgfx::createShader(bgfx::makeRef(vs_data, vs_size));
