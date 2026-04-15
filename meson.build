@@ -11,6 +11,7 @@ project(
         'unity=on', # merge source files per target
         'unity_size=8', # TODO: mess around with this
         'buildtype=debug',
+        'force_fallback_for=[\'miniaudio\',\'stb\']',
         'b_pch=true', # precompiled headers
         'default_library=static', # static linkage to subprojects
         # 'b_lto=true', # link-time optimisation (ThinLTO under clang+lld)
