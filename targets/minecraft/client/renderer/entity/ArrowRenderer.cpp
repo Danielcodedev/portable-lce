@@ -3,6 +3,7 @@
 #include <math.h>
 
 #include <memory>
+#include <numbers>
 
 #include "minecraft/client/renderer/Tesselator.h"
 #include "minecraft/client/renderer/Textures.h"

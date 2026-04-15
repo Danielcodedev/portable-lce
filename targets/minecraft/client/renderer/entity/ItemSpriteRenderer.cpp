@@ -1,6 +1,7 @@
 #include "ItemSpriteRenderer.h"
 
 #include <memory>
+#include <numbers>
 
 #include "EntityRenderDispatcher.h"
 #include "minecraft/client/renderer/Tesselator.h"

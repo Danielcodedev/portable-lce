@@ -1,5 +1,7 @@
 #include "MobSpawnerRenderer.h"
 
+#include <numbers>
+
 #include "minecraft/client/renderer/entity/EntityRenderDispatcher.h"
 #include "minecraft/world/entity/Entity.h"
 #include "minecraft/world/level/BaseMobSpawner.h"

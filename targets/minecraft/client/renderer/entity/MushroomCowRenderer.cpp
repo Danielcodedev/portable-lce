@@ -1,6 +1,7 @@
 #include "MushroomCowRenderer.h"
 
 #include <memory>
+#include <numbers>
 
 #include "minecraft/client/model/QuadrupedModel.h"
 #include "minecraft/client/model/geom/ModelPart.h"

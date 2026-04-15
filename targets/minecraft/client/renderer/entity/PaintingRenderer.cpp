@@ -1,6 +1,7 @@
 #include "PaintingRenderer.h"
 
 #include <cmath>
+#include <numbers>
 
 #include "EntityRenderDispatcher.h"
 #include "java/Random.h"

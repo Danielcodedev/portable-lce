@@ -1,6 +1,7 @@
 #include "EnderCrystalModel.h"
 
 #include <memory>
+#include <numbers>
 #include <string>
 
 #include "minecraft/client/model/geom/ModelPart.h"

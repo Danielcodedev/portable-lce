@@ -2,6 +2,7 @@
 
 #include <math.h>
 
+#include <numbers>
 #include <vector>
 
 #include "EntityRenderDispatcher.h"
@@ -25,11 +26,10 @@
 #include "minecraft/world/item/Item.h"
 #include "minecraft/world/item/ItemInstance.h"
 #include "minecraft/world/level/tile/Tile.h"
+#include "platform/renderer/IRenderPath.h"
 #include "platform/renderer/renderer.h"
 #include "platform/stubs.h"
 #include "util/StringHelpers.h"
-#include "platform/renderer/IRenderPath.h"
-
 
 class ResourceLocation;
 
@@ -232,7 +232,7 @@ void ItemRenderer::renderItemBillboard(std::shared_ptr<ItemEntity> entity,
         } else {
             RenderPath.MatrixRotate(
                 (entity->age + a) / 20.0f + entity->bobOffs,
-                0, 1, 0);
+                                    0, 1, 0);
         }
 
         float width = 1 / 16.0f;
@@ -494,7 +494,7 @@ void ItemRenderer::renderAndDecorateItem(
             isConstantBlended ? Gui::currentGuiBlendFactor : 1.0f;
 
         RenderPath.StateSetColour(0.5f * blendFactor, 0.25f * blendFactor, 0.8f * blendFactor,
-                  1);  // 4J - scale back colourisation with blendFactor
+            1);  // 4J - scale back colourisation with blendFactor
         // scale the x and y by the scale factor
         if ((fScaleX != 1.0f) || (fScaleY != 1.0f)) {
             // 4J Stu - Scales were multiples of 20, making 16 to not overlap in

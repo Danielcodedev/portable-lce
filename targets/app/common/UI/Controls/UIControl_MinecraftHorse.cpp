@@ -10,6 +10,8 @@
 #ifndef _ENABLEIGGY
 #include "app/common/Iggy/iggy_stubs.h"
 #endif
+#include <numbers>
+
 #include "minecraft/client/Lighting.h"
 #include "minecraft/client/Minecraft.h"
 #include "minecraft/client/Options.h"

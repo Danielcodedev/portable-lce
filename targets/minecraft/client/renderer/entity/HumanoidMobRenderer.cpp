@@ -1,5 +1,6 @@
 #include "HumanoidMobRenderer.h"
 
+#include <numbers>
 #include <utility>
 #include <vector>
 
@@ -151,7 +152,7 @@ int HumanoidMobRenderer::prepareArmor(std::shared_ptr<LivingEntity> _mob,
                 float green = (float)((color >> 8) & 0xFF) / 0xFF;
                 float blue = (float)(color & 0xFF) / 0xFF;
                 RenderPath.StateSetColour(brightness * red, brightness * green,
-                          brightness * blue, 1.0f);
+                                          brightness * blue, 1.0f);
 
                 if (itemInstance->isEnchanted()) return 0x1f;
                 return 0x10;

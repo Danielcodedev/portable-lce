@@ -1,6 +1,7 @@
 #include "SnowManRenderer.h"
 
 #include <memory>
+#include <numbers>
 
 #include "EntityRenderDispatcher.h"
 #include "minecraft/client/model/SnowManModel.h"

@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <numbers>
 
 #include "Facing.h"
 #include "app/common/UI/ConsoleUIController.h"
@@ -50,12 +51,11 @@
 #include "platform/PlatformTypes.h"
 #include "platform/XboxStubs.h"
 #include "platform/input/input.h"
+#include "platform/renderer/IRenderPath.h"
 #include "platform/renderer/renderer.h"
 #include "platform/stubs.h"
 #include "strings.h"
 #include "util/StringHelpers.h"
-#include "platform/renderer/IRenderPath.h"
-
 
 ResourceLocation Gui::PUMPKIN_BLUR_LOCATION =
     ResourceLocation(TN__BLUR__MISC_PUMPKINBLUR);
@@ -333,7 +333,7 @@ void Gui::render(float a, bool mouseFree, int xMouse, int yMouse) {
     RenderPath.StateSetBlendFunc(rp::BlendFactor::src_alpha,
                 rp::BlendFactor::one_minus_src_alpha);  // 4J - added - this did actually get
                                           // set in renderVignette but that code
-                                          // is currently commented out
+                                                // is currently commented out
 
     if (Minecraft::useFancyGraphics()) {
         renderVignette(minecraft->player->getBrightness(a), screenWidth,
@@ -457,7 +457,7 @@ void Gui::render(float a, bool mouseFree, int xMouse, int yMouse) {
                 &GUI_ICONS_LOCATION);  // "/gui/icons.png"));
             RenderPath.StateSetBlendEnable(true);
             RenderPath.StateSetBlendFactor(0xffffff |
-                                                 (((unsigned int)fVal) << 24));
+                                           (((unsigned int)fVal) << 24));
             RenderPath.StateSetBlendFunc(rp::BlendFactor::constant_alpha, rp::BlendFactor::one_minus_constant_alpha);
             // RenderPath.StateSetBlendFunc(GL_ONE_MINUS_DST_COLOR, rp::BlendFactor::one_minus_src_color);
             //  4J Stu - We don't want to adjust the cursor by the safezone, we
@@ -1120,12 +1120,12 @@ max) + "% (" + (total / 1024 / 1024) + "MB)"; drawString(font, msg, screenWidth
                 RenderPath.MatrixTranslate((float)((screenWidth / 2) + iWidthOffset),
                              ((float)(screenHeight + iHeightOffset)) -
                                  iTooltipsYOffset - 12 - iSafezoneYHalf,
-                             0);
+                    0);
             } else {
                 RenderPath.MatrixTranslate(((float)screenWidth) / 2,
                              ((float)screenHeight) - iTooltipsYOffset - 12 -
-                                 iSafezoneYHalf,
-                             0);
+                                               iSafezoneYHalf,
+                                           0);
             }
             RenderPath.StateSetBlendEnable(true);
             RenderPath.StateSetBlendFunc(rp::BlendFactor::src_alpha, rp::BlendFactor::one_minus_src_alpha);
@@ -1165,8 +1165,8 @@ max) + "% (" + (total / 1024 / 1024) + "MB)"; drawString(font, msg, screenWidth
     RenderPath.MatrixTranslate(0.0f,
                  (float)(screenHeight - iSafezoneYHalf - iTooltipsYOffset - 16 -
                          3 + 22) -
-                     24.0f,
-                 0.0f);
+                                   24.0f,
+                               0.0f);
     // RenderPath.MatrixScale(1.0f / ssc.scale, 1.0f / ssc.scale, 1);
 
     // 4J-PB - we need gui messages for each of the possible 4 splitscreen

@@ -1,6 +1,7 @@
 #include "EndermanRenderer.h"
 
 #include <memory>
+#include <numbers>
 
 #include "minecraft/SharedConstants.h"
 #include "minecraft/client/model/EndermanModel.h"

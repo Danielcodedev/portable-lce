@@ -3,6 +3,7 @@
 #include <math.h>
 
 #include <memory>
+#include <numbers>
 
 #include "minecraft/client/model/BoatModel.h"
 #include "minecraft/client/model/geom/Model.h"

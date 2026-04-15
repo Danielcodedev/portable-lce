@@ -1,5 +1,7 @@
 #include "Lighting.h"
 
+#include <numbers>
+
 #include "java/FloatBuffer.h"
 #include "minecraft/world/phys/Vec3.h"
 #include "platform/renderer/renderer.h"

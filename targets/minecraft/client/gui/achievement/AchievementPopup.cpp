@@ -1,6 +1,9 @@
 #include "AchievementPopup.h"
 
+#include <numbers>
+
 #include "java/System.h"
+#include "minecraft/SharedConstants.h"
 #include "minecraft/client/Lighting.h"
 #include "minecraft/client/Minecraft.h"
 #include "minecraft/client/gui/Font.h"
@@ -8,11 +11,9 @@
 #include "minecraft/client/renderer/entity/ItemRenderer.h"
 #include "minecraft/locale/I18n.h"
 #include "minecraft/stats/Achievement.h"
-#include "minecraft/SharedConstants.h"
+#include "platform/renderer/IRenderPath.h"
 #include "platform/renderer/renderer.h"
 #include "platform/stubs.h"
-#include "platform/renderer/IRenderPath.h"
-
 
 AchievementPopup::AchievementPopup(Minecraft* mc) {
     // 4J - added initialisers

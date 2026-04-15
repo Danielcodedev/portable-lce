@@ -4,6 +4,7 @@
 #include <string.h>
 #include <wchar.h>
 
+#include <numbers>
 #include <string>
 
 #include "Font.h"

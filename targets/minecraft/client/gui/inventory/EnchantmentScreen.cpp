@@ -4,6 +4,7 @@
 #include <cmath>
 #include <iterator>
 #include <memory>
+#include <numbers>
 #include <sstream>
 #include <string>
 
@@ -21,9 +22,8 @@
 #include "minecraft/world/inventory/EnchantmentMenu.h"
 #include "minecraft/world/inventory/Slot.h"
 #include "minecraft/world/item/ItemInstance.h"
-#include "platform/stubs.h"
 #include "platform/renderer/IRenderPath.h"
-
+#include "platform/stubs.h"
 
 class Level;
 
