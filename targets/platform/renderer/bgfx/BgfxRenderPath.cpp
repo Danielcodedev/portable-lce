@@ -904,8 +904,7 @@ bool BgfxRenderPath::CBuffCall(int index, bool) {
     uint32_t texSamplerFlags = BGFX_SAMPLER_MIN_POINT | BGFX_SAMPLER_MAG_POINT;
     if (state_.texture_enabled && state_.bound_texture >= 0) {
         auto tex_it = gl_tex_to_bgfx_.find(state_.bound_texture);
-        if (tex_it != gl_tex_to_bgfx_.end() &&
-            bgfx::isValid(tex_it->second.handle)) {
+        if (tex_it != gl_tex_to_bgfx_.end()) {
             texHandle = tex_it->second.handle;
             texSamplerFlags = tex_it->second.sampler_flags;
             hasTexture = true;
