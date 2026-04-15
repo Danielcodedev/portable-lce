@@ -1,3 +1,4 @@
+#define SDL_MAIN_HANDLED
 #include <SDL.h>
 
 #include "app/common/AppGameServices.h"
@@ -440,6 +441,7 @@ int main(int argc, const char* argv[]) {
     // PLCE(TODO): make this shit work on native wayland
     setenv("SDL_VIDEODRIVER", "x11", 1);
 #endif
+    SDL_SetMainReady();
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Window* sdl_window = SDL_CreateWindow(
         "Minecraft Console Edition", SDL_WINDOWPOS_CENTERED,
@@ -534,15 +536,7 @@ int main(int argc, const char* argv[]) {
 
         rp::FrameDesc frame{};
         {
-            int fbw = 0, fbh = 0;
-            fbw = frame.framebuffer.width;
-            fbh = frame.framebuffer.height;
-            frame.framebuffer.width = fbw;
-            frame.framebuffer.height = fbh;
-            frame.framebuffer.aspect = fbh > 0 ? (float)fbw / (float)fbh : 1.0f;
-            frame.framebuffer.is_widescreen =
-                RenderPath.framebuffer().is_widescreen;
-            frame.framebuffer.is_hi_def = RenderPath.framebuffer().is_hi_def;
+            frame.framebuffer = RenderPath.framebuffer();
         }
 
         if (pMinecraft->pollResize()) {

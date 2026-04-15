@@ -5,6 +5,7 @@
 #include <bgfx/bgfx.h>
 #include <bgfx/platform.h>
 
+#include <cstdio>
 #include <cstring>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -33,6 +34,35 @@ thread_local BgfxRenderPath::RenderState BgfxRenderPath::state_;
 
 static constexpr uint32_t TRANSIENT_ARENA_SIZE = 16 * 1024 * 1024;
 constexpr float Z_BIAS_EPSILON = 6e-5f;
+
+static const char* bgfx_renderer_name(bgfx::RendererType::Enum type) {
+    switch (type) {
+        case bgfx::RendererType::Noop:
+            return "Noop";
+        case bgfx::RendererType::Agc:
+            return "Agc";
+        case bgfx::RendererType::Direct3D11:
+            return "Direct3D11";
+        case bgfx::RendererType::Direct3D12:
+            return "Direct3D12";
+        case bgfx::RendererType::Gnm:
+            return "Gnm";
+        case bgfx::RendererType::Metal:
+            return "Metal";
+        case bgfx::RendererType::Nvn:
+            return "Nvn";
+        case bgfx::RendererType::OpenGL:
+            return "OpenGL";
+        case bgfx::RendererType::OpenGLES:
+            return "OpenGLES";
+        case bgfx::RendererType::Vulkan:
+            return "Vulkan";
+        case bgfx::RendererType::WebGPU:
+            return "WebGPU";
+        default:
+            return "Unknown";
+    }
+}
 
 static uint64_t bgfx_blend_factor(rp::BlendFactor f) {
     switch (f) {
@@ -165,9 +195,6 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
     uint32_t fs_size = 0;
 
     switch (bgfx::getRendererType()) {
-        // we'll need a set compiled for each shaderc platform
-#ifdef __linux__
-        // --platform linux
         case bgfx::RendererType::Vulkan:
             vs_data = vs_4jcraft_spv;
             vs_size = sizeof(vs_4jcraft_spv);
@@ -180,16 +207,12 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
             fs_data = fs_4jcraft_glsl;
             fs_size = sizeof(fs_4jcraft_glsl);
             break;
-#endif
-#ifdef __APPLE__
-        // --platform osx
         case bgfx::RendererType::Metal:
             vs_data = vs_4jcraft_mtl;
             vs_size = sizeof(vs_4jcraft_mtl);
             fs_data = fs_4jcraft_mtl;
             fs_size = sizeof(fs_4jcraft_mtl);
             break;
-#endif
         default:
             assert(0 && "shaders not yet compiled for this renderer");
             break;
@@ -200,6 +223,9 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
     bgfx::ShaderHandle fsh =
         bgfx::createShader(bgfx::makeRef(fs_data, fs_size));
     program_ = bgfx::createProgram(vsh, fsh, true);
+    std::fprintf(stderr, "[bgfx] renderer=%s program_valid=%d viewport=%ux%u\n",
+                 bgfx_renderer_name(bgfx::getRendererType()),
+                 bgfx::isValid(program_) ? 1 : 0, width_, height_);
 
     // Vertex uniforms
     u_baseColor_ = bgfx::createUniform("u_baseColor", bgfx::UniformType::Vec4);
