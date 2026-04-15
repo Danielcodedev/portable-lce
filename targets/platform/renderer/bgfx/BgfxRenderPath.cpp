@@ -578,7 +578,10 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data,
         }
     }
     if (state_.use_lightmap && bgfx::isValid(state_.bound_lightmap)) {
-        bgfx::setTexture(1, s_tex1_, state_.bound_lightmap);
+            bgfx::setTexture(1, s_tex1_, state_.bound_lightmap,
+                             BGFX_SAMPLER_MIN_ANISOTROPIC |
+                                 BGFX_SAMPLER_MAG_ANISOTROPIC |
+                                 BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP);
     }
     float fragP[4] = {hasTexture ? 1.0f : 0.0f,
                       state_.use_lightmap ? 1.0f : 0.0f, state_.alpha_ref,
@@ -874,7 +877,10 @@ bool BgfxRenderPath::CBuffCall(int index, bool) {
 
         if (hasTexture) bgfx::setTexture(0, s_tex0_, texHandle);
         if (state_.use_lightmap && bgfx::isValid(state_.bound_lightmap)) {
-            bgfx::setTexture(1, s_tex1_, state_.bound_lightmap);
+            bgfx::setTexture(1, s_tex1_, state_.bound_lightmap,
+                             BGFX_SAMPLER_MIN_ANISOTROPIC |
+                                 BGFX_SAMPLER_MAG_ANISOTROPIC |
+                                 BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP);
         }
 
         if (bgfx::isValid(program_))
@@ -1143,7 +1149,10 @@ void BgfxRenderPath::submit_immediate(const DrawCall& dc) {
         }
     }
     if (state_.use_lightmap && bgfx::isValid(state_.bound_lightmap)) {
-        bgfx::setTexture(1, s_tex1_, state_.bound_lightmap);
+            bgfx::setTexture(1, s_tex1_, state_.bound_lightmap,
+                             BGFX_SAMPLER_MIN_ANISOTROPIC |
+                                 BGFX_SAMPLER_MAG_ANISOTROPIC |
+                                 BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP);
     }
     float fragP[4] = {hasTexture ? 1.0f : 0.0f,
                       state_.use_lightmap ? 1.0f : 0.0f, state_.alpha_ref,
