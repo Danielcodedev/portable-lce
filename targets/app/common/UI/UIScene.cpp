@@ -17,6 +17,8 @@
 #ifndef _ENABLEIGGY
 #include "app/common/Iggy/iggy_stubs.h"
 #endif
+#include <numbers>
+
 #include "app/common/Audio/SoundTypes.h"
 #include "app/common/Game.h"
 #include "app/common/Iggy/include/rrCore.h"
@@ -27,9 +29,8 @@
 #include "minecraft/client/renderer/entity/ItemRenderer.h"
 #include "minecraft/world/entity/player/Inventory.h"
 #include "minecraft/world/item/ItemInstance.h"
-#include "util/StringHelpers.h"
 #include "platform/renderer/IRenderPath.h"
-
+#include "util/StringHelpers.h"
 
 class MultiplayerLocalPlayer;
 

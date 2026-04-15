@@ -1,6 +1,7 @@
 #include "TheEndPortalRenderer.h"
 
 #include <memory>
+#include <numbers>
 
 #include "TileEntityRenderDispatcher.h"
 #include "java/FloatBuffer.h"
@@ -99,7 +100,7 @@ void TheEndPortalRenderer::render(std::shared_ptr<TileEntity> _table, double x,
         RenderPath.MatrixTranslate(-xx, -zz, -yy);
         float ss1 = (float)(dd + Camera::yPlayerOffs);
         RenderPath.MatrixTranslate(Camera::xPlayerOffs * dist / ss1,
-                     Camera::zPlayerOffs * dist / ss1, -yy);
+                                   Camera::zPlayerOffs * dist / ss1, -yy);
 
         Tesselator* t = Tesselator::getInstance();
         t->useProjectedTexture(

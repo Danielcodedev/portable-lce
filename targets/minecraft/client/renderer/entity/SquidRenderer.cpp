@@ -1,6 +1,7 @@
 #include "SquidRenderer.h"
 
 #include <memory>
+#include <numbers>
 
 #include "minecraft/client/renderer/Textures.h"
 #include "minecraft/client/renderer/entity/MobRenderer.h"

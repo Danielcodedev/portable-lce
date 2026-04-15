@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <numbers>
 #include <string>
 
 #include "minecraft/GameEnums.h"

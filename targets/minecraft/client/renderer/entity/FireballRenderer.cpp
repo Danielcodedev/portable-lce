@@ -1,6 +1,7 @@
 #include "FireballRenderer.h"
 
 #include <memory>
+#include <numbers>
 
 #include "EntityRenderDispatcher.h"
 #include "java/Class.h"

@@ -6,6 +6,8 @@
 #include "minecraft/client/renderer/TileRenderer.h"
 #include "platform/stubs.h"
 // #include "ItemFrame"
+#include <numbers>
+
 #include "ItemFrameRenderer.h"
 #include "minecraft/Direction.h"
 #include "minecraft/Facing.h"
@@ -142,7 +144,7 @@ void ItemFrameRenderer::drawItem(std::shared_ptr<ItemFrame> entity) {
     RenderPath.MatrixPush();
 
     RenderPath.MatrixTranslate((-7.25f / 16.0f) * Direction::STEP_X[entity->dir], -0.18f,
-                 (-7.25f / 16.0f) * Direction::STEP_Z[entity->dir]);
+        (-7.25f / 16.0f) * Direction::STEP_Z[entity->dir]);
     RenderPath.MatrixRotate((180 + entity->yRot)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
     RenderPath.MatrixRotate((-90 * entity->getRotation())*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
 

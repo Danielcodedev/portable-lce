@@ -18,6 +18,11 @@
 #include "shaders/vs_4jcraft.bin.h"
 #include "stb_image.h"
 
+#ifdef __APPLE__
+#import <Cocoa/Cocoa.h>
+#import <QuartzCore/QuartzCore.h>
+#endif
+
 using namespace rp;
 
 thread_local int BgfxRenderPath::cbuf_rec_id_ = -1;
@@ -31,33 +36,53 @@ constexpr float Z_BIAS_EPSILON = 6e-5f;
 
 static uint64_t bgfx_blend_factor(rp::BlendFactor f) {
     switch (f) {
-        case rp::BlendFactor::zero:                     return BGFX_STATE_BLEND_ZERO;
-        case rp::BlendFactor::one:                      return BGFX_STATE_BLEND_ONE;
-        case rp::BlendFactor::src_color:                return BGFX_STATE_BLEND_SRC_COLOR;
-        case rp::BlendFactor::one_minus_src_color:      return BGFX_STATE_BLEND_INV_SRC_COLOR;
-        case rp::BlendFactor::src_alpha:                return BGFX_STATE_BLEND_SRC_ALPHA;
-        case rp::BlendFactor::one_minus_src_alpha:      return BGFX_STATE_BLEND_INV_SRC_ALPHA;
-        case rp::BlendFactor::dst_color:                return BGFX_STATE_BLEND_DST_COLOR;
-        case rp::BlendFactor::one_minus_dst_color:      return BGFX_STATE_BLEND_INV_DST_COLOR;
-        case rp::BlendFactor::dst_alpha:                return BGFX_STATE_BLEND_DST_ALPHA;
-        case rp::BlendFactor::one_minus_dst_alpha:      return BGFX_STATE_BLEND_INV_DST_ALPHA;
-        // PLCE: these were BGFX_STATE_BLEND_FACTOR / BGFX_STATE_BLEND_INV_FACTOR,
-        // switching them to SRC_ALPHA / INV_SRC_ALPHA fixes the invisible HUD.
-        case rp::BlendFactor::constant_alpha:           return BGFX_STATE_BLEND_SRC_ALPHA;
-        case rp::BlendFactor::one_minus_constant_alpha: return BGFX_STATE_BLEND_INV_SRC_ALPHA;
+        case rp::BlendFactor::zero:
+            return BGFX_STATE_BLEND_ZERO;
+        case rp::BlendFactor::one:
+            return BGFX_STATE_BLEND_ONE;
+        case rp::BlendFactor::src_color:
+            return BGFX_STATE_BLEND_SRC_COLOR;
+        case rp::BlendFactor::one_minus_src_color:
+            return BGFX_STATE_BLEND_INV_SRC_COLOR;
+        case rp::BlendFactor::src_alpha:
+            return BGFX_STATE_BLEND_SRC_ALPHA;
+        case rp::BlendFactor::one_minus_src_alpha:
+            return BGFX_STATE_BLEND_INV_SRC_ALPHA;
+        case rp::BlendFactor::dst_color:
+            return BGFX_STATE_BLEND_DST_COLOR;
+        case rp::BlendFactor::one_minus_dst_color:
+            return BGFX_STATE_BLEND_INV_DST_COLOR;
+        case rp::BlendFactor::dst_alpha:
+            return BGFX_STATE_BLEND_DST_ALPHA;
+        case rp::BlendFactor::one_minus_dst_alpha:
+            return BGFX_STATE_BLEND_INV_DST_ALPHA;
+        // PLCE: these were BGFX_STATE_BLEND_FACTOR /
+        // BGFX_STATE_BLEND_INV_FACTOR, switching them to SRC_ALPHA /
+        // INV_SRC_ALPHA fixes the invisible HUD.
+        case rp::BlendFactor::constant_alpha:
+            return BGFX_STATE_BLEND_SRC_ALPHA;
+        case rp::BlendFactor::one_minus_constant_alpha:
+            return BGFX_STATE_BLEND_INV_SRC_ALPHA;
     }
     return BGFX_STATE_BLEND_ONE;
 }
 
 static uint64_t bgfx_depth_func(rp::DepthTest t) {
     switch (t) {
-        case rp::DepthTest::off:           return BGFX_STATE_DEPTH_TEST_ALWAYS;
-        case rp::DepthTest::less:          return BGFX_STATE_DEPTH_TEST_LESS;
-        case rp::DepthTest::less_equal:    return BGFX_STATE_DEPTH_TEST_LEQUAL;
-        case rp::DepthTest::equal:         return BGFX_STATE_DEPTH_TEST_EQUAL;
-        case rp::DepthTest::greater:       return BGFX_STATE_DEPTH_TEST_GREATER;
-        case rp::DepthTest::greater_equal: return BGFX_STATE_DEPTH_TEST_GEQUAL;
-        case rp::DepthTest::always:        return BGFX_STATE_DEPTH_TEST_ALWAYS;
+        case rp::DepthTest::off:
+            return BGFX_STATE_DEPTH_TEST_ALWAYS;
+        case rp::DepthTest::less:
+            return BGFX_STATE_DEPTH_TEST_LESS;
+        case rp::DepthTest::less_equal:
+            return BGFX_STATE_DEPTH_TEST_LEQUAL;
+        case rp::DepthTest::equal:
+            return BGFX_STATE_DEPTH_TEST_EQUAL;
+        case rp::DepthTest::greater:
+            return BGFX_STATE_DEPTH_TEST_GREATER;
+        case rp::DepthTest::greater_equal:
+            return BGFX_STATE_DEPTH_TEST_GEQUAL;
+        case rp::DepthTest::always:
+            return BGFX_STATE_DEPTH_TEST_ALWAYS;
     }
     return BGFX_STATE_DEPTH_TEST_LEQUAL;
 }
@@ -94,6 +119,8 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
     }
 #elif defined(_WIN32)
     init.platformData.nwh = wmi.info.win.window;
+#elif defined(__APPLE__)
+    init.platformData.nwh = wmi.info.cocoa.window;
 #endif
 
     init.type = bgfx::RendererType::OpenGL;
@@ -137,10 +164,10 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
     const uint8_t* fs_data = nullptr;
     uint32_t fs_size = 0;
 
-    // these shaders were compiled with --platform=linux, we'll need a set
-    // compiled for each shaderc platform
-#ifdef __linux__
     switch (bgfx::getRendererType()) {
+        // we'll need a set compiled for each shaderc platform
+#ifdef __linux__
+        // --platform linux
         case bgfx::RendererType::Vulkan:
             vs_data = vs_4jcraft_spv;
             vs_size = sizeof(vs_4jcraft_spv);
@@ -153,11 +180,20 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
             fs_data = fs_4jcraft_glsl;
             fs_size = sizeof(fs_4jcraft_glsl);
             break;
+#endif
+#ifdef __APPLE__
+        // --platform osx
+        case bgfx::RendererType::Metal:
+            vs_data = vs_4jcraft_mtl;
+            vs_size = sizeof(vs_4jcraft_mtl);
+            fs_data = fs_4jcraft_mtl;
+            fs_size = sizeof(fs_4jcraft_mtl);
+            break;
+#endif
         default:
             assert(0 && "shaders not yet compiled for this renderer");
             break;
     }
-#endif
 
     bgfx::ShaderHandle vsh =
         bgfx::createShader(bgfx::makeRef(vs_data, vs_size));
@@ -578,10 +614,10 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data,
         }
     }
     if (state_.use_lightmap && bgfx::isValid(state_.bound_lightmap)) {
-            bgfx::setTexture(1, s_tex1_, state_.bound_lightmap,
-                             BGFX_SAMPLER_MIN_ANISOTROPIC |
-                                 BGFX_SAMPLER_MAG_ANISOTROPIC |
-                                 BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP);
+        bgfx::setTexture(1, s_tex1_, state_.bound_lightmap,
+                         BGFX_SAMPLER_MIN_ANISOTROPIC |
+                             BGFX_SAMPLER_MAG_ANISOTROPIC |
+                             BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP);
     }
     float fragP[4] = {hasTexture ? 1.0f : 0.0f,
                       state_.use_lightmap ? 1.0f : 0.0f, state_.alpha_ref,
@@ -1149,10 +1185,10 @@ void BgfxRenderPath::submit_immediate(const DrawCall& dc) {
         }
     }
     if (state_.use_lightmap && bgfx::isValid(state_.bound_lightmap)) {
-            bgfx::setTexture(1, s_tex1_, state_.bound_lightmap,
-                             BGFX_SAMPLER_MIN_ANISOTROPIC |
-                                 BGFX_SAMPLER_MAG_ANISOTROPIC |
-                                 BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP);
+        bgfx::setTexture(1, s_tex1_, state_.bound_lightmap,
+                         BGFX_SAMPLER_MIN_ANISOTROPIC |
+                             BGFX_SAMPLER_MAG_ANISOTROPIC |
+                             BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP);
     }
     float fragP[4] = {hasTexture ? 1.0f : 0.0f,
                       state_.use_lightmap ? 1.0f : 0.0f, state_.alpha_ref,

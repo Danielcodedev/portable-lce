@@ -1,6 +1,7 @@
 #include "WitchRenderer.h"
 
 #include <memory>
+#include <numbers>
 #include <vector>
 
 #include "EntityRenderDispatcher.h"

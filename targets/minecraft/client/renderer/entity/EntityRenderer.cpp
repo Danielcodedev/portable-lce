@@ -1,6 +1,7 @@
 #include "EntityRenderer.h"
 
 #include <cmath>
+#include <numbers>
 
 #include "EntityRenderDispatcher.h"
 #include "java/Class.h"

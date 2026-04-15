@@ -10,6 +10,8 @@
 #include "app/common/Iggy/iggy_stubs.h"
 #endif
 
+#include <numbers>
+
 #include "java/Class.h"
 #include "minecraft/client/Lighting.h"
 #include "minecraft/client/Minecraft.h"

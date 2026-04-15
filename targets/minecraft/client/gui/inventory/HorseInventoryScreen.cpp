@@ -1,6 +1,7 @@
 #include "HorseInventoryScreen.h"
 
 #include <cmath>
+#include <numbers>
 #include <string>
 
 #include "minecraft/client/Lighting.h"

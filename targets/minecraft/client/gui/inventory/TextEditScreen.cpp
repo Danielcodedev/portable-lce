@@ -1,5 +1,6 @@
 #include "TextEditScreen.h"
 
+#include <numbers>
 #include <vector>
 
 #include "minecraft/SharedConstants.h"
