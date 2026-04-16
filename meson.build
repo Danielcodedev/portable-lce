@@ -85,6 +85,15 @@ elif get_option('occlusion_culling') == 'hardware'
   global_cpp_defs += ['-DOCCLUSION_MODE_HARDWARE', '-DUSE_OCCLUSION_CULLING']
 endif
 
+if get_option('renderer') == 'bgfx-Vulkan'
+  global_cpp_defs += ['-DBGFX_RENDERER_VULKAN']
+elif get_option('renderer') == 'bgfx-OpenGL'
+  global_cpp_defs += ['-DBGFX_RENDERER_OPENGL']
+elif get_option('renderer') == 'bgfx-Metal'
+  global_cpp_defs += ['-DBGFX_RENDERER_METAL']
+endif
+
+
 add_project_arguments(global_cpp_defs, language: ['cpp', 'c'])
 add_project_arguments(global_cpp_args, language: 'cpp')
 

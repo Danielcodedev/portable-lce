@@ -153,7 +153,17 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
     init.platformData.nwh = wmi.info.cocoa.window;
 #endif
 
-    init.type = bgfx::RendererType::OpenGL;
+    #ifdef BGFX_RENDERER_VULKAN 
+        init.type = bgfx::RendererType::Vulkan;
+    #endif
+    #ifdef BGFX_RENDERER_OPENGL
+        init.type = bgfx::RendererType::OpenGL;
+    #endif
+    #ifdef BGFX_RENDERER_METAL 
+        init.type = bgfx::RendererType::Metal;
+    #endif // 
+            
+   
     init.resolution.width = width_;
     init.resolution.height = height_;
 #ifdef ENABLE_VSYNC 
