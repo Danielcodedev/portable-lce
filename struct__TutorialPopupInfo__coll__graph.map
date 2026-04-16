@@ -1,0 +1,21 @@
+<map id="_TutorialPopupInfo" name="_TutorialPopupInfo">
+<area shape="rect" id="Node000001" title=" " alt="" coords="187,269,330,295"/>
+<area shape="rect" id="Node000002" href="$classUIScene.html" title=" " alt="" coords="149,181,224,207"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="185,221,186,233,190,244,203,257,219,267,217,271,200,261,186,247,181,234,180,221"/>
+<area shape="rect" id="Node000003" href="$structIggyValuePath.html" title=" " alt="" coords="5,93,120,119"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="90,124,134,155,170,179,167,183,130,160,87,129"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="135,97,147,106,138,114,120,116,120,111,136,109,141,106,132,102"/>
+<area shape="rect" id="Node000004" href="$classUILayer.html" title=" " alt="" coords="215,93,287,119"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="236,131,198,182,193,179,232,128"/>
+<area shape="rect" id="Node000005" href="$classUIGroup.html" title=" " alt="" coords="213,5,288,31"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="253,45,253,93,248,93,248,45"/>
+<area shape="rect" id="Node000006" href="$classTutorial.html" title=" " alt="" coords="358,181,429,207"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="360,215,329,233,275,271,272,267,327,228,357,211"/>
+<area shape="rect" id="Node000008" href="$classTutorialTask.html" title=" " alt="" coords="385,269,484,295"/>
+<area shape="poly" id="edge9_Node000008_Node000006" title=" " alt="" coords="389,220,389,232,392,244,401,257,414,267,411,271,397,261,387,246,383,233,384,220"/>
+<area shape="rect" id="Node000007" href="$classITutorial.html" title=" " alt="" coords="323,93,397,119"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="372,131,391,180,386,182,367,133"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="445,256,447,243,444,232,434,219,420,209,423,205,437,215,449,229,452,243,450,257"/>
+<area shape="rect" id="Node000009" href="$classTutorialConstraint.html" title=" " alt="" coords="422,93,559,119"/>
+<area shape="poly" id="edge10_Node000006_Node000009" title=" " alt="" coords="469,130,409,183,405,179,466,126"/>
+</map>

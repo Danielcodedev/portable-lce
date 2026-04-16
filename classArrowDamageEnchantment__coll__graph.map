@@ -1,0 +1,9 @@
+<map id="ArrowDamageEnchantment" name="ArrowDamageEnchantment">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,411,207,436"/>
+<area shape="rect" id="Node000002" href="$classEnchantment.html" title=" " alt="" coords="52,268,160,293"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,307,109,410,103,410,103,307"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="137,261,155,259,170,261,182,268,187,281,180,295,165,302,145,302,124,296,126,291,146,297,164,297,177,291,181,281,178,271,169,266,155,264,138,266"/>
+<area shape="rect" id="Node000003" href="$classEnchantmentCategory.html" title=" " alt="" coords="23,59,189,84"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="109,98,109,268,103,268,103,98"/>
+<area shape="poly" id="edge4_Node000003_Node000003" title=" " alt="" coords="148,53,172,51,194,53,209,59,216,71,208,85,188,91,162,92,135,87,136,81,163,86,187,86,205,80,211,71,206,63,192,58,172,56,149,58"/>
+</map>

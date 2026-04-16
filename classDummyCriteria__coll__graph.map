@@ -1,0 +1,6 @@
+<map id="DummyCriteria" name="DummyCriteria">
+<area shape="rect" id="Node000001" title=" " alt="" coords="10,128,133,153"/>
+<area shape="rect" id="Node000002" href="$classObjectiveCriteria.html" title=" " alt="" coords="5,29,137,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="74,68,74,128,69,128,69,68"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="152,31,160,35,164,42,156,52,138,56,137,50,153,47,159,42,157,39,150,36"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="IPlatformLeaderboard::StatsData" name="IPlatformLeaderboard::StatsData">
+<area shape="rect" id="Node000001" title=" " alt="" coords="303,101,465,141"/>
+<area shape="rect" id="Node000002" href="$structIPlatformLeaderboard_1_1KillsRecord.html" title=" " alt="" coords="5,5,168,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="172,47,280,80,331,99,330,104,278,85,171,52"/>
+<area shape="rect" id="Node000003" href="$structIPlatformLeaderboard_1_1MiningRecord.html" title=" " alt="" coords="5,69,168,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="182,97,303,110,302,115,181,102"/>
+<area shape="rect" id="Node000004" href="$structIPlatformLeaderboard_1_1FarmingRecord.html" title=" " alt="" coords="5,133,168,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="181,141,302,127,303,133,182,146"/>
+<area shape="rect" id="Node000005" href="$structIPlatformLeaderboard_1_1TravellingRecord.html" title=" " alt="" coords="5,197,168,237"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="173,191,278,159,332,139,334,144,280,164,175,196"/>
+</map>

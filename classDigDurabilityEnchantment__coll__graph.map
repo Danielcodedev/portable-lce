@@ -1,0 +1,9 @@
+<map id="DigDurabilityEnchantment" name="DigDurabilityEnchantment">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,411,200,436"/>
+<area shape="rect" id="Node000002" href="$classEnchantment.html" title=" " alt="" coords="49,268,157,293"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,307,105,410,100,410,100,307"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="134,261,151,259,167,261,179,268,183,281,177,295,162,302,142,302,121,296,122,291,142,297,160,297,173,291,178,281,175,271,165,266,151,264,135,266"/>
+<area shape="rect" id="Node000003" href="$classEnchantmentCategory.html" title=" " alt="" coords="19,59,186,84"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="105,98,105,268,100,268,100,98"/>
+<area shape="poly" id="edge4_Node000003_Node000003" title=" " alt="" coords="145,53,169,51,190,53,206,59,213,71,204,85,185,91,159,92,131,87,132,81,159,86,184,86,201,80,207,71,203,63,189,58,169,56,145,58"/>
+</map>

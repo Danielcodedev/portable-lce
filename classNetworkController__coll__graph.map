@@ -1,0 +1,7 @@
+<map id="NetworkController" name="NetworkController">
+<area shape="rect" id="Node000001" title=" " alt="" coords="105,93,246,119"/>
+<area shape="rect" id="Node000002" href="$structXUSER__SIGNIN__INFO.html" title=" " alt="" coords="5,5,164,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="91,43,103,68,119,81,138,91,135,96,116,86,99,71,86,46"/>
+<area shape="rect" id="Node000003" href="$struct__JoinFromInviteData.html" title=" " alt="" coords="189,5,343,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="258,44,239,71,203,95,200,91,235,67,253,41"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="ProtectionEnchantment" name="ProtectionEnchantment">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,411,180,436"/>
+<area shape="rect" id="Node000002" href="$classEnchantment.html" title=" " alt="" coords="39,268,147,293"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,307,95,410,90,410,90,307"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="124,261,141,259,157,261,169,268,173,281,167,295,152,302,132,302,111,296,112,291,132,297,150,297,163,291,168,281,165,271,155,266,141,264,125,266"/>
+<area shape="rect" id="Node000003" href="$classEnchantmentCategory.html" title=" " alt="" coords="9,59,176,84"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="95,98,95,268,90,268,90,98"/>
+<area shape="poly" id="edge4_Node000003_Node000003" title=" " alt="" coords="135,53,159,51,180,53,196,59,203,71,194,85,175,91,149,92,121,87,122,81,149,86,174,86,191,80,197,71,193,63,179,58,159,56,135,58"/>
+</map>

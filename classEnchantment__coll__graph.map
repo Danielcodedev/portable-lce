@@ -1,0 +1,7 @@
+<map id="Enchantment" name="Enchantment">
+<area shape="rect" id="Node000001" title=" " alt="" coords="35,268,143,293"/>
+<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="118,260,136,257,152,259,165,267,169,281,163,296,147,304,126,303,105,296,106,291,127,298,146,298,159,292,164,281,160,270,151,264,136,262,119,265"/>
+<area shape="rect" id="Node000002" href="$classEnchantmentCategory.html" title=" " alt="" coords="5,59,172,84"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="91,98,91,268,86,268,86,98"/>
+<area shape="poly" id="edge3_Node000002_Node000002" title=" " alt="" coords="131,53,155,51,176,53,192,59,199,71,190,85,171,91,145,92,117,87,118,81,145,86,170,86,187,80,193,71,189,63,175,58,155,56,131,58"/>
+</map>

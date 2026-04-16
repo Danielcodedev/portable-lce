@@ -1,0 +1,7 @@
+<map id="UIScene_PauseMenu" name="UIScene_PauseMenu">
+<area shape="rect" id="Node000001" title=" " alt="" coords="35,79,191,104"/>
+<area shape="rect" id="Node000002" href="$classUIScene.html" title=" " alt="" coords="5,5,80,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="66,39,104,77,100,80,62,43"/>
+<area shape="rect" id="Node000003" href="$classIUIScene__PauseMenu.html" title=" " alt="" coords="104,5,264,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="165,43,127,80,123,77,161,39"/>
+</map>

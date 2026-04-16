@@ -1,0 +1,13 @@
+<map id="SearchForGamesData" name="SearchForGamesData">
+<area shape="rect" id="Node000001" title=" " alt="" coords="191,196,354,221"/>
+<area shape="rect" id="Node000002" href="$structXSESSION__SEARCHRESULT__HEADER.html" title=" " alt="" coords="9,93,205,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="140,140,182,170,237,194,235,198,179,174,137,144"/>
+<area shape="rect" id="Node000003" href="$structXSESSION__SEARCHRESULT.html" title=" " alt="" coords="5,5,201,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="107,44,109,93,104,93,102,44"/>
+<area shape="rect" id="Node000004" href="$structXNQOS.html" title=" " alt="" coords="238,101,307,126"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="275,140,275,196,270,196,270,140"/>
+<area shape="rect" id="Node000005" href="$structXNQOSINFO.html" title=" " alt="" coords="226,5,327,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="278,44,276,101,270,100,273,44"/>
+<area shape="rect" id="Node000006" href="$structXOVERLAPPED.html" title=" " alt="" coords="331,101,449,126"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="369,137,325,174,291,198,288,194,322,170,366,133"/>
+</map>

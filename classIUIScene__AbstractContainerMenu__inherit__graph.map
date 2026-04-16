@@ -1,0 +1,65 @@
+<map id="IUIScene_AbstractContainerMenu" name="IUIScene_AbstractContainerMenu">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,301,244,327"/>
+<area shape="rect" id="Node000002" href="$classIUIScene__AnvilMenu.html" title=" " alt="" coords="332,5,487,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="131,287,151,235,184,167,230,98,258,67,290,40,310,29,331,22,333,27,312,34,294,44,262,70,234,101,188,170,156,237,136,289"/>
+<area shape="rect" id="Node000004" href="$classIUIScene__BeaconMenu.html" title=" " alt="" coords="324,55,495,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="135,287,158,244,192,189,236,135,262,110,291,89,322,75,324,80,293,94,266,114,240,138,196,193,162,246,140,290"/>
+<area shape="rect" id="Node000006" href="$classIUIScene__BrewingMenu.html" title=" " alt="" coords="322,104,497,129"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="140,288,165,254,200,213,242,172,291,138,321,126,323,131,293,143,246,176,204,217,169,257,144,291"/>
+<area shape="rect" id="Node000008" href="$classIUIScene__ContainerMenu.html" title=" " alt="" coords="317,153,502,179"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="147,290,209,238,248,210,291,188,323,176,325,181,293,192,251,215,212,242,151,294"/>
+<area shape="rect" id="Node000010" href="$classIUIScene__CreativeMenu.html" title=" " alt="" coords="321,203,498,228"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="161,292,221,264,291,237,334,225,335,231,293,242,223,269,163,297"/>
+<area shape="rect" id="Node000012" href="$classIUIScene__DispenserMenu.html" title=" " alt="" coords="316,252,503,277"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="212,296,335,275,336,280,213,302"/>
+<area shape="rect" id="Node000014" href="$classIUIScene__EnchantingMenu.html" title=" " alt="" coords="312,351,507,376"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="213,326,336,348,335,353,212,332"/>
+<area shape="rect" id="Node000016" href="$classIUIScene__FireworksMenu.html" title=" " alt="" coords="317,400,502,425"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="164,330,224,358,293,385,339,397,338,402,291,390,222,363,162,335"/>
+<area shape="rect" id="Node000018" href="$classIUIScene__FurnaceMenu.html" title=" " alt="" coords="323,449,496,475"/>
+<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="151,334,213,385,252,412,293,434,329,447,327,452,291,439,249,416,209,389,148,338"/>
+<area shape="rect" id="Node000020" href="$classIUIScene__HopperMenu.html" title=" " alt="" coords="325,499,494,524"/>
+<area shape="poly" id="edge19_Node000001_Node000020" title=" " alt="" coords="144,337,169,370,204,410,246,450,293,484,325,497,323,502,291,488,242,455,200,414,165,374,140,340"/>
+<area shape="rect" id="Node000022" href="$classIUIScene__HorseInventoryMenu.html" title=" " alt="" coords="298,548,521,573"/>
+<area shape="poly" id="edge21_Node000001_Node000022" title=" " alt="" coords="140,338,162,381,196,435,240,488,266,512,293,533,319,545,317,550,291,538,262,517,236,492,192,438,158,384,135,340"/>
+<area shape="rect" id="Node000024" href="$classIUIScene__InventoryMenu.html" title=" " alt="" coords="317,597,501,623"/>
+<area shape="poly" id="edge23_Node000001_Node000024" title=" " alt="" coords="136,338,156,391,189,457,234,526,262,556,293,582,318,595,316,600,291,587,259,560,230,529,184,460,151,393,131,340"/>
+<area shape="rect" id="Node000026" href="$classUIScene__AbstractContainerMenu.html" title=" " alt="" coords="292,301,527,327"/>
+<area shape="poly" id="edge25_Node000001_Node000026" title=" " alt="" coords="258,311,292,311,292,317,258,317"/>
+<area shape="rect" id="Node000003" href="$classUIScene__AnvilMenu.html" title=" " alt="" coords="609,7,759,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="500,16,608,16,608,22,500,21"/>
+<area shape="rect" id="Node000005" href="$classUIScene__BeaconMenu.html" title=" " alt="" coords="601,56,767,81"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="508,65,600,66,600,71,508,70"/>
+<area shape="rect" id="Node000007" href="$classUIScene__BrewingStandMenu.html" title=" " alt="" coords="580,107,788,132"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="511,115,580,116,580,121,510,120"/>
+<area shape="rect" id="Node000009" href="$classUIScene__ContainerMenu.html" title=" " alt="" coords="593,157,775,183"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="516,165,593,166,593,171,516,170"/>
+<area shape="rect" id="Node000011" href="$classUIScene__CreativeMenu.html" title=" " alt="" coords="597,209,771,235"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="512,215,597,217,597,223,512,220"/>
+<area shape="rect" id="Node000013" href="$classUIScene__DispenserMenu.html" title=" " alt="" coords="593,265,775,291"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="516,267,593,271,592,276,516,273"/>
+<area shape="rect" id="Node000015" href="$classUIScene__EnchantingMenu.html" title=" " alt="" coords="589,327,779,352"/>
+<area shape="poly" id="edge14_Node000014_Node000015" title=" " alt="" coords="521,351,588,345,589,350,521,356"/>
+<area shape="rect" id="Node000017" href="$classUIScene__FireworksMenu.html" title=" " alt="" coords="593,400,775,425"/>
+<area shape="poly" id="edge16_Node000016_Node000017" title=" " alt="" coords="516,410,593,410,593,415,516,415"/>
+<area shape="rect" id="Node000019" href="$classUIScene__FurnaceMenu.html" title=" " alt="" coords="599,449,769,475"/>
+<area shape="poly" id="edge18_Node000018_Node000019" title=" " alt="" coords="510,459,599,459,599,465,510,465"/>
+<area shape="rect" id="Node000021" href="$classUIScene__HopperMenu.html" title=" " alt="" coords="601,499,767,524"/>
+<area shape="poly" id="edge20_Node000020_Node000021" title=" " alt="" coords="508,509,601,509,601,514,508,514"/>
+<area shape="rect" id="Node000023" href="$classUIScene__HorseInventoryMenu.html" title=" " alt="" coords="575,548,793,573"/>
+<area shape="poly" id="edge22_Node000022_Node000023" title=" " alt="" coords="534,558,574,558,574,563,534,563"/>
+<area shape="rect" id="Node000025" href="$classUIScene__InventoryMenu.html" title=" " alt="" coords="594,597,774,623"/>
+<area shape="poly" id="edge24_Node000024_Node000025" title=" " alt="" coords="515,607,594,607,594,613,515,613"/>
+<area shape="poly" id="edge26_Node000026_Node000003" title=" " alt="" coords="520,292,525,287,545,257,553,228,553,197,548,166,543,135,543,104,551,72,573,41,589,29,607,22,609,26,591,34,577,45,556,75,548,104,549,135,553,166,558,197,559,228,550,260,529,290,523,295"/>
+<area shape="poly" id="edge27_Node000026_Node000005" title=" " alt="" coords="519,292,525,287,542,264,550,240,551,216,548,192,546,167,547,142,555,117,573,92,599,75,602,80,576,96,559,119,552,143,551,167,554,191,556,216,555,241,547,266,529,290,522,296"/>
+<area shape="poly" id="edge28_Node000026_Node000007" title=" " alt="" coords="518,292,525,287,539,270,546,253,548,217,551,179,558,161,573,143,592,130,595,134,576,147,563,163,556,181,553,217,551,254,543,273,529,291,521,297"/>
+<area shape="poly" id="edge29_Node000026_Node000009" title=" " alt="" coords="515,293,525,287,536,276,542,265,548,242,555,218,562,206,573,195,598,181,600,185,576,199,566,209,559,220,553,244,547,268,540,279,528,291,518,297"/>
+<area shape="poly" id="edge30_Node000026_Node000011" title=" " alt="" coords="503,295,525,286,539,278,549,269,573,250,622,232,624,237,576,255,553,273,543,282,528,291,505,300"/>
+<area shape="poly" id="edge31_Node000026_Node000013" title=" " alt="" coords="519,297,592,287,593,293,520,302"/>
+<area shape="poly" id="edge32_Node000026_Node000015" title=" " alt="" coords="541,323,589,328,588,333,540,329"/>
+<area shape="poly" id="edge33_Node000026_Node000017" title=" " alt="" coords="501,327,528,336,552,347,576,361,655,398,652,402,573,366,550,352,526,340,500,333"/>
+<area shape="poly" id="edge34_Node000026_Node000019" title=" " alt="" coords="522,331,528,336,540,348,548,361,553,387,559,412,565,423,576,435,600,448,598,453,573,439,561,426,554,414,548,388,543,363,536,351,525,340,518,336"/>
+<area shape="poly" id="edge35_Node000026_Node000021" title=" " alt="" coords="524,332,529,336,544,354,551,373,554,412,556,449,562,467,576,484,602,500,599,504,573,488,558,469,550,450,548,412,546,375,539,357,525,340,520,336"/>
+<area shape="poly" id="edge36_Node000026_Node000023" title=" " alt="" coords="524,332,529,336,547,361,555,386,556,411,554,437,551,462,552,486,559,510,577,533,593,546,590,550,573,537,554,512,547,487,546,461,548,436,551,411,550,387,542,363,525,340,521,336"/>
+<area shape="poly" id="edge37_Node000026_Node000025" title=" " alt="" coords="525,333,529,336,551,367,559,398,559,430,554,461,549,492,548,523,556,553,577,583,595,596,592,601,573,587,551,555,543,524,543,492,548,461,553,430,554,399,546,369,525,340,521,337"/>
+</map>

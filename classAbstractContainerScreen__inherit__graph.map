@@ -1,0 +1,33 @@
+<map id="AbstractContainerScreen" name="AbstractContainerScreen">
+<area shape="rect" id="Node000001" title=" " alt="" coords="287,301,469,327"/>
+<area shape="rect" id="Node000004" href="$classBeaconScreen.html" title=" " alt="" coords="551,5,666,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="382,287,397,235,423,168,462,99,487,67,516,40,532,30,550,23,552,28,534,34,519,44,491,71,467,102,428,170,402,236,388,288"/>
+<area shape="rect" id="Node000005" href="$classBrewingStandScreen.html" title=" " alt="" coords="531,55,687,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="385,287,403,244,431,190,468,136,491,111,516,89,536,78,539,82,519,94,494,115,472,139,435,193,408,246,390,289"/>
+<area shape="rect" id="Node000006" href="$classContainerScreen.html" title=" " alt="" coords="544,104,673,129"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="390,288,410,254,438,214,474,173,516,138,543,126,545,131,519,143,478,177,443,217,414,257,394,291"/>
+<area shape="rect" id="Node000007" href="$classCraftingScreen.html" title=" " alt="" coords="550,153,667,179"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="397,289,447,238,480,211,516,188,549,175,551,180,519,192,483,215,451,242,401,293"/>
+<area shape="rect" id="Node000008" href="$classCreativeInventoryScreen.html" title=" " alt="" coords="517,203,700,228"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="409,292,459,264,516,237,551,226,552,231,518,242,461,269,412,297"/>
+<area shape="rect" id="Node000009" href="$classEnchantmentScreen.html" title=" " alt="" coords="533,252,685,277"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="451,296,548,275,549,280,452,301"/>
+<area shape="rect" id="Node000010" href="$classFurnaceScreen.html" title=" " alt="" coords="550,301,667,327"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="483,311,550,311,550,317,483,317"/>
+<area shape="rect" id="Node000011" href="$classHopperScreen.html" title=" " alt="" coords="552,351,665,376"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="452,327,553,349,551,354,451,332"/>
+<area shape="rect" id="Node000012" href="$classHorseInventoryScreen.html" title=" " alt="" coords="525,400,692,425"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="412,331,461,359,518,386,552,397,551,402,516,391,459,364,409,336"/>
+<area shape="rect" id="Node000013" href="$classInventoryScreen.html" title=" " alt="" coords="545,449,673,475"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="401,335,451,386,483,413,519,436,545,447,543,452,516,440,480,417,447,390,397,339"/>
+<area shape="rect" id="Node000014" href="$classMerchantScreen.html" title=" " alt="" coords="545,499,672,524"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="394,337,414,371,443,411,478,451,519,485,546,498,544,503,516,490,474,455,438,414,410,374,390,340"/>
+<area shape="rect" id="Node000015" href="$classRepairScreen.html" title=" " alt="" coords="555,548,663,573"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="390,339,408,382,435,435,472,489,494,513,519,534,536,544,555,551,553,556,534,549,516,539,491,517,468,492,431,438,403,384,385,341"/>
+<area shape="rect" id="Node000016" href="$classTrapScreen.html" title=" " alt="" coords="562,597,655,623"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="388,340,402,392,428,458,467,526,491,557,519,584,540,596,563,603,561,608,537,601,516,588,487,561,462,529,423,460,397,393,382,341"/>
+<area shape="rect" id="Node000002" href="$classScreen.html" title=" " alt="" coords="172,301,239,327"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="253,311,286,311,286,317,253,317"/>
+<area shape="rect" id="Node000003" href="$classGuiComponent.html" title=" " alt="" coords="5,301,124,327"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="138,311,172,311,172,317,138,317"/>
+</map>

@@ -1,0 +1,42 @@
+<map id="VillagePieces::Well" name="VillagePieces::Well">
+<area shape="rect" id="Node000001" title=" " alt="" coords="593,66,738,91"/>
+<area shape="rect" id="Node000005" href="$classVillagePieces_1_1StartPiece.html" title=" " alt="" coords="940,125,1123,150"/>
+<area shape="poly" id="edge5_Node000005_Node000001" title=" " alt="" coords="752,90,952,122,951,127,751,95"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="1240,58,1437,83"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1226,75,738,80,738,75,1226,69"/>
+<area shape="rect" id="Node000003" href="$classStructurePiece.html" title=" " alt="" coords="973,7,1089,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1104,29,1262,55,1261,61,1103,34"/>
+<area shape="rect" id="Node000004" href="$classBoundingBox.html" title=" " alt="" coords="611,7,719,33"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="733,17,973,17,973,23,733,23"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="1124,120,1215,101,1294,81,1295,86,1217,107,1125,125"/>
+<area shape="rect" id="Node000006" href="$classBiomeSource.html" title=" " alt="" coords="5,125,113,150"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="127,135,940,135,940,140,127,140"/>
+<area shape="rect" id="Node000011" href="$classDimension.html" title=" " alt="" coords="276,183,368,209"/>
+<area shape="poly" id="edge15_Node000011_Node000006" title=" " alt="" coords="102,153,138,168,210,183,276,191,276,196,209,188,137,173,100,158"/>
+<area shape="rect" id="Node000007" href="$classVillagePieces_1_1PieceWeight.html" title=" " alt="" coords="567,175,764,201"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="778,183,846,177,915,168,993,147,995,153,917,173,847,183,778,188"/>
+<area shape="rect" id="Node000008" href="$classLevel.html" title=" " alt="" coords="637,327,694,353"/>
+<area shape="poly" id="edge8_Node000005_Node000008" title=" " alt="" coords="702,318,915,203,1008,148,1011,152,917,208,705,323"/>
+<area shape="poly" id="edge12_Node000011_Node000008" title=" " alt="" coords="637,321,594,289,542,260,508,248,481,243,452,240,417,232,355,211,357,206,418,227,453,235,481,238,509,243,544,255,597,285,641,317"/>
+<area shape="rect" id="Node000018" href="$classLevelChunk.html" title=" " alt="" coords="982,327,1081,353"/>
+<area shape="poly" id="edge22_Node000018_Node000008" title=" " alt="" coords="708,337,982,337,982,343,708,343"/>
+<area shape="rect" id="Node000009" href="$classLevelSource.html" title=" " alt="" coords="271,290,373,315"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="387,307,637,334,636,340,386,312"/>
+<area shape="rect" id="Node000010" href="$classRandom.html" title=" " alt="" coords="284,339,360,365"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="374,350,543,348,636,340,637,346,543,353,374,356"/>
+<area shape="poly" id="edge11_Node000008_Node000011" title=" " alt="" coords="382,186,461,188,503,195,544,210,583,235,616,268,659,326,654,329,612,271,580,239,541,214,502,201,460,193,382,192"/>
+<area shape="rect" id="Node000012" href="$classLevelType.html" title=" " alt="" coords="16,271,103,297"/>
+<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="110,264,282,206,284,211,112,269"/>
+<area shape="poly" id="edge14_Node000012_Node000012" title=" " alt="" coords="35,256,42,248,59,245,74,247,83,253,85,263,81,272,76,270,80,262,78,256,72,252,59,250,45,253,39,260"/>
+<area shape="rect" id="Node000013" href="$classChunkSource.html" title=" " alt="" coords="269,389,375,414"/>
+<area shape="poly" id="edge16_Node000008_Node000013" title=" " alt="" coords="389,392,542,369,636,346,637,351,543,375,390,397"/>
+<area shape="rect" id="Node000014" href="$classLevelData.html" title=" " alt="" coords="278,438,366,463"/>
+<area shape="poly" id="edge17_Node000008_Node000014" title=" " alt="" coords="379,443,457,431,542,408,600,380,645,351,648,355,602,385,544,413,459,436,380,448"/>
+<area shape="rect" id="Node000015" href="$classSavedDataStorage.html" title=" " alt="" coords="251,487,393,513"/>
+<area shape="poly" id="edge18_Node000008_Node000015" title=" " alt="" coords="406,494,475,482,509,472,541,458,578,434,609,404,653,351,657,355,613,408,581,438,544,462,511,477,476,487,407,499"/>
+<area shape="rect" id="Node000016" href="$classVillageSiege.html" title=" " alt="" coords="271,537,373,562"/>
+<area shape="poly" id="edge19_Node000008_Node000016" title=" " alt="" coords="387,549,424,547,464,540,504,529,541,511,564,494,584,474,618,429,642,385,657,352,661,354,647,388,622,432,588,478,567,498,544,516,506,534,465,546,425,552,387,554"/>
+<area shape="rect" id="Node000017" href="$classScoreboard.html" title=" " alt="" coords="275,241,369,266"/>
+<area shape="poly" id="edge20_Node000008_Node000017" title=" " alt="" coords="383,263,543,300,637,328,635,333,542,305,382,268"/>
+<area shape="poly" id="edge21_Node000008_Node000018" title=" " alt="" coords="969,356,916,364,852,368,788,364,694,349,695,344,788,359,852,362,916,359,968,351"/>
+</map>

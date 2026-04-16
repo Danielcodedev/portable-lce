@@ -1,0 +1,9 @@
+<map id="StubPlatformNetwork" name="StubPlatformNetwork">
+<area shape="rect" id="Node000001" title=" " alt="" coords="14,168,177,193"/>
+<area shape="rect" id="Node000002" href="$classIPlatformNetwork.html" title=" " alt="" coords="5,80,143,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="83,118,95,167,90,168,78,119"/>
+<area shape="rect" id="Node000003" href="$classStubNetworkPlayer.html" title=" " alt="" coords="167,80,314,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="211,115,116,170,114,165,208,110"/>
+<area shape="rect" id="Node000004" href="$classINetworkPlayer.html" title=" " alt="" coords="179,5,302,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="243,45,243,80,238,80,238,45"/>
+</map>

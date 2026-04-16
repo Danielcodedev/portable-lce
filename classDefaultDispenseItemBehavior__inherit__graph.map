@@ -1,0 +1,39 @@
+<map id="DefaultDispenseItemBehavior" name="DefaultDispenseItemBehavior">
+<area shape="rect" id="Node000001" title=" " alt="" coords="352,359,571,384"/>
+<area shape="rect" id="Node000004" href="$classAbstractProjectileDispenseBehavior.html" title=" " alt="" coords="633,97,831,137"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="471,345,493,302,524,249,566,194,617,148,641,134,644,139,620,152,570,198,529,252,497,305,476,347"/>
+<area shape="rect" id="Node000010" href="$classBoatDispenseBehavior.html" title=" " alt="" coords="647,161,817,187"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="475,346,499,312,531,271,571,231,617,197,647,184,649,189,620,202,575,235,535,275,503,315,480,349"/>
+<area shape="rect" id="Node000011" href="$classDyeDispenseBehavior.html" title=" " alt="" coords="649,211,815,236"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="483,347,541,296,578,269,618,246,652,234,654,239,620,251,581,273,544,300,487,351"/>
+<area shape="rect" id="Node000012" href="$classEmptyBucketDispenseBehavior.html" title=" " alt="" coords="619,260,845,285"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="496,350,553,322,618,295,662,283,664,288,620,301,555,327,499,355"/>
+<area shape="rect" id="Node000013" href="$classFilledBucketDispenseBehavior.html" title=" " alt="" coords="623,309,841,335"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="545,354,661,332,662,337,546,359"/>
+<area shape="rect" id="Node000014" href="$classFireballDispenseBehavior.html" title=" " alt="" coords="638,359,826,384"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="585,369,638,369,638,374,585,374"/>
+<area shape="rect" id="Node000015" href="$classFireworksDispenseBehavior.html" title=" " alt="" coords="631,408,833,433"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="546,384,662,405,661,411,545,389"/>
+<area shape="rect" id="Node000016" href="$classFlintAndSteelDispenseBehavior.html" title=" " alt="" coords="619,457,845,483"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="498,388,554,417,620,443,660,455,658,460,618,449,552,421,496,393"/>
+<area shape="rect" id="Node000017" href="$classPotionDispenseBehavior.html" title=" " alt="" coords="641,507,823,532"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="486,392,543,444,580,470,620,493,651,504,649,509,618,498,577,475,540,448,482,396"/>
+<area shape="rect" id="Node000018" href="$classSpawnEggDispenseBehavior.html" title=" " alt="" coords="629,556,835,581"/>
+<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="480,394,503,428,535,469,575,509,620,542,645,554,643,558,617,547,571,513,531,472,498,431,475,397"/>
+<area shape="rect" id="Node000019" href="$classTntDispenseBehavior.html" title=" " alt="" coords="651,605,813,631"/>
+<area shape="poly" id="edge18_Node000001_Node000019" title=" " alt="" coords="476,396,496,440,528,493,569,547,593,571,620,592,652,606,650,611,617,596,590,575,565,551,523,496,492,442,471,398"/>
+<area shape="rect" id="Node000002" href="$classDispenseItemBehavior.html" title=" " alt="" coords="133,359,304,384"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="318,369,352,369,352,374,318,374"/>
+<area shape="rect" id="Node000003" href="$classBehavior.html" title=" " alt="" coords="5,359,85,384"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="99,369,133,369,133,374,99,374"/>
+<area shape="rect" id="Node000005" href="$classArrowDispenseBehavior.html" title=" " alt="" coords="919,5,1097,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="782,88,834,62,892,39,933,28,935,33,894,45,836,67,784,92"/>
+<area shape="rect" id="Node000006" href="$classEggDispenseBehavior.html" title=" " alt="" coords="926,55,1090,80"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="844,94,936,77,937,83,845,99"/>
+<area shape="rect" id="Node000007" href="$classExpBottleDispenseBehavior.html" title=" " alt="" coords="907,104,1109,129"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="844,114,906,114,906,119,844,119"/>
+<area shape="rect" id="Node000008" href="$classSnowballDispenseBehavior.html" title=" " alt="" coords="909,153,1107,179"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="845,134,937,151,936,156,844,139"/>
+<area shape="rect" id="Node000009" href="$classThrownPotionDispenseBehavior.html" title=" " alt="" coords="893,203,1123,228"/>
+<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="830,139,847,148,861,158,871,169,880,179,895,189,924,200,922,205,892,194,877,184,867,173,858,162,844,152,827,144"/>
+</map>

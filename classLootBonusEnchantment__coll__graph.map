@@ -1,0 +1,9 @@
+<map id="LootBonusEnchantment" name="LootBonusEnchantment">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,411,181,436"/>
+<area shape="rect" id="Node000002" href="$classEnchantment.html" title=" " alt="" coords="39,268,147,293"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,307,96,410,91,410,91,307"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="125,261,142,259,158,261,169,268,174,281,168,295,152,302,132,302,111,296,113,291,133,297,151,297,164,291,169,281,165,271,156,266,142,264,125,266"/>
+<area shape="rect" id="Node000003" href="$classEnchantmentCategory.html" title=" " alt="" coords="10,59,177,84"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="96,98,96,268,91,268,91,98"/>
+<area shape="poly" id="edge4_Node000003_Node000003" title=" " alt="" coords="135,53,159,51,181,53,197,59,203,71,195,85,175,91,150,92,122,87,123,81,150,86,175,86,192,80,198,71,193,63,180,58,159,56,136,58"/>
+</map>

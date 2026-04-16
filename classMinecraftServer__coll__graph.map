@@ -1,0 +1,12 @@
+<map id="MinecraftServer" name="MinecraftServer">
+<area shape="rect" id="Node000001" title=" " alt="" coords="155,93,281,119"/>
+<area shape="rect" id="Node000003" href="$classServerConnection.html" title=" " alt="" coords="149,181,287,207"/>
+<area shape="poly" id="edge3_Node000003_Node000001" title=" " alt="" coords="190,129,179,144,178,153,182,162,200,179,196,183,177,166,173,154,174,142,186,126"/>
+<area shape="rect" id="Node000002" href="$classConsoleInputSource.html" title=" " alt="" coords="5,5,156,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,36,201,91,198,95,109,40"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="223,168,225,143,219,120,224,118,230,142,228,168"/>
+<area shape="rect" id="Node000004" href="$classSettings.html" title=" " alt="" coords="181,5,255,31"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="221,45,221,93,215,93,215,45"/>
+<area shape="rect" id="Node000005" href="$classC4JThread_1_1Event.html" title=" " alt="" coords="279,5,413,31"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="323,42,282,72,241,96,239,91,279,67,320,37"/>
+</map>

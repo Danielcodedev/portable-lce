@@ -1,0 +1,9 @@
+<map id="ArrowKnockbackEnchantment" name="ArrowKnockbackEnchantment">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,411,223,436"/>
+<area shape="rect" id="Node000002" href="$classEnchantment.html" title=" " alt="" coords="60,268,168,293"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,307,117,410,111,410,111,307"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="145,261,163,259,178,261,190,268,195,281,188,295,173,302,153,302,132,296,134,291,154,297,172,297,185,291,189,281,186,271,177,266,163,264,146,266"/>
+<area shape="rect" id="Node000003" href="$classEnchantmentCategory.html" title=" " alt="" coords="31,59,197,84"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="117,98,117,268,111,268,111,98"/>
+<area shape="poly" id="edge4_Node000003_Node000003" title=" " alt="" coords="156,53,180,51,202,53,217,59,224,71,216,85,196,91,170,92,143,87,144,81,171,86,195,86,213,80,219,71,214,63,200,58,180,56,157,58"/>
+</map>

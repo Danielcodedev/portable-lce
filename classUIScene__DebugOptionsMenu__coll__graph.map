@@ -1,0 +1,22 @@
+<map id="UIScene_DebugOptionsMenu" name="UIScene_DebugOptionsMenu">
+<area shape="rect" id="Node000001" title=" " alt="" coords="104,520,315,545"/>
+<area shape="rect" id="Node000002" href="$classUIScene.html" title=" " alt="" coords="220,181,295,207"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="266,220,273,281,273,446,269,474,254,498,229,522,225,518,250,494,264,472,268,446,268,281,261,220"/>
+<area shape="rect" id="Node000008" href="$classUIControl.html" title=" " alt="" coords="104,269,187,295"/>
+<area shape="poly" id="edge10_Node000008_Node000002" title=" " alt="" coords="207,208,171,219,149,232,143,250,145,269,139,269,138,250,145,229,169,214,206,203"/>
+<area shape="rect" id="Node000003" href="$structIggyValuePath.html" title=" " alt="" coords="44,93,159,119"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="133,123,188,155,235,179,232,184,185,160,130,128"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="174,97,185,106,177,114,159,116,158,111,175,109,180,106,171,102"/>
+<area shape="poly" id="edge9_Node000008_Node000003" title=" " alt="" coords="109,132,137,245,144,268,139,270,132,246,104,133"/>
+<area shape="rect" id="Node000004" href="$classUILayer.html" title=" " alt="" coords="253,93,325,119"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="283,133,264,182,259,180,278,131"/>
+<area shape="rect" id="Node000005" href="$classUIGroup.html" title=" " alt="" coords="252,5,327,31"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="292,45,292,93,287,93,287,45"/>
+<area shape="rect" id="Node000006" href="$classUIControl__CheckBox.html" title=" " alt="" coords="71,432,225,457"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="147,471,153,495,165,508,180,518,177,522,161,512,148,497,142,472"/>
+<area shape="rect" id="Node000007" href="$classUIControl__Base.html" title=" " alt="" coords="84,357,207,383"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="149,397,150,432,145,432,144,397"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="148,309,148,357,143,357,143,309"/>
+<area shape="rect" id="Node000009" href="$classUIString.html" title=" " alt="" coords="5,269,80,295"/>
+<area shape="poly" id="edge11_Node000007_Node000009" title=" " alt="" coords="60,304,84,331,122,355,119,360,81,335,56,308"/>
+</map>

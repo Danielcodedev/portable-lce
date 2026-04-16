@@ -1,0 +1,41 @@
+<map id="Game" name="Game">
+<area shape="rect" id="Node000001" title=" " alt="" coords="923,321,984,346"/>
+<area shape="rect" id="Node000002" href="$classDLCManager.html" title=" " alt="" coords="563,25,668,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="681,22,734,17,793,20,850,34,877,47,901,65,914,84,925,113,941,188,950,265,954,320,949,321,945,265,936,189,920,115,909,87,897,69,874,52,848,39,792,25,734,22,682,27"/>
+<area shape="rect" id="Node000003" href="$classSaveManager.html" title=" " alt="" coords="560,74,671,99"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="684,83,808,89,863,98,885,106,900,115,912,131,922,154,937,213,953,320,948,321,932,214,917,156,907,134,897,119,882,111,862,104,807,94,684,88"/>
+<area shape="rect" id="Node000004" href="$classBannedListManager.html" title=" " alt="" coords="540,123,691,149"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="705,133,818,140,867,149,900,164,917,182,930,202,946,246,953,288,955,320,950,320,948,289,941,247,925,204,913,185,897,169,865,155,817,145,704,138"/>
+<area shape="rect" id="Node000005" href="$structBANNEDLIST.html" title=" " alt="" coords="213,123,319,149"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="332,133,540,133,540,139,332,139"/>
+<area shape="rect" id="Node000006" href="$classTerrainFeatureManager.html" title=" " alt="" coords="529,173,701,198"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="715,183,822,190,868,199,900,212,923,237,939,267,953,320,948,321,934,269,919,240,897,217,867,204,822,196,715,188"/>
+<area shape="rect" id="Node000007" href="$classDebugOptions.html" title=" " alt="" coords="558,222,673,247"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="686,227,736,228,791,234,847,247,900,268,928,292,947,319,943,322,924,296,897,273,845,252,790,239,735,234,686,233"/>
+<area shape="rect" id="Node000008" href="$classLocalizationManager.html" title=" " alt="" coords="537,271,694,297"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="708,285,801,294,899,311,923,318,922,323,898,316,800,299,707,290"/>
+<area shape="rect" id="Node000009" href="$classArchiveManager.html" title=" " alt="" coords="551,321,679,346"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="693,331,923,331,923,336,693,336"/>
+<area shape="rect" id="Node000010" href="$classArchiveFile.html" title=" " alt="" coords="219,321,313,346"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="327,331,551,331,551,336,327,336"/>
+<area shape="rect" id="Node000011" href="$classFile.html" title=" " alt="" coords="5,321,51,346"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="65,331,218,331,218,336,65,336"/>
+<area shape="rect" id="Node000012" href="$classSkinManager.html" title=" " alt="" coords="562,370,669,395"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="682,378,785,370,898,351,922,343,923,348,899,356,785,375,683,383"/>
+<area shape="rect" id="Node000013" href="$classGameSettingsManager.html" title=" " alt="" coords="530,419,701,445"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="714,435,759,432,806,426,853,414,897,395,925,371,943,345,947,348,929,375,900,400,855,419,807,431,760,438,715,440"/>
+<area shape="rect" id="Node000014" href="$structGAME__SETTINGS.html" title=" " alt="" coords="200,419,332,445"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="346,429,530,429,530,435,346,435"/>
+<area shape="rect" id="Node000015" href="$classDLCController.html" title=" " alt="" coords="559,469,671,494"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="685,491,736,495,792,492,847,480,873,470,897,455,920,431,935,400,944,370,948,346,953,347,949,371,940,402,924,434,900,459,876,474,849,485,792,498,736,500,685,497"/>
+<area shape="rect" id="Node000016" href="$classNetworkController.html" title=" " alt="" coords="545,518,686,543"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="675,544,727,552,786,553,845,543,872,532,897,517,915,499,928,477,944,429,950,382,950,346,956,346,955,382,949,430,933,480,919,502,900,521,875,537,846,548,787,559,727,557,674,549"/>
+<area shape="rect" id="Node000017" href="$structXUSER__SIGNIN__INFO.html" title=" " alt="" coords="187,494,345,519"/>
+<area shape="poly" id="edge16_Node000016_Node000017" title=" " alt="" coords="359,510,544,523,544,529,359,516"/>
+<area shape="rect" id="Node000018" href="$struct__JoinFromInviteData.html" title=" " alt="" coords="189,543,343,569"/>
+<area shape="poly" id="edge17_Node000016_Node000018" title=" " alt="" coords="357,550,505,541,544,537,545,543,506,547,357,556"/>
+<area shape="rect" id="Node000019" href="$classMenuController.html" title=" " alt="" coords="554,567,677,593"/>
+<area shape="poly" id="edge18_Node000001_Node000019" title=" " alt="" coords="691,587,750,591,810,593,863,588,883,583,897,575,909,559,919,534,935,468,944,398,949,346,954,347,949,398,940,469,924,536,914,562,900,579,885,588,864,593,811,598,750,597,691,592"/>
+<area shape="rect" id="Node000020" href="$classGameRuleManager.html" title=" " alt="" coords="542,617,689,642"/>
+<area shape="poly" id="edge19_Node000001_Node000020" title=" " alt="" coords="675,642,727,651,787,652,817,649,846,641,873,630,897,613,910,594,921,564,937,486,946,404,949,346,954,346,951,405,942,486,927,565,915,596,901,617,875,634,847,646,818,654,787,658,727,656,674,648"/>
+</map>

@@ -1,0 +1,22 @@
+var searchData=
+[
+  ['gatherstats_0',['gatherstats',['../classServerChunkCache.html#ab5e5ae452ed1a4840f55da3e02cad38d',1,'ServerChunkCache::gatherStats()'],['../classMultiPlayerChunkCache.html#acd46b9876d8f70bc53178b466eda9d39',1,'MultiPlayerChunkCache::gatherStats()'],['../classTheEndLevelRandomLevelSource.html#a125f3b549b95b4d9994d935e8d68c20e',1,'TheEndLevelRandomLevelSource::gatherStats()'],['../classRandomLevelSource.html#ac7cb8d1d4d07e5ae43dde9c1bcdb6d98',1,'RandomLevelSource::gatherStats()'],['../classHellRandomLevelSource.html#a7e9da04c8af75125336e01c7dfb0c9c1',1,'HellRandomLevelSource::gatherStats()'],['../classHellFlatLevelSource.html#ad5fedd79ea8b8502ce498f0a18ec34c6',1,'HellFlatLevelSource::gatherStats()'],['../classFlatLevelSource.html#a8c0563fe4596c744a5ddcda982254014',1,'FlatLevelSource::gatherStats()'],['../classCustomLevelSource.html#aa96c3cb2bb47d1d7d4c2c8227c562f89',1,'CustomLevelSource::gatherStats()'],['../classReadOnlyChunkCache.html#ac0c32ec7518731d43ebc04bb5f8d6691',1,'ReadOnlyChunkCache::gatherStats()'],['../classChunkSource.html#aa7582842c75a325336f4ecf0a316b405',1,'ChunkSource::gatherStats()']]],
+  ['getarmorvalue_1',['getarmorvalue',['../classEntityHorse.html#a21dfeeefd830dfd8c356d13714f96f44',1,'EntityHorse::getArmorValue()'],['../classWitherBoss.html#a47944cb30b68cadd0486e7139d9c68ee',1,'WitherBoss::getArmorValue()'],['../classLivingEntity.html#af722d220520ed1d3338beef0d4234e94',1,'LivingEntity::getArmorValue()'],['../classLavaSlime.html#a107f150d75d1fafb58e0d0618edcab99',1,'LavaSlime::getArmorValue()'],['../classZombie.html#a41f8cad29930f8035d7da8fd6b4eacdc',1,'Zombie::getArmorValue()'],['../classPlayer.html#a9520b3f386640f895bf587e429255a97',1,'Player::getArmorValue()']]],
+  ['getblock_2',['getBlock',['../classStructurePiece.html#a7e941a2263434fbc3e73a88f4e0454f7',1,'StructurePiece']]],
+  ['getdamagebonus_3',['getDamageBonus',['../classEnchantmentHelper.html#af7d23f6993ef830172f84107359dd372',1,'EnchantmentHelper']]],
+  ['getdamageprotection_4',['getDamageProtection',['../classEnchantmentHelper.html#aee31527b894c1257c62d1fd85ccddc42',1,'EnchantmentHelper']]],
+  ['getdefaultvalue_5',['getdefaultvalue',['../classAttribute.html#a2217d336f13d9c403bb884ba6ffeb097',1,'Attribute::getDefaultValue()'],['../classBaseAttribute.html#a866afe03a7bf8e5b1796e688e934aaba',1,'BaseAttribute::getDefaultValue()']]],
+  ['getdescription_6',['getDescription',['../classAchievement.html#a5b6e74cb55ab3509db3e8e334345165e',1,'Achievement']]],
+  ['getdifficulty_7',['getDifficulty',['../classLevel.html#a40ab95b6b46371f5aabb38a42688a1dd',1,'Level']]],
+  ['getenchantmentcost_8',['getEnchantmentCost',['../classEnchantmentHelper.html#a2a07a9913dd24ef87d8e5abb987be714',1,'EnchantmentHelper']]],
+  ['getexperiencevalue_9',['getExperienceValue',['../classExperienceOrb.html#ad8d6c82260f67f1c7b5dab4c0862da45',1,'ExperienceOrb']]],
+  ['getfile_10',['getFile',['../classArchiveFile.html#a952831893972eaa7bfa1d2bb0c79fb43',1,'ArchiveFile']]],
+  ['getid_11',['getid',['../classAttribute.html#ace549068e86005ea55c69017b4138282',1,'Attribute::getId()'],['../classBaseAttribute.html#a32e1895eecafca39790ad18520a6105b',1,'BaseAttribute::getId()']]],
+  ['getmadsound_12',['getMadSound',['../classEntityHorse.html#afac816e0a4970a589940dc42d9c8db71',1,'EntityHorse']]],
+  ['getmaxtemper_13',['getMaxTemper',['../classEntityHorse.html#a11ad481ab8565c4426962de02193c2be',1,'EntityHorse']]],
+  ['getreorderedblocksanddata_14',['getReorderedBlocksAndData',['../classLevelChunk.html#a6a3c1107748229119225eb9a77169fb4',1,'LevelChunk']]],
+  ['gettilelightblock_15',['getTileLightBlock',['../classLevelChunk.html#ac7fe5a1074f6640d5443aa61b5f330cd',1,'LevelChunk']]],
+  ['getx_16',['getx',['../classBlockSource.html#a7cc7b5299ebf1bcdcc6083d3f3b0eaa8',1,'BlockSource::getX()'],['../classBlockSourceImpl.html#a28af1f8e2193cd5e2a2f472173f732cf',1,'BlockSourceImpl::getX()']]],
+  ['gety_17',['gety',['../classBlockSource.html#a1a6f5442c27c3c1c33a7a2bb0d8102d2',1,'BlockSource::getY()'],['../classBlockSourceImpl.html#aec3f936e9b60dcf3c86d9e2e9f5f15e2',1,'BlockSourceImpl::getY()']]],
+  ['getz_18',['getz',['../classBlockSource.html#a23dc8c53b0e429409b9cd3b99cc6eaf5',1,'BlockSource::getZ()'],['../classBlockSourceImpl.html#afcec9f61ddf3f9cf4b2c23b19fd4c3fa',1,'BlockSourceImpl::getZ()']]]
+];

@@ -1,0 +1,46 @@
+<map id="UIScene_InventoryMenu" name="UIScene_InventoryMenu">
+<area shape="rect" id="Node000001" title=" " alt="" coords="2053,171,2233,196"/>
+<area shape="rect" id="Node000002" href="$classUIScene__AbstractContainerMenu.html" title=" " alt="" coords="1769,233,2004,259"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1952,227,2090,193,2091,199,1953,233"/>
+<area shape="rect" id="Node000003" href="$classUIScene.html" title=" " alt="" coords="502,305,577,331"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="565,338,602,369,652,403,711,430,742,438,773,441,1457,441,1544,443,1616,441,1647,434,1679,421,1710,401,1743,371,1752,358,1756,346,1754,319,1753,292,1757,277,1767,264,1777,257,1780,261,1771,268,1762,280,1758,292,1760,319,1761,346,1757,361,1747,374,1713,405,1681,426,1649,439,1616,446,1544,448,1457,446,773,446,741,443,709,435,650,408,599,374,562,342"/>
+<area shape="rect" id="Node000011" href="$classUIControl.html" title=" " alt="" coords="733,235,816,260"/>
+<area shape="poly" id="edge13_Node000011_Node000003" title=" " alt="" coords="590,308,647,296,708,278,751,258,753,263,710,283,649,301,591,313"/>
+<area shape="rect" id="Node000004" href="$structIggyValuePath.html" title=" " alt="" coords="233,251,348,276"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="362,276,502,307,501,312,361,281"/>
+<area shape="poly" id="edge4_Node000004_Node000004" title=" " alt="" coords="265,236,273,227,291,224,306,226,315,233,318,242,313,252,308,249,312,242,311,236,304,231,291,229,275,232,269,239"/>
+<area shape="poly" id="edge12_Node000011_Node000004" title=" " alt="" coords="362,258,733,246,733,251,362,264"/>
+<area shape="rect" id="Node000005" href="$classUILayer.html" title=" " alt="" coords="255,315,327,340"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="340,326,475,323,502,321,502,326,475,329,340,331"/>
+<area shape="rect" id="Node000006" href="$classUIGroup.html" title=" " alt="" coords="5,315,80,340"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="94,325,255,325,255,330,94,330"/>
+<area shape="rect" id="Node000007" href="$classIUIScene__AbstractContainerMenu.html" title=" " alt="" coords="1336,132,1575,157"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="1562,157,1652,173,1746,194,1854,231,1853,236,1745,199,1651,178,1561,162"/>
+<area shape="rect" id="Node000017" href="$classIUIScene__InventoryMenu.html" title=" " alt="" coords="1795,145,1979,171"/>
+<area shape="poly" id="edge23_Node000017_Node000007" title=" " alt="" coords="1589,146,1795,152,1795,158,1588,151"/>
+<area shape="rect" id="Node000008" href="$classAbstractContainerMenu.html" title=" " alt="" coords="921,52,1096,77"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="1110,70,1209,82,1313,99,1418,129,1417,134,1311,105,1208,87,1110,75"/>
+<area shape="rect" id="Node000009" href="$struct__UIVec2D.html" title=" " alt="" coords="967,101,1051,127"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="1065,115,1336,134,1335,139,1064,120"/>
+<area shape="rect" id="Node000010" href="$classSlot.html" title=" " alt="" coords="985,151,1032,176"/>
+<area shape="poly" id="edge10_Node000007_Node000010" title=" " alt="" coords="1046,161,1164,160,1312,155,1336,154,1336,159,1312,161,1164,165,1046,166"/>
+<area shape="poly" id="edge11_Node000002_Node000011" title=" " alt="" coords="830,243,1155,236,1599,229,1672,227,1745,229,1775,231,1774,236,1745,234,1672,232,1599,234,1155,241,830,249"/>
+<area shape="rect" id="Node000013" href="$classUIControl__Base.html" title=" " alt="" coords="947,299,1070,324"/>
+<area shape="poly" id="edge16_Node000013_Node000011" title=" " alt="" coords="830,259,962,296,960,301,829,265"/>
+<area shape="rect" id="Node000018" href="$classUIControl__MinecraftPlayer.html" title=" " alt="" coords="1120,9,1312,35"/>
+<area shape="poly" id="edge26_Node000018_Node000011" title=" " alt="" coords="783,221,801,179,830,127,870,77,893,55,920,37,974,15,1032,5,1089,3,1141,7,1140,12,1089,8,1033,10,976,20,923,42,897,59,874,81,835,130,806,181,788,223"/>
+<area shape="rect" id="Node000012" href="$classUIControl__SlotList.html" title=" " alt="" coords="1386,353,1525,379"/>
+<area shape="poly" id="edge24_Node000001_Node000012" title=" " alt="" coords="1538,368,1599,370,1672,374,1704,375,1745,370,1821,356,1878,340,1934,318,2003,284,2039,262,2074,237,2126,194,2130,198,2077,241,2042,266,2005,288,1936,323,1880,346,1822,361,1746,375,1705,380,1672,380,1599,375,1538,373"/>
+<area shape="poly" id="edge14_Node000002_Node000012" title=" " alt="" coords="1538,367,1639,361,1693,353,1744,338,1782,321,1817,299,1870,257,1873,261,1821,303,1785,325,1746,343,1694,358,1639,367,1539,372"/>
+<area shape="poly" id="edge15_Node000012_Node000013" title=" " alt="" coords="1084,318,1386,355,1385,360,1084,323"/>
+<area shape="rect" id="Node000015" href="$classUIControl__Cursor.html" title=" " alt="" coords="1389,249,1521,275"/>
+<area shape="poly" id="edge19_Node000015_Node000013" title=" " alt="" coords="1083,295,1120,290,1264,274,1389,264,1389,269,1265,279,1120,295,1084,301"/>
+<area shape="rect" id="Node000016" href="$classUIControl__Label.html" title=" " alt="" coords="1393,299,1518,324"/>
+<area shape="poly" id="edge21_Node000016_Node000013" title=" " alt="" coords="1084,309,1392,309,1392,314,1084,314"/>
+<area shape="rect" id="Node000014" href="$classUIString.html" title=" " alt="" coords="737,481,812,507"/>
+<area shape="poly" id="edge17_Node000013_Node000014" title=" " alt="" coords="801,471,989,322,992,326,804,475"/>
+<area shape="poly" id="edge18_Node000002_Node000015" title=" " alt="" coords="1535,256,1769,248,1769,253,1535,262"/>
+<area shape="poly" id="edge20_Node000002_Node000016" title=" " alt="" coords="1531,308,1633,302,1745,287,1802,273,1852,256,1853,261,1803,278,1746,293,1634,307,1532,313"/>
+<area shape="poly" id="edge22_Node000001_Node000017" title=" " alt="" coords="1993,166,2053,172,2053,177,1992,171"/>
+<area shape="poly" id="edge25_Node000001_Node000018" title=" " alt="" coords="1326,28,1463,41,1633,63,1820,92,2005,131,2063,149,2113,168,2111,173,2061,154,2003,137,1819,97,1633,68,1463,47,1326,33"/>
+</map>

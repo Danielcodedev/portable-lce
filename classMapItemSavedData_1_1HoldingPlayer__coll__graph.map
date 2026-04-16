@@ -1,0 +1,9 @@
+<map id="MapItemSavedData::HoldingPlayer" name="MapItemSavedData::HoldingPlayer">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,257,215,297"/>
+<area shape="rect" id="Node000002" href="$classMapItemSavedData.html" title=" " alt="" coords="35,169,185,195"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,208,113,257,107,257,107,208"/>
+<area shape="rect" id="Node000003" href="$classSavedData.html" title=" " alt="" coords="63,95,157,120"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="113,134,113,169,107,169,107,134"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="14,5,206,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="113,59,113,94,107,94,107,59"/>
+</map>

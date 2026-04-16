@@ -1,0 +1,9 @@
+<map id="ArrowInfiniteEnchantment" name="ArrowInfiniteEnchantment">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,411,196,436"/>
+<area shape="rect" id="Node000002" href="$classEnchantment.html" title=" " alt="" coords="47,268,155,293"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,307,103,410,98,410,98,307"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="132,261,149,259,165,261,177,268,181,281,175,295,160,302,140,302,119,296,120,291,140,297,158,297,171,291,176,281,173,271,163,266,149,264,133,266"/>
+<area shape="rect" id="Node000003" href="$classEnchantmentCategory.html" title=" " alt="" coords="17,59,184,84"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="103,98,103,268,98,268,98,98"/>
+<area shape="poly" id="edge4_Node000003_Node000003" title=" " alt="" coords="143,53,167,51,188,53,204,59,211,71,202,85,183,91,157,92,129,87,130,81,157,86,182,86,199,80,205,71,201,63,187,58,167,56,143,58"/>
+</map>

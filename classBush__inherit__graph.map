@@ -1,0 +1,25 @@
+<map id="Bush" name="Bush">
+<area shape="rect" id="Node000001" title=" " alt="" coords="511,79,565,104"/>
+<area shape="rect" id="Node000003" href="$classCropTile.html" title=" " alt="" coords="67,152,143,177"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="498,101,347,122,156,155,143,157,142,152,155,149,346,117,497,95"/>
+<area shape="rect" id="Node000006" href="$classDeadBushTile.html" title=" " alt="" coords="167,152,279,177"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="498,104,275,155,273,149,497,99"/>
+<area shape="rect" id="Node000007" href="$classMushroom.html" title=" " alt="" coords="303,152,394,177"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="499,110,380,154,378,149,497,105"/>
+<area shape="rect" id="Node000008" href="$classNetherWartTile.html" title=" " alt="" coords="418,152,538,177"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="521,116,490,154,486,150,517,113"/>
+<area shape="rect" id="Node000009" href="$classSapling.html" title=" " alt="" coords="563,152,633,177"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="559,113,590,150,586,154,555,116"/>
+<area shape="rect" id="Node000010" href="$classStemTile.html" title=" " alt="" coords="658,152,738,177"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="577,107,673,149,671,154,575,112"/>
+<area shape="rect" id="Node000011" href="$classTallGrass.html" title=" " alt="" coords="763,152,844,177"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="579,101,763,150,762,155,578,106"/>
+<area shape="rect" id="Node000012" href="$classWaterlilyTile.html" title=" " alt="" coords="869,152,973,177"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="579,98,869,151,868,156,578,103"/>
+<area shape="rect" id="Node000002" href="$classTile.html" title=" " alt="" coords="515,5,561,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="541,44,541,79,535,79,535,44"/>
+<area shape="rect" id="Node000004" href="$classCarrotTile.html" title=" " alt="" coords="5,225,92,251"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="89,190,60,227,56,224,85,187"/>
+<area shape="rect" id="Node000005" href="$classPotatoTile.html" title=" " alt="" coords="117,225,205,251"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="125,187,154,224,150,227,120,190"/>
+</map>
