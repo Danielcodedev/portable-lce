@@ -4,6 +4,4 @@ cpp = 'clang++'
 c_ld = 'lld'
 cpp_ld = 'lld'
 
-[built-in options]
-c_args = '-march=native -O3'
-cpp_args = c_args
+
