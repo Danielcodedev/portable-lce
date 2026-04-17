@@ -14,8 +14,8 @@ option('classic_panorama',
 option(
   'renderer',
   type: 'combo',
-  choices: ['bgfx-Vulkan','bgfx-OpenGL','bgfx-Metal'],
-  value: 'bgfx-Vulkan',
+  choices: ['bgfx-vulkan','bgfx-opengl','bgfx-metal' 'bgfx-d3d12'],
+  value: 'bgfx-vulkan',
   description: 'Specifies a rendering implementation for the game.',
 )
 
