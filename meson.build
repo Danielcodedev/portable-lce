@@ -91,7 +91,7 @@ elif get_option('renderer') == 'bgfx-opengl'
   global_cpp_defs += ['-DBGFX_RENDERER_OPENGL']
 elif get_option('renderer') == 'bgfx-metal'
   global_cpp_defs += ['-DBGFX_RENDERER_METAL']
-elif get_option('renderer') == "bgfx-d3d12"
+elif get_option('renderer') == 'bgfx-d3d12'
   global_cpp_defs += ['-DBGFX_RENDERER_D3D12']
 endif
 
