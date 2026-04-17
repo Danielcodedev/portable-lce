@@ -3,5 +3,3 @@ c = 'clang'
 cpp = 'clang++'
 c_ld = 'lld'
 cpp_ld = 'lld'
-
-
