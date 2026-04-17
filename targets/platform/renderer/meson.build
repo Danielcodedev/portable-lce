@@ -1,17 +1,17 @@
-cpp_args = global_cpp_args + global_cpp_defs
+platform_renderer_bgfx_cpp_args = global_cpp_args + global_cpp_defs
 
 if host_machine.system() == 'darwin'
-  cpp_args += ['-xobjective-c++']
+  platform_renderer_bgfx_cpp_args += ['-xobjective-c++']
 endif
 
 if get_option('renderer') == 'bgfx-vulkan'
-  cpp_args += ['-DBGFX_RENDERER_VULKAN']
+  platform_renderer_bgfx_cpp_args += ['-DBGFX_RENDERER_VULKAN']
 elif get_option('renderer') == 'bgfx-opengl'
-  cpp_args += ['-DBGFX_RENDERER_OPENGL']
+  platform_renderer_bgfx_cpp_args += ['-DBGFX_RENDERER_OPENGL']
 elif get_option('renderer') == 'bgfx-metal'
-  cpp_args += ['-DBGFX_RENDERER_METAL']
+  platform_renderer_bgfx_cpp_args += ['-DBGFX_RENDERER_METAL']
 elif get_option('renderer') == 'bgfx-d3d12'
-  cpp_args += ['-DBGFX_RENDERER_D3D12']
+  platform_renderer_bgfx_cpp_args += ['-DBGFX_RENDERER_D3D12']
 endif
 
 lib_platform_renderer_bgfx = static_library('platform_renderer',
@@ -24,7 +24,7 @@ lib_platform_renderer_bgfx = static_library('platform_renderer',
         dependency('stb'),
         java_dep
     ],
-    cpp_args: cpp_args,
+    cpp_args: platform_renderer_bgfx_cpp_args,
 )
 
 platform_renderer_bgfx_dep = declare_dependency(
