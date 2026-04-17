@@ -779,12 +779,12 @@ void BgfxRenderPath::render_frame(const FrameDesc& frame) {
 void BgfxRenderPath::resize(uint32_t w, uint32_t h) {
     width_ = w;
     height_ = h;
-#ifdef ENABLE_VSYNC 
-    bgfx::reset(w, h, BGFX_RESET_VSYNC)
-#else 
-       bgfx::reset(w, h, BGFX_RESET_NONE);
-#endif // 
-   }
+#ifdef ENABLE_VSYNC
+    bgfx::reset(w, h, BGFX_RESET_VSYNC);
+#else
+    bgfx::reset(w, h, BGFX_RESET_NONE);
+#endif
+}
 
 const FrameFramebuffer& BgfxRenderPath::framebuffer() const { return fb_; }
 void BgfxRenderPath::read_framebuffer(const TextureReadback&) {}
