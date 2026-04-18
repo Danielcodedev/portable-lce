@@ -2229,12 +2229,10 @@ void LevelRenderer::renderHitOutline(std::shared_ptr<Player> player,
 
         // draw hit outline
         RenderPath.StateSetColour(0.0f, 0.0f, 0.0f, 0.4f);
-        RenderPath.StateSetLineWidth(1.0f);
-
-        // hack
-        RenderPath.StateSetDepthFunc(rp::DepthTest::less_equal);
-        (void)0;
-        RenderPath.StateSetDepthSlopeAndBias(-2.0f, -2.0f);
+        // RenderPath.StateSetLineWidth(2.0f);
+        RenderPath.StateSetDepthFunc(
+            rp::DepthTest::less_equal);  // hack because StateSetLineWidth is
+                                         // broken
 
         int tileId = level[iPad]->getTile(h->x, h->y, h->z);
 
@@ -2253,7 +2251,7 @@ void LevelRenderer::renderHitOutline(std::shared_ptr<Player> player,
         }
 
         // restore
-        (void)0;
+        RenderPath.StateSetDepthFunc(rp::DepthTest::off);
         RenderPath.StateSetColour(1.0f, 1.0f, 1.0f, 1.0f);
         RenderPath.StateSetTextureEnable(true);
         RenderPath.StateSetLightingEnable(true);
