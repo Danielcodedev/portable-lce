@@ -2224,15 +2224,11 @@ void LevelRenderer::renderHitOutline(std::shared_ptr<Player> player,
         // 4J-PB - If Display HUD is false, don't render the hit outline
         if (gameServices().getGameSettings(iPad, eGameSetting_DisplayHUD) == 0)
             return;
+        
         RenderPath.StateSetLightingEnable(false);
         RenderPath.StateSetTextureEnable(false);
-
-        // draw hit outline
         RenderPath.StateSetColour(0.0f, 0.0f, 0.0f, 0.4f);
-        // RenderPath.StateSetLineWidth(2.0f);
-        RenderPath.StateSetDepthFunc(
-            rp::DepthTest::less_equal);  // hack because StateSetLineWidth is
-                                         // broken
+        RenderPath.StateSetLineWidth(2.0f);
 
         int tileId = level[iPad]->getTile(h->x, h->y, h->z);
 
@@ -2251,7 +2247,6 @@ void LevelRenderer::renderHitOutline(std::shared_ptr<Player> player,
         }
 
         // restore
-        RenderPath.StateSetDepthFunc(rp::DepthTest::off);
         RenderPath.StateSetColour(1.0f, 1.0f, 1.0f, 1.0f);
         RenderPath.StateSetTextureEnable(true);
         RenderPath.StateSetLightingEnable(true);
