@@ -2262,13 +2262,6 @@ void LevelRenderer::renderHitOutline(std::shared_ptr<Player> player,
 
 void LevelRenderer::render(AABB* b) {
     Tesselator* t = Tesselator::getInstance();
-    RenderPath.StateSetLightingEnable(false);
-    RenderPath.StateSetTextureEnable(false);
-    RenderPath.StateSetColour(0.0f, 0.0f, 0.0f, 0.4f);
-
-    // prevent zfight
-    (void)0;
-    RenderPath.StateSetDepthSlopeAndBias(-2.0f, -2.0f);
 
     // One call please!
     t->begin(0x0001);
@@ -2304,10 +2297,6 @@ void LevelRenderer::render(AABB* b) {
     t->vertex(b->x0, b->y1, b->z1);
 
     t->end();
-    (void)0;
-    RenderPath.StateSetLightingEnable(true);
-    RenderPath.StateSetTextureEnable(true);
-    RenderPath.StateSetColour(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 void LevelRenderer::setDirty(int x0, int y0, int z0, int x1, int y1, int z1,
