@@ -77,12 +77,11 @@
 #include "minecraft/world/phys/Vec3.h"
 #include "platform/PlatformTypes.h"
 #include "platform/input/input.h"
+#include "platform/renderer/IRenderPath.h"
 #include "platform/renderer/renderer.h"
 #include "platform/stubs.h"
 #include "platform/thread/ShutdownManager.h"
 #include "util/FrameProfiler.h"
-#include "platform/renderer/IRenderPath.h"
-
 
 bool GameRenderer::anaglyph3d = false;
 int GameRenderer::anaglyphPass = 0;
@@ -435,7 +434,9 @@ void GameRenderer::bobHurt(float a) {
     if (player->getHealth() <= 0) {
         float duration = player->deathTime + a;
 
-        RenderPath.MatrixRotate((40 - (40 * 200) / (duration + 200))*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
+        RenderPath.MatrixRotate((40 - (40 * 200) / (duration + 200)) *
+                                    (std::numbers::pi_v<float> / 180.f),
+                                0, 0, 1);
     }
 
     if (hurt < 0) return;
@@ -444,9 +445,12 @@ void GameRenderer::bobHurt(float a) {
 
     float rr = player->hurtDir;
 
-    RenderPath.MatrixRotate((-rr)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
-    RenderPath.MatrixRotate((-hurt * 14)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
-    RenderPath.MatrixRotate((+rr)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+    RenderPath.MatrixRotate((-rr) * (std::numbers::pi_v<float> / 180.f), 0, 1,
+                            0);
+    RenderPath.MatrixRotate((-hurt * 14) * (std::numbers::pi_v<float> / 180.f),
+                            0, 0, 1);
+    RenderPath.MatrixRotate((+rr) * (std::numbers::pi_v<float> / 180.f), 0, 1,
+                            0);
 }
 
 void GameRenderer::bobView(float a) {
@@ -459,12 +463,18 @@ void GameRenderer::bobView(float a) {
     float b = -(player->walkDist + wda * a);
     float bob = player->oBob + (player->bob - player->oBob) * a;
     float tilt = player->oTilt + (player->tilt - player->oTilt) * a;
-    RenderPath.MatrixTranslate((float)sinf(b * std::numbers::pi) * bob * 0.5f,
-                 -(float)std::abs(cosf(b * std::numbers::pi) * bob), 0);
-    RenderPath.MatrixRotate(((float)sinf(b * std::numbers::pi) * bob * 3)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
-    RenderPath.MatrixRotate(((float)std::abs(cosf(b * std::numbers::pi - 0.2f) * bob) * 5)*(std::numbers::pi_v<float>/180.f), 1,
-              0, 0);
-    RenderPath.MatrixRotate(((float)tilt)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+    RenderPath.MatrixTranslate(
+        (float)sinf(b * std::numbers::pi) * bob * 0.5f,
+        -(float)std::abs(cosf(b * std::numbers::pi) * bob), 0);
+    RenderPath.MatrixRotate(((float)sinf(b * std::numbers::pi) * bob * 3) *
+                                (std::numbers::pi_v<float> / 180.f),
+                            0, 0, 1);
+    RenderPath.MatrixRotate(
+        ((float)std::abs(cosf(b * std::numbers::pi - 0.2f) * bob) * 5) *
+            (std::numbers::pi_v<float> / 180.f),
+        1, 0, 0);
+    RenderPath.MatrixRotate(((float)tilt) * (std::numbers::pi_v<float> / 180.f),
+                            1, 0, 0);
 }
 
 void GameRenderer::moveCameraToPlayer(float a) {
@@ -477,7 +487,9 @@ void GameRenderer::moveCameraToPlayer(float a) {
     double y = player->yo + (player->y - player->yo) * a - heightOffset;
     double z = player->zo + (player->z - player->zo) * a;
 
-    RenderPath.MatrixRotate((cameraRollO + (cameraRoll - cameraRollO) * a)*(std::numbers::pi_v<float>/180.f), 0, 0, 1);
+    RenderPath.MatrixRotate((cameraRollO + (cameraRoll - cameraRollO) * a) *
+                                (std::numbers::pi_v<float> / 180.f),
+                            0, 0, 1);
 
     if (player->isSleeping()) {
         heightOffset += 1.0;
@@ -492,12 +504,18 @@ void GameRenderer::moveCameraToPlayer(float a) {
                                               std::floor(player->z));
 
                 int direction = data & 3;
-                RenderPath.MatrixRotate(((float)direction * 90)*(std::numbers::pi_v<float>/180.f), 0.0f, 1.0f, 0.0f);
+                RenderPath.MatrixRotate(((float)direction * 90) *
+                                            (std::numbers::pi_v<float> / 180.f),
+                                        0.0f, 1.0f, 0.0f);
             }
-            RenderPath.MatrixRotate((player->yRotO + (player->yRot - player->yRotO) * a + 180)*(std::numbers::pi_v<float>/180.f),
-                      0, -1, 0);
-            RenderPath.MatrixRotate((player->xRotO + (player->xRot - player->xRotO) * a)*(std::numbers::pi_v<float>/180.f), -1, 0,
-                      0);
+            RenderPath.MatrixRotate(
+                (player->yRotO + (player->yRot - player->yRotO) * a + 180) *
+                    (std::numbers::pi_v<float> / 180.f),
+                0, -1, 0);
+            RenderPath.MatrixRotate(
+                (player->xRotO + (player->xRot - player->xRotO) * a) *
+                    (std::numbers::pi_v<float> / 180.f),
+                -1, 0, 0);
         }
     }
     // 4J-PB - changing this to be per player
@@ -512,8 +530,10 @@ void GameRenderer::moveCameraToPlayer(float a) {
             float xRot = thirdTiltO + (thirdTilt - thirdTiltO) * a;
 
             RenderPath.MatrixTranslate(0, 0, (float)-cameraDist);
-            RenderPath.MatrixRotate((xRot)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
-            RenderPath.MatrixRotate((rotationY)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+            RenderPath.MatrixRotate(
+                (xRot) * (std::numbers::pi_v<float> / 180.f), 1, 0, 0);
+            RenderPath.MatrixRotate(
+                (rotationY) * (std::numbers::pi_v<float> / 180.f), 0, 1, 0);
         } else {
             // 4J - corrected bug where this used to just take player->xRot &
             // yRot directly and so wasn't taking into account interpolation,
@@ -563,23 +583,37 @@ void GameRenderer::moveCameraToPlayer(float a) {
             }
 
             if (localplayer->ThirdPersonView() == 2) {
-                RenderPath.MatrixRotate((180)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+                RenderPath.MatrixRotate(
+                    (180) * (std::numbers::pi_v<float> / 180.f), 0, 1, 0);
             }
 
-            RenderPath.MatrixRotate((playerXRot - xRot)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
-            RenderPath.MatrixRotate((playerYRot - yRot)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
+            RenderPath.MatrixRotate(
+                (playerXRot - xRot) * (std::numbers::pi_v<float> / 180.f), 1, 0,
+                0);
+            RenderPath.MatrixRotate(
+                (playerYRot - yRot) * (std::numbers::pi_v<float> / 180.f), 0, 1,
+                0);
             RenderPath.MatrixTranslate(0, 0, (float)-cameraDist);
-            RenderPath.MatrixRotate((yRot - playerYRot)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
-            RenderPath.MatrixRotate((xRot - playerXRot)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+            RenderPath.MatrixRotate(
+                (yRot - playerYRot) * (std::numbers::pi_v<float> / 180.f), 0, 1,
+                0);
+            RenderPath.MatrixRotate(
+                (xRot - playerXRot) * (std::numbers::pi_v<float> / 180.f), 1, 0,
+                0);
         }
     } else {
         RenderPath.MatrixTranslate(0, 0, -0.1f);
     }
 
     if (!mc->options->fixedCamera) {
-        RenderPath.MatrixRotate((player->xRotO + (player->xRot - player->xRotO) * a)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
-        RenderPath.MatrixRotate((player->yRotO + (player->yRot - player->yRotO) * a + 180)*(std::numbers::pi_v<float>/180.f), 0,
-                  1, 0);
+        RenderPath.MatrixRotate(
+            (player->xRotO + (player->xRot - player->xRotO) * a) *
+                (std::numbers::pi_v<float> / 180.f),
+            1, 0, 0);
+        RenderPath.MatrixRotate(
+            (player->yRotO + (player->yRot - player->yRotO) * a + 180) *
+                (std::numbers::pi_v<float> / 180.f),
+            0, 1, 0);
     }
 
     RenderPath.MatrixTranslate(0, heightOffset, 0);
@@ -609,17 +643,13 @@ void GameRenderer::getFovAndAspect(float& fov, float& aspect, float a,
     aspect = mc->width / (float)mc->height;
     fov = getFov(a, applyEffects);
 
-    if ((mc->player->m_iScreenSection ==
-         1) ||
-        (mc->player->m_iScreenSection ==
-         2)) {
+    if ((mc->player->m_iScreenSection == 1) ||
+        (mc->player->m_iScreenSection == 2)) {
         aspect *= 2.0f;
         fov *= 0.7f;  // Reduce FOV to make things less fish-eye, at the expense
                       // of reducing vertical FOV from single player mode
-    } else if ((mc->player->m_iScreenSection ==
-                3) ||
-               (mc->player->m_iScreenSection ==
-                4)) {
+    } else if ((mc->player->m_iScreenSection == 3) ||
+               (mc->player->m_iScreenSection == 4)) {
         // Ideally I'd like to make the fov bigger here, but if I do then you an
         // see that the arm isn't very long...
         aspect *= 0.5f;
@@ -642,7 +672,7 @@ void GameRenderer::setupCamera(float a, int eye) {
 
     if (zoom != 1) {
         RenderPath.MatrixTranslate((float)zoom_x, (float)-zoom_y, 0);
-        RenderPath.MatrixScale((float)(zoom),(float)(zoom),(float)(1));
+        RenderPath.MatrixScale((float)(zoom), (float)(zoom), (float)(1));
     }
     RenderPath.MatrixPerspective(fov, aspect, 0.05f, renderDistance * 2);
 
@@ -653,7 +683,8 @@ void GameRenderer::setupCamera(float a, int eye) {
 
     RenderPath.MatrixMode(rp::MatrixStack::modelview);
     RenderPath.MatrixSetIdentity();
-    if (mc->options->anaglyph3d) RenderPath.MatrixTranslate((eye * 2 - 1) * 0.10f, 0, 0);
+    if (mc->options->anaglyph3d)
+        RenderPath.MatrixTranslate((eye * 2 - 1) * 0.10f, 0, 0);
 
     bobHurt(a);
 
@@ -680,20 +711,34 @@ void GameRenderer::setupCamera(float a, int eye) {
 
         float skew = 5 / (pt * pt + 5) - pt * 0.04f;
         skew *= skew;
-        RenderPath.MatrixRotate(((_tick + a) * multiplier)*(std::numbers::pi_v<float>/180.f), 0, 1, 1);
+        RenderPath.MatrixRotate(
+            ((_tick + a) * multiplier) * (std::numbers::pi_v<float> / 180.f), 0,
+            1, 1);
         RenderPath.MatrixScale(1 / skew, 1, 1);
-        RenderPath.MatrixRotate((-(_tick + a) * multiplier)*(std::numbers::pi_v<float>/180.f), 0, 1, 1);
+        RenderPath.MatrixRotate(
+            (-(_tick + a) * multiplier) * (std::numbers::pi_v<float> / 180.f),
+            0, 1, 1);
     }
 
     moveCameraToPlayer(a);
 
     if (cameraFlip > 0) {
         int i = cameraFlip - 1;
-        if (i == 1) RenderPath.MatrixRotate((90)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
-        if (i == 2) RenderPath.MatrixRotate((180)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
-        if (i == 3) RenderPath.MatrixRotate((-90)*(std::numbers::pi_v<float>/180.f), 0, 1, 0);
-        if (i == 4) RenderPath.MatrixRotate((90)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
-        if (i == 5) RenderPath.MatrixRotate((-90)*(std::numbers::pi_v<float>/180.f), 1, 0, 0);
+        if (i == 1)
+            RenderPath.MatrixRotate((90) * (std::numbers::pi_v<float> / 180.f),
+                                    0, 1, 0);
+        if (i == 2)
+            RenderPath.MatrixRotate((180) * (std::numbers::pi_v<float> / 180.f),
+                                    0, 1, 0);
+        if (i == 3)
+            RenderPath.MatrixRotate((-90) * (std::numbers::pi_v<float> / 180.f),
+                                    0, 1, 0);
+        if (i == 4)
+            RenderPath.MatrixRotate((90) * (std::numbers::pi_v<float> / 180.f),
+                                    1, 0, 0);
+        if (i == 5)
+            RenderPath.MatrixRotate((-90) * (std::numbers::pi_v<float> / 180.f),
+                                    1, 0, 0);
     }
 }
 
@@ -739,7 +784,7 @@ void GameRenderer::renderItemInHand(float a, int eye) {
 
     if (zoom != 1) {
         RenderPath.MatrixTranslate((float)zoom_x, (float)-zoom_y, 0);
-        RenderPath.MatrixScale((float)(zoom),(float)(zoom),(float)(1));
+        RenderPath.MatrixScale((float)(zoom), (float)(zoom), (float)(1));
     }
     RenderPath.MatrixPerspective(fov, aspect, 0.05f, renderDistance * 2);
 
@@ -751,7 +796,8 @@ void GameRenderer::renderItemInHand(float a, int eye) {
     RenderPath.MatrixMode(rp::MatrixStack::modelview);
 
     RenderPath.MatrixSetIdentity();
-    if (mc->options->anaglyph3d) RenderPath.MatrixTranslate((eye * 2 - 1) * 0.10f, 0, 0);
+    if (mc->options->anaglyph3d)
+        RenderPath.MatrixTranslate((eye * 2 - 1) * 0.10f, 0, 0);
 
     RenderPath.MatrixPush();
     bobHurt(a);
@@ -1090,7 +1136,8 @@ void GameRenderer::render(float a, bool bFirst) {
 
     for (uint8_t i = 0; i < captured_fog_count && i < 4; ++i)
         current_view.fog_profiles[i] = captured_fog_profiles[i];
-    current_view.fog_profile_count = captured_fog_count > 0 ? captured_fog_count : 1;
+    current_view.fog_profile_count =
+        captured_fog_count > 0 ? captured_fog_count : 1;
     current_view.clear.flags = rp::CLEAR_COLOR | rp::CLEAR_DEPTH;
     current_view.clear.color[0] = fr;
     current_view.clear.color[1] = fg;
@@ -1420,7 +1467,7 @@ void GameRenderer::renderLevel(float a, int64_t until) {
         RenderPath.StateSetBlendEnable(false);
         RenderPath.StateSetFaceCull(true);
         RenderPath.StateSetBlendFunc(rp::BlendFactor::src_alpha,
-                                           rp::BlendFactor::one_minus_src_alpha);
+                                     rp::BlendFactor::one_minus_src_alpha);
         RenderPath.StateSetDepthMask(true);
         setupFog(0, a);
         RenderPath.StateSetBlendEnable(true);
@@ -1438,12 +1485,13 @@ void GameRenderer::renderLevel(float a, int64_t until) {
                 (void)0;
             }
 
-            RenderPath.StateSetBlendFunc(rp::BlendFactor::zero, rp::BlendFactor::one);
+            RenderPath.StateSetBlendFunc(rp::BlendFactor::zero,
+                                         rp::BlendFactor::one);
             int visibleWaterChunks =
                 levelRenderer->render(cameraEntity, 1, a, updateChunks);
 
             RenderPath.StateSetBlendFunc(rp::BlendFactor::src_alpha,
-                                               rp::BlendFactor::one_minus_src_alpha);
+                                         rp::BlendFactor::one_minus_src_alpha);
 
             if (visibleWaterChunks > 0) {
                 levelRenderer->render(
@@ -1502,7 +1550,8 @@ void GameRenderer::renderLevel(float a, int64_t until) {
         */
 
         RenderPath.StateSetBlendEnable(true);
-        RenderPath.StateSetBlendFunc(rp::BlendFactor::src_alpha, rp::BlendFactor::one);
+        RenderPath.StateSetBlendFunc(rp::BlendFactor::src_alpha,
+                                     rp::BlendFactor::one);
         {
             FRAME_PROFILE_SCOPE(WeatherSky);
             levelRenderer->renderDestroyAnimation(
@@ -1529,6 +1578,15 @@ void GameRenderer::renderLevel(float a, int64_t until) {
 
         if (zoom == 1) {
             RenderPath.Clear(rp::CLEAR_DEPTH);
+            // PLCE: The BGFX renderer's implementation of RenderPath::Clear
+            // works a little differently from immediate-mode OpenGL such at
+            // glClear will only be called at the _end_ of each frame rather
+            // than immediately between glDrawArraysInstanced calls. This means
+            // that clearing the depth buffer in the middle of a frame is
+            // effectively impossible, so we work around this by disabling depth
+            // testing here, which prevents the player hand from rendering
+            // behind terrain.
+            RenderPath.StateSetDepthTestEnable(false);
             renderItemInHand(a, i);
         }
 
@@ -1665,7 +1723,8 @@ void GameRenderer::renderSnowAndRain(float a) {
     RenderPath.StateSetFaceCull(false);
     (void)0;
     RenderPath.StateSetBlendEnable(true);
-    RenderPath.StateSetBlendFunc(rp::BlendFactor::src_alpha, rp::BlendFactor::one_minus_src_alpha);
+    RenderPath.StateSetBlendFunc(rp::BlendFactor::src_alpha,
+                                 rp::BlendFactor::one_minus_src_alpha);
     RenderPath.StateSetAlphaFunc(rp::AlphaTest::greater, 0.01f);
 
     mc->textures->bindTexture(
@@ -1841,7 +1900,8 @@ void GameRenderer::renderSnowAndRain(float a) {
 // 4J - added forceScale parameter
 void GameRenderer::setupGuiScreen(int forceScale /*=-1*/) {
     int fbw, fbh;
-    fbw = RenderPath.framebuffer().width; fbh = RenderPath.framebuffer().height;
+    fbw = RenderPath.framebuffer().width;
+    fbh = RenderPath.framebuffer().height;
 
     // 4jcraft: use actual framebuffer dimensions instead of mc->width/height
     // to ensure GUI scales correctly after a window resize.
@@ -1878,7 +1938,8 @@ void GameRenderer::setupGuiScreen(int forceScale /*=-1*/) {
     RenderPath.Clear(rp::CLEAR_DEPTH);
     RenderPath.MatrixMode(rp::MatrixStack::projection);
     RenderPath.MatrixSetIdentity();
-    RenderPath.MatrixOrthogonal(0, (float)ssc.rawWidth, (float)ssc.rawHeight, 0, 1000, 3000);
+    RenderPath.MatrixOrthogonal(0, (float)ssc.rawWidth, (float)ssc.rawHeight, 0,
+                                1000, 3000);
     RenderPath.MatrixMode(rp::MatrixStack::modelview);
     RenderPath.MatrixSetIdentity();
     RenderPath.MatrixTranslate(0, 0, -2000);
@@ -2034,7 +2095,10 @@ void GameRenderer::setupClearColor(float a) {
         fb = fbb;
     }
 
-    {float cc__[]={fr,fg,fb,0.0f};RenderPath.SetClearColour(cc__);};
+    {
+        float cc__[] = {fr, fg, fb, 0.0f};
+        RenderPath.SetClearColour(cc__);
+    };
 }
 
 void GameRenderer::captureFogProfile(int pass_index, float) {
@@ -2140,8 +2204,7 @@ void GameRenderer::setupFog(int i, float alpha) {
             RenderPath.StateSetFogDensity(0.05f);  // was 0.06
         } else {
             RenderPath.StateSetFogDensity(
-                   0.1f - (EnchantmentHelper::getOxygenBonus(player) *
-                           0.03f));
+                0.1f - (EnchantmentHelper::getOxygenBonus(player) * 0.03f));
         }
     } else if (t > 0 && Tile::tiles[t]->material == Material::lava) {
         RenderPath.StateSetFogMode(rp::FogMode::exponential);
@@ -2185,7 +2248,8 @@ void GameRenderer::setupFog(int i, float alpha) {
 
         if (mc->level->dimension->isFoggyAt((int)player->x, (int)player->z)) {
             RenderPath.StateSetFogNearDistance(distance * 0.05f);
-            RenderPath.StateSetFogFarDistance(std::min(distance, 16 * 16 * .75f) * .5f);
+            RenderPath.StateSetFogFarDistance(
+                std::min(distance, 16 * 16 * .75f) * .5f);
         }
     }
 
