@@ -28,7 +28,7 @@ This project is a heavily modified version of the Minecraft Console Legacy Editi
 | **profile** | `stub` | `stub` | `stub` |
 | **leaderboard** | `stub` | `stub` | `stub` |
 
-[^2]: `-Dui_backend=shiggy` supports x86-64 architectures only.
+[^2]: `-Dui_backend=shiggy` supports the x86-64 architecture with AVX2 extensions only.
 
 > [!TIP]
 >
