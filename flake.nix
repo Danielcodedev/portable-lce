@@ -114,7 +114,9 @@
             openssl.dev
             libGL
             libGLU
+            glew
             glm
+            mimalloc
             SDL2
             zlib
           ];
