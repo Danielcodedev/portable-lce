@@ -437,10 +437,6 @@ int main(int argc, const char* argv[]) {
 
     static bool bTrialTimerDisplayed = true;
 
-#ifdef __linux__
-    // PLCE(TODO): make this shit work on native wayland
-    setenv("SDL_VIDEODRIVER", "x11", 1);
-#endif
     SDL_SetMainReady();
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Window* sdl_window = SDL_CreateWindow(
