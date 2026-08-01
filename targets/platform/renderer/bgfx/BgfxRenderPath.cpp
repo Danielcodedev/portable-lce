@@ -153,28 +153,28 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
     init.platformData.nwh = wmi.info.cocoa.window;
 #endif
 
-    #ifdef BGFX_RENDERER_VULKAN 
+    #ifdef BGFX_RENDERER_VULKAN
         init.type = bgfx::RendererType::Vulkan;
     #endif
     #ifdef BGFX_RENDERER_OPENGL
         init.type = bgfx::RendererType::OpenGL;
     #endif
-    #ifdef BGFX_RENDERER_METAL 
+    #ifdef BGFX_RENDERER_METAL
         init.type = bgfx::RendererType::Metal;
-    #endif 
+    #endif
     #ifdef BGFX_RENDERER_D3D12
         init.Type = bgfx:RendererType::Direct3D12;
     #endif
-            
-   
+
+
     init.resolution.width = width_;
     init.resolution.height = height_;
-#ifdef ENABLE_VSYNC 
+#ifdef ENABLE_VSYNC
 init.resolution.reset = BGFX_RESET_VSYNC;
-#else 
+#else
   init.resolution.reset = BGFX_RESET_NONE;
-#endif // 
-    
+#endif //
+
     init.limits.maxTransientVbSize = 32 * 1024 * 1024;
     bgfx::init(init);
 
@@ -683,7 +683,8 @@ void BgfxRenderPath::update_mesh(MeshHandle, const MeshDesc&) {}
 void BgfxRenderPath::destroy_mesh(MeshHandle) {}
 
 TextureHandle BgfxRenderPath::create_texture(const TextureDesc& desc) {
-    auto th = bgfx::createTexture2D(desc.width, desc.height, false, 1,
+    auto th = bgfx::createTexture2D(desc.width, desc.height,
+                                    desc.mip_levels > 1, 1,
                                     bgfx::TextureFormat::RGBA8, 0);  // no mem
 
     if (!desc.initial_data.empty()) {
@@ -704,7 +705,18 @@ TextureHandle BgfxRenderPath::create_texture(const TextureDesc& desc) {
     return {idx, 1};
 }
 
-void BgfxRenderPath::update_texture(TextureHandle, const TextureRegion&) {}
+void BgfxRenderPath::update_texture(TextureHandle h, const TextureRegion& r) {
+    if (h.index >= textures_.size() ||
+        textures_[h.index].generation != h.generation) {
+        return;
+    }
+    const auto& slot = textures_[h.index];
+    if (!bgfx::isValid(slot.bgfx_handle) || r.data.empty()) return;
+    auto mem = bgfx::copy(r.data.data(), (uint32_t)r.data.size());
+    bgfx::updateTexture2D(slot.bgfx_handle, 0, r.mip_level, (uint16_t)r.x,
+                          (uint16_t)r.y, (uint16_t)r.width, (uint16_t)r.height,
+                          mem);
+}
 
 void BgfxRenderPath::destroy_texture(TextureHandle h) {
     if (h.index < textures_.size() &&
@@ -948,7 +960,7 @@ bool BgfxRenderPath::CBuffCall(int index, bool) {
     bgfx::setUniform(u_globalLM_, state_.global_lm);
     bgfx::setUniform(u_fragParams_, fragP);
     bgfx::setUniform(u_fogColor_, state_.fog_color);
-    
+
     for (const auto& dc : cb.draws) {
         if (hasTexture) {
             bgfx::setTexture(0, s_tex0_, texHandle, texSamplerFlags);
@@ -1029,7 +1041,11 @@ void BgfxRenderPath::TextureBindVertex(int idx, bool scaleLight) {
     state_.lightmap_transform[3] = scaleLight ? 8.f / 256.f : 0.0f;
 }
 
-void BgfxRenderPath::TextureSetTextureLevels(int) {}
+void BgfxRenderPath::TextureSetTextureLevels(int levels) {
+    if (state_.bound_texture < 0) return;
+    gl_tex_to_bgfx_[state_.bound_texture].mip_levels =
+        (uint16_t)(levels > 1 ? levels : 1);
+}
 
 void BgfxRenderPath::TextureSetParam(int param, int value) {
     // translate OpenGL sampler params to bgfx sampler flags
@@ -1130,39 +1146,121 @@ void BgfxRenderPath::TextureSetParam(int param, int value) {
     }
 }
 
+static uint16_t mipChainCount(uint32_t w, uint32_t h) {
+    const uint32_t longest = w > h ? w : h;
+    uint16_t levels = 1;
+    while ((1u << levels) < longest) levels++;
+    return (uint16_t)(levels + 1);
+}
+
+// the game only uploads the mip levels it needs, the remaining levels
+// are filled by nearest-sampling the last uploaded level which is COMPLETELY
+// WRONG. the others would bleed neighbor tiles of the atlas into each other!!!
+static void fillMipTail(uint16_t lastLevel, const uint8_t* data, int w, int h,
+                        bgfx::TextureHandle handle, uint16_t chain) {
+    std::vector<uint8_t> bufA((size_t)(w / 2 + 1) * (h / 2 + 1) * 4);
+    std::vector<uint8_t> bufB((size_t)(w / 4 + 1) * (h / 4 + 1) * 4);
+    int srcW = w;
+    int srcH = h;
+    const uint8_t* src = data;
+    uint8_t* dst = bufA.data();
+    for (uint16_t lvl = (uint16_t)(lastLevel + 1); lvl < chain; lvl++) {
+        const int dstW = srcW > 1 ? srcW / 2 : 1;
+        const int dstH = srcH > 1 ? srcH / 2 : 1;
+        for (int y = 0; y < dstH; y++) {
+            const int sy = (int)((size_t)y * srcH / dstH);
+            for (int x = 0; x < dstW; x++) {
+                const int sx = (int)((size_t)x * srcW / dstW);
+                const uint8_t* p = src + ((size_t)sy * srcW + sx) * 4;
+                uint8_t* d = dst + ((size_t)y * dstW + x) * 4;
+                d[0] = p[0];
+                d[1] = p[1];
+                d[2] = p[2];
+                d[3] = p[3];
+            }
+        }
+        const bgfx::Memory* mem =
+            bgfx::copy(dst, (uint32_t)((size_t)dstW * dstH * 4));
+        bgfx::updateTexture2D(handle, 0, lvl, 0, 0, (uint16_t)dstW,
+                              (uint16_t)dstH, mem);
+        src = dst;
+        srcW = dstW;
+        srcH = dstH;
+        dst = (dst == bufA.data()) ? bufB.data() : bufA.data();
+    }
+}
+
 void BgfxRenderPath::TextureData(int width, int height, void* data, int level,
                                  int) {
-    if (level > 0) return;
     if (state_.bound_texture < 0 || !data || width <= 0 || height <= 0) return;
 
     auto& slot = gl_tex_to_bgfx_[state_.bound_texture];
 
-    // if sampler flags changed, we have to recreate the texture
-    uint32_t flags = slot.sampler_flags;
-    if (!bgfx::isValid(slot.handle) || slot.sampler_flags != flags) {
-        if (bgfx::isValid(slot.handle)) bgfx::destroy(slot.handle);
+    const bool wantMips = slot.mip_levels > 1;
+    const uint16_t wanted =
+        wantMips ? mipChainCount((uint32_t)width, (uint32_t)height) : 1;
 
-        slot.handle = bgfx::createTexture2D(width, height, false, 1,
-                                            bgfx::TextureFormat::RGBA8, flags);
-        slot.sampler_flags = flags;
-        state_.bound_texture_sampler_flags = flags;
+    // PLCE: don't sample deeper than the last level the game uploads.
+    if (wantMips) {
+        slot.sampler_flags &= ~BGFX_SAMPLER_LOD_MASK;
+        slot.sampler_flags |= BGFX_SAMPLER_LOD_CLAMP
+            | ((uint32_t)(slot.mip_levels - 1) << BGFX_SAMPLER_LOD_SHIFT);
     }
 
+    // PLCE: this used to crash on Nvidia(?).
+    if (level == 0
+    &&  ( !bgfx::isValid(slot.handle)
+       || slot.width  != (uint32_t)width
+       || slot.height != (uint32_t)height
+       || slot.created_mips != wanted ) ) {
+        if (bgfx::isValid(slot.handle)) bgfx::destroy(slot.handle);
+
+        slot.handle = bgfx::createTexture2D((uint16_t)width, (uint16_t)height,
+                                            wantMips, 1,
+                                            bgfx::TextureFormat::RGBA8,
+                                            slot.sampler_flags);
+        slot.created_mips = wanted;
+        slot.width  = (uint32_t)width;
+        slot.height = (uint32_t)height;
+        state_.bound_texture_sampler_flags = slot.sampler_flags;
+    }
+
+    if (level < 0 || (uint16_t)level >= slot.created_mips) return;
+
     const bgfx::Memory* mem = bgfx::copy(data, (uint32_t)(width * height * 4));
-    bgfx::updateTexture2D(slot.handle, 0, (uint8_t)level, 0, 0, (uint16_t)width,
-                          (uint16_t)height, mem);
+    bgfx::updateTexture2D(slot.handle, 0, (uint8_t)level, 0, 0,
+                          (uint16_t)width, (uint16_t)height, mem);
+
+    if (slot.mip_levels > 1 && (uint16_t)level == slot.mip_levels - 1
+    &&  slot.mip_levels < slot.created_mips) {
+        fillMipTail((uint16_t)level, (const uint8_t*)data, width, height,
+                    slot.handle, slot.created_mips);
+    }
 }
 
 void BgfxRenderPath::TextureDataUpdate(int xoff, int yoff, int w, int h,
-                                       void* data, int) {
+                                       void* data, int level) {
     if (state_.bound_texture < 0 || !data) return;
     auto it = gl_tex_to_bgfx_.find(state_.bound_texture);
     if (it == gl_tex_to_bgfx_.end()) return;
+    auto& slot = it->second;
+    if (level < 0 || (uint16_t)level >= slot.created_mips) return;
     const bgfx::Memory* mem = bgfx::copy(data, w * h * 4);
-    bgfx::updateTexture2D(it->second.handle, 0, 0, xoff, yoff, w, h, mem);
+    bgfx::updateTexture2D(slot.handle, 0, (uint8_t)level, (uint16_t)xoff,
+                          (uint16_t)yoff, (uint16_t)w, (uint16_t)h, mem);
+
+    if (slot.mip_levels > 1 && (uint16_t)level == slot.mip_levels - 1
+    &&  slot.mip_levels < slot.created_mips && xoff == 0 && yoff == 0) {
+        fillMipTail((uint16_t)level, (const uint8_t*)data, w, h, slot.handle,
+                    slot.created_mips);
+    }
 }
 
-int BgfxRenderPath::TextureGetTextureLevels() { return 1; }
+int BgfxRenderPath::TextureGetTextureLevels() {
+    auto it = gl_tex_to_bgfx_.find(state_.bound_texture);
+    return it != gl_tex_to_bgfx_.end() ? (int)it->second.created_mips : 1;
+}
+
 void BgfxRenderPath::ReadPixels(int, int, int, int, void*) {}
 static int* stb_pixels_to_argb(unsigned char* pixels, int w, int h) {
     int* px = new int[w * h];

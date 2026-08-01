@@ -231,6 +231,10 @@ private:
         bgfx::TextureHandle handle = BGFX_INVALID_HANDLE;
         uint32_t sampler_flags =
             BGFX_SAMPLER_MIN_POINT | BGFX_SAMPLER_MAG_POINT;
+        uint16_t mip_levels = 1;
+        uint16_t created_mips = 1;
+        uint32_t width = 0;
+        uint32_t height = 0;
     };
     std::unordered_map<int, GlTexSlot> gl_tex_to_bgfx_;
     int next_gl_tex_id_ = 1;

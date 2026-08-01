@@ -33,13 +33,8 @@
 #include "platform/renderer/IRenderPath.h"
 
 
-// Linux/PC port: disable mipmapping globally so textures are always sampled
-// from the full-resolution level 0 with 0x2600, giving pixel-crisp
-// Minecraft blocks at all distances. Mipmapping causes glGenerateMipmap() to
-// fire (which resets the min-filter to 0x2702 on many
-// Mesa/Nvidia drivers) and the per-level crispBlend loop is both wasteful and
-// still causes visible blurring.
-bool Textures::MIPMAP = false;
+// PLCE: who the hell disabled mipmaps!?
+bool Textures::MIPMAP = true;
 int Textures::TEXTURE_FORMAT =
     0;
 
@@ -606,7 +601,9 @@ int Textures::loadTexture(TEXTURE_NAME texId, const std::string& resourceName) {
         (resourceName == "%blur%misc/pumpkinblur.png") ||
         (resourceName == "%clamp%misc/shadow.png") ||
         (resourceName == "gui/icons.png") || (resourceName == "gui/gui.png") ||
-        (resourceName == "misc/footprint.png")) {
+        (resourceName == "misc/footprint.png") || // PLCE: is this used??
+        (resourceName.find("font/") == 0) ||
+        (resourceName.find("title/") == 0)) {
         MIPMAP = false;
     }
     setTextureFormat(resourceName);
@@ -680,6 +677,8 @@ void Textures::loadTexture(BufferedImage* img, int id, bool blur, bool clamp) {
     if (MIPMAP) {
         // Linux/PC port: force 0x2600 to avoid mip-level distance blurring
         // and keep Minecraft textures pixel-crisp at all distances.
+        // PLCE: "To keep Minecraft textures pixel crisp at all distances"
+        //       ^ Whoever wrote this does not know about mipmaps at all.
         RenderPath.TextureSetParam(0x2801, 0x2600);
         RenderPath.TextureSetParam(0x2800, 0x2600);
         /*
