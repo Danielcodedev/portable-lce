@@ -26,12 +26,15 @@ void Lighting::turnOn() {
     float d = 0.6f;
     float s = 0.0f;
 
-    Vec3 l(0.2f, 1.0f, -0.7f);
+    // PLCE: these mirror the legacy RenderHelper LIGHT0/LIGHT1 constants
+    // (toward-light directions, model space): primary from above-left-front,
+    // fill from below-right-behind.
+    Vec3 l(-0.2f, 1.0f, -0.7f);
     l = l.normalize();
     RenderPath.StateSetLightDirection(0, l.x, l.y, l.z);
     RenderPath.StateSetLightColour(0, d, d, d);
 
-    l = Vec3(-0.2f, 1.0f, 0.7f);
+    l = Vec3(0.2f, -1.0f, 0.7f);
     l = l.normalize();
     RenderPath.StateSetLightDirection(1, l.x, l.y, l.z);
     RenderPath.StateSetLightColour(1, d, d, d);

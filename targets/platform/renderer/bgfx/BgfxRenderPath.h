@@ -203,6 +203,9 @@ private:
     // View ID management
     uint16_t current_view_id_ = 0;
 
+    std::vector<std::pair<glm::mat4, uint16_t>> proj_view_cache_;
+    uint16_t resolveView(const glm::mat4& proj);
+    glm::vec4 lightDirUniform(int l) const;
     // Transient arena
     std::vector<std::byte> transient_arena_;
     uint32_t transient_offset_ = 0;
@@ -271,8 +274,8 @@ private:
         float fog_end = 100;
         float fog_density = 0;
         float fog_color[4] = {0.5f, 0.7f, 1.0f, 1.0f};
-        float light0_dir[4] = {0.173913f, 0.869565f, -0.608696f, 0};
-        float light1_dir[4] = {-0.173913f, 0.869565f, 0.608696f, 0};
+        float light0_dir[4] = {-0.173913f, 0.869565f, -0.608696f, 0};
+        float light1_dir[4] = {0.173913f, -0.869565f, 0.608696f, 0};
         float light_diffuse[4] = {0.6f, 0.6f, 0.6f, 1};
         float light_ambient[4] = {0.4f, 0.4f, 0.4f, 1};
         float global_lm[4] = {

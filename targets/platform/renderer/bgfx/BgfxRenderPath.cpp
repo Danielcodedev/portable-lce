@@ -473,13 +473,19 @@ void BgfxRenderPath::StateSetLightAmbientColour(float r, float g, float b) {
     state_.light_ambient[2] = b;
 }
 void BgfxRenderPath::StateSetLightDirection(int l, float x, float y, float z) {
-    glm::vec3 d =
-        glm::normalize(glm::mat3(modelview_stack_.top()) * glm::vec3(x, y, z));
+    // PLCE: bgfx likes the raw model-space direction
+    glm::vec3 d = glm::normalize(glm::vec3(x, y, z));
     float* dst = (l == 0) ? state_.light0_dir : state_.light1_dir;
     dst[0] = d.x;
     dst[1] = d.y;
     dst[2] = d.z;
     dst[3] = 0;
+}
+glm::vec4 BgfxRenderPath::lightDirUniform(int l) const {
+    const float* src = (l == 0) ? state_.light0_dir : state_.light1_dir;
+    glm::vec3 d = glm::normalize(
+        glm::mat3(modelview_stack_.top()) * glm::vec3(src[0], src[1], src[2]));
+    return glm::vec4(d, 0.0f);
 }
 void BgfxRenderPath::StateSetLightEnable(int, bool) {}
 
@@ -620,16 +626,17 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data,
     else if (primType == 0x0003)
         primState = BGFX_STATE_PT_LINESTRIP;  // GL_LINE_STRIP
 
-    glm::mat4 mvp = projection_stack_.top() * modelview_stack_.top();
+    glm::mat4 proj = projection_stack_.top();
 
     // PLCE: bgfx exposes no polygon offset state, so the constant bias is
-    // baked into clip-space Z here. Slope bias would need a shader-side
-    // implementation and is currently ignored.
+    // baked into clip-space Z via the view projection here. Slope bias would
+    // need a shader-side implementation and is currently ignored.
     if (state_.depth_z_bias != 0.0f) {
-        mvp[3][2] += state_.depth_z_bias * Z_BIAS_EPSILON;
+        proj[3][2] += state_.depth_z_bias * Z_BIAS_EPSILON;
     }
+    const uint16_t view = resolveView(proj);
 
-    bgfx::setTransform(glm::value_ptr(mvp));
+    bgfx::setTransform(glm::value_ptr(modelview_stack_.top()));
     bgfx::setState(state_.bgfx_state | primState, state_.blend_factor_rgba);
     bgfx::setVertexBuffer(0, &tvb);
 
@@ -640,8 +647,10 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data,
     bgfx::setUniform(u_chunkOffset_, chunkOff);
     float lp[4] = {state_.lighting_enabled ? 1.0f : 0.0f, 1.0f, 0, 0};
     bgfx::setUniform(u_lightParams_, lp);
-    bgfx::setUniform(u_light0Dir_, state_.light0_dir);
-    bgfx::setUniform(u_light1Dir_, state_.light1_dir);
+    const glm::vec4 l0 = lightDirUniform(0);
+    const glm::vec4 l1 = lightDirUniform(1);
+    bgfx::setUniform(u_light0Dir_, glm::value_ptr(l0));
+    bgfx::setUniform(u_light1Dir_, glm::value_ptr(l1));
     bgfx::setUniform(u_lightDiffuse_, state_.light_diffuse);
     bgfx::setUniform(u_lightAmbient_, state_.light_ambient);
     float fp[4] = {state_.fog_enabled ? state_.fog_mode : 0.0f,
@@ -671,7 +680,7 @@ void BgfxRenderPath::DrawVertices(int primType, int count, void* data,
     bgfx::setUniform(u_fogColor_, state_.fog_color);
 
     if (bgfx::isValid(program_))
-        bgfx::submit(current_view_id_, program_);
+        bgfx::submit(view, program_);
     else
         bgfx::discard();
 }
@@ -919,13 +928,15 @@ bool BgfxRenderPath::CBuffCall(int index, bool) {
 
     if (!bgfx::isValid(cb.vbh)) return false;
 
-    glm::mat4 mvp = projection_stack_.top() * modelview_stack_.top();
+    glm::mat4 proj = projection_stack_.top();
     // PLCE: this is a hack to avoid implementing this in a shader. these values
     // are used to prevent Z-fighting and this does effectively the same thing
     // by breaking the tie in the depth buffer.
     if (state_.depth_z_bias != 0.0f) {
-        mvp[3][2] += state_.depth_z_bias * Z_BIAS_EPSILON;
+        proj[3][2] += state_.depth_z_bias * Z_BIAS_EPSILON;
     }
+    const uint16_t view = resolveView(proj);
+    const glm::mat4 modelview = modelview_stack_.top();
 
     float chunkOff[4] = {state_.chunk_offset[0], state_.chunk_offset[1],
                          state_.chunk_offset[2], 0};
@@ -951,8 +962,10 @@ bool BgfxRenderPath::CBuffCall(int index, bool) {
     bgfx::setUniform(u_baseColor_, state_.tint_color);
     bgfx::setUniform(u_chunkOffset_, chunkOff);
     bgfx::setUniform(u_lightParams_, lp);
-    bgfx::setUniform(u_light0Dir_, state_.light0_dir);
-    bgfx::setUniform(u_light1Dir_, state_.light1_dir);
+    const glm::vec4 l0 = lightDirUniform(0);
+    const glm::vec4 l1 = lightDirUniform(1);
+    bgfx::setUniform(u_light0Dir_, glm::value_ptr(l0));
+    bgfx::setUniform(u_light1Dir_, glm::value_ptr(l1));
     bgfx::setUniform(u_lightDiffuse_, state_.light_diffuse);
     bgfx::setUniform(u_lightAmbient_, state_.light_ambient);
     bgfx::setUniform(u_fogParams_, fp);
@@ -980,12 +993,12 @@ bool BgfxRenderPath::CBuffCall(int index, bool) {
         else if (dc.prim == 0x0003)
             primBits = BGFX_STATE_PT_LINESTRIP;
 
-        bgfx::setTransform(glm::value_ptr(mvp));
+        bgfx::setTransform(glm::value_ptr(modelview));
         bgfx::setState(state_.bgfx_state | primBits, state_.blend_factor_rgba);
         bgfx::setVertexBuffer(0, cb.vbh, dc.first, dc.count);
 
         if (bgfx::isValid(program_))
-            bgfx::submit(current_view_id_, program_);
+            bgfx::submit(view, program_);
         else
             bgfx::discard();
     }
@@ -1305,6 +1318,19 @@ int BgfxRenderPath::LoadTextureData(uint8_t* data, uint32_t bytes,
 
 // MARK: Frame lifecycle
 
+uint16_t BgfxRenderPath::resolveView(const glm::mat4& proj) {
+    for (const auto& [p, v] : proj_view_cache_) {
+        if (p == proj) return v;
+    }
+    const uint16_t view = (uint16_t)proj_view_cache_.size();
+    if (view >= bgfx::getCaps()->limits.maxViews) return 0;
+    bgfx::setViewRect(view, 0, 0, width_, height_);
+    bgfx::setViewTransform(view, NULL, glm::value_ptr(proj));
+    bgfx::setViewMode(view, bgfx::ViewMode::Sequential);
+    proj_view_cache_.emplace_back(proj, view);
+    return view;
+}
+
 void BgfxRenderPath::StartFrame() {
     int w, h;
     SDL_GetWindowSize(window_, &w, &h);
@@ -1316,6 +1342,7 @@ void BgfxRenderPath::StartFrame() {
     fb_.is_widescreen = fb_.aspect > 1.5f;
     fb_.is_hi_def = h >= 720;
     current_view_id_ = 0;
+    proj_view_cache_.clear();
     uint32_t rgba = (uint32_t(state_.clear_color[0] * 255) << 24) |
                     (uint32_t(state_.clear_color[1] * 255) << 16) |
                     (uint32_t(state_.clear_color[2] * 255) << 8) | 0xFF;
@@ -1414,11 +1441,12 @@ void BgfxRenderPath::submit_immediate(const DrawCall& dc) {
     } else {
         memcpy(bvb.data, src, vertCount * stride);
     }
-    glm::mat4 mvp = projection_stack_.top() * modelview_stack_.top();
+    glm::mat4 proj = projection_stack_.top();
     if (state_.depth_z_bias != 0.0f) {
-        mvp[3][2] += state_.depth_z_bias * Z_BIAS_EPSILON;
+        proj[3][2] += state_.depth_z_bias * Z_BIAS_EPSILON;
     }
-    bgfx::setTransform(glm::value_ptr(mvp));
+    const uint16_t view = resolveView(proj);
+    bgfx::setTransform(glm::value_ptr(modelview_stack_.top()));
     bgfx::setState(state_.bgfx_state, state_.blend_factor_rgba);
     bgfx::setVertexBuffer(0, &bvb);
 
@@ -1428,8 +1456,10 @@ void BgfxRenderPath::submit_immediate(const DrawCall& dc) {
     bgfx::setUniform(u_chunkOffset_, chunkOff);
     float lp[4] = {state_.lighting_enabled ? 1.0f : 0.0f, 1.0f, 0, 0};
     bgfx::setUniform(u_lightParams_, lp);
-    bgfx::setUniform(u_light0Dir_, state_.light0_dir);
-    bgfx::setUniform(u_light1Dir_, state_.light1_dir);
+    const glm::vec4 l0 = lightDirUniform(0);
+    const glm::vec4 l1 = lightDirUniform(1);
+    bgfx::setUniform(u_light0Dir_, glm::value_ptr(l0));
+    bgfx::setUniform(u_light1Dir_, glm::value_ptr(l1));
     bgfx::setUniform(u_lightDiffuse_, state_.light_diffuse);
     bgfx::setUniform(u_lightAmbient_, state_.light_ambient);
     float fp[4] = {state_.fog_enabled ? state_.fog_mode : 0.0f,
@@ -1460,7 +1490,7 @@ void BgfxRenderPath::submit_immediate(const DrawCall& dc) {
     bgfx::setUniform(u_fogColor_, state_.fog_color);
 
     if (bgfx::isValid(program_))
-        bgfx::submit(current_view_id_, program_);
+        bgfx::submit(view, program_);
     else
         bgfx::discard();
 }
