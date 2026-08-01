@@ -1176,12 +1176,7 @@ static uint16_t mipChainCount(uint32_t w, uint32_t h) {
 // WRONG. the others would bleed neighbor tiles of the atlas into each other!!!
 static void fillMipTail(uint16_t lastLevel, const uint8_t* data, int w, int h,
                         bgfx::TextureHandle handle, uint16_t chain) {
-    std::vector<uint8_t> bufA((size_t)(w / 2 + 1) * (h / 2 + 1) * 4);
-    std::vector<uint8_t> bufB((size_t)(w / 4 + 1) * (h / 4 + 1) * 4);
-    int srcW = w;
-    int srcH = h;
-    const uint8_t* src = data;
-    uint8_t* dst = bufA.data();
+    std::vector<uint8_t> buf((size_t)(w / 2 + 1) * (h / 2 + 1) * 4);
     for (uint16_t lvl = (uint16_t)(lastLevel + 1); lvl < chain; lvl++) {
         const int dstW = srcW > 1 ? srcW / 2 : 1;
         const int dstH = srcH > 1 ? srcH / 2 : 1;
