@@ -142,7 +142,7 @@ BgfxRenderPath::BgfxRenderPath(SDL_Window* window) : window_(window) {
     } else if (wmi.subsystem == SDL_SYSWM_WAYLAND) {
         init.platformData.ndt = wmi.info.wl.display;
         init.platformData.nwh = wmi.info.wl.surface;
-        init.platformData.type = bgfx::NativeWindowHandleType::Default;
+        init.platformData.type = bgfx::NativeWindowHandleType::Wayland;
     } else {
         // Unknown subsystem
         assert(false && "Unsupported windowing system");
