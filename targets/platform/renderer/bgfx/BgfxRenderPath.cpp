@@ -1171,21 +1171,25 @@ static uint16_t mipChainCount(uint32_t w, uint32_t h) {
     return (uint16_t)(levels + 1);
 }
 
-// the game only uploads the mip levels it needs, the remaining levels
+// PLCE: the game only uploads the mip levels it needs, the remaining levels
 // are filled by nearest-sampling the last uploaded level which is COMPLETELY
 // WRONG. the others would bleed neighbor tiles of the atlas into each other!!!
+
+// PLCE: turns out GL backend ignores BGFX_SAMPLER_LOD_CLAMP so OpenGL samples
+// the wrong mipmaps ;~;
 static void fillMipTail(uint16_t lastLevel, const uint8_t* data, int w, int h,
                         bgfx::TextureHandle handle, uint16_t chain) {
     std::vector<uint8_t> buf((size_t)(w / 2 + 1) * (h / 2 + 1) * 4);
     for (uint16_t lvl = (uint16_t)(lastLevel + 1); lvl < chain; lvl++) {
-        const int dstW = srcW > 1 ? srcW / 2 : 1;
-        const int dstH = srcH > 1 ? srcH / 2 : 1;
+        const uint16_t shift = (uint16_t)(lvl - lastLevel);
+        const int dstW = w > (1 << shift) ? (w >> shift) : 1;
+        const int dstH = h > (1 << shift) ? (h >> shift) : 1;
         for (int y = 0; y < dstH; y++) {
-            const int sy = (int)((size_t)y * srcH / dstH);
+            const int sy = (int)((size_t)y * h / dstH);
             for (int x = 0; x < dstW; x++) {
-                const int sx = (int)((size_t)x * srcW / dstW);
-                const uint8_t* p = src + ((size_t)sy * srcW + sx) * 4;
-                uint8_t* d = dst + ((size_t)y * dstW + x) * 4;
+                const int sx = (int)((size_t)x * w / dstW);
+                const uint8_t* p = data + ((size_t)sy * w + sx) * 4;
+                uint8_t* d = buf.data() + ((size_t)y * dstW + x) * 4;
                 d[0] = p[0];
                 d[1] = p[1];
                 d[2] = p[2];
@@ -1193,13 +1197,9 @@ static void fillMipTail(uint16_t lastLevel, const uint8_t* data, int w, int h,
             }
         }
         const bgfx::Memory* mem =
-            bgfx::copy(dst, (uint32_t)((size_t)dstW * dstH * 4));
+            bgfx::copy(buf.data(), (uint32_t)((size_t)dstW * dstH * 4));
         bgfx::updateTexture2D(handle, 0, lvl, 0, 0, (uint16_t)dstW,
                               (uint16_t)dstH, mem);
-        src = dst;
-        srcW = dstW;
-        srcH = dstH;
-        dst = (dst == bufA.data()) ? bufB.data() : bufA.data();
     }
 }
 
