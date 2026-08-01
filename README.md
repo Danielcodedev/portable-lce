@@ -13,7 +13,7 @@ This project is a heavily modified version of the Minecraft Console Legacy Editi
 
 ## Status
 
-|  | **Linux** | **Windows** | **macOS[^1]** |
+|  | [![Linux](https://github.com/portable-lce/portable-lce/actions/workflows/build-linux.yml/badge.svg)](https://github.com/portable-lce/portable-lce/actions/workflows/build-linux.yml) | [![Windows](https://github.com/portable-lce/portable-lce/actions/workflows/build-windows.yml/badge.svg)](https://github.com/portable-lce/portable-lce/actions/workflows/build-windows.yml) | [![macOS](https://github.com/portable-lce/portable-lce/actions/workflows/build-macos.yml/badge.svg)](https://github.com/portable-lce/portable-lce/actions/workflows/build-macos.yml) |
 | - | - | - | - |
 | **app** | `desktop` | `desktop` | `desktop` |
 | **ui** | `java`, `shiggy`[^2] | `java`, `shiggy`[^2] | `java` |
@@ -28,8 +28,7 @@ This project is a heavily modified version of the Minecraft Console Legacy Editi
 | **profile** | `stub` | `stub` | `stub` |
 | **leaderboard** | `stub` | `stub` | `stub` |
 
-[^1]: `platform_renderer_gl` is unstable on this platform and known to segfault. Development is WIP.
-[^2]: `-Dui_backend=shiggy` supports x86-64 architectures only.
+[^2]: `-Dui_backend=shiggy` supports the x86-64 architecture with AVX2 extensions only.
 
 > [!TIP]
 >

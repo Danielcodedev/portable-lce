@@ -11,17 +11,17 @@ runs:
   using: "composite"
   steps:
     - name: Restore ccache cache
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
-        path: ~/.ccache
-        key: ${{ runner.os }}-ccache-${{ hashFiles('**/meson.build') }}
+        path: ~/.cache/ccache
+        key: ${{ runner.os }}-ccache-${{ matrix.build-type }}-${{ hashFiles('**/meson.build') }}
 
     - name: Create ccache dir
       shell: bash
-      run: mkdir -p {{ inputs.ccache_dir }}
+      run: mkdir -p ${{ inputs.ccache_dir }}
 
     - name: Restore meson cache
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
-        path: ~/.cache/meson
-        key: ${{ runner.os }}-meson-${{ hashFiles('**/meson.build') }}
+        path: ${{ github.workspace }}/build_${{ matrix.build-type }}
+        key: ${{ runner.os }}-meson-${{ matrix.build-type }}-${{ hashFiles('**/meson.build') }}

@@ -3,18 +3,18 @@ name: Format Check
 on:
   push:
     paths: &workflow_paths
-      - '**.cpp'
-      - '**.h'
-      - '**.c'
-      - '**.cc'
-      - '**.cxx'
-      - '**.hh'
-      - '**.hpp'
-      - '**.hxx'
-      - '**.inl'
-      - '.clang-format'
-      - '.github/workflows/clang-format.yml'
-      - '.github/scripts/check-clang-format.sh'
+      - "**.cpp"
+      - "**.h"
+      - "**.c"
+      - "**.cc"
+      - "**.cxx"
+      - "**.hh"
+      - "**.hpp"
+      - "**.hxx"
+      - "**.inl"
+      - ".clang-format"
+      - ".github/workflows/clang-format.yml"
+      - ".github/scripts/check-clang-format.sh"
 
   pull_request:
     paths: *workflow_paths
@@ -34,9 +34,7 @@ jobs:
           fetch-depth: 2
 
       - name: Install clang-format
-        uses: daaku/gh-action-apt-install@v4
-        with:
-          packages: clang-format
+        run: sudo apt-get install -y clang-format
 
       - name: Check changed files
         env:

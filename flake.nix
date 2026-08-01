@@ -39,9 +39,8 @@
       let
         pkgs = import nixpkgs { inherit system; };
         lib = pkgs.lib;
-
-        subprojectNames = [
-          "shiggy"
+        subprojectNames = builtins.filter (x: x!=null) [
+          (if !(system == "x86_64-darwin" || system == "aarch64-darwin") then "shiggy" else null)
           "stb"
           "simdutf"
           "miniaudio"
@@ -115,7 +114,9 @@
             openssl.dev
             libGL
             libGLU
+            glew
             glm
+            mimalloc
             SDL2
             zlib
           ];
@@ -142,11 +143,10 @@
             }
             {
               inputsFrom = [ self.packages.${system}.default ];
-
               packages = with pkgs; [
                 clang-tools
                 lldb
-                valgrind
+                (if system=="x86_64-darwin" || system=="aarch64-darwin" then null else valgrind)
                 include-what-you-use
                 ccache
               ];
