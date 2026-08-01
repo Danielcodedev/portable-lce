@@ -203,7 +203,12 @@ init.resolution.reset = BGFX_RESET_VSYNC;
     fb_.is_widescreen = fb_.aspect > 1.5f;
     fb_.is_hi_def = height_ >= 720;
 
-    state_.bgfx_state = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A |
+    // PLCE: son what :sob:
+    // so BGFX was writing in RGBA and not simple RGB..
+    // making the game look transparent
+    // It is quite funny but not what we're looking for
+    // if you want it back, add "BGFX_STATE_WRITE_A" to the BGFX state
+    state_.bgfx_state = BGFX_STATE_WRITE_RGB |
                         BGFX_STATE_WRITE_Z | BGFX_STATE_DEPTH_TEST_LEQUAL;
 
     // Load shaders
