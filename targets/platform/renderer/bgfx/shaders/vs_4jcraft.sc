@@ -13,6 +13,7 @@ uniform vec4 u_lightAmbient;
 uniform vec4 u_fogParams;      // x = mode (0=off,1=linear,2=exp,3=exp2), y = start, z = end, w = density
 uniform vec4 u_lmTransform;    // xy = scale, zw = offset
 uniform vec4 u_globalLM;       // xy = global lightmap coords
+uniform mat4 u_texMatrix;      // texture matrix (GL_TEXTURE_MATRIX)
 
 void main()
 {
@@ -20,7 +21,7 @@ void main()
     vec4 eyePos = mul(u_modelView, pos4);
     gl_Position = mul(u_modelViewProj, pos4);
 
-    v_uv0 = a_texcoord0;
+    v_uv0 = mul(u_texMatrix, vec4(a_texcoord0.xy, 0.0, 1.0)).xy;
 
     // Lightmap UV from vertex data or global fallback
     vec2 lm = (a_texcoord1.x <= -2) ? u_globalLM.xy : vec2(a_texcoord1);

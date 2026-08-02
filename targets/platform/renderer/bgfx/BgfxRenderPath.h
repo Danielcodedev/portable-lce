@@ -177,6 +177,7 @@ private:
     rp::MatrixStack matrix_mode_ = rp::MatrixStack::modelview;  // GL_MODELVIEW
     std::stack<glm::mat4> projection_stack_;
     std::stack<glm::mat4> modelview_stack_;
+    std::stack<glm::mat4> texture_stack_;
     glm::mat4 projection_top_{1.0f};
     glm::mat4 modelview_top_{1.0f};
 
@@ -195,10 +196,12 @@ private:
     bgfx::UniformHandle u_fogParams_ = BGFX_INVALID_HANDLE;
     bgfx::UniformHandle u_lmTransform_ = BGFX_INVALID_HANDLE;
     bgfx::UniformHandle u_globalLM_ = BGFX_INVALID_HANDLE;
+    bgfx::UniformHandle u_texMatrix_ = BGFX_INVALID_HANDLE;
     bgfx::UniformHandle u_fragParams_ = BGFX_INVALID_HANDLE;
     bgfx::UniformHandle u_fogColor_ = BGFX_INVALID_HANDLE;
     bgfx::UniformHandle s_tex0_ = BGFX_INVALID_HANDLE;
     bgfx::UniformHandle s_tex1_ = BGFX_INVALID_HANDLE;
+    bgfx::TextureHandle white_tex_ = BGFX_INVALID_HANDLE;
 
     // View ID management
     uint16_t current_view_id_ = 0;

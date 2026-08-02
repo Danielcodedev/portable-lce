@@ -364,6 +364,7 @@ void ItemRenderer::renderGuiItem(Font* font, Textures* textures,
         textures->bindTexture(&TextureAtlas::LOCATION_BLOCKS);
 
         Tile* tile = Tile::tiles[itemId];
+        RenderPath.StateSetFaceCull(false);
         RenderPath.MatrixPush();
         // 4J - original code left here for reference
         // 4jcraft: original code reused for proper lighting

@@ -820,6 +820,7 @@ void GameRenderer::renderItemInHand(float a, int eye) {
         if (!localplayer->ThirdPersonView() &&
             !mc->cameraTargetPlayer->isSleeping()) {
             if (!mc->options->hideGui && !mc->gameMode->isCutScene()) {
+                RenderPath.StateSetFaceCull(true);
                 turnOnLightLayer(a, true);
                 itemInHandRenderer->render(a);
 
